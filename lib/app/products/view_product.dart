@@ -140,10 +140,6 @@ class _ViewProductState extends State<ViewProduct> {
         'deleteProduct',
         'Error occured',
         'Deleted successfully');
-    // final response = await http.delete(
-    //   Uri.parse(Api.baseUrl + Api.deleteProduct + widget.product.id),
-    //   headers: authHeader(),
-    // );
 
     final status = FormController.instance.status;
     setState(() {
@@ -277,58 +273,6 @@ class _ViewProductState extends State<ViewProduct> {
                 ),
                 child: MyImage(url: widget.product.productImage),
               ),
-              // FlutterCarousel.builder(
-              //   options: CarouselOptions(
-              //     height:
-              //         deviceType(media.width) > 3 && deviceType(media.width) < 5
-              //             ? media.height * 0.5
-              //             : media.height * 0.42,
-              //     viewportFraction: 1.0,
-              //     initialPage: 0,
-              //     enableInfiniteScroll: true,
-              //     autoPlay: true,
-              //     autoPlayInterval: const Duration(seconds: 2),
-              //     autoPlayAnimationDuration: const Duration(milliseconds: 800),
-              //     autoPlayCurve: Curves.easeInOut,
-              //     enlargeCenterPage: true,
-              //     controller: carouselController,
-              //     onPageChanged: (index, value) {
-              //       setState(() {});
-              //     },
-              //     pageSnapping: true,
-              //     scrollDirection: Axis.horizontal,
-              //     physics: const BouncingScrollPhysics(),
-              //     scrollBehavior: const ScrollBehavior(),
-              //     pauseAutoPlayOnTouch: true,
-              //     pauseAutoPlayOnManualNavigate: true,
-              //     pauseAutoPlayInFiniteScroll: false,
-              //     enlargeStrategy: CenterPageEnlargeStrategy.scale,
-              //     disableCenter: false,
-              //     showIndicator: true,
-              //     floatingIndicator: true,
-              //     slideIndicator: CircularSlideIndicator(
-              //       alignment: Alignment.bottomCenter,
-              //       currentIndicatorColor: kAccentColor,
-              //       indicatorBackgroundColor: kPrimaryColor,
-              //       indicatorRadius: 5,
-              //       padding: const EdgeInsets.all(10),
-              //     ),
-              //   ),
-              //   itemCount: widget.product.productImage.length,
-              //   itemBuilder:
-              //       (BuildContext context, int itemIndex, int pageViewIndex) =>
-              //           SizedBox(
-              //     // padding: const EdgeInsets.all(10),
-              //     child: Container(
-              //       width: media.width,
-              //       decoration: const ShapeDecoration(
-              //         shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.all(Radius.circular(20))),
-              //       ),
-              //       child: MyImage(url: widget.product.productImage),
-              //     ),
-              //   ),
-              // ),
               kSizedBox,
               Padding(
                 padding: const EdgeInsets.all(kDefaultPadding / 2),

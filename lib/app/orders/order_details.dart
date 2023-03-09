@@ -161,7 +161,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                             letterSpacing: -0.32,
                           ),
                         ),
-
                         Text(
                           widget.orderStatus,
                           textAlign: TextAlign.right,
@@ -172,53 +171,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                             letterSpacing: -0.32,
                           ),
                         )
-                        // widget.order.deliveryStatus == "COMP"
-                        //     ? const Text(
-                        //         'Delivered',
-                        //         textAlign: TextAlign.right,
-                        //         style: TextStyle(
-                        //           color: kSuccessColor,
-                        //           fontSize: 16,
-                        //           fontWeight: FontWeight.w700,
-                        //           letterSpacing: -0.32,
-                        //         ),
-                        //       )
-                        //     : isDispatched == true &&
-                        //             widget.order.deliveryStatus == "dispatched"
-                        //         ? Text(
-                        //             'Dispatched',
-                        //             textAlign: TextAlign.right,
-                        //             style: TextStyle(
-                        //               color: kSecondaryColor,
-                        //               fontSize: 16,
-                        //               fontWeight: FontWeight.w700,
-                        //               letterSpacing: -0.32,
-                        //             ),
-                        //           )
-                        //         : isDispatched == false &&
-                        //                 widget.order.deliveryStatus == "PEND"
-                        //             ?
-                        //             Text(
-                        //                 'Canceled',
-                        //                 textAlign: TextAlign.right,
-                        //                 style: TextStyle(
-                        //                   color: kAccentColor,
-                        //                   fontSize: 16,
-                        //                   fontWeight: FontWeight.w700,
-                        //                   letterSpacing: -0.32,
-                        //                 ),
-                        //               )
-
-                        //             :  Text(
-                        //                 'Pending',
-                        //                 textAlign: TextAlign.right,
-                        //                 style: TextStyle(
-                        //                   color: kLoadingColor,
-                        //                   fontSize: 16,
-                        //                   fontWeight: FontWeight.w700,
-                        //                   letterSpacing: -0.32,
-                        //                 ),
-                        //               )
                       ],
                     ),
                   ],
@@ -357,15 +309,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                           ),
                           kHalfSizedBox,
-                          // Text(
-                          //   widget.order.deliveryAddress,
-                          //   style: TextStyle(
-                          //     color: kTextGreyColor,
-                          //     fontSize: 12,
-                          //     fontWeight: FontWeight.w400,
-                          //   ),
-                          // ),
-                          // kHalfSizedBox,
                         ],
                       ),
                     ],
@@ -436,14 +379,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            // TextSpan(
-                            //   text: widget.order.orderitems.totalAmount,
-                            //   style: TextStyle(
-                            //     color: kTextBlackColor,
-                            //     fontSize: 14.30,
-                            //     fontWeight: FontWeight.w400,
-                            //   ),
-                            // ),
                           ],
                         ),
                         textAlign: TextAlign.right,

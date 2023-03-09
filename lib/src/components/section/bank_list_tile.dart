@@ -21,21 +21,7 @@ class BankListTile extends StatelessWidget {
         ListTile(
           onTap: onTap,
           horizontalTitleGap: 0,
-          leading:
-              // bankImage.isEmpty
-              //     ? Padding(
-              //         padding: const EdgeInsets.only(right: 20),
-              //         child: CircleAvatar(
-              //           backgroundColor: kLightGreyColor,
-              //           child: FaIcon(
-              //             FontAwesomeIcons.buildingColumns,
-              //             color: kAccentColor,
-              //             size: 18,
-              //           ),
-              //         ),
-              //       )
-              //     :
-              Padding(
+          leading: Padding(
             padding: const EdgeInsets.only(right: 20),
             child: CircleAvatar(
               backgroundColor: kLightGreyColor,
@@ -43,20 +29,7 @@ class BankListTile extends StatelessWidget {
                   child: FaIcon(
                 FontAwesomeIcons.buildingColumns,
                 color: kAccentColor,
-              )
-
-                  //  CachedNetworkImage(
-                  //   imageUrl: bankImage,
-                  //   fit: BoxFit.fill,
-                  //   progressIndicatorBuilder:
-                  //       (context, url, downloadProgress) => Center(
-                  //     child:
-                  //         CupertinoActivityIndicator(color: kAccentColor),
-                  //   ),
-                  //   errorWidget: (context, url, error) =>
-                  //       Icon(Icons.error, color: kAccentColor),
-                  // ),
-                  ),
+              )),
             ),
           ),
           title: Text(

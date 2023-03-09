@@ -68,30 +68,6 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                 size: 30,
               ),
             ),
-            // Positioned(
-            //   top: 10,
-            //   right: 5,
-            //   child: Container(
-            //     height: 20,
-            //     width: 20,
-            //     decoration: ShapeDecoration(
-            //       color: kAccentColor,
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(100),
-            //       ),
-            //     ),
-            //     child: Center(
-            //       child: Text(
-            //         formatNumber(numberOfNotifications),
-            //         textAlign: TextAlign.center,
-            //         style: const TextStyle(
-            //           fontSize: 9,
-            //           fontWeight: FontWeight.w400,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // )
           ],
         ),
         kWidthSizedBox

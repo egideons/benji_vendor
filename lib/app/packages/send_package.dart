@@ -227,10 +227,6 @@ class _SendPackageState extends State<SendPackage> {
         longitudePick = longitudeValue.toString();
       });
     }
-    // latitudePick = latLngDetailController.latLngDetail.value[0];
-    // longitudePick = latLngDetailController.latLngDetail.value[1];
-    // pickupEC.text = latLngDetailController.latLngDetail.value[2];
-    // latLngDetailController.setEmpty();
   }
 
   void toGetLocationOnMapDrop() async {
@@ -406,14 +402,6 @@ class _SendPackageState extends State<SendPackage> {
   }
 
   //=============================== WIDGETS ==================================\\
-
-  // Widget stepIconBuilder(context, details) {
-  //   return Icon(
-  //     Icons.check,
-  //     color: kPrimaryColor,
-  //     size: 15,
-  //   );
-  // }
 
   Widget controlsBuilder(context, details) {
     final media = MediaQuery.of(context);
@@ -1011,7 +999,6 @@ class _SendPackageState extends State<SendPackage> {
                         );
                 },
               ),
-
               kSizedBox,
               const Text(
                 "Item Weight",
@@ -1117,86 +1104,6 @@ class _SendPackageState extends State<SendPackage> {
                 textInputType: TextInputType.number,
               ),
               kSizedBox,
-              // DottedBorder(
-              //   color: kLightGreyColor,
-              //   borderPadding: const EdgeInsets.all(3),
-              //   padding: const EdgeInsets.all(kDefaultPadding / 2),
-              //   borderType: BorderType.RRect,
-              //   radius: const Radius.circular(20),
-              //   child: Column(
-              //     children: [
-              //       selectedImage == null
-              //           ? Container(
-              //               width: media.width,
-              //               height: 144,
-              //               decoration: ShapeDecoration(
-              //                 image: const DecorationImage(
-              //                     image: AssetImage(
-              //                         "assets/icons/image-upload.png")),
-              //                 shape: RoundedRectangleBorder(
-              //                   side: const BorderSide(
-              //                     width: 0.50,
-              //                     color: Color(0xFFE6E6E6),
-              //                   ),
-              //                   borderRadius: BorderRadius.circular(20),
-              //                 ),
-              //               ),
-              //             )
-              //           : Container(
-              //               width: media.width,
-              //               height: deviceType(media.width) >= 2 ? 280 : 200,
-              //               decoration: ShapeDecoration(
-              //                 image: DecorationImage(
-              //                   image: FileImage(selectedImage!),
-              //                   fit: BoxFit.contain,
-              //                 ),
-              //                 shape: RoundedRectangleBorder(
-              //                   side: const BorderSide(
-              //                     width: 0.50,
-              //                     color: Color(0xFFE6E6E6),
-              //                   ),
-              //                   borderRadius: BorderRadius.circular(20),
-              //                 ),
-              //               ),
-              //             ),
-              //       InkWell(
-              //         onTap: () {
-              //           showModalBottomSheet(
-              //             context: context,
-              //             elevation: 20,
-              //             barrierColor: kBlackColor.withOpacity(0.8),
-              //             showDragHandle: true,
-              //             useSafeArea: true,
-              //             isDismissible: true,
-              //             isScrollControlled: true,
-              //             shape: const RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.vertical(
-              //                 top: Radius.circular(kDefaultPadding),
-              //               ),
-              //             ),
-              //             enableDrag: true,
-              //             builder: ((builder) => uploadCoverImage()),
-              //           );
-              //         },
-              //         splashColor: kAccentColor.withOpacity(0.1),
-              //         borderRadius: BorderRadius.circular(10),
-              //         child: Container(
-              //           padding: const EdgeInsets.all(10),
-              //           child: Text(
-              //             'Upload item image',
-              //             textAlign: TextAlign.center,
-              //             style: TextStyle(
-              //               color: kAccentColor,
-              //               fontSize: 16,
-              //               fontWeight: FontWeight.w400,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // kSizedBox,
             ],
           ),
         ),
