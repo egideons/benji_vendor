@@ -88,16 +88,6 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
       );
       return;
     }
-    // Get.to(
-    //   () => BusinessLocation(business: widget.business),
-    //   routeName: 'BusinessLocation',
-    //   duration: const Duration(milliseconds: 300),
-    //   fullscreenDialog: true,
-    //   curve: Curves.easeIn,
-    //   preventDuplicates: true,
-    //   popGesture: true,
-    //   transition: Transition.rightToLeft,
-    // );
   }
 
 //==========================================================================================\\
