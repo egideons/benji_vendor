@@ -28,22 +28,6 @@ class _ProfileState extends State<Profile> {
     super.initState();
   }
 
-  // List<OrderModel> get pendingOrders =>
-  //     OrderController.instance.vendorsOrderList
-  //         .where((order) => order.deliveryStatus == "PEND")
-  //         .toList();
-
-  // List<OrderModel> get deliveredOrders =>
-  //     OrderController.instance.vendorsOrderList
-  //         .where((order) => order.deliveryStatus == "COMP")
-  //         .toList();
-  // int get pendingOrdersCount => pendingOrders.length;
-  // int get deliveredOrdersCount => deliveredOrders.length;
-
-  // totalNumberOfOrders() {
-  //   return pendingOrdersCount + deliveredOrdersCount;
-  // }
-
   void logOut() async {
     UserController.instance.deleteUser();
     ProductController.instance.deleteCachedProducts();
@@ -254,45 +238,6 @@ class _ProfileState extends State<Profile> {
                               color: kAccentColor,
                             ),
                           ),
-                          // ListTile(
-                          //   onTap: UserReviewsPage,
-                          //   leading: FaIcon(
-                          //     FontAwesomeIcons.solidComment,
-                          //     color: kAccentColor,
-                          //   ),
-                          //   title: const Text(
-                          //     'User Reviews',
-                          //     style: TextStyle(
-                          //       color: kTextBlackColor,
-                          //       fontSize: 15,
-                          //       fontWeight: FontWeight.w400,
-                          //     ),
-                          //   ),
-                          //   trailing: const FaIcon(FontAwesomeIcons.chevronRight),
-                          // ),
-                          // ListTile(
-                          //   leading: FaIcon(
-                          //     FontAwesomeIcons.receipt,
-                          //     color: kAccentColor,
-                          //   ),
-                          //   title: const Text(
-                          //     'Number of Orders',
-                          //     style: TextStyle(
-                          //       color: kTextBlackColor,
-                          //       fontSize: 15,
-                          //       fontWeight: FontWeight.w400,
-                          //     ),
-                          //   ),
-                          //   trailing: Text(
-                          //     formatNumber(totalNumberOfOrders()),
-                          //     textAlign: TextAlign.right,
-                          //     style: const TextStyle(
-                          //       color: Color(0xFF9B9BA5),
-                          //       fontSize: 18,
-                          //       fontWeight: FontWeight.w700,
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),
