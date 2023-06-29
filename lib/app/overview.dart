@@ -13,7 +13,7 @@ class OverView extends StatefulWidget {
 }
 
 class _OverViewState extends State<OverView> {
-  int _currentIndex = 1;
+  int _currentIndex = 0;
 
   final List<Widget> _pages = const [
     Dashboard(),
@@ -21,7 +21,7 @@ class _OverViewState extends State<OverView> {
     Profile(),
   ];
 
-  void onTappedBar(int index) {
+  void _onTappedBar(int index) {
     setState(() {
       _currentIndex = index;
     });
@@ -34,9 +34,54 @@ class _OverViewState extends State<OverView> {
       backgroundColor: kPrimaryColor,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: kPrimaryColor,
-        elevation: 10.0,
         currentIndex: _currentIndex,
-        items: const [],
+        onTap: _onTappedBar,
+        elevation: 20.0,
+        selectedItemColor: kAccentColor,
+        selectedIconTheme: IconThemeData(
+          color: kAccentColor,
+        ),
+        showSelectedLabels: true,
+        unselectedItemColor: const Color(
+          0xFFBDBDBD,
+        ),
+        unselectedIconTheme: const IconThemeData(
+          color: Color(
+            0xFFBDBDBD,
+          ),
+        ),
+        showUnselectedLabels: true,
+        enableFeedback: true,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.grid_view,
+            ),
+            label: "Overview",
+            activeIcon: Icon(
+              Icons.grid_view_rounded,
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.menu,
+            ),
+            label: "Product",
+            activeIcon: Icon(
+              Icons.menu_rounded,
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_2_outlined,
+            ),
+            label: "Profile",
+            activeIcon: Icon(
+              Icons.person_2_rounded,
+            ),
+          ),
+        ],
       ),
     );
   }
