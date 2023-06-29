@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-// import 'app/home/home.dart';
 import 'routes/routes.dart';
+import 'splash screens/startup splash screen.dart';
 import 'theme/colors.dart';
 
 void main() async {
@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Benji",
+      title: "Benji Vendor",
+      color: kPrimaryColor,
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
         scrollbarTheme: ScrollbarThemeData(
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme, // Use the default theme
         ),
       ),
-      // initialRoute: StartupSplashscreen.routeName,
+      initialRoute: StartupSplashscreen.routeName,
       // home: Home(),
       routes: routes,
     );
