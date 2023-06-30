@@ -35,12 +35,12 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/icons
-    - assets/images/login
-    - assets/images/logo
-    - assets/images/profile
-    - assets/images/splash screen
-    - assets/images/vendor
+    - assets/images/icons/
+    - assets/images/login/
+    - assets/images/logo/
+    - assets/images/profile/
+    - assets/images/splash screen/
+    - assets/images/vendor/
     - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
