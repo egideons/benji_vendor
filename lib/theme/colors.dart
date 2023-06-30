@@ -53,17 +53,23 @@ const Color kTextBlackColor = Color.fromARGB(
   0,
 );
 Color kTextGreyColor = const Color(
-  0xFF7E8A97,
+  0xFF676767,
 );
 const Color kBlueLinkTextColor = Color(
   0xFF2196F3,
 );
 //Icon Colors
+const Color kIconGreyColor = Color(
+  0xFF676767,
+);
 const Color kIconLightColor = Color(
   0xFFA5A5A5,
 );
 
 //Border Colors
+const Color kBorderGreyColor = Color(
+  0xFF676767,
+);
 const Color kBorderLightColor = Color(
   0xFFA5A5A5,
 );
