@@ -1,9 +1,9 @@
+import 'package:benji_vendor/app/overview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'routes/routes.dart';
-import 'splash screens/startup splash screen.dart';
 import 'theme/colors.dart';
 
 void main() async {
@@ -46,8 +46,8 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme, // Use the default theme
         ),
       ),
-      initialRoute: StartupSplashscreen.routeName,
-      // home: Home(),
+      // initialRoute: StartupSplashscreen.routeName,
+      home: const OverView(),
       routes: routes,
     );
   }

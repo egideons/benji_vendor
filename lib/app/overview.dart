@@ -67,7 +67,7 @@ class _OverViewState extends State<OverView> {
             icon: Icon(
               Icons.menu,
             ),
-            label: "Product",
+            label: "Products",
             activeIcon: Icon(
               Icons.menu_rounded,
             ),
