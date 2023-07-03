@@ -41,6 +41,7 @@ flutter:
     - assets/images/profile/
     - assets/images/splash screen/
     - assets/images/vendor/
+    - assets/images/food/
     - assets/animations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
