@@ -7,6 +7,7 @@ import '../../modules/home/home appBar vendor name.dart';
 import '../../modules/home/home orders container.dart';
 import '../../modules/home/home showModalBottomSheet.dart';
 import '../../theme/constants.dart';
+import '../others/notifications.dart';
 import '../profile/profile.dart';
 
 class Dashboard extends StatefulWidget {
@@ -102,11 +103,11 @@ class _DashboardState extends State<Dashboard> {
             ),
             child: IconButton(
               onPressed: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => Cart(),
-                //   ),
-                // );
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Notifications(),
+                  ),
+                );
               },
               splashRadius: 20,
               icon: Icon(
