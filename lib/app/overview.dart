@@ -2,6 +2,7 @@ import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'dashboard/dashboard.dart';
+import 'orders/orders.dart';
 import 'product/product.dart';
 import 'profile/profile.dart';
 
@@ -17,6 +18,7 @@ class _OverViewState extends State<OverView> {
 
   final List<Widget> _pages = const [
     Dashboard(),
+    Orders(),
     Product(),
     Profile(),
   ];
@@ -61,6 +63,15 @@ class _OverViewState extends State<OverView> {
             label: "Overview",
             activeIcon: Icon(
               Icons.grid_view_rounded,
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.shopping_bag_outlined,
+            ),
+            label: "Orders",
+            activeIcon: Icon(
+              Icons.shopping_bag_rounded,
             ),
           ),
           BottomNavigationBarItem(
