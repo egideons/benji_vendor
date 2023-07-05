@@ -1,3 +1,4 @@
+import 'package:benji_vendor/app/others/user%20reviews.dart';
 import 'package:benji_vendor/theme/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -231,7 +232,13 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
                 child: ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const UserReviews(),
+                      ),
+                    );
+                  },
                   leading: Icon(
                     Icons.keyboard_command_key_rounded,
                     color: kAccentColor,
