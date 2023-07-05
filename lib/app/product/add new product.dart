@@ -144,7 +144,6 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       kHalfSizedBox,
                       DropdownButtonFormField<String>(
-                        key: _formKey,
                         value: dropDownItemValue,
                         onChanged: dropDownOnChanged,
                         enableFeedback: true,
