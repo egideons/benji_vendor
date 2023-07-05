@@ -138,115 +138,124 @@ class _ProductState extends State<Product> {
                     scrollDirection: Axis.vertical,
                     itemCount: 3,
                     itemBuilder: (context, index) {
-                      return SizedBox(
-                        height: 120,
-                        width: 331,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              top: 0,
-                              left: 0,
-                              child: Container(
-                                width: 104,
-                                height: 104,
-                                decoration: ShapeDecoration(
-                                  image: const DecorationImage(
-                                    image: AssetImage(
-                                      "assets/images/food/pasta.png",
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ViewProdut(),
+                            ),
+                          );
+                        },
+                        child: SizedBox(
+                          height: 120,
+                          width: 331,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                left: 0,
+                                child: Container(
+                                  width: 104,
+                                  height: 104,
+                                  decoration: ShapeDecoration(
+                                    image: const DecorationImage(
+                                      image: AssetImage(
+                                        "assets/images/food/pasta.png",
+                                      ),
+                                      fit: BoxFit.fill,
                                     ),
-                                    fit: BoxFit.fill,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      12,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                        12,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Positioned(
-                              left: 110,
-                              child: SizedBox(
-                                height: 70,
-                                width: 260,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const SizedBox(
-                                      width: 149,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Chicken Thai Biriyani',
-                                            style: TextStyle(
-                                              color: Color(
-                                                0xFF32343E,
+                              Positioned(
+                                left: 110,
+                                child: SizedBox(
+                                  height: 70,
+                                  width: 260,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const SizedBox(
+                                        width: 149,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Chicken Thai Biriyani',
+                                              style: TextStyle(
+                                                color: Color(
+                                                  0xFF32343E,
+                                                ),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
                                               ),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
                                             ),
-                                          ),
-                                          Text(
-                                            "Chicken pasta mixed with spagetti and rice",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              overflow: TextOverflow.fade,
+                                            Text(
+                                              "Chicken pasta mixed with spagetti and rice",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                overflow: TextOverflow.fade,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        Icons.more_horiz_rounded,
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          Icons.more_horiz_rounded,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            const Positioned(
-                              right: 0,
-                              bottom: 30,
-                              child: SizedBox(
-                                width: 260,
-                                height: 17,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      '₦6,000',
-                                      style: TextStyle(
-                                        color: Color(
-                                          0xFF4F4F4F,
+                              const Positioned(
+                                right: 0,
+                                bottom: 30,
+                                child: SizedBox(
+                                  width: 260,
+                                  height: 17,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '₦6,000',
+                                        style: TextStyle(
+                                          color: Color(
+                                            0xFF4F4F4F,
+                                          ),
+                                          fontSize: 18,
+                                          fontFamily: 'Sen',
+                                          fontWeight: FontWeight.w400,
                                         ),
-                                        fontSize: 18,
-                                        fontFamily: 'Sen',
-                                        fontWeight: FontWeight.w400,
                                       ),
-                                    ),
-                                    Text(
-                                      'Qty: 3200',
-                                      textAlign: TextAlign.right,
-                                      style: TextStyle(
-                                        color: Color(
-                                          0xFFAFAFAF,
+                                      Text(
+                                        'Qty: 3200',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          color: Color(
+                                            0xFFAFAFAF,
+                                          ),
+                                          fontSize: 13.60,
+                                          fontWeight: FontWeight.w400,
                                         ),
-                                        fontSize: 13.60,
-                                        fontWeight: FontWeight.w400,
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
