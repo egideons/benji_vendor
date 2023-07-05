@@ -1,3 +1,4 @@
+import 'package:benji_vendor/app/product/view%20product.dart';
 import 'package:flutter/material.dart';
 
 import '../../modules/product/category button section.dart';
@@ -142,7 +143,7 @@ class _ProductState extends State<Product> {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => ViewProdut(),
+                              builder: (context) => const ViewProduct(),
                             ),
                           );
                         },
@@ -188,7 +189,7 @@ class _ProductState extends State<Product> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Chicken Thai Biriyani',
+                                              'Smokey Jollof Rice',
                                               style: TextStyle(
                                                 color: Color(
                                                   0xFF32343E,
@@ -198,7 +199,7 @@ class _ProductState extends State<Product> {
                                               ),
                                             ),
                                             Text(
-                                              "Chicken pasta mixed with spagetti and rice",
+                                              "Freshly steamed Jollof Rice",
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w400,
@@ -229,7 +230,7 @@ class _ProductState extends State<Product> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        '₦6,000',
+                                        '₦850',
                                         style: TextStyle(
                                           color: Color(
                                             0xFF4F4F4F,
