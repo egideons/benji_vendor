@@ -596,7 +596,7 @@ class _AddProductState extends State<AddProduct> {
                         alignment: Alignment.bottomRight,
                         child: MyOutlinedElevatedButton(
                           onPressed: () {},
-                          buttonTitle: "+ Add more variety",
+                          buttonTitle: "+ Add a variety",
                           titleFontSize: 16,
                           circularBorderRadius: 20,
                           maximumSizeHeight: 30,
