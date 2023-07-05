@@ -3,7 +3,9 @@
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../modules/home appBar vendor name.dart';
+import '../../modules/home/home appBar vendor name.dart';
+import '../../modules/home/home orders container.dart';
+import '../../modules/home/home showModalBottomSheet.dart';
 import '../../theme/constants.dart';
 import '../profile/profile.dart';
 
@@ -14,26 +16,12 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
+typedef ModalContentBuilder = Widget Function(BuildContext);
+
 class _DashboardState extends State<Dashboard> {
 //=================================== ALL VARIABLES =====================================\\
 
-//=================================== ORDERS =====================================\\
-  List<String> numberOfOrders = [
-    "20",
-    "05",
-  ];
-  List<String> typeOfOrder = [
-    "Active Orders",
-    "Pending Orders",
-  ];
-
 //=================================== DROP DOWN BUTTON =====================================\\
-  List<String> dropDownItems = <String>[
-    "Daily",
-    "Weekly",
-    "Monthly",
-    "Yearly",
-  ];
 
   String dropDownItemValue = "Daily";
 
@@ -78,6 +66,7 @@ class _DashboardState extends State<Dashboard> {
                 },
                 child: CircleAvatar(
                   minRadius: 20,
+                  backgroundColor: kSecondaryColor,
                   child: ClipOval(
                     child: Image.asset(
                       "assets/images/profile/profile-picture.png",
@@ -140,85 +129,28 @@ class _DashboardState extends State<Dashboard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  for (int i = 0; i < 2; i++)
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.only(
-                          top: kDefaultPadding / 1.5,
-                          left: kDefaultPadding,
-                          right: kDefaultPadding / 1.5,
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.41,
-                        height: 140,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                              kDefaultPadding,
-                            ),
-                          ),
-                          shadows: const [
-                            BoxShadow(
-                              color: Color(
-                                0x0F000000,
-                              ),
-                              blurRadius: 24,
-                              offset: Offset(
-                                0,
-                                4,
-                              ),
-                              spreadRadius: 4,
-                            )
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            const Align(
-                              alignment: Alignment.topRight,
-                              child: Icon(
-                                Icons.arrow_forward_rounded,
-                                size: 20,
-                                color: kGreyColor1,
-                              ),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: SizedBox(
-                                    width: 59.30,
-                                    height: 62.78,
-                                    child: Text(
-                                      numberOfOrders[i],
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: kAccentColor,
-                                        fontSize: 52.32,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Text(
-                                    typeOfOrder[i],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: kTextGreyColor,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                  OrdersContainer(
+                    onTap: () {
+                      OrdersContainerBottomSheet(
+                        context,
+                        "20 Running",
+                        20,
+                      );
+                    },
+                    numberOfOrders: "20",
+                    typeOfOrders: "Active",
+                  ),
+                  OrdersContainer(
+                    onTap: () {
+                      OrdersContainerBottomSheet(
+                        context,
+                        "5 Pending",
+                        5,
+                      );
+                    },
+                    numberOfOrders: "05",
+                    typeOfOrders: "Pending",
+                  ),
                 ],
               ),
             ),
@@ -426,12 +358,10 @@ class _DashboardState extends State<Dashboard> {
                         size: 30,
                       ),
                       kWidthSizedBox,
-                      const Text(
+                      Text(
                         '4.9',
                         style: TextStyle(
-                          color: Color(
-                            0xFFEC2623,
-                          ),
+                          color: kAccentColor,
                           fontSize: 21.80,
                           fontWeight: FontWeight.w700,
                         ),
