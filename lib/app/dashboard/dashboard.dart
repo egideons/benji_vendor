@@ -8,6 +8,7 @@ import '../../modules/home/home orders container.dart';
 import '../../modules/home/home showModalBottomSheet.dart';
 import '../../theme/constants.dart';
 import '../others/notifications.dart';
+import '../product/add new product.dart';
 import '../profile/profile.dart';
 
 class Dashboard extends StatefulWidget {
@@ -37,7 +38,13 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       backgroundColor: kPrimaryColor,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const AddProduct(),
+            ),
+          );
+        },
         elevation: 20.0,
         backgroundColor: kAccentColor,
         foregroundColor: kPrimaryColor,

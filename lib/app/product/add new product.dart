@@ -65,7 +65,7 @@ class _AddProductState extends State<AddProduct> {
       child: Scaffold(
         backgroundColor: kPrimaryColor,
         appBar: MyAppBar(
-          title: "Add New Items ",
+          title: "Add New Item ",
           backgroundColor: kPrimaryColor,
           elevation: 0.0,
           actions: const [],
@@ -301,8 +301,8 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       kHalfSizedBox,
                       MyTextFormField(
-                        controller: productNameEC,
-                        focusNode: productNameFN,
+                        controller: productPriceEC,
+                        focusNode: productPriceFN,
                         hintText: "Enter the unit price here",
                         textInputAction: TextInputAction.next,
                         textInputType: TextInputType.number,
@@ -314,7 +314,7 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         validator: (value) {
                           if (value == null || value!.isEmpty) {
-                            productNameFN.requestFocus();
+                            productPriceFN.requestFocus();
                             return "Enter the unit price";
                           }
                           return null;
