@@ -42,7 +42,10 @@ flutter:
     - assets/images/splash screen/
     - assets/images/vendor/
     - assets/images/food/
-    - assets/animations/
+    - assets/animations/forgot password/
+    - assets/animations/no internet/
+    - assets/animations/splash screen/
+    - assets/animations/successful/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
