@@ -42,6 +42,7 @@ flutter:
     - assets/images/splash screen/
     - assets/images/vendor/
     - assets/images/food/
+    - assets/images/customer/
     - assets/animations/forgot password/
     - assets/animations/no internet/
     - assets/animations/splash screen/
