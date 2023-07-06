@@ -13,6 +13,7 @@ class MyElevatedButton extends StatelessWidget {
   final double maximumSizeHeight;
   final String buttonTitle;
   final double titleFontSize;
+  final double elevation;
 
   const MyElevatedButton({
     super.key,
@@ -24,6 +25,7 @@ class MyElevatedButton extends StatelessWidget {
     required this.maximumSizeHeight,
     required this.buttonTitle,
     required this.titleFontSize,
+    required this.elevation,
   });
 
   @override
@@ -32,6 +34,7 @@ class MyElevatedButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: kAccentColor,
+        elevation: elevation,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
             circularBorderRadius,

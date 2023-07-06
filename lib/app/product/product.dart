@@ -92,6 +92,7 @@ class _ProductState extends State<Product> {
                         ),
                       ),
                       MyOutlinedElevatedButton(
+                        elevation: 5.0,
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -150,106 +151,136 @@ class _ProductState extends State<Product> {
                         child: SizedBox(
                           height: 120,
                           width: MediaQuery.of(context).size.width,
-                          child: Stack(
+                          child: Row(
                             children: [
-                              Positioned(
-                                top: 0,
-                                left: 0,
-                                child: Container(
-                                  width: 104,
-                                  height: 104,
-                                  decoration: ShapeDecoration(
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                        "assets/images/food/pasta.png",
-                                      ),
-                                      fit: BoxFit.fill,
+                              Container(
+                                width: 104,
+                                height: 104,
+                                decoration: ShapeDecoration(
+                                  image: const DecorationImage(
+                                    image: AssetImage(
+                                      "assets/images/food/pasta.png",
                                     ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                        12,
-                                      ),
+                                    fit: BoxFit.fill,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      12,
                                     ),
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                left: 110,
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: SizedBox(
-                                  height: 70,
-                                  width: 260,
-                                  child: Row(
+                                  width: 200,
+                                  child: Column(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      const SizedBox(
-                                        width: 149,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Smokey Jollof Rice',
-                                              style: TextStyle(
-                                                color: Color(
-                                                  0xFF32343E,
+                                      Text(
+                                        'Smokey Jollof Rice',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          color: Color(
+                                            0xFF32343E,
+                                          ),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Freshly steamed Jollof Rice",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text.rich(
+                                            TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: '₦',
+                                                  style: TextStyle(
+                                                    color: Color(
+                                                      0xFF4F4F4F,
+                                                    ),
+                                                    fontSize: 18,
+                                                    fontFamily: 'Sen',
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
                                                 ),
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w700,
-                                              ),
+                                                TextSpan(
+                                                  text: ' ',
+                                                  style: TextStyle(
+                                                    color: Color(
+                                                      0xFF4F4F4F,
+                                                    ),
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: '850',
+                                                  style: TextStyle(
+                                                    color: Color(
+                                                      0xFF4F4F4F,
+                                                    ),
+                                                    fontSize: 13.60,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              "Freshly steamed Jollof Rice",
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w400,
-                                                overflow: TextOverflow.fade,
-                                              ),
+                                          ),
+                                          Text.rich(
+                                            TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: 'Qty:',
+                                                  style: TextStyle(
+                                                    color: Color(
+                                                      0xFF4F4F4F,
+                                                    ),
+                                                    fontSize: 13.60,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: ' ',
+                                                  style: TextStyle(
+                                                    color: Color(
+                                                      0xFF4F4F4F,
+                                                    ),
+                                                    fontSize: 13.60,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                TextSpan(
+                                                  text: '3200',
+                                                  style: TextStyle(
+                                                    color: Color(
+                                                      0xFF4F4F4F,
+                                                    ),
+                                                    fontSize: 13.60,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.more_horiz_rounded,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const Positioned(
-                                left: 110,
-                                bottom: 30,
-                                child: SizedBox(
-                                  width: 260,
-                                  height: 17,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '₦850',
-                                        style: TextStyle(
-                                          color: Color(
-                                            0xFF4F4F4F,
                                           ),
-                                          fontSize: 18,
-                                          fontFamily: 'Sen',
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      Text(
-                                        'Qty: 3200',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          color: Color(
-                                            0xFFAFAFAF,
-                                          ),
-                                          fontSize: 13.60,
-                                          fontWeight: FontWeight.w400,
-                                        ),
+                                        ],
                                       ),
                                     ],
                                   ),

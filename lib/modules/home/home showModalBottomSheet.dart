@@ -168,6 +168,7 @@ Future<dynamic> OrdersContainerBottomSheet(
                               children: [
                                 MyElevatedButton(
                                   onPressed: () {},
+                                  elevation: 10.0,
                                   circularBorderRadius: 10,
                                   minimumSizeWidth: 90,
                                   minimumSizeHeight: 30,
@@ -178,6 +179,7 @@ Future<dynamic> OrdersContainerBottomSheet(
                                 ),
                                 MyOutlinedElevatedButton(
                                   onPressed: () {},
+                                  elevation: 10.0,
                                   circularBorderRadius: 10,
                                   minimumSizeWidth: 90,
                                   minimumSizeHeight: 30,

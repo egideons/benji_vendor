@@ -59,7 +59,6 @@ class _NotificationsState extends State<Notifications> {
               return Column(
                 children: [
                   ListTile(
-                    onTap: () {},
                     minVerticalPadding: kDefaultPadding / 2,
                     enableFeedback: true,
                     leading: const CircleAvatar(

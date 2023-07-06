@@ -61,6 +61,7 @@ class WithdrawalSuccessful extends StatelessWidget {
               ),
               MyElevatedButton(
                 buttonTitle: "Done",
+                elevation: 10.0,
                 titleFontSize: 18,
                 circularBorderRadius: 10,
                 maximumSizeHeight: 68,

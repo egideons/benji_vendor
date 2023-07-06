@@ -458,7 +458,7 @@ class _AddProductState extends State<AddProduct> {
                                   },
                                 ),
                                 const Text(
-                                  'Free Delivery',
+                                  'Disabled',
                                   style: TextStyle(
                                     color: Color(
                                       0xFF222222,
@@ -519,7 +519,7 @@ class _AddProductState extends State<AddProduct> {
                                   },
                                 ),
                                 const Text(
-                                  'Percentage Discount',
+                                  'Disabled',
                                   style: TextStyle(
                                     color: Color(
                                       0xFF222222,
@@ -655,12 +655,12 @@ class _AddProductState extends State<AddProduct> {
                                 Icons.arrow_forward_ios_rounded,
                               ),
                               title: Text(
-                                'Select variety',
+                                'Disabled',
                                 style: TextStyle(
                                   color: Color(
                                     0xFF979797,
                                   ),
-                                  fontSize: 18,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
@@ -671,6 +671,7 @@ class _AddProductState extends State<AddProduct> {
                               alignment: Alignment.bottomRight,
                               child: MyOutlinedElevatedButton(
                                 onPressed: () {},
+                                elevation: 10.0,
                                 buttonTitle: "+ Add a variety",
                                 titleFontSize: 16,
                                 circularBorderRadius: 20,
@@ -683,8 +684,8 @@ class _AddProductState extends State<AddProduct> {
                           : const Align(
                               alignment: Alignment.bottomRight,
                               child: MyDisabledOutlinedElevatedButton(
-                                buttonTitle: "+ Add a variety",
-                                titleFontSize: 16,
+                                buttonTitle: "Disabled",
+                                titleFontSize: 14,
                                 circularBorderRadius: 20,
                                 maximumSizeHeight: 30,
                                 maximumSizeWidth: 150,
@@ -695,6 +696,7 @@ class _AddProductState extends State<AddProduct> {
                       kSizedBox,
                       MyElevatedButton(
                         onPressed: () {},
+                        elevation: 10.0,
                         buttonTitle: "Save",
                         titleFontSize: 14,
                         circularBorderRadius: 20,

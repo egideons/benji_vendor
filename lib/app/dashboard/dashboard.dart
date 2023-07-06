@@ -91,36 +91,19 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
         actions: [
-          Container(
-            width: 45,
-            height: 45,
-            margin: const EdgeInsets.only(
-              right: kDefaultPadding / 2,
-            ),
-            decoration: const ShapeDecoration(
-              color: Color(0xFFFEF8F8),
-              shape: OvalBorder(
-                side: BorderSide(
-                  width: 0.50,
-                  color: Color(
-                    0xFFFDEDED,
-                  ),
+          IconButton(
+            iconSize: 20,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const Notifications(),
                 ),
-              ),
-            ),
-            child: IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const Notifications(),
-                  ),
-                );
-              },
-              splashRadius: 20,
-              icon: Icon(
-                Icons.notifications_outlined,
-                color: kAccentColor,
-              ),
+              );
+            },
+            splashRadius: 20,
+            icon: Icon(
+              Icons.notifications_outlined,
+              color: kAccentColor,
             ),
           ),
         ],
