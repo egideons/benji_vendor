@@ -149,7 +149,7 @@ class _ProductState extends State<Product> {
                         },
                         child: SizedBox(
                           height: 120,
-                          width: 331,
+                          width: MediaQuery.of(context).size.width,
                           child: Stack(
                             children: [
                               Positioned(
@@ -220,7 +220,7 @@ class _ProductState extends State<Product> {
                                 ),
                               ),
                               const Positioned(
-                                right: 0,
+                                left: 110,
                                 bottom: 30,
                                 child: SizedBox(
                                   width: 260,
