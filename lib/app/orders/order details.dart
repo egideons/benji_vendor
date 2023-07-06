@@ -325,43 +325,32 @@ class _OrderDetailsState extends State<OrderDetails> {
                           ),
                         ],
                       ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: kAccentColor,
-                            elevation: 10.0,
-                            enableFeedback: true,
-                            minimumSize: const Size(30, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                20,
-                              ),
-                            )),
-                        child: Icon(
-                          Icons.phone_rounded,
-                          color: kPrimaryColor,
-                          size: 20,
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: ShapeDecoration(
+                          color: kAccentColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          shadows: [
+                            BoxShadow(
+                              blurRadius: 4,
+                              spreadRadius: 0.7,
+                              color: kBlackColor.withOpacity(0.4),
+                              offset: const Offset(0, 4),
+                            )
+                          ],
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.phone_rounded,
+                            color: kPrimaryColor,
+                            size: 20,
+                          ),
                         ),
                       ),
-                      // Container(
-                      //   width: 40,
-                      //   height: 40,
-                      //   decoration: ShapeDecoration(
-                      //     color: kAccentColor,
-                      //     shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(14.30),
-                      //     ),
-                      //   ),
-                      //   child: Center(
-                      //     child: IconButton(
-                      //       onPressed: () {},
-                      //       icon: Icon(
-                      //         Icons.phone_rounded,
-                      //         color: kPrimaryColor,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ],
