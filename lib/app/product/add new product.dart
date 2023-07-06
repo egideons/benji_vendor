@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import '../../reusable widgets/my appbar.dart';
+import '../../reusable widgets/my disabled outlined elevatedButton.dart';
 import '../../reusable widgets/my elevatedButton.dart';
 import '../../reusable widgets/my outlined elevatedButton.dart';
 import '../../reusable widgets/my textformfield.dart';
@@ -82,7 +83,7 @@ class _AddProductState extends State<AddProduct> {
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: () {},
                   child: Container(
                     width: 346,
@@ -375,13 +376,9 @@ class _AddProductState extends State<AddProduct> {
                       ListTile(
                         enableFeedback: true,
                         onTap: () {},
-                        onLongPress: () {
-                          const Tooltip(
-                            message: "Select a category",
-                          );
-                        },
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.arrow_forward_ios_rounded,
+                          color: kAccentColor,
                         ),
                         title: const Text(
                           'Select Category',
@@ -424,7 +421,7 @@ class _AddProductState extends State<AddProduct> {
                             ],
                           ),
                           IconButton(
-                            tooltip: "Turn off",
+                            tooltip: isToggled ? "Turn on" : "Turn off",
                             isSelected: isToggled,
                             onPressed: () {
                               setState(() {
@@ -443,68 +440,128 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ],
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Checkbox(
-                            value: isChecked,
-                            splashRadius: 50,
-                            activeColor: kAccentColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                5,
-                              ),
+                      isToggled
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  value: false,
+                                  fillColor: const MaterialStatePropertyAll(
+                                      kGreyColor1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      5,
+                                    ),
+                                  ),
+                                  onChanged: (newValue) {
+                                    null;
+                                  },
+                                ),
+                                const Text(
+                                  'Free Delivery',
+                                  style: TextStyle(
+                                    color: Color(
+                                      0xFF222222,
+                                    ),
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: -0.26,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  value: isChecked,
+                                  splashRadius: 50,
+                                  activeColor: kAccentColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      5,
+                                    ),
+                                  ),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      isChecked = newValue!;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'Free Delivery',
+                                  style: TextStyle(
+                                    color: Color(
+                                      0xFF222222,
+                                    ),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: -0.26,
+                                  ),
+                                ),
+                              ],
                             ),
-                            onChanged: (newValue) {
-                              setState(() {
-                                isChecked = newValue!;
-                              });
-                            },
-                          ),
-                          const Text(
-                            'Free Delivery',
-                            style: TextStyle(
-                              color: Color(
-                                0xFF222222,
-                              ),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              letterSpacing: -0.26,
+                      isToggled
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  value: false,
+                                  fillColor: const MaterialStatePropertyAll(
+                                      kGreyColor1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      5,
+                                    ),
+                                  ),
+                                  onChanged: (newValue) {
+                                    null;
+                                  },
+                                ),
+                                const Text(
+                                  'Percentage Discount',
+                                  style: TextStyle(
+                                    color: Color(
+                                      0xFF222222,
+                                    ),
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: -0.26,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Checkbox(
+                                  value: isChecked2,
+                                  splashRadius: 50,
+                                  activeColor: kAccentColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      5,
+                                    ),
+                                  ),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      isChecked2 = newValue!;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'Percentage Discount',
+                                  style: TextStyle(
+                                    color: Color(
+                                      0xFF222222,
+                                    ),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: -0.26,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Checkbox(
-                            value: isChecked2,
-                            splashRadius: 50,
-                            activeColor: kAccentColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                5,
-                              ),
-                            ),
-                            onChanged: (newValue) {
-                              setState(() {
-                                isChecked2 = newValue!;
-                              });
-                            },
-                          ),
-                          const Text(
-                            'Percentage Discount',
-                            style: TextStyle(
-                              color: Color(
-                                0xFF222222,
-                              ),
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              letterSpacing: -0.26,
-                            ),
-                          ),
-                        ],
-                      ),
                       kSizedBox,
                       const Text(
                         'Set Custom Discount',
@@ -569,42 +626,72 @@ class _AddProductState extends State<AddProduct> {
                         ],
                       ),
                       kSizedBox,
-                      ListTile(
-                        enableFeedback: true,
-                        onTap: () {},
-                        onLongPress: () {
-                          const Tooltip(
-                            message: "Select a variety",
-                          );
-                        },
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios_rounded,
-                        ),
-                        title: const Text(
-                          'Select variety',
-                          style: TextStyle(
-                            color: Color(
-                              0xFF979797,
+                      isChecked3
+                          ? ListTile(
+                              enableFeedback: true,
+                              onTap: () {},
+                              onLongPress: () {
+                                const Tooltip(
+                                  message: "Select a variety",
+                                );
+                              },
+                              trailing: Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: kAccentColor,
+                              ),
+                              title: const Text(
+                                'Select variety',
+                                style: TextStyle(
+                                  color: Color(
+                                    0xFF979797,
+                                  ),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            )
+                          : const ListTile(
+                              trailing: Icon(
+                                Icons.arrow_forward_ios_rounded,
+                              ),
+                              title: Text(
+                                'Select variety',
+                                style: TextStyle(
+                                  color: Color(
+                                    0xFF979797,
+                                  ),
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
                             ),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
                       kHalfSizedBox,
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: MyOutlinedElevatedButton(
-                          onPressed: () {},
-                          buttonTitle: "+ Add a variety",
-                          titleFontSize: 16,
-                          circularBorderRadius: 20,
-                          maximumSizeHeight: 30,
-                          maximumSizeWidth: 180,
-                          minimumSizeHeight: 30,
-                          minimumSizeWidth: 180,
-                        ),
-                      ),
+                      isChecked3
+                          ? Align(
+                              alignment: Alignment.bottomRight,
+                              child: MyOutlinedElevatedButton(
+                                onPressed: () {},
+                                buttonTitle: "+ Add a variety",
+                                titleFontSize: 16,
+                                circularBorderRadius: 20,
+                                maximumSizeHeight: 30,
+                                maximumSizeWidth: 150,
+                                minimumSizeHeight: 30,
+                                minimumSizeWidth: 150,
+                              ),
+                            )
+                          : const Align(
+                              alignment: Alignment.bottomRight,
+                              child: MyDisabledOutlinedElevatedButton(
+                                buttonTitle: "+ Add a variety",
+                                titleFontSize: 16,
+                                circularBorderRadius: 20,
+                                maximumSizeHeight: 30,
+                                maximumSizeWidth: 150,
+                                minimumSizeHeight: 30,
+                                minimumSizeWidth: 150,
+                              ),
+                            ),
                       kSizedBox,
                       MyElevatedButton(
                         onPressed: () {},
