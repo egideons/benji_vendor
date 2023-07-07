@@ -7,6 +7,7 @@ import '../../reusable widgets/my disabled outlined elevatedButton.dart';
 import '../../reusable widgets/my elevatedButton.dart';
 import '../../reusable widgets/my outlined elevatedButton.dart';
 import '../../reusable widgets/my textformfield.dart';
+import '../../reusable widgets/showModalBottomSheetTitleWithIcon.dart';
 import '../../theme/colors.dart';
 import '../../theme/constants.dart';
 
@@ -51,12 +52,25 @@ class _AddProductState extends State<AddProduct> {
   bool isChecked = false;
   bool isChecked2 = false;
   bool isChecked3 = false;
+  bool categorySelected = false;
   var isToggled;
+
+  //========================================= LISTS ==========================================\\
+
+  // int get categoryCount => categoryList.length;
+  List<bool> selectedItems = []; // List to track selected items
+  List<String> categoryList = [
+    "Rice",
+    "Swallow",
+    "Soup",
+    "Snacks",
+  ];
 
   @override
   void initState() {
     super.initState();
     isToggled = true;
+    selectedItems = List<bool>.generate(categoryList.length, (index) => false);
   }
 
   @override
@@ -86,10 +100,9 @@ class _AddProductState extends State<AddProduct> {
                 InkWell(
                   onTap: () {},
                   child: Container(
-                    width: 346,
+                    width: MediaQuery.of(context).size.width,
                     height: 144,
                     decoration: ShapeDecoration(
-                      color: Colors.white,
                       shape: RoundedRectangleBorder(
                         side: const BorderSide(
                           width: 0.50,
@@ -375,7 +388,220 @@ class _AddProductState extends State<AddProduct> {
                       kHalfSizedBox,
                       ListTile(
                         enableFeedback: true,
-                        onTap: () {},
+                        onTap: () {
+                          // SelectCategoryShowModalBottomSheet(context);
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: kPrimaryColor,
+                            barrierColor: kBlackColor.withOpacity(0.5),
+                            showDragHandle: true,
+                            useSafeArea: true,
+                            isScrollControlled: true,
+                            isDismissible: true,
+                            elevation: 20.0,
+                            constraints: BoxConstraints(
+                              maxHeight:
+                                  MediaQuery.of(context).size.height * 0.7,
+                              minHeight:
+                                  MediaQuery.of(context).size.height * 0.5,
+                            ),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(
+                                  kDefaultPadding,
+                                ),
+                              ),
+                            ),
+                            enableDrag: true,
+                            builder: (context) => SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              padding: const EdgeInsets.only(
+                                left: kDefaultPadding,
+                                top: kDefaultPadding / 2,
+                                right: kDefaultPadding,
+                                bottom: kDefaultPadding,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const ShowModalBottomSheetTitleWithIcon(
+                                    title: "Select Category",
+                                  ),
+                                  const SizedBox(
+                                    height: kDefaultPadding * 3,
+                                  ),
+                                  Center(
+                                    child: Column(
+                                      children: [
+                                        Image.asset(
+                                          "assets/images/icons/add-category.png",
+                                        ),
+                                        kSizedBox,
+                                        const SizedBox(
+                                          width: 156,
+                                          height: 31,
+                                          child: Text(
+                                            'No Category',
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Color(0xFF222222),
+                                              overflow: TextOverflow.ellipsis,
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.w700,
+                                              letterSpacing: -0.48,
+                                            ),
+                                          ),
+                                        ),
+                                        kSizedBox,
+                                        const SizedBox(
+                                          width: 187,
+                                          height: 60,
+                                          child: Text(
+                                            'Create a new category',
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 3,
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              overflow: TextOverflow.ellipsis,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              letterSpacing: -0.32,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: kDefaultPadding * 2,
+                                  ),
+                                  Center(
+                                    child: InkWell(
+                                      onTap: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          backgroundColor: kPrimaryColor,
+                                          barrierColor:
+                                              kBlackColor.withOpacity(0.5),
+                                          showDragHandle: true,
+                                          useSafeArea: true,
+                                          isScrollControlled: true,
+                                          isDismissible: true,
+                                          elevation: 20.0,
+                                          constraints: BoxConstraints(
+                                            maxHeight: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.7,
+                                            minHeight: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.5,
+                                          ),
+                                          shape: const RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(
+                                                kDefaultPadding,
+                                              ),
+                                            ),
+                                          ),
+                                          enableDrag: true,
+                                          builder: (context) =>
+                                              SingleChildScrollView(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            scrollDirection: Axis.vertical,
+                                            padding: const EdgeInsets.only(
+                                              left: kDefaultPadding,
+                                              top: kDefaultPadding / 2,
+                                              right: kDefaultPadding,
+                                              bottom: kDefaultPadding,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const ShowModalBottomSheetTitleWithIcon(
+                                                  title: "Choose Category",
+                                                ),
+                                                kSizedBox,
+                                                Column(
+                                                  children: categoryList
+                                                      .map((category) {
+                                                    int index = categoryList
+                                                        .indexOf(category);
+                                                    return ListTile(
+                                                      title: Text(category),
+                                                      leading:
+                                                          selectedItems[index]
+                                                              ? const Icon(
+                                                                  Icons.check)
+                                                              : null,
+                                                      onTap: () {
+                                                        setState(() {
+                                                          selectedItems = List<
+                                                                  bool>.generate(
+                                                              categoryList
+                                                                  .length,
+                                                              (i) =>
+                                                                  i == index);
+                                                        });
+                                                      },
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width /
+                                                1.2,
+                                        height: 56,
+                                        decoration: ShapeDecoration(
+                                          shape: RoundedRectangleBorder(
+                                            side: const BorderSide(
+                                                width: 0.50,
+                                                color: Color(0xFFE6E6E6)),
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.add_circle_outlined,
+                                              color: kAccentColor,
+                                            ),
+                                            kHalfWidthSizedBox,
+                                            Text(
+                                              'Add Category',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                color: kAccentColor,
+                                                overflow: TextOverflow.ellipsis,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w700,
+                                                letterSpacing: -0.28,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                         trailing: Icon(
                           Icons.arrow_forward_ios_rounded,
                           color: kAccentColor,
