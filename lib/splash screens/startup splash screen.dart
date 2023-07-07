@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../app/overview.dart';
 import '../theme/colors.dart';
-import '../theme/constants.dart';
+import '../providers/constants.dart';
 
 class StartupSplashscreen extends StatefulWidget {
   static String routeName = "Startup Splash Screen";

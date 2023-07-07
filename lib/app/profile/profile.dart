@@ -1,8 +1,8 @@
 import 'package:benji_vendor/app/others/user%20reviews.dart';
-import 'package:benji_vendor/theme/constants.dart';
+import 'package:benji_vendor/providers/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../../modules/profile/profile first half.dart';
+import '../../widgets/profile/profile first half.dart';
 import '../../theme/colors.dart';
 
 class Profile extends StatefulWidget {

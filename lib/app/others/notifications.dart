@@ -1,5 +1,5 @@
 import 'package:benji_vendor/theme/colors.dart';
-import 'package:benji_vendor/theme/constants.dart';
+import 'package:benji_vendor/providers/constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../reusable widgets/my appbar.dart';

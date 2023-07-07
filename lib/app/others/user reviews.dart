@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../reusable widgets/my appbar.dart';
 import '../../theme/colors.dart';
-import '../../theme/constants.dart';
+import '../../providers/constants.dart';
 
 class UserReviews extends StatefulWidget {
   const UserReviews({super.key});
