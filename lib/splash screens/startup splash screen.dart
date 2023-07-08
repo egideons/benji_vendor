@@ -1,11 +1,11 @@
 // ignore_for_file: camel_case_types, file_names
 
+import 'package:benji_vendor/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../app/overview.dart';
-import '../theme/colors.dart';
 import '../providers/constants.dart';
+import '../theme/colors.dart';
 
 class StartupSplashscreen extends StatefulWidget {
   static String routeName = "Startup Splash Screen";
@@ -24,35 +24,50 @@ class _StartupSplashscreenState extends State<StartupSplashscreen> {
         ), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (ctx) => const OverView(),
+          builder: (ctx) => const Login(),
         ),
       );
     });
     return Scaffold(
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height / 4,
-              width: MediaQuery.of(context).size.width / 2,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    "assets/images/splash screen/frame-1.png",
+      body: ListView(
+        padding: const EdgeInsets.all(kDefaultPadding / 2),
+        physics: const BouncingScrollPhysics(),
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height / 4,
+                  width: MediaQuery.of(context).size.width / 2,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        "assets/images/splash screen/frame-1.png",
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                kSizedBox,
+                const Center(
+                  child: Text(
+                    "Vendor App",
+                    style: TextStyle(
+                      color: kTextBlackColor,
+                    ),
+                  ),
+                ),
+                kSizedBox,
+                SpinKitThreeInOut(
+                  color: kSecondaryColor,
+                  size: 20,
+                ),
+              ],
             ),
-            kSizedBox,
-            SpinKitThreeInOut(
-              color: kSecondaryColor,
-              size: 20,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

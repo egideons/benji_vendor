@@ -1,5 +1,6 @@
 // ignore_for_file: camel_case_types, file_names
 
+import 'package:benji_vendor/app/overview.dart';
 import 'package:flutter/material.dart';
 
 class LoginSplashScreen extends StatelessWidget {
@@ -7,13 +8,13 @@ class LoginSplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(seconds: 3), () {
-    //   Navigator.of(context).pushReplacement(
-    //     MaterialPageRoute(
-    //       builder: (context) => Home(),
-    //     ),
-    //   );
-    // });
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const OverView(),
+        ),
+      );
+    });
 
     return SafeArea(
       child: Scaffold(
