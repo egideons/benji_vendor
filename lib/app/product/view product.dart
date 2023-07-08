@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../modules/product/category button section.dart';
+import '../../providers/constants.dart';
+import '../../reusable widgets/showModalBottomSheet.dart';
+import '../../reusable widgets/showModalBottomSheetTitleWithIcon.dart';
 import '../../theme/colors.dart';
-import '../../theme/constants.dart';
+import '../../widgets/product/category button section.dart';
 
 class ViewProduct extends StatefulWidget {
   const ViewProduct({super.key});
@@ -94,7 +96,7 @@ class _ViewProductState extends State<ViewProduct> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.of(context).pop(context);
                     },
@@ -102,9 +104,7 @@ class _ViewProductState extends State<ViewProduct> {
                       width: 48,
                       height: 48,
                       decoration: ShapeDecoration(
-                        color: const Color(
-                          0xFFFAFAFA,
-                        ),
+                        color: kPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                             19,
@@ -117,15 +117,75 @@ class _ViewProductState extends State<ViewProduct> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {},
+                  InkWell(
+                    onTap: () {
+                      ShowModalBottomSheet(
+                        context,
+                        20.0,
+                        MediaQuery.of(context).size.height * 0.7,
+                        MediaQuery.of(context).size.height * 0.5,
+                        SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          padding: const EdgeInsets.only(
+                            left: kDefaultPadding,
+                            top: kDefaultPadding / 2,
+                            right: kDefaultPadding,
+                            bottom: kDefaultPadding,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const ShowModalBottomSheetTitleWithIcon(
+                                title: "Option",
+                              ),
+                              const SizedBox(
+                                height: kDefaultPadding * 3,
+                              ),
+                              ListTile(
+                                onTap: () {},
+                                leading: Icon(
+                                  Icons.edit,
+                                  color: kAccentColor,
+                                  size: 14,
+                                ),
+                                title: const Text(
+                                  'Edit',
+                                  style: TextStyle(
+                                    color: Color(0xFF696969),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: -0.32,
+                                  ),
+                                ),
+                              ),
+                              ListTile(
+                                onTap: () {},
+                                leading: Icon(
+                                  Icons.delete,
+                                  color: kAccentColor,
+                                  size: 14,
+                                ),
+                                title: const Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                    color: Color(0xFF696969),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: -0.32,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                     child: Container(
                       width: 48,
                       height: 48,
                       decoration: ShapeDecoration(
-                        color: const Color(
-                          0xFFFAFAFA,
-                        ),
+                        color: kPrimaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(
                             19,

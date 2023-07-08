@@ -1,11 +1,11 @@
 import 'package:benji_vendor/app/product/view%20product.dart';
 import 'package:flutter/material.dart';
 
-import '../../modules/product/category button section.dart';
+import '../../providers/constants.dart';
 import '../../reusable widgets/my outlined elevatedButton.dart';
 import '../../reusable widgets/search field.dart';
 import '../../theme/colors.dart';
-import '../../theme/constants.dart';
+import '../../widgets/product/category button section.dart';
 import 'add new product.dart';
 
 class Product extends StatefulWidget {
@@ -101,12 +101,12 @@ class _ProductState extends State<Product> {
                           );
                         },
                         circularBorderRadius: 10,
-                        minimumSizeWidth: 75,
+                        minimumSizeWidth: 65,
                         minimumSizeHeight: 35,
-                        maximumSizeWidth: 75,
+                        maximumSizeWidth: 65,
                         maximumSizeHeight: 35,
                         buttonTitle: "+ Add",
-                        titleFontSize: 14,
+                        titleFontSize: 12,
                       )
                     ],
                   ),
@@ -124,7 +124,7 @@ class _ProductState extends State<Product> {
                 ),
                 kHalfSizedBox,
                 const Text(
-                  'Total 03 items',
+                  'Total 3 items',
                   style: TextStyle(
                     color: Color(
                       0xFF9B9BA5,
@@ -140,7 +140,7 @@ class _ProductState extends State<Product> {
                     scrollDirection: Axis.vertical,
                     itemCount: 3,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
+                      return InkWell(
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
@@ -216,18 +216,8 @@ class _ProductState extends State<Product> {
                                                     color: Color(
                                                       0xFF4F4F4F,
                                                     ),
-                                                    fontSize: 18,
+                                                    fontSize: 14,
                                                     fontFamily: 'Sen',
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: ' ',
-                                                  style: TextStyle(
-                                                    color: Color(
-                                                      0xFF4F4F4F,
-                                                    ),
-                                                    fontSize: 18,
                                                     fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
@@ -237,7 +227,7 @@ class _ProductState extends State<Product> {
                                                     color: Color(
                                                       0xFF4F4F4F,
                                                     ),
-                                                    fontSize: 13.60,
+                                                    fontSize: 18,
                                                     fontWeight: FontWeight.w400,
                                                   ),
                                                 ),

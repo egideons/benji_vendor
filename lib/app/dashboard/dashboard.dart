@@ -3,10 +3,10 @@
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../modules/home/home appBar vendor name.dart';
-import '../../modules/home/home orders container.dart';
-import '../../modules/home/home showModalBottomSheet.dart';
-import '../../theme/constants.dart';
+import '../../providers/constants.dart';
+import '../../widgets/home/home appBar vendor name.dart';
+import '../../widgets/home/home orders container.dart';
+import '../../widgets/home/home showModalBottomSheet.dart';
 import '../others/notifications.dart';
 import '../product/add new product.dart';
 import '../profile/profile.dart';
@@ -109,6 +109,7 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       body: SafeArea(
+        maintainBottomViewPadding: true,
         child: ListView(
           physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.vertical,

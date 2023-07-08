@@ -9,6 +9,7 @@ class MyTextFormField2 extends StatelessWidget {
   final TextInputAction textInputAction;
   final FocusNode focusNode;
   final String hintText;
+  final TextInputType textInputType;
 
   const MyTextFormField2({
     super.key,
@@ -17,7 +18,7 @@ class MyTextFormField2 extends StatelessWidget {
     this.onSaved,
     required this.textInputAction,
     required this.focusNode,
-    required this.hintText,
+    required this.hintText, required this.textInputType,
   });
 
   @override
@@ -33,7 +34,7 @@ class MyTextFormField2 extends StatelessWidget {
       cursorColor: kSecondaryColor,
       autocorrect: true,
       enableSuggestions: true,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: textInputType,
       maxLines: 1,
       style: TextStyle(
         color: kSecondaryColor,

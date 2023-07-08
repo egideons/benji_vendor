@@ -5,8 +5,8 @@ import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../providers/constants.dart';
-import '../../reusable widgets/my textformfield2.dart';
 import '../../reusable widgets/my elevatedButton.dart';
+import '../../reusable widgets/my textformfield2.dart';
 import '../../reusable widgets/showModalBottomSheetTitleWithIcon.dart';
 import '../others/successful_screen.dart';
 
@@ -130,7 +130,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) => const SuccessfulScreen(
-                      text: "Product addedd successfully",
+                      text: "Product added successfully",
                       elevatedButtonTitle: "Okay",
                     ),
                   ),
@@ -195,6 +195,7 @@ class _SelectCategoryState extends State<SelectCategory> {
                           MyTextFormField2(
                             controller: categoryNameEC,
                             focusNode: categoryNameFN,
+                            textInputType: TextInputType.name,
                             hintText: "Enter category name here",
                             textInputAction: TextInputAction.go,
                             validator: (value) {
