@@ -4,31 +4,27 @@ import 'package:flutter/material.dart';
 
 import '../theme/colors.dart';
 
-class MyTextFormField2 extends StatelessWidget {
+class EmailTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final FormFieldValidator validator;
   final dynamic onSaved;
   final TextInputAction textInputAction;
-  final FocusNode focusNode;
-  final String hintText;
-  final TextInputType textInputType;
+  final FocusNode emailFocusNode;
 
-  const MyTextFormField2({
+  const EmailTextFormField({
     super.key,
     required this.controller,
     required this.validator,
     this.onSaved,
     required this.textInputAction,
-    required this.focusNode,
-    required this.hintText,
-    required this.textInputType,
+    required this.emailFocusNode,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       // onTap: onTap,
-      focusNode: focusNode,
+      focusNode: emailFocusNode,
       controller: controller,
       validator: validator,
       onSaved: onSaved,
@@ -37,7 +33,7 @@ class MyTextFormField2 extends StatelessWidget {
       cursorColor: kSecondaryColor,
       autocorrect: true,
       enableSuggestions: true,
-      keyboardType: textInputType,
+      keyboardType: TextInputType.emailAddress,
       maxLines: 1,
       style: TextStyle(
         color: kSecondaryColor,
@@ -45,7 +41,7 @@ class MyTextFormField2 extends StatelessWidget {
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
-        hintText: hintText,
+        hintText: "example@gmail.com",
         errorStyle: const TextStyle(
           color: kErrorColor,
         ),
