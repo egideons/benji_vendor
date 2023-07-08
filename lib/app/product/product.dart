@@ -222,6 +222,16 @@ class _ProductState extends State<Product> {
                                                   ),
                                                 ),
                                                 TextSpan(
+                                                  text: ' ',
+                                                  style: TextStyle(
+                                                    color: Color(
+                                                      0xFF4F4F4F,
+                                                    ),
+                                                    fontSize: 13.60,
+                                                    fontWeight: FontWeight.w400,
+                                                  ),
+                                                ),
+                                                TextSpan(
                                                   text: '850',
                                                   style: TextStyle(
                                                     color: Color(

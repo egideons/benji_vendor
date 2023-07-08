@@ -1,11 +1,13 @@
 // ignore_for_file: file_names
 
-import 'package:benji_vendor/reusable%20widgets/my%20appbar.dart';
-import 'package:benji_vendor/reusable%20widgets/my%20elevatedButton.dart';
-import 'package:benji_vendor/reusable%20widgets/my%20outlined%20elevatedButton.dart';
-import 'package:benji_vendor/theme/colors.dart';
 import 'package:benji_vendor/providers/constants.dart';
+import 'package:benji_vendor/reusable%20widgets/my%20appbar.dart';
+import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import '../../reusable widgets/my elevatedButton.dart';
+import '../../reusable widgets/my outlined elevatedButton.dart';
 
 class OrderDetails extends StatefulWidget {
   const OrderDetails({super.key});
@@ -15,6 +17,46 @@ class OrderDetails extends StatefulWidget {
 }
 
 class _OrderDetailsState extends State<OrderDetails> {
+//============================== ALL VARIABLES ================================\\
+
+//============================== VARIABLES ================================\\
+
+//============================== BOOLS ================================\\
+  bool isOrderProcessing = false;
+  bool isOrderAccepted = false;
+  bool isOrderCanceled = false;
+
+//============================== FUNCTIONS ================================\\
+  //Order Accepted
+  void processOrderAccepted() {
+    setState(() {
+      isOrderProcessing = true;
+    });
+
+    // Simulating an asynchronous process
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        isOrderProcessing = false;
+        isOrderAccepted = true;
+      });
+    });
+  }
+
+  //Order Canceled
+  void processOrderCanceled() {
+    setState(() {
+      isOrderProcessing = true;
+    });
+
+    // Simulating an asynchronous process
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        isOrderProcessing = false;
+        isOrderCanceled = true;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,11 +94,11 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
@@ -82,7 +124,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           '#00977',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -92,16 +134,49 @@ class _OrderDetailsState extends State<OrderDetails> {
                             letterSpacing: -0.32,
                           ),
                         ),
-                        Text(
-                          'Pending',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: Color(0xFF0003C4),
-                            fontSize: 16.09,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.32,
-                          ),
-                        ),
+                        isOrderCanceled
+                            ? Text(
+                                'Canceled',
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  color: kAccentColor,
+                                  fontSize: 16.09,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: -0.32,
+                                ),
+                              )
+                            : isOrderAccepted
+                                ? const Text(
+                                    'Accepted',
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      color: kSuccessColor,
+                                      fontSize: 16.09,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: -0.32,
+                                    ),
+                                  )
+                                : isOrderProcessing
+                                    ? Text(
+                                        'Processing',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          color: kLoadingColor,
+                                          fontSize: 16.09,
+                                          fontWeight: FontWeight.w700,
+                                          letterSpacing: -0.32,
+                                        ),
+                                      )
+                                    : Text(
+                                        'Pending',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          color: kSecondaryColor,
+                                          fontSize: 16.09,
+                                          fontWeight: FontWeight.w700,
+                                          letterSpacing: -0.32,
+                                        ),
+                                      ),
                       ],
                     ),
                   ],
@@ -529,34 +604,164 @@ class _OrderDetailsState extends State<OrderDetails> {
                 ],
               ),
             ),
-            kSizedBox,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                MyOutlinedElevatedButton(
-                  onPressed: () {},
-                  buttonTitle: "Cancel Order",
-                  elevation: 10.0,
-                  titleFontSize: 16.09,
-                  circularBorderRadius: 10.0,
-                  maximumSizeHeight: 50.07,
-                  maximumSizeWidth: MediaQuery.of(context).size.width / 2.5,
-                  minimumSizeHeight: 50.07,
-                  minimumSizeWidth: MediaQuery.of(context).size.width / 2.5,
-                ),
-                MyElevatedButton(
-                  onPressed: () {},
-                  elevation: 10.0,
-                  buttonTitle: "Accept Order",
-                  titleFontSize: 16.09,
-                  circularBorderRadius: 10.0,
-                  maximumSizeHeight: 50.07,
-                  maximumSizeWidth: MediaQuery.of(context).size.width / 2.5,
-                  minimumSizeHeight: 50.07,
-                  minimumSizeWidth: MediaQuery.of(context).size.width / 2.5,
-                ),
-              ],
+            const SizedBox(
+              height: kDefaultPadding * 2,
             ),
+            isOrderCanceled
+                ? Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.all(15),
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFFEF8F8),
+                      shape: RoundedRectangleBorder(
+                        side: const BorderSide(
+                          width: 0.50,
+                          color: Color(0xFFFDEDED),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          color: kAccentColor,
+                          Icons.info_outline_rounded,
+                          size: 30,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Order Canceled',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16.09,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: -0.32,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: const Text(
+                                'This order has been canceled',
+                                style: TextStyle(
+                                  color: Color(0xFF6E6E6E),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  letterSpacing: -0.28,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  )
+                : isOrderAccepted
+                    ? Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(15),
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFFEF8F8),
+                          shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                              width: 0.50,
+                              color: Color(0xFFFDEDED),
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              color: kAccentColor,
+                              Icons.info_outline_rounded,
+                              size: 30,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Awaiting Delivery',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.09,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: -0.32,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  child: const Text(
+                                    'The delivery man is on his way to deliver this product',
+                                    style: TextStyle(
+                                      color: Color(0xFF6E6E6E),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      letterSpacing: -0.28,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    : isOrderProcessing
+                        ? SpinKitChasingDots(
+                            color: kAccentColor,
+                            duration: const Duration(seconds: 2),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              MyOutlinedElevatedButton(
+                                onPressed: () {
+                                  processOrderCanceled();
+                                },
+                                buttonTitle: "Cancel Order",
+                                elevation: 10.0,
+                                titleFontSize: 16.09,
+                                circularBorderRadius: 10.0,
+                                maximumSizeHeight: 50.07,
+                                maximumSizeWidth:
+                                    MediaQuery.of(context).size.width / 2.5,
+                                minimumSizeHeight: 50.07,
+                                minimumSizeWidth:
+                                    MediaQuery.of(context).size.width / 2.5,
+                              ),
+                              MyElevatedButton(
+                                onPressed: () {
+                                  processOrderAccepted();
+                                },
+                                elevation: 10.0,
+                                buttonTitle: "Accept Order",
+                                titleFontSize: 16.09,
+                                circularBorderRadius: 10.0,
+                                maximumSizeHeight: 50.07,
+                                maximumSizeWidth:
+                                    MediaQuery.of(context).size.width / 2.5,
+                                minimumSizeHeight: 50.07,
+                                minimumSizeWidth:
+                                    MediaQuery.of(context).size.width / 2.5,
+                              ),
+                            ],
+                          ),
             kSizedBox,
           ],
         ),

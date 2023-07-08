@@ -1,7 +1,10 @@
+// ignore_for_file: file_names
+
+import 'package:flutter/material.dart';
+
 import 'package:benji_vendor/providers/constants.dart';
 import 'package:benji_vendor/reusable%20widgets/my%20outlined%20elevatedButton.dart';
 import 'package:benji_vendor/theme/colors.dart';
-import 'package:flutter/material.dart';
 
 import '../../reusable widgets/my appbar.dart';
 import '../../reusable widgets/my elevatedButton.dart';
