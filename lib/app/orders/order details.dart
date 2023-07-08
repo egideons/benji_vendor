@@ -62,6 +62,7 @@ class _OrderDetailsState extends State<OrderDetails> {
     return Scaffold(
       appBar: MyAppBar(
         title: "Order Details",
+        toolbarHeight: 80,
         elevation: 0.0,
         actions: const [],
         backgroundColor: kPrimaryColor,

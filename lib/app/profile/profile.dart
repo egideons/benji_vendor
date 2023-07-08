@@ -1,9 +1,10 @@
 import 'package:benji_vendor/app/others/user%20reviews.dart';
 import 'package:benji_vendor/providers/constants.dart';
+import 'package:benji_vendor/screens/login.dart';
 import 'package:flutter/material.dart';
 
-import '../../widgets/profile/profile first half.dart';
 import '../../theme/colors.dart';
+import '../../widgets/profile/profile first half.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -288,7 +289,14 @@ class _ProfileState extends State<Profile> {
                   ],
                 ),
                 child: ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => const Login(),
+                      ),
+                      (route) => false,
+                    );
+                  },
                   leading: Icon(
                     Icons.logout_rounded,
                     color: kAccentColor,

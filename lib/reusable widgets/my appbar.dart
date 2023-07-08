@@ -2,14 +2,15 @@
 
 import 'package:flutter/material.dart';
 
-import '../theme/colors.dart';
 import '../providers/constants.dart';
+import '../theme/colors.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final double elevation;
   final Color backgroundColor;
   final List<Widget> actions;
+  final double toolbarHeight;
   @override
   Size get preferredSize => const Size.fromHeight(
         80,
@@ -20,19 +21,21 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.elevation,
     required this.actions,
     required this.backgroundColor,
+    required this.toolbarHeight,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      toolbarHeight: 80,
+      toolbarHeight: toolbarHeight,
       automaticallyImplyLeading: false,
       elevation: elevation,
       backgroundColor: backgroundColor,
       actions: actions,
       title: Row(
         children: [
-          GestureDetector(
+          InkWell(
+            borderRadius: BorderRadius.circular(24),
             onTap: () {
               Navigator.of(context).pop(context);
             },

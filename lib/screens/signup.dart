@@ -1,31 +1,34 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'package:benji_vendor/screens/signup.dart';
+import 'package:benji_vendor/screens/login.dart';
+import 'package:benji_vendor/splash%20screens/signup%20splash%20screen.dart';
 import 'package:flutter/material.dart';
 
 import '../providers/constants.dart';
 import '../reusable widgets/email textformfield.dart';
+import '../reusable widgets/my appbar.dart';
 import '../reusable widgets/my floating snackbar.dart';
+import '../reusable widgets/name textformfield.dart';
 import '../reusable widgets/password textformfield.dart';
 import '../reusable widgets/reusable authentication first half.dart';
-import '../splash screens/login splash screen.dart';
 import '../theme/colors.dart';
-import 'forgot password.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   //=========================== ALL VARIABBLES ====================================\\
 
   //=========================== CONTROLLERS ====================================\\
 
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController userFirstNameEC = TextEditingController();
+  TextEditingController userLastNameEC = TextEditingController();
+  TextEditingController userEmailEC = TextEditingController();
+  TextEditingController userPasswordEC = TextEditingController();
 
   //=========================== KEYS ====================================\\
 
@@ -43,8 +46,10 @@ class _LoginState extends State<Login> {
   );
 
   //=========================== FOCUS NODES ====================================\\
-  FocusNode emailFocusNode = FocusNode();
-  FocusNode passwordFocusNode = FocusNode();
+  FocusNode userFirstNameFN = FocusNode();
+  FocusNode userLastNameFN = FocusNode();
+  FocusNode userEmailFN = FocusNode();
+  FocusNode userPasswordFN = FocusNode();
 
   //=========================== INITIAL STATE ====================================\\
   @override
@@ -60,27 +65,22 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         backgroundColor: kSecondaryColor,
         resizeToAvoidBottomInset: true,
+        appBar: const MyAppBar(
+          title: "",
+          toolbarHeight: kToolbarHeight,
+          backgroundColor: kTransparentColor,
+          elevation: 0.0,
+          actions: [],
+        ),
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: Column(
             children: [
-              ReusableAuthenticationFirstHalf(
-                title: "Log In",
-                subtitle: "Please log in to your existing account",
-                decoration: ShapeDecoration(
-                  image: const DecorationImage(
-                    image: AssetImage(
-                      "assets/images/login/avatar-image.png",
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      43.50,
-                    ),
-                  ),
-                ),
-                imageContainerHeight: 88,
+              const ReusableAuthenticationFirstHalf(
+                title: "Sign up",
+                subtitle: "Please sign up to get started",
+                decoration: BoxDecoration(),
+                imageContainerHeight: 0,
               ),
               kSizedBox,
               Expanded(
@@ -88,8 +88,12 @@ class _LoginState extends State<Login> {
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(24),
+                      topLeft: Radius.circular(
+                        24,
+                      ),
+                      topRight: Radius.circular(
+                        24,
+                      ),
                     ),
                     color: kPrimaryColor,
                   ),
@@ -114,36 +118,113 @@ class _LoginState extends State<Login> {
                               children: [
                                 const SizedBox(
                                   child: Text(
+                                    'First Name',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(
+                                        0xFF31343D,
+                                      ),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                kHalfSizedBox,
+                                NameTextFormField(
+                                  controller: userFirstNameEC,
+                                  validator: (value) {
+                                    RegExp userNamePattern = RegExp(
+                                      r'^.{3,}$', //Min. of 3 characters
+                                    );
+                                    if (value == null || value!.isEmpty) {
+                                      userFirstNameFN.requestFocus();
+                                      return "Enter your first name";
+                                    } else if (!userNamePattern
+                                        .hasMatch(value)) {
+                                      userFirstNameFN.requestFocus();
+                                      return "Name must be at least 3 characters";
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    userFirstNameEC.text = value;
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  nameFocusNode: userFirstNameFN,
+                                  hintText: "Enter first name",
+                                ),
+                                kSizedBox,
+                                const SizedBox(
+                                  child: Text(
+                                    'Last Name',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(
+                                        0xFF31343D,
+                                      ),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                kHalfSizedBox,
+                                NameTextFormField(
+                                  controller: userLastNameEC,
+                                  validator: (value) {
+                                    RegExp userNamePattern = RegExp(
+                                      r'^.{3,}$', //Min. of 3 characters
+                                    );
+                                    if (value == null || value!.isEmpty) {
+                                      userLastNameFN.requestFocus();
+                                      return "Enter your last name";
+                                    } else if (!userNamePattern
+                                        .hasMatch(value)) {
+                                      userLastNameFN.requestFocus();
+                                      return "Name must be at least 3 characters";
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    userLastNameEC.text = value;
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  nameFocusNode: userLastNameFN,
+                                  hintText: "Enter last name",
+                                ),
+                                kSizedBox,
+                                const SizedBox(
+                                  child: Text(
                                     'Email',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Color(
                                         0xFF31343D,
                                       ),
-                                      fontSize: 13,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                 ),
                                 kHalfSizedBox,
                                 EmailTextFormField(
-                                  controller: emailController,
-                                  emailFocusNode: emailFocusNode,
+                                  controller: userEmailEC,
+                                  emailFocusNode: userEmailFN,
                                   textInputAction: TextInputAction.next,
                                   validator: (value) {
                                     RegExp emailPattern = RegExp(
                                       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
                                     );
                                     if (value == null || value!.isEmpty) {
-                                      emailFocusNode.requestFocus();
+                                      userEmailFN.requestFocus();
                                       return "Enter your email address";
                                     } else if (!emailPattern.hasMatch(value)) {
+                                      userEmailFN.requestFocus();
                                       return "Please enter a valid email address";
                                     }
                                     return null;
                                   },
                                   onSaved: (value) {
-                                    emailController.text = value;
+                                    userEmailEC.text = value;
                                   },
                                 ),
                                 kSizedBox,
@@ -154,15 +235,15 @@ class _LoginState extends State<Login> {
                                       color: Color(
                                         0xFF31343D,
                                       ),
-                                      fontSize: 13,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
                                 ),
                                 kHalfSizedBox,
                                 PasswordTextFormField(
-                                  controller: passwordController,
-                                  passwordFocusNode: passwordFocusNode,
+                                  controller: userPasswordEC,
+                                  passwordFocusNode: userPasswordFN,
                                   keyboardType: TextInputType.visiblePassword,
                                   obscureText: isObscured,
                                   textInputAction: TextInputAction.done,
@@ -171,16 +252,17 @@ class _LoginState extends State<Login> {
                                       r'^.{8,}$',
                                     );
                                     if (value == null || value!.isEmpty) {
-                                      passwordFocusNode.requestFocus();
+                                      userPasswordFN.requestFocus();
                                       return "Enter your password";
                                     } else if (!passwordPattern
                                         .hasMatch(value)) {
+                                      userPasswordFN.requestFocus();
                                       return "Password must be at least 8 characters";
                                     }
                                     return null;
                                   },
                                   onSaved: (value) {
-                                    passwordController.text = value;
+                                    userPasswordEC.text = value;
                                   },
                                   suffixIcon: IconButton(
                                     onPressed: () {
@@ -200,49 +282,141 @@ class _LoginState extends State<Login> {
                                 ),
                                 kHalfSizedBox,
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Checkbox(
-                                          value: isChecked,
-                                          splashRadius: 50,
-                                          activeColor: kSecondaryColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              5,
-                                            ),
-                                          ),
-                                          onChanged: (newValue) {
-                                            setState(() {
-                                              isChecked = newValue!;
-                                            });
-                                          },
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                      value: isChecked,
+                                      splashRadius: 50,
+                                      isError: true,
+                                      activeColor: kSecondaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          5,
                                         ),
-                                        const Text(
-                                          "Remember me ",
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ForgotPassword(),
-                                          ),
-                                        );
+                                      ),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          isChecked = newValue!;
+                                        });
                                       },
-                                      child: Text(
-                                        "Forgot Password",
-                                        style: myAccentFontStyle,
+                                    ),
+                                    const Text(
+                                      "8-32 characters long",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                      value: isChecked,
+                                      splashRadius: 50,
+                                      isError: true,
+                                      activeColor: kSecondaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          5,
+                                        ),
+                                      ),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          isChecked = newValue!;
+                                        });
+                                      },
+                                    ),
+                                    const Text(
+                                      "Has a lowercase character",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                      value: isChecked,
+                                      splashRadius: 50,
+                                      isError: true,
+                                      activeColor: kSecondaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          5,
+                                        ),
+                                      ),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          isChecked = newValue!;
+                                        });
+                                      },
+                                    ),
+                                    const Text(
+                                      "Has an uppercase character",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                      value: isChecked,
+                                      splashRadius: 50,
+                                      isError: true,
+                                      activeColor: kSecondaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          5,
+                                        ),
+                                      ),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          isChecked = newValue!;
+                                        });
+                                      },
+                                    ),
+                                    const Text(
+                                      "Has a Number",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Checkbox(
+                                      value: isChecked,
+                                      splashRadius: 50,
+                                      isError: true,
+                                      activeColor: kSecondaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          5,
+                                        ),
+                                      ),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          isChecked = newValue!;
+                                        });
+                                      },
+                                    ),
+                                    const Text(
+                                      "Has a special character",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
                                       ),
                                     ),
                                   ],
@@ -253,16 +427,17 @@ class _LoginState extends State<Login> {
                                     if (_formKey.currentState!.validate()) {
                                       mySnackBar(
                                         context,
-                                        "Login Successful",
+                                        "Sign up Successful",
                                         kSuccessColor,
                                         SnackBarBehavior.floating,
                                         kDefaultPadding,
                                       );
-                                      Navigator.of(context).pushReplacement(
+                                      Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              const LoginSplashScreen(),
+                                              const SignUpSplashScreen(),
                                         ),
+                                        (route) => false,
                                       );
                                     }
                                   }),
@@ -276,10 +451,6 @@ class _LoginState extends State<Login> {
                                       MediaQuery.of(context).size.width,
                                       60,
                                     ),
-                                    // fixedSize: Size(
-                                    //   MediaQuery.of(context).size.width,
-                                    //   62,
-                                    // ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(
                                         16,
@@ -289,7 +460,7 @@ class _LoginState extends State<Login> {
                                     shadowColor: kDarkGreyColor,
                                   ),
                                   child: Text(
-                                    "Log in".toUpperCase(),
+                                    "Sign up".toUpperCase(),
                                   ),
                                 ),
                                 kHalfSizedBox,
@@ -297,7 +468,7 @@ class _LoginState extends State<Login> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const Text(
-                                      "Don't have an account? ",
+                                      "Already have an account? ",
                                       style: TextStyle(
                                         color: Color(
                                           0xFF646982,
@@ -306,15 +477,14 @@ class _LoginState extends State<Login> {
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.of(context).push(
+                                        Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                const SignUp(),
+                                            builder: (context) => const Login(),
                                           ),
                                         );
                                       },
                                       child: Text(
-                                        "Sign up",
+                                        "Log in",
                                         style: myAccentFontStyle,
                                       ),
                                     ),
@@ -325,7 +495,7 @@ class _LoginState extends State<Login> {
                                   child: Column(
                                     children: [
                                       const Text(
-                                        "Or log in with ",
+                                        "Or sign up with ",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           color: Color(
