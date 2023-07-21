@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Benji Vendor",
+
       color: kPrimaryColor,
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
