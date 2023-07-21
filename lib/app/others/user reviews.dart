@@ -51,8 +51,7 @@ class _UserReviewsState extends State<UserReviews> {
     return Scaffold(
       appBar: MyAppBar(
         backgroundColor: kPrimaryColor,
-                  toolbarHeight: 80,
-
+        toolbarHeight: 80,
         title: "Reviews",
         actions: const [],
         elevation: 0.0,

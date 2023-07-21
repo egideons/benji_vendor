@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../providers/constants.dart';
+import '../../theme/colors.dart';
 import '../../widgets/orders/orders container.dart';
 import '../../widgets/product/category button section.dart';
-import '../../theme/colors.dart';
-import '../../providers/constants.dart';
 import 'order details.dart';
 
 class Orders extends StatefulWidget {

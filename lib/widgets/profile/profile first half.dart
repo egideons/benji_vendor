@@ -1,9 +1,10 @@
 // ignore_for_file: file_names
 
 import 'package:benji_vendor/app/others/successful_screen.dart';
-import 'package:benji_vendor/theme/colors.dart';
 import 'package:benji_vendor/providers/constants.dart';
 import 'package:flutter/material.dart';
+
+import '../../theme/colors.dart';
 
 class ProfileFirstHalf extends StatelessWidget {
   final String availableBalance;

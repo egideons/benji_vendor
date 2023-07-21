@@ -2,12 +2,12 @@
 
 import 'package:benji_vendor/providers/constants.dart';
 import 'package:benji_vendor/reusable%20widgets/my%20appbar.dart';
-import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../reusable widgets/my elevatedButton.dart';
 import '../../reusable widgets/my outlined elevatedButton.dart';
+import '../../theme/colors.dart';
 
 class OrderDetails extends StatefulWidget {
   const OrderDetails({super.key});

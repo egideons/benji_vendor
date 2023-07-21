@@ -1,10 +1,10 @@
 // ignore_for_file: camel_case_types, file_names
 
-import 'package:benji_vendor/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../providers/constants.dart';
+import '../app/screens/login.dart';
 import '../theme/colors.dart';
 
 class StartupSplashscreen extends StatefulWidget {

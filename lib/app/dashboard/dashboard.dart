@@ -1,9 +1,9 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../providers/constants.dart';
+import '../../theme/colors.dart';
 import '../../widgets/home/home appBar vendor name.dart';
 import '../../widgets/home/home orders container.dart';
 import '../../widgets/home/home showModalBottomSheet.dart';

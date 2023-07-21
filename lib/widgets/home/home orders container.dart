@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../theme/colors.dart';
 import '../../providers/constants.dart';
+import '../../theme/colors.dart';
 
 class OrdersContainer extends StatelessWidget {
   final Function() onTap;

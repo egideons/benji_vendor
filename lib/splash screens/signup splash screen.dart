@@ -1,7 +1,8 @@
 // ignore_for_file: camel_case_types, file_names
 
-import 'package:benji_vendor/app/overview.dart';
 import 'package:flutter/material.dart';
+
+import '../app/overview/overview.dart';
 
 class SignUpSplashScreen extends StatelessWidget {
   const SignUpSplashScreen({super.key});
