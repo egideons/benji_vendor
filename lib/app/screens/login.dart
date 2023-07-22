@@ -215,10 +215,10 @@ class _LoginState extends State<Login> {
                                 },
                                 icon: isObscured
                                     ? const Icon(
-                                        Icons.visibility,
+                                        Icons.visibility_off_rounded,
                                       )
                                     : Icon(
-                                        Icons.visibility_off_rounded,
+                                        Icons.visibility,
                                         color: kSecondaryColor,
                                       ),
                               ),
