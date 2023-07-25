@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 
-import '../../providers/constants.dart';
+import '../../src/common_widgets/home appBar vendor name.dart';
+import '../../src/common_widgets/home orders container.dart';
+import '../../src/common_widgets/home showModalBottomSheet.dart';
+import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import '../../widgets/home/home appBar vendor name.dart';
-import '../../widgets/home/home orders container.dart';
-import '../../widgets/home/home showModalBottomSheet.dart';
 import '../others/notifications.dart';
 import '../product/add new product.dart';
 import '../profile/profile.dart';

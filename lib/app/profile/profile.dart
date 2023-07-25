@@ -1,10 +1,10 @@
 import 'package:benji_vendor/app/others/user%20reviews.dart';
-import 'package:benji_vendor/providers/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/login.dart';
+import '../../src/common_widgets/profile first half.dart';
+import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import '../../widgets/profile/profile first half.dart';
+import '../screens/login.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});

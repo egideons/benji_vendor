@@ -3,15 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
-import '../../../providers/constants.dart';
-import '../../../reusable widgets/email textformfield.dart';
-import '../../../reusable widgets/my appbar.dart';
-import '../../../reusable widgets/my fixed snackBar.dart';
-import '../../../reusable widgets/name textformfield.dart';
-import '../../../reusable widgets/password textformfield.dart';
-import '../../../reusable widgets/reusable authentication first half.dart';
-import '../../../splash screens/signup splash screen.dart';
+import '../../src/common_widgets/email textformfield.dart';
+import '../../src/common_widgets/my appbar.dart';
+import '../../src/common_widgets/my fixed snackBar.dart';
+import '../../src/common_widgets/my intl phonefield.dart';
+import '../../src/common_widgets/name textformfield.dart';
+import '../../src/common_widgets/password textformfield.dart';
+import '../../src/common_widgets/reusable authentication first half.dart';
+import '../../src/providers/constants.dart';
+import '../../src/splash screens/signup splash screen.dart';
 import '../../theme/colors.dart';
 import 'login.dart';
 
@@ -30,6 +32,7 @@ class _SignUpState extends State<SignUp> {
   TextEditingController userFirstNameEC = TextEditingController();
   TextEditingController userLastNameEC = TextEditingController();
   TextEditingController userEmailEC = TextEditingController();
+  TextEditingController userPhoneNumberEC = TextEditingController();
   TextEditingController userPasswordEC = TextEditingController();
 
   //=========================== KEYS ====================================\\
@@ -52,6 +55,7 @@ class _SignUpState extends State<SignUp> {
   FocusNode userFirstNameFN = FocusNode();
   FocusNode userLastNameFN = FocusNode();
   FocusNode userEmailFN = FocusNode();
+  FocusNode userPhoneNumberFN = FocusNode();
   FocusNode userPasswordFN = FocusNode();
 
   //=========================== FUNCTIONS ====================================\\
@@ -252,6 +256,43 @@ class _SignUpState extends State<SignUp> {
                               onSaved: (value) {
                                 userEmailEC.text = value;
                               },
+                            ),
+                            kSizedBox,
+                            const SizedBox(
+                              child: Text(
+                                'Phone Number',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Color(
+                                    0xFF31343D,
+                                  ),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            kHalfSizedBox,
+                            MyIntlPhoneField(
+                              controller: userPhoneNumberEC,
+                              initialCountryCode: "NG",
+                              invalidNumberMessage: "Invalid Phone Number",
+                              dropdownIconPosition: IconPosition.trailing,
+                              showCountryFlag: true,
+                              showDropdownIcon: true,
+                              dropdownIcon: Icon(
+                                Icons.arrow_drop_down_rounded,
+                                color: kAccentColor,
+                              ),
+                              validator: (value) {
+                                if (value.isBlank) {
+                                  return "Enter your phone number";
+                                }
+                              },
+                              onSaved: (value) {
+                                userPhoneNumberEC.text = value!;
+                              },
+                              textInputAction: TextInputAction.next,
+                              focusNode: userPhoneNumberFN,
                             ),
                             kSizedBox,
                             const SizedBox(

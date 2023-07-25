@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 
-import '../../providers/constants.dart';
-import '../../reusable widgets/my appbar.dart';
-import '../../reusable widgets/my disabled outlined elevatedButton.dart';
-import '../../reusable widgets/my elevatedButton.dart';
-import '../../reusable widgets/my outlined elevatedButton.dart';
-import '../../reusable widgets/my textformfield.dart';
+import '../../src/common_widgets/my appbar.dart';
+import '../../src/common_widgets/my disabled outlined elevatedButton.dart';
+import '../../src/common_widgets/my elevatedButton.dart';
+import '../../src/common_widgets/my outlined elevatedButton.dart';
+import '../../src/common_widgets/my textformfield.dart';
+import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import 'select category.dart';
 import 'set variety.dart';

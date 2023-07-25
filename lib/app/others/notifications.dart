@@ -1,7 +1,7 @@
-import 'package:benji_vendor/providers/constants.dart';
 import 'package:flutter/material.dart';
 
-import '../../reusable widgets/my appbar.dart';
+import '../../src/common_widgets/my appbar.dart';
+import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
 class Notifications extends StatefulWidget {
