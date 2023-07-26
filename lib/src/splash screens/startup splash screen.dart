@@ -1,9 +1,9 @@
 // ignore_for_file: camel_case_types, file_names
 
+import 'package:benji_vendor/app/screens/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../../app/screens/login.dart';
 import '../../theme/colors.dart';
 import '../providers/constants.dart';
 
@@ -18,15 +18,10 @@ class StartupSplashscreen extends StatefulWidget {
 class _StartupSplashscreenState extends State<StartupSplashscreen> {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(
-        const Duration(
-          seconds: 4,
-        ), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (ctx) => const Login(),
-        ),
-      );
+    Future.delayed(const Duration(seconds: 4), () {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const SignUp()),
+          (route) => false);
     });
     return Scaffold(
       body: ListView(
@@ -44,9 +39,8 @@ class _StartupSplashscreenState extends State<StartupSplashscreen> {
                   width: MediaQuery.of(context).size.width / 2,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(
-                        "assets/images/splash screen/frame-1.png",
-                      ),
+                      image:
+                          AssetImage("assets/images/splash screen/frame-1.png"),
                     ),
                   ),
                 ),
@@ -54,9 +48,7 @@ class _StartupSplashscreenState extends State<StartupSplashscreen> {
                 const Center(
                   child: Text(
                     "Vendor App",
-                    style: TextStyle(
-                      color: kTextBlackColor,
-                    ),
+                    style: TextStyle(color: kTextBlackColor),
                   ),
                 ),
                 kSizedBox,

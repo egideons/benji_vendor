@@ -51,7 +51,7 @@ class _ProfileState extends State<Profile> {
               ),
               child: Container(
                 width: 327,
-                height: 141,
+                height: 190,
                 padding: const EdgeInsets.all(
                   kDefaultPadding / 2,
                 ),
@@ -86,6 +86,26 @@ class _ProfileState extends State<Profile> {
                       ),
                       title: const Text(
                         'Personal Info',
+                        style: TextStyle(
+                          color: Color(
+                            0xFF333333,
+                          ),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      trailing: const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                      ),
+                    ),
+                    ListTile(
+                      onTap: () {},
+                      leading: Icon(
+                        Icons.business_rounded,
+                        color: kAccentColor,
+                      ),
+                      title: const Text(
+                        'Shop Info',
                         style: TextStyle(
                           color: Color(
                             0xFF333333,

@@ -46,7 +46,7 @@ class MyIntlPhoneField extends StatelessWidget {
       focusNode: focusNode,
       validator: validator,
       onSaved: onSaved,
-      flagsButtonPadding: EdgeInsets.all(
+      flagsButtonPadding: const EdgeInsets.all(
         kDefaultPadding / 2,
       ),
       cursorColor: kSecondaryColor,
@@ -54,7 +54,7 @@ class MyIntlPhoneField extends StatelessWidget {
         print(phone.completeNumber);
       },
       onCountryChanged: (country) {
-        print('Country changed to: ' + country.name);
+        print('Country changed to: ${country.name}');
       },
       decoration: InputDecoration(
         hintText: "Enter phone Number",

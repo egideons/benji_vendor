@@ -3,10 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
-    brightness: Brightness.light,
-    textTheme: GoogleFonts.senTextTheme(),
-  );
+      brightness: Brightness.light, textTheme: GoogleFonts.senTextTheme());
   static ThemeData darkTheme = ThemeData(
-    brightness: Brightness.dark,
-  );
+      brightness: Brightness.dark, textTheme: GoogleFonts.senTextTheme());
 }

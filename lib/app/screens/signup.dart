@@ -102,13 +102,6 @@ class _SignUpState extends State<SignUp> {
       child: Scaffold(
         backgroundColor: kSecondaryColor,
         resizeToAvoidBottomInset: true,
-        appBar: const MyAppBar(
-          title: "",
-          toolbarHeight: kToolbarHeight,
-          backgroundColor: kTransparentColor,
-          elevation: 0.0,
-          actions: [],
-        ),
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: Column(
@@ -433,7 +426,7 @@ class _SignUpState extends State<SignUp> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pushReplacement(
+                              Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => const Login(),
                                 ),

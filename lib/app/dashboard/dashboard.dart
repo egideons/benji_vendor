@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:benji_vendor/app/others/user%20reviews.dart';
 import 'package:flutter/material.dart';
 
 import '../../src/common_widgets/home appBar vendor name.dart';
@@ -326,7 +327,13 @@ class _DashboardState extends State<Dashboard> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const UserReviews(),
+                            ),
+                          );
+                        },
                         child: Text(
                           'See All Reviews',
                           style: TextStyle(
