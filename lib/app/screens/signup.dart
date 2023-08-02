@@ -6,7 +6,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../src/common_widgets/email textformfield.dart';
-import '../../src/common_widgets/my appbar.dart';
 import '../../src/common_widgets/my fixed snackBar.dart';
 import '../../src/common_widgets/my intl phonefield.dart';
 import '../../src/common_widgets/name textformfield.dart';

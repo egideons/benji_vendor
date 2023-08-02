@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import 'src/splash screens/startup splash screen.dart';
+import 'app/screens/signup.dart';
 import 'theme/app theme.dart';
 import 'theme/colors.dart';
 
@@ -31,7 +31,8 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      home: const StartupSplashscreen(),
+      home: const SignUp(),
+      // home: const StartupSplashscreen(),
     );
   }
 }

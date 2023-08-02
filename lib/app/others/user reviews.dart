@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
 import '../../src/common_widgets/my appbar.dart';
@@ -48,109 +49,111 @@ class _UserReviewsState extends State<UserReviews> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(
+    return MyResponsivePadding(
+      child: Scaffold(
+        appBar: MyAppBar(
+          backgroundColor: kPrimaryColor,
+          toolbarHeight: 80,
+          title: "Reviews",
+          actions: const [],
+          elevation: 0.0,
+        ),
         backgroundColor: kPrimaryColor,
-        toolbarHeight: 80,
-        title: "Reviews",
-        actions: const [],
-        elevation: 0.0,
-      ),
-      backgroundColor: kPrimaryColor,
-      body: SafeArea(
-        maintainBottomViewPadding: true,
-        child: Container(
-          padding: const EdgeInsets.all(
-            kDefaultPadding,
-          ),
-          child: ListView.builder(
-            itemCount: 5,
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              return ListTile(
-                minVerticalPadding: kDefaultPadding / 2,
-                enableFeedback: true,
-                leading: const CircleAvatar(
-                  backgroundColor: Color(
-                    0xFF98A8B8,
-                  ),
-                  child: ClipOval(
-                    clipBehavior: Clip.hardEdge,
-                  ),
-                ),
-                title: Container(
-                  width: 274,
-                  height: 171,
-                  padding: const EdgeInsets.only(
-                    left: kDefaultPadding,
-                    right: kDefaultPadding,
-                    bottom: kDefaultPadding,
-                  ),
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFFF6F8FA),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+        body: SafeArea(
+          maintainBottomViewPadding: true,
+          child: Container(
+            padding: const EdgeInsets.all(
+              kDefaultPadding,
+            ),
+            child: ListView.builder(
+              itemCount: 5,
+              physics: const BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  minVerticalPadding: kDefaultPadding / 2,
+                  enableFeedback: true,
+                  leading: const CircleAvatar(
+                    backgroundColor: Color(
+                      0xFF98A8B8,
+                    ),
+                    child: ClipOval(
+                      clipBehavior: Clip.hardEdge,
                     ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            reviewDate[index],
-                            style: const TextStyle(
-                              color: Color(0xFF9B9BA5),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
+                  title: Container(
+                    width: 274,
+                    height: 171,
+                    padding: const EdgeInsets.only(
+                      left: kDefaultPadding,
+                      right: kDefaultPadding,
+                      bottom: kDefaultPadding,
+                    ),
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFF6F8FA),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              reviewDate[index],
+                              style: const TextStyle(
+                                color: Color(0xFF9B9BA5),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.more_horiz_rounded,
+                              ),
+                            )
+                          ],
+                        ),
+                        Text(
+                          reviewTitle[index],
+                          style: const TextStyle(
+                            color: Color(0xFF32343E),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
                           ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.more_horiz_rounded,
-                            ),
-                          )
-                        ],
-                      ),
-                      Text(
-                        reviewTitle[index],
-                        style: const TextStyle(
-                          color: Color(0xFF32343E),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
                         ),
-                      ),
-                      kHalfSizedBox,
-                      Row(
-                        children: [
-                          for (int i = 0; i < 5; i++)
-                            Icon(
-                              starRating[i],
-                              color: kAccentColor,
-                              size: 12,
-                            ),
-                        ],
-                      ),
-                      kHalfSizedBox,
-                      Text(
-                        reviewContent[index],
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        softWrap: true,
-                        style: const TextStyle(
-                          color: Color(0xFF737782),
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
+                        kHalfSizedBox,
+                        Row(
+                          children: [
+                            for (int i = 0; i < 5; i++)
+                              Icon(
+                                starRating[i],
+                                color: kAccentColor,
+                                size: 12,
+                              ),
+                          ],
                         ),
-                      )
-                    ],
+                        kHalfSizedBox,
+                        Text(
+                          reviewContent[index],
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          softWrap: true,
+                          style: const TextStyle(
+                            color: Color(0xFF737782),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),
