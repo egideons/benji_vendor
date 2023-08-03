@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 
-import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
 import '../../src/common_widgets/my appbar.dart';
@@ -50,244 +49,237 @@ class _SelectCategoryState extends State<SelectCategory> {
 
   @override
   Widget build(BuildContext context) {
-    return MyResponsivePadding(
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: kPrimaryColor,
+      appBar: MyAppBar(
+        title: "Select Category",
+        toolbarHeight: 80,
+        elevation: 0.0,
+        actions: const [],
         backgroundColor: kPrimaryColor,
-        appBar: MyAppBar(
-          title: "Select Category",
-          toolbarHeight: 80,
-          elevation: 0.0,
-          actions: const [],
-          backgroundColor: kPrimaryColor,
-        ),
-        body: SafeArea(
-          maintainBottomViewPadding: true,
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            padding: const EdgeInsets.all(kDefaultPadding / 2),
-            children: [
-              Container(
-                height: 500,
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(
-                  kDefaultPadding,
-                ),
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  itemCount: categoryCount,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              selectedCategory = index;
-                            });
-                          },
-                          child: SizedBox(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  categoryList[index],
-                                  style: TextStyle(
-                                    color: selectedCategory == index
-                                        ? kBlackColor
-                                        : kGreyColor1,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Icon(
-                                  selectedCategory == index
-                                      ? Icons.check_rounded
-                                      : null,
-                                  color: kAccentColor,
-                                  size: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 1,
+      ),
+      body: SafeArea(
+        maintainBottomViewPadding: true,
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          padding: const EdgeInsets.all(kDefaultPadding / 2),
+          children: [
+            Container(
+              height: 500,
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.all(
+                kDefaultPadding,
+              ),
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: categoryCount,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = index;
+                          });
+                        },
+                        child: SizedBox(
+                          height: 50,
                           width: MediaQuery.of(context).size.width,
-                          decoration: const BoxDecoration(
-                            color: kGreyColor1,
-                          ),
-                        ),
-                        kSizedBox,
-                      ],
-                    );
-                  },
-                ),
-              ),
-              MyElevatedButton(
-                buttonTitle: "Save",
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const SuccessfulScreen(
-                        text: "Product added successfully",
-                        elevatedButtonTitle: "Okay",
-                      ),
-                    ),
-                  );
-                },
-                circularBorderRadius: 16,
-                minimumSizeWidth: MediaQuery.of(context).size.width,
-                minimumSizeHeight: 50,
-                maximumSizeWidth: MediaQuery.of(context).size.width,
-                maximumSizeHeight: 50,
-                titleFontSize: 14,
-                elevation: 0,
-              ),
-              kSizedBox,
-              InkWell(
-                onTap: () {
-                  // Navigator.of(context).push(
-                  //   MaterialPageRoute(
-                  //     builder: (context) => const AddCategory(),
-                  //   ),
-                  // );
-                  showModalBottomSheet(
-                    context: context,
-                    backgroundColor: kPrimaryColor,
-                    barrierColor: kBlackColor.withOpacity(0.5),
-                    showDragHandle: true,
-                    useSafeArea: true,
-                    isScrollControlled: true,
-                    isDismissible: true,
-                    elevation: 20.0,
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.7,
-                      minHeight: MediaQuery.of(context).size.height * 0.5,
-                    ),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(
-                          kDefaultPadding,
-                        ),
-                      ),
-                    ),
-                    enableDrag: true,
-                    builder: (context) => MyResponsivePadding(
-                      child: GestureDetector(
-                        onTap: (() =>
-                            FocusManager.instance.primaryFocus?.unfocus()),
-                        child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          padding: const EdgeInsets.only(
-                            left: kDefaultPadding,
-                            top: kDefaultPadding / 2,
-                            right: kDefaultPadding,
-                            bottom: kDefaultPadding,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const ShowModalBottomSheetTitleWithIcon(
-                                title: "Create Category",
+                              Text(
+                                categoryList[index],
+                                style: TextStyle(
+                                  color: selectedCategory == index
+                                      ? kBlackColor
+                                      : kGreyColor1,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                              const SizedBox(height: kDefaultPadding * 4),
-                              MyTextFormField2(
-                                controller: categoryNameEC,
-                                focusNode: categoryNameFN,
-                                textInputType: TextInputType.name,
-                                hintText: "Enter category name here",
-                                textInputAction: TextInputAction.go,
-                                validator: (value) {
-                                  RegExp namePattern = RegExp(
-                                    r'^.{3,}$', //Less than 3 characters
-                                  );
-                                  if (value == null || value!.isEmpty) {
-                                    categoryNameFN.requestFocus();
-                                    return "Enter a category";
-                                  } else if (!namePattern.hasMatch(value)) {
-                                    categoryNameFN.requestFocus();
-                                    return "Please enter a valid name";
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  categoryNameEC.text = value;
-                                },
-                              ),
-                              kSizedBox,
-                              MyElevatedButton(
-                                buttonTitle: "Save",
-                                onPressed: () {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const SuccessfulScreen(
-                                        text: "Product created successfully",
-                                        elevatedButtonTitle: "Okay",
-                                      ),
-                                    ),
-                                  );
-                                },
-                                circularBorderRadius: 16,
-                                minimumSizeWidth:
-                                    MediaQuery.of(context).size.width,
-                                minimumSizeHeight: 50,
-                                maximumSizeWidth:
-                                    MediaQuery.of(context).size.width,
-                                maximumSizeHeight: 50,
-                                titleFontSize: 14,
-                                elevation: 0,
+                              Icon(
+                                selectedCategory == index
+                                    ? Icons.check_rounded
+                                    : null,
+                                color: kAccentColor,
+                                size: 20,
                               ),
                             ],
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-                borderRadius: BorderRadius.circular(16),
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 1.2,
-                  height: 56,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(
-                        width: 2,
-                        color: Color(0xFFE6E6E6),
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.add_circle_outlined,
-                        color: kAccentColor,
-                      ),
-                      kHalfWidthSizedBox,
-                      Text(
-                        'Add Category',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: kAccentColor,
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.28,
+                      Container(
+                        height: 1,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: const BoxDecoration(
+                          color: kGreyColor1,
                         ),
                       ),
+                      kSizedBox,
                     ],
+                  );
+                },
+              ),
+            ),
+            MyElevatedButton(
+              buttonTitle: "Save",
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const SuccessfulScreen(
+                      text: "Product added successfully",
+                      elevatedButtonTitle: "Okay",
+                    ),
+                  ),
+                );
+              },
+              circularBorderRadius: 16,
+              minimumSizeWidth: MediaQuery.of(context).size.width,
+              minimumSizeHeight: 50,
+              maximumSizeWidth: MediaQuery.of(context).size.width,
+              maximumSizeHeight: 50,
+              titleFontSize: 14,
+              elevation: 0,
+            ),
+            kSizedBox,
+            InkWell(
+              onTap: () {
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (context) => const AddCategory(),
+                //   ),
+                // );
+                showModalBottomSheet(
+                  context: context,
+                  backgroundColor: kPrimaryColor,
+                  barrierColor: kBlackColor.withOpacity(0.5),
+                  showDragHandle: true,
+                  useSafeArea: true,
+                  isScrollControlled: true,
+                  isDismissible: true,
+                  elevation: 20.0,
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.7,
+                    minHeight: MediaQuery.of(context).size.height * 0.5,
+                  ),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(
+                        kDefaultPadding,
+                      ),
+                    ),
+                  ),
+                  enableDrag: true,
+                  builder: (context) => GestureDetector(
+                    onTap: (() =>
+                        FocusManager.instance.primaryFocus?.unfocus()),
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      padding: const EdgeInsets.only(
+                        left: kDefaultPadding,
+                        top: kDefaultPadding / 2,
+                        right: kDefaultPadding,
+                        bottom: kDefaultPadding,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const ShowModalBottomSheetTitleWithIcon(
+                            title: "Create Category",
+                          ),
+                          const SizedBox(height: kDefaultPadding * 4),
+                          MyTextFormField2(
+                            controller: categoryNameEC,
+                            focusNode: categoryNameFN,
+                            textInputType: TextInputType.name,
+                            hintText: "Enter category name here",
+                            textInputAction: TextInputAction.go,
+                            validator: (value) {
+                              RegExp namePattern = RegExp(
+                                r'^.{3,}$', //Less than 3 characters
+                              );
+                              if (value == null || value!.isEmpty) {
+                                categoryNameFN.requestFocus();
+                                return "Enter a category";
+                              } else if (!namePattern.hasMatch(value)) {
+                                categoryNameFN.requestFocus();
+                                return "Please enter a valid name";
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              categoryNameEC.text = value;
+                            },
+                          ),
+                          kSizedBox,
+                          MyElevatedButton(
+                            buttonTitle: "Save",
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) => const SuccessfulScreen(
+                                    text: "Product created successfully",
+                                    elevatedButtonTitle: "Okay",
+                                  ),
+                                ),
+                              );
+                            },
+                            circularBorderRadius: 16,
+                            minimumSizeWidth: MediaQuery.of(context).size.width,
+                            minimumSizeHeight: 50,
+                            maximumSizeWidth: MediaQuery.of(context).size.width,
+                            maximumSizeHeight: 50,
+                            titleFontSize: 14,
+                            elevation: 0,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                width: MediaQuery.of(context).size.width / 1.2,
+                height: 56,
+                decoration: ShapeDecoration(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(
+                      width: 2,
+                      color: Color(0xFFE6E6E6),
+                    ),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.add_circle_outlined,
+                      color: kAccentColor,
+                    ),
+                    kHalfWidthSizedBox,
+                    Text(
+                      'Add Category',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: kAccentColor,
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.28,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

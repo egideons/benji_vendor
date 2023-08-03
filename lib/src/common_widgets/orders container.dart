@@ -26,7 +26,6 @@ class OrderContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 10),
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(
         kDefaultPadding / 2,

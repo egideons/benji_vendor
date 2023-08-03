@@ -25,7 +25,6 @@ dependencies:
   permission_handler: ^10.3.0
   image_picker: ^1.0.1
   intl_phone_field: ^3.2.0
-  flutter_layout_grid: ^1.0.3
 
 dev_dependencies:
   flutter_test:
