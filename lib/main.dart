@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import 'theme/app theme.dart';
+import 'routes/routes.dart';
+import 'splash screens/startup splash screen.dart';
 import 'theme/colors.dart';
 
 void main() async {
@@ -28,11 +29,23 @@ class MyApp extends StatelessWidget {
       title: "Benji Vendor",
       color: kPrimaryColor,
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme: ThemeData.light().copyWith(
+        scrollbarTheme: ScrollbarThemeData(
+          thumbColor: MaterialStateProperty.all(
+            kDarkGreyColor,
+          ),
+          radius: const Radius.circular(
+            6,
+          ),
+        ),
+        textTheme: GoogleFonts.senTextTheme(
+          // Update the textTheme property
+          Theme.of(context).textTheme, // Use the default theme
+        ),
+      ),
+      initialRoute: StartupSplashscreen.routeName,
       // home: const OverView(),
-      home: const StartupSplashscreen(),
+      routes: routes,
     );
   }
 }
