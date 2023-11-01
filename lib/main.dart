@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // initialRoute: StartupSplashscreen.routeName,
-      home: const StartupSplashscreen(),
+      home: SplashScreen(),
     );
   }
 }

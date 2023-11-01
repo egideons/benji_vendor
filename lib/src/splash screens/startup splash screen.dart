@@ -1,66 +1,66 @@
-// ignore_for_file: camel_case_types, file_names
-
-import 'package:benji_vendor/app/auth/login.dart';
+import 'package:benji_vendor/src/controller/auth_controller.dart';
+import 'package:benji_vendor/src/controller/login_controller.dart';
+import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 
-import '../../theme/colors.dart';
-import '../providers/constants.dart';
+import '../../src/providers/constants.dart';
 
-class StartupSplashscreen extends StatefulWidget {
-  static String routeName = "Startup Splash Screen";
-  const StartupSplashscreen({super.key});
-
-  @override
-  State<StartupSplashscreen> createState() => _StartupSplashscreenState();
-}
-
-class _StartupSplashscreenState extends State<StartupSplashscreen> {
+class SplashScreen extends StatelessWidget {
+  SplashScreen({super.key});
+  final user = Get.put(UserController());
+  final login = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 4), () {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const Login()),
-          (route) => false);
-    });
-    return Scaffold(
-      body: ListView(
-        padding: const EdgeInsets.all(kDefaultPadding / 2),
-        physics: const BouncingScrollPhysics(),
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height / 4,
-                  width: MediaQuery.of(context).size.width / 2,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image:
-                          AssetImage("assets/images/splash screen/frame-1.png"),
+    var size = MediaQuery.of(context).size;
+    return GetBuilder<AuthController>(
+      init: AuthController(),
+      builder: (controller) {
+        return Scaffold(
+          body: ListView(
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(kDefaultPadding),
+            children: [
+              SizedBox(
+                height: size.height,
+                width: size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: size.height / 4,
+                      width: size.width / 2,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            "assets/images/splash_screen/frame_1.png",
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    SpinKitThreeInOut(
+                      color: kSecondaryColor,
+                      size: 20,
+                    ),
+                    kSizedBox,
+                    Text(
+                      "VENDOR",
+                      style: TextStyle(
+                        color: kAccentColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                  ],
                 ),
-                kSizedBox,
-                const Center(
-                  child: Text(
-                    "Vendor App",
-                    style: TextStyle(color: kTextBlackColor),
-                  ),
-                ),
-                kSizedBox,
-                SpinKitThreeInOut(
-                  color: kSecondaryColor,
-                  size: 20,
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
