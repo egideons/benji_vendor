@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../providers/constants.dart';
+import '../../providers/constants.dart';
 
 class OrderContainer extends StatelessWidget {
   final String customerName;

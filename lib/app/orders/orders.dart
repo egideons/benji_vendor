@@ -2,7 +2,7 @@ import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart'
 import 'package:flutter/material.dart';
 
 import '../../src/common_widgets/button/category button section.dart';
-import '../../src/common_widgets/orders container.dart';
+import '../../src/common_widgets/container/orders container.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import 'order details.dart';
