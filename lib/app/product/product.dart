@@ -1,4 +1,4 @@
-import 'package:benji_vendor/app/product/view%20product.dart';
+import 'package:benji_vendor/src/common_widgets/container/vendors_product_container.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +17,23 @@ class Product extends StatefulWidget {
 }
 
 class _ProductState extends State<Product> {
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(
+        () => ProductController.instance.scrollListener(scrollController));
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+
+    super.dispose();
+  }
+
+  //========= variables ==========//
+  final ScrollController scrollController = ScrollController();
+
   //============================= ALL VARIABLES =====================================\\
 
   //===================== TEXTEDITING CONTROLLER =======================\\
@@ -82,191 +99,52 @@ class _ProductState extends State<Product> {
                     ),
                   ),
                   kSizedBox,
-                  GetBuilder<ProductController>(
-                    initState: (state) async {
-                      await ProductController.instance.getProducts();
-                    },
-                    builder: (controller) => ListView.separated(
-                      separatorBuilder: (context, index) => kSizedBox,
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          decoration: ShapeDecoration(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14.30),
-                            ),
-                            shadows: const [
-                              BoxShadow(
-                                color: Color(0x0F000000),
-                                blurRadius: 24,
-                                offset: Offset(0, 4),
-                                spreadRadius: 0,
-                              )
-                            ],
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const ViewProduct(),
-                                ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      GetBuilder<ProductController>(
+                        initState: (state) async {
+                          await ProductController.instance.getProducts();
+                        },
+                        init: ProductController(),
+                        builder: (controller) {
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: controller.products.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return VendorsProductContainer(
+                                onTap: () {},
+                                product: controller.products[index],
                               );
                             },
-                            child: SizedBox(
-                              height: 120,
-                              width: MediaQuery.of(context).size.width,
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 120,
-                                    height: 120,
+                          );
+                        },
+                      ),
+                      GetBuilder<ProductController>(
+                        builder: (controller) => Column(
+                          children: [
+                            controller.isLoadMore.value
+                                ? Center(
+                                    child: CircularProgressIndicator(
+                                      color: kAccentColor,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            controller.loadedAll.value
+                                ? Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 20),
+                                    height: 10,
+                                    width: 10,
                                     decoration: ShapeDecoration(
-                                      image: const DecorationImage(
-                                        image: AssetImage(
-                                          "assets/images/products/pasta.png",
-                                        ),
-                                        fit: BoxFit.fill,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          12,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: SizedBox(
-                                      width: 200,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Smokey Jollof Rice',
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                              overflow: TextOverflow.ellipsis,
-                                              color: Color(
-                                                0xFF32343E,
-                                              ),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          Text(
-                                            "Freshly steamed Jollof Rice",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              overflow: TextOverflow.fade,
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text.rich(
-                                                TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: '₦',
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                          0xFF4F4F4F,
-                                                        ),
-                                                        fontSize: 14,
-                                                        fontFamily: 'Sen',
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                      text: ' ',
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                          0xFF4F4F4F,
-                                                        ),
-                                                        fontSize: 13.60,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                      text: '850',
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                          0xFF4F4F4F,
-                                                        ),
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text.rich(
-                                                TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: 'Qty:',
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                          0xFF4F4F4F,
-                                                        ),
-                                                        fontSize: 13.60,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                      text: ' ',
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                          0xFF4F4F4F,
-                                                        ),
-                                                        fontSize: 13.60,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    ),
-                                                    TextSpan(
-                                                      text: '3200',
-                                                      style: TextStyle(
-                                                        color: Color(
-                                                          0xFF4F4F4F,
-                                                        ),
-                                                        fontSize: 13.60,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+                                        shape: const CircleBorder(),
+                                        color: kPageSkeletonColor),
+                                  )
+                                : const SizedBox(),
+                          ],
+                        ),
+                      )
+                    ],
                   )
                 ],
               ),

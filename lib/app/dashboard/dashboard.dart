@@ -104,7 +104,7 @@ class _DashboardState extends State<Dashboard> {
           ),
           actions: [
             IconButton(
-              iconSize: 20,
+              iconSize: 30,
               onPressed: () {
                 Get.to(
                   () => const Notifications(),
@@ -123,6 +123,7 @@ class _DashboardState extends State<Dashboard> {
                 color: kAccentColor,
               ),
             ),
+            kWidthSizedBox,
           ],
         ),
         body: SafeArea(

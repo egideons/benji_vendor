@@ -101,11 +101,8 @@ class _AddProductState extends State<AddProduct> {
       'is_trending': true,
     };
     print(data);
-    await FormController.instance.postAuthstream(
-        Api.baseUrl + Api.agentAddProductToVendor,
-        data,
-        {'product_image': selectedImage},
-        'agentAddProductToVendor');
+    await FormController.instance.postAuthstream(Api.baseUrl + Api.addProduct,
+        data, {'product_image': selectedImage}, 'addProduct');
   }
 
   pickProductImage(ImageSource source) async {
