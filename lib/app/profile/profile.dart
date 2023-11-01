@@ -2,7 +2,7 @@ import 'package:benji_vendor/app/others/user%20reviews.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/common_widgets/profile first half.dart';
+import '../../src/common_widgets/section/profile first half.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../auth/login.dart';

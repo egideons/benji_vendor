@@ -1,9 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, file_names
 
-import 'package:benji_vendor/src/common_widgets/email%20textformfield.dart';
-import 'package:benji_vendor/src/common_widgets/my%20appbar.dart';
-import 'package:benji_vendor/src/common_widgets/my%20fixed%20snackBar.dart';
-import 'package:benji_vendor/src/common_widgets/reusable%20authentication%20first%20half.dart';
+import 'package:benji_vendor/src/common_widgets/input/email%20textformfield.dart';
+import 'package:benji_vendor/src/common_widgets/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/common_widgets/section/my%20fixed%20snackBar.dart';
+import 'package:benji_vendor/src/common_widgets/section/reusable%20authentication%20first%20half.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/theme/responsive_constant.dart';
 import 'package:flutter/material.dart';

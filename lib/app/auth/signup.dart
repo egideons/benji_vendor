@@ -7,12 +7,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-import '../../src/common_widgets/email textformfield.dart';
-import '../../src/common_widgets/my fixed snackBar.dart';
-import '../../src/common_widgets/my intl phonefield.dart';
-import '../../src/common_widgets/name textformfield.dart';
-import '../../src/common_widgets/password textformfield.dart';
-import '../../src/common_widgets/reusable authentication first half.dart';
+import '../../src/common_widgets/input/email textformfield.dart';
+import '../../src/common_widgets/section/my fixed snackBar.dart';
+import '../../src/common_widgets/input/my intl phonefield.dart';
+import '../../src/common_widgets/input/name textformfield.dart';
+import '../../src/common_widgets/input/password textformfield.dart';
+import '../../src/common_widgets/section/reusable authentication first half.dart';
 import '../../src/providers/constants.dart';
 import '../../src/splash screens/signup splash screen.dart';
 import '../../theme/colors.dart';

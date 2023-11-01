@@ -3,8 +3,8 @@
 import 'package:benji_vendor/app/others/successful_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../theme/colors.dart';
-import '../providers/constants.dart';
+import '../../../theme/colors.dart';
+import '../../providers/constants.dart';
 
 class ProfileFirstHalf extends StatelessWidget {
   final String availableBalance;

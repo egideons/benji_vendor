@@ -2,9 +2,9 @@ import 'package:benji_vendor/app/product/view%20product.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/common_widgets/category button section.dart';
-import '../../src/common_widgets/my outlined elevatedButton.dart';
-import '../../src/common_widgets/search field.dart';
+import '../../src/common_widgets/button/category button section.dart';
+import '../../src/common_widgets/button/my outlined elevatedButton.dart';
+import '../../src/common_widgets/input/search field.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import 'add new product.dart';

@@ -5,52 +5,65 @@ import 'package:flutter/services.dart';
 
 import '../../../../theme/colors.dart';
 
-class MyOTPTextFormField extends StatelessWidget {
-  final TextInputAction textInputAction;
+class PasswordTextFormField extends StatelessWidget {
+  final TextEditingController controller;
+  final FormFieldValidator validator;
   final dynamic onSaved;
-  final dynamic validator;
-  final dynamic onChanged;
-  final dynamic controller;
-  const MyOTPTextFormField({
+  final TextInputAction textInputAction;
+  final TextInputType keyboardType;
+  final IconButton suffixIcon;
+  final FocusNode passwordFocusNode;
+  final bool obscureText;
+  const PasswordTextFormField({
     super.key,
-    required this.textInputAction,
-    required this.onSaved,
+    required this.controller,
     required this.validator,
-    this.onChanged,
-    this.controller,
+    this.onSaved,
+    required this.textInputAction,
+    required this.keyboardType,
+    required this.suffixIcon,
+    required this.passwordFocusNode,
+    required this.obscureText,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      keyboardType: TextInputType.number,
-      textAlign: TextAlign.center,
-      textInputAction: textInputAction,
-      onSaved: onSaved,
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(1),
-        FilteringTextInputFormatter.digitsOnly,
-      ],
-      onChanged: onChanged,
       validator: validator,
+      onSaved: onSaved,
+      textInputAction: textInputAction,
+      keyboardType: keyboardType,
+      focusNode: passwordFocusNode,
+      obscureText: obscureText,
+      cursorColor: kSecondaryColor,
+      autocorrect: true,
+      enableSuggestions: true,
+      maxLines: 1,
+      textAlign: TextAlign.start,
+      obscuringCharacter: "*",
+      maxLength: 32,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
       style: TextStyle(
         color: kSecondaryColor,
-        fontSize: 20,
+        fontSize: 14,
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
-        hintText: "0",
+        hintText: "****************",
         hintStyle: const TextStyle(
-          fontSize: 17,
-          fontWeight: FontWeight.w700,
+          fontSize: 14,
+          letterSpacing: 3.0,
+          fontWeight: FontWeight.w400,
         ),
-        errorStyle: const TextStyle(
-          color: kErrorColor,
-        ),
+        suffixIcon: suffixIcon,
         filled: true,
         fillColor: Colors.blue.shade50,
         focusColor: Colors.blue.shade50,
+        errorStyle: const TextStyle(
+          color: kErrorColor,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
@@ -77,9 +90,7 @@ class MyOTPTextFormField extends StatelessWidget {
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            10.0,
-          ),
+          borderRadius: BorderRadius.circular(10.0),
           borderSide: const BorderSide(
             color: kErrorBorderColor,
             width: 2.0,

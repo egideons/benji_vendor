@@ -3,9 +3,9 @@
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/common_widgets/category button section.dart';
-import '../../src/common_widgets/showModalBottomSheet.dart';
-import '../../src/common_widgets/showModalBottomSheetTitleWithIcon.dart';
+import '../../src/common_widgets/button/category button section.dart';
+import '../../src/common_widgets/section/showModalBottomSheet.dart';
+import '../../src/common_widgets/section/showModalBottomSheetTitleWithIcon.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 

@@ -6,11 +6,11 @@ import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart'
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../src/common_widgets/my appbar.dart';
-import '../../src/common_widgets/my disabled outlined elevatedButton.dart';
-import '../../src/common_widgets/my elevatedButton.dart';
-import '../../src/common_widgets/my outlined elevatedButton.dart';
-import '../../src/common_widgets/my textformfield.dart';
+import '../../src/common_widgets/appbar/my appbar.dart';
+import '../../src/common_widgets/button/my disabled outlined elevatedButton.dart';
+import '../../src/common_widgets/button/my elevatedButton.dart';
+import '../../src/common_widgets/button/my outlined elevatedButton.dart';
+import '../../src/common_widgets/input/my textformfield.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import 'select category.dart';

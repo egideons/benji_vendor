@@ -1,49 +1,50 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import '../../theme/colors.dart';
- 
-class NameTextFormField extends StatelessWidget {
-  final TextEditingController controller;
-  final FormFieldValidator validator;
-  final dynamic onSaved;
+import '../../../../../theme/colors.dart';
+
+class MyOTPTextFormField extends StatelessWidget {
   final TextInputAction textInputAction;
-  final FocusNode nameFocusNode;
-  final String hintText;
-
-  const NameTextFormField({
+  final dynamic onSaved;
+  final dynamic validator;
+  final dynamic onChanged;
+  final dynamic controller;
+  const MyOTPTextFormField({
     super.key,
-    required this.controller,
-    required this.validator,
-    this.onSaved,
     required this.textInputAction,
-    required this.nameFocusNode,
-    required this.hintText,
+    required this.onSaved,
+    required this.validator,
+    this.onChanged,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      // onTap: onTap,
-      focusNode: nameFocusNode,
       controller: controller,
-      validator: validator,
-      onSaved: onSaved,
+      keyboardType: TextInputType.number,
+      textAlign: TextAlign.center,
       textInputAction: textInputAction,
-      textAlign: TextAlign.start,
-      cursorColor: kSecondaryColor,
-      autocorrect: true,
-      enableSuggestions: true,
-      keyboardType: TextInputType.name,
-      maxLines: 1,
+      onSaved: onSaved,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(1),
+        FilteringTextInputFormatter.digitsOnly,
+      ],
+      onChanged: onChanged,
+      validator: validator,
       style: TextStyle(
         color: kSecondaryColor,
-        fontSize: 14,
+        fontSize: 20,
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
-        hintText: hintText,
+        hintText: "0",
+        hintStyle: const TextStyle(
+          fontSize: 17,
+          fontWeight: FontWeight.w700,
+        ),
         errorStyle: const TextStyle(
           color: kErrorColor,
         ),
@@ -51,33 +52,25 @@ class NameTextFormField extends StatelessWidget {
         fillColor: Colors.blue.shade50,
         focusColor: Colors.blue.shade50,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            10.0,
-          ),
+          borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
             color: Colors.blue.shade50,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            10.0,
-          ),
+          borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
             color: Colors.blue.shade50,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            10.0,
-          ),
+          borderRadius: BorderRadius.circular(10.0),
           borderSide: BorderSide(
             color: Colors.blue.shade50,
           ),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            10.0,
-          ),
+          borderRadius: BorderRadius.circular(10.0),
           borderSide: const BorderSide(
             color: kErrorBorderColor,
             width: 2.0,

@@ -6,9 +6,9 @@ import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../src/common_widgets/my fixed snackBar.dart';
-import '../../src/common_widgets/password textformfield.dart';
-import '../../src/common_widgets/reusable authentication first half.dart';
+import '../../src/common_widgets/section/my fixed snackBar.dart';
+import '../../src/common_widgets/input/password textformfield.dart';
+import '../../src/common_widgets/section/reusable authentication first half.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../../theme/responsive_constant.dart';

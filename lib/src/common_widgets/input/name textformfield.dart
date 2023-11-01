@@ -2,33 +2,31 @@
 
 import 'package:flutter/material.dart';
 
-import '../../theme/colors.dart';
+import '../../../theme/colors.dart';
 
-class MyTextFormField2 extends StatelessWidget {
+class NameTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final FormFieldValidator validator;
   final dynamic onSaved;
   final TextInputAction textInputAction;
-  final FocusNode focusNode;
+  final FocusNode nameFocusNode;
   final String hintText;
-  final TextInputType textInputType;
 
-  const MyTextFormField2({
+  const NameTextFormField({
     super.key,
     required this.controller,
     required this.validator,
     this.onSaved,
     required this.textInputAction,
-    required this.focusNode,
+    required this.nameFocusNode,
     required this.hintText,
-    required this.textInputType,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       // onTap: onTap,
-      focusNode: focusNode,
+      focusNode: nameFocusNode,
       controller: controller,
       validator: validator,
       onSaved: onSaved,
@@ -37,7 +35,7 @@ class MyTextFormField2 extends StatelessWidget {
       cursorColor: kSecondaryColor,
       autocorrect: true,
       enableSuggestions: true,
-      keyboardType: textInputType,
+      keyboardType: TextInputType.name,
       maxLines: 1,
       style: TextStyle(
         color: kSecondaryColor,

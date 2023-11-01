@@ -4,9 +4,9 @@ import 'package:benji_vendor/app/others/user%20reviews.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/common_widgets/home appBar vendor name.dart';
-import '../../src/common_widgets/home orders container.dart';
-import '../../src/common_widgets/home showModalBottomSheet.dart';
+import '../../src/common_widgets/appbar/home appBar vendor name.dart';
+import '../../src/common_widgets/container/home orders container.dart';
+import '../../src/common_widgets/section/home showModalBottomSheet.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';

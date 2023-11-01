@@ -3,7 +3,7 @@
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/common_widgets/my elevatedButton.dart';
+import '../../src/common_widgets/button/my elevatedButton.dart';
 import '../../src/providers/constants.dart';
 
 class SuccessfulScreen extends StatelessWidget {

@@ -4,9 +4,9 @@ import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../../src/common_widgets/my appbar.dart';
-import '../../src/common_widgets/my elevatedButton.dart';
-import '../../src/common_widgets/my outlined elevatedButton.dart';
+import '../../src/common_widgets/appbar/my appbar.dart';
+import '../../src/common_widgets/button/my elevatedButton.dart';
+import '../../src/common_widgets/button/my outlined elevatedButton.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 

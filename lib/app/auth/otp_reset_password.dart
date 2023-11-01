@@ -3,10 +3,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:benji_vendor/src/common_widgets/my%20appbar.dart';
-import 'package:benji_vendor/src/common_widgets/my%20fixed%20snackBar.dart';
-import 'package:benji_vendor/src/common_widgets/otp%20textFormField.dart';
-import 'package:benji_vendor/src/common_widgets/reusable%20authentication%20first%20half.dart';
+import 'package:benji_vendor/src/common_widgets/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/common_widgets/section/my%20fixed%20snackBar.dart';
+import 'package:benji_vendor/src/common_widgets/input/otp%20textFormField.dart';
+import 'package:benji_vendor/src/common_widgets/section/reusable%20authentication%20first%20half.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/theme/responsive_constant.dart';
 import 'package:flutter/material.dart';
