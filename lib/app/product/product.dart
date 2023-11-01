@@ -2,9 +2,7 @@ import 'package:benji_vendor/app/product/view%20product.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/common_widgets/button/category button section.dart';
 import '../../src/common_widgets/button/my outlined elevatedButton.dart';
-import '../../src/common_widgets/input/search field.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import 'add new product.dart';
@@ -114,35 +112,29 @@ class _ProductState extends State<Product> {
                     ),
                   ),
                   kSizedBox,
-                  SearchField(
-                    hintText: "Search your products",
-                    searchController: searchController,
-                  ),
-                  kSizedBox,
-                  CategoryButtonSection(
-                    category: _categoryButton,
-                    categorybgColor: _categoryButtonBgColor,
-                    categoryFontColor: _categoryButtonFontColor,
-                  ),
-                  kHalfSizedBox,
-                  const Text(
-                    'Total 3 items',
-                    style: TextStyle(
-                      color: Color(
-                        0xFF9B9BA5,
-                      ),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  kSizedBox,
-                  Flexible(
-                    child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        return InkWell(
+                  ListView.separated(
+                    separatorBuilder: (context, index) => kSizedBox,
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14.30),
+                          ),
+                          shadows: const [
+                            BoxShadow(
+                              color: Color(0x0F000000),
+                              blurRadius: 24,
+                              offset: Offset(0, 4),
+                              spreadRadius: 0,
+                            )
+                          ],
+                        ),
+                        child: InkWell(
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -156,12 +148,12 @@ class _ProductState extends State<Product> {
                             child: Row(
                               children: [
                                 Container(
-                                  width: 104,
-                                  height: 104,
+                                  width: 120,
+                                  height: 120,
                                   decoration: ShapeDecoration(
                                     image: const DecorationImage(
                                       image: AssetImage(
-                                        "assets/images/food/pasta.png",
+                                        "assets/images/products/pasta.png",
                                       ),
                                       fit: BoxFit.fill,
                                     ),
@@ -297,9 +289,9 @@ class _ProductState extends State<Product> {
                               ],
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
