@@ -1,10 +1,8 @@
-// To parse this JSON data, do
-//
-//     final userModel = userModelFromJson(jsonString);
-
 import 'dart:convert';
 
+import 'package:benji_vendor/src/model/business_type_model.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
+import 'package:get/get.dart';
 
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
@@ -12,102 +10,83 @@ String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
   int id;
-  String code;
+  String token;
   String email;
   String phone;
   String username;
+  String code;
   String firstName;
   String lastName;
-  String address;
   String gender;
-  String religion;
-  String worshipHours;
-  String stateOfOrigin;
-  String lga;
-  String permanentAddress;
-  String residentialAddress;
-  String nearestBusStop;
-  String maritalStatus;
-  String nameOfSpouse;
-  String phoneNumberOfSpouse;
-  String license;
-  String token;
-  String image;
+  String address;
+  bool isOnline;
+  double averageRating;
+  int numberOfClientsReactions;
+  String shopName;
+  String shopImage;
+  String profileLogo;
+  BusinessType shopType;
 
   UserModel({
     required this.id,
+    required this.token,
     required this.email,
     required this.phone,
-    required this.code,
     required this.username,
+    required this.code,
     required this.firstName,
     required this.lastName,
-    required this.address,
     required this.gender,
-    required this.religion,
-    required this.worshipHours,
-    required this.stateOfOrigin,
-    required this.lga,
-    required this.permanentAddress,
-    required this.residentialAddress,
-    required this.nearestBusStop,
-    required this.maritalStatus,
-    required this.nameOfSpouse,
-    required this.phoneNumberOfSpouse,
-    required this.license,
-    required this.token,
-    required this.image,
+    required this.address,
+    required this.isOnline,
+    required this.averageRating,
+    required this.numberOfClientsReactions,
+    required this.shopName,
+    required this.shopImage,
+    required this.profileLogo,
+    required this.shopType,
   });
+
   factory UserModel.fromJson(Map<String, dynamic>? json) {
     json ??= {};
     return UserModel(
-      id: json['id'] ?? 0,
-      email: json['email'] ?? notAvailable,
-      phone: json['phone'] ?? notAvailable,
-      code: json['code'] ?? notAvailable,
-      username: json['username'] ?? notAvailable,
-      firstName: json['first_name'] ?? notAvailable,
-      lastName: json['last_name'] ?? notAvailable,
-      address: json['address'] ?? notAvailable,
-      gender: json['gender'] ?? notAvailable,
-      religion: json['religion'] ?? notAvailable,
-      worshipHours: json['worship_hours'] ?? notAvailable,
-      stateOfOrigin: json['stateOfOrigin'] ?? notAvailable,
-      lga: json['lga'] ?? notAvailable,
-      permanentAddress: json['permanent_address'] ?? notAvailable,
-      residentialAddress: json['residential_address'] ?? notAvailable,
-      nearestBusStop: json['nearest_bus_stop'] ?? notAvailable,
-      maritalStatus: json['marital_status'] ?? notAvailable,
-      nameOfSpouse: json['nameOfSpouse'] ?? notAvailable,
-      phoneNumberOfSpouse: json['phoneNumberOfSpouse'] ?? notAvailable,
-      license: json['license'] ?? notAvailable,
-      token: json['token'] ?? '',
-      image: json['image'] ?? '',
+      id: json["id"] ?? 0,
+      token: json["token"] ?? '',
+      email: json["email"] ?? notAvailable,
+      phone: json["phone"] ?? notAvailable,
+      username: json["username"] ?? notAvailable,
+      code: json["code"] ?? notAvailable,
+      firstName: json["first_name"] ?? notAvailable,
+      lastName: json["last_name"] ?? notAvailable,
+      gender: json["gender"] ?? notAvailable,
+      address: json["address"] ?? notAvailable,
+      isOnline: json["is_online"] ?? false,
+      averageRating: ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
+      numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
+      shopName: json["shop_name"] ?? notAvailable,
+      shopImage: json["shop_image"] ?? '',
+      profileLogo: json["profileLogo"] ?? '',
+      shopType: BusinessType.fromJson(json["shop_type"]),
     );
   }
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "token": token,
         "email": email,
         "phone": phone,
-        "code": code,
         "username": username,
+        "code": code,
         "first_name": firstName,
         "last_name": lastName,
-        "address": address,
         "gender": gender,
-        "religion": religion,
-        "worship_hours": worshipHours,
-        "stateOfOrigin": stateOfOrigin,
-        "lga": lga,
-        "permanent_address": permanentAddress,
-        "residential_address": residentialAddress,
-        "nearest_bus_stop": nearestBusStop,
-        "marital_status": maritalStatus,
-        "nameOfSpouse": nameOfSpouse,
-        "phoneNumberOfSpouse": phoneNumberOfSpouse,
-        "license": license,
-        "token": token,
-        "image": image,
+        "address": address,
+        "is_online": isOnline,
+        "average_rating": averageRating,
+        "number_of_clients_reactions": numberOfClientsReactions,
+        "shop_name": shopName,
+        "shop_image": shopImage,
+        "profileLogo": profileLogo,
+        "shop_type": shopType.toJson(),
       };
 }
