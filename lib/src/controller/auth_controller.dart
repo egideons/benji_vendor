@@ -20,7 +20,7 @@ class AuthController extends GetxController {
   Future checkAuth() async {
     if (await isAuthorized()) {
       Get.offAll(
-        () => const OverView(),
+        () => OverView(),
         fullscreenDialog: true,
         curve: Curves.easeIn,
         routeName: "OverView",

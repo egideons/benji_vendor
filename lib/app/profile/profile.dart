@@ -1,8 +1,10 @@
 import 'package:benji_vendor/app/others/user%20reviews.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/common_widgets/section/profile_first_half.dart';
+import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../src/common_widgets/section/profile first half.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../auth/login.dart';
@@ -12,6 +14,20 @@ class Profile extends StatefulWidget {
 
   @override
   State<Profile> createState() => _ProfileState();
+}
+
+void _logOut() async {
+  await UserController.instance.deleteUser();
+  Get.offAll(
+    () => const Login(),
+    duration: const Duration(milliseconds: 300),
+    fullscreenDialog: true,
+    curve: Curves.easeIn,
+    routeName: "Login",
+    predicate: (routes) => false,
+    popGesture: false,
+    transition: Transition.rightToLeft,
+  );
 }
 
 class _ProfileState extends State<Profile> {
@@ -41,9 +57,7 @@ class _ProfileState extends State<Profile> {
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
-              const ProfileFirstHalf(
-                availableBalance: "100,000.00",
-              ),
+              ProfileFirstHalf(availableBalance: doubleFormattedText(1000000)),
               Padding(
                 padding: const EdgeInsets.only(
                   top: kDefaultPadding,
@@ -311,14 +325,7 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                   child: ListTile(
-                    onTap: () {
-                      Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => const Login(),
-                        ),
-                        (route) => false,
-                      );
-                    },
+                    onTap: _logOut,
                     leading: Icon(
                       Icons.logout_rounded,
                       color: kAccentColor,

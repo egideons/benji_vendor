@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 
+Color kPageSkeletonColor = kBlackColor.withOpacity(0.35);
+
+Color kLightGreyColor = Colors.grey.shade300;
+
 //App Main Colors
 Color kPrimaryColor = const Color(
   0xFFFFFFFF,

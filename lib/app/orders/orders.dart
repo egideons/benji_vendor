@@ -1,11 +1,11 @@
+import 'package:benji_vendor/src/common_widgets/container/vendors_order_container.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import '../../src/common_widgets/button/category button section.dart';
-import '../../src/common_widgets/container/orders container.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import 'order details.dart';
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -15,32 +15,22 @@ class Orders extends StatefulWidget {
 }
 
 class _OrdersState extends State<Orders> {
-  //============================= ALL VARIABLES =====================================\\
-  //===================== CATEGORY BUTTONS =======================\\
-  final List _categoryButton = [
-    "Pending",
-    "Completed",
-    "Cancelled",
-  ];
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(
+        () => OrderController.instance.scrollListener(scrollController));
+  }
 
-  final List<Color> _categoryButtonBgColor = [
-    kAccentColor,
-    const Color(
-      0xFFF2F2F2,
-    ),
-    const Color(
-      0xFFF2F2F2,
-    ),
-  ];
-  final List<Color> _categoryButtonFontColor = [
-    kPrimaryColor,
-    const Color(
-      0xFF828282,
-    ),
-    const Color(
-      0xFF828282,
-    ),
-  ];
+  @override
+  void dispose() {
+    scrollController.dispose();
+
+    super.dispose();
+  }
+
+  //========= variables ==========//
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,37 +56,48 @@ class _OrdersState extends State<Orders> {
                   ),
                 ),
                 kSizedBox,
-                CategoryButtonSection(
-                  category: _categoryButton,
-                  categorybgColor: _categoryButtonBgColor,
-                  categoryFontColor: _categoryButtonFontColor,
-                ),
-                kSizedBox,
-                Flexible(
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const OrderDetails(),
-                            ),
+                Column(
+                  children: [
+                    GetBuilder<OrderController>(
+                      initState: (state) async {
+                        await OrderController.instance.getOrders();
+                      },
+                      init: OrderController(),
+                      builder: (controller) => ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: controller.orderList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return VendorsOrderContainer(
+                            order: controller.orderList[index],
                           );
                         },
-                        child: OrderContainer(
-                          orderNumber: "00977",
-                          customerName: "Blessing Elechi",
-                          orderTimeStamp: "04-06-2023 | 12:30pm",
-                          orderName: "Jollof Rice and Chicken with Plantain",
-                          orderQuantity: 2.toString(),
-                          orderPrice: "5,000",
-                          customerAddress: "21 Kanna Street, GRA, Enugu",
-                        ),
-                      );
-                    },
-                  ),
+                      ),
+                    ),
+                    GetBuilder<OrderController>(
+                      builder: (controller) => Column(
+                        children: [
+                          controller.isLoadMore.value
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: kAccentColor,
+                                  ),
+                                )
+                              : const SizedBox(),
+                          controller.loadedAll.value
+                              ? Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 20, bottom: 20),
+                                  height: 10,
+                                  width: 10,
+                                  decoration: ShapeDecoration(
+                                      shape: const CircleBorder(),
+                                      color: kPageSkeletonColor),
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               ],
             ),

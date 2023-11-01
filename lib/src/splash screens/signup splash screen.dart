@@ -12,7 +12,7 @@ class SignUpSplashScreen extends StatelessWidget {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const OverView(),
+          builder: (context) => OverView(),
         ),
       );
     });

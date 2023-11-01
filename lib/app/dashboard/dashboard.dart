@@ -3,6 +3,7 @@
 import 'package:benji_vendor/app/others/user%20reviews.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../src/common_widgets/appbar/home appBar vendor name.dart';
 import '../../src/common_widgets/container/home orders container.dart';
@@ -35,19 +36,26 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
+  _addProduct() {
+    Get.to(
+      () => const AddProduct(),
+      routeName: 'AddProduct',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MyResponsivePadding(
       child: Scaffold(
         backgroundColor: kPrimaryColor,
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const AddProduct(),
-              ),
-            );
-          },
+          onPressed: _addProduct,
           elevation: 20.0,
           backgroundColor: kAccentColor,
           foregroundColor: kPrimaryColor,
@@ -98,10 +106,15 @@ class _DashboardState extends State<Dashboard> {
             IconButton(
               iconSize: 20,
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const Notifications(),
-                  ),
+                Get.to(
+                  () => const Notifications(),
+                  routeName: 'Notifications',
+                  duration: const Duration(milliseconds: 300),
+                  fullscreenDialog: true,
+                  curve: Curves.easeIn,
+                  preventDuplicates: true,
+                  popGesture: true,
+                  transition: Transition.rightToLeft,
                 );
               },
               splashRadius: 20,
