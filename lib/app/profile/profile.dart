@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../src/common_widgets/profile first half.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import '../screens/login.dart';
+import '../auth/login.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});

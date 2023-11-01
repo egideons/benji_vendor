@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'theme/colors.dart';
+
+late SharedPreferences prefs;
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
   );
   WidgetsFlutterBinding.ensureInitialized();
+  prefs = await SharedPreferences.getInstance();
 
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
@@ -43,7 +47,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       // initialRoute: StartupSplashscreen.routeName,
-      home: StartupSplashscreen(),
+      home: const StartupSplashscreen(),
     );
   }
 }

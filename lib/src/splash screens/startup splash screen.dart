@@ -1,6 +1,6 @@
 // ignore_for_file: camel_case_types, file_names
 
-import 'package:benji_vendor/app/screens/signup.dart';
+import 'package:benji_vendor/app/auth/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
