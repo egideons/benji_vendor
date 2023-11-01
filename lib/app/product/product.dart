@@ -121,6 +121,9 @@ class _ProductState extends State<Product> {
                         },
                       ),
                       GetBuilder<ProductController>(
+                        initState: (state) async {
+                          await ProductController.instance.getProducts();
+                        },
                         builder: (controller) => Column(
                           children: [
                             controller.isLoadMore.value
