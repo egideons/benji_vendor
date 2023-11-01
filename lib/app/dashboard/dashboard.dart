@@ -76,11 +76,12 @@ class _DashboardState extends State<Dashboard> {
                     );
                   },
                   child: CircleAvatar(
+                    maxRadius: 25,
                     minRadius: 20,
                     backgroundColor: kSecondaryColor,
                     child: ClipOval(
                       child: Image.asset(
-                        "assets/images/profile/profile-picture.png",
+                        "assets/images/profile/super-maria.png",
                         fit: BoxFit.cover,
                       ),
                     ),

@@ -59,7 +59,7 @@ class LoginController extends GetxController {
 
         http.Response? responseUserData = await HandleData.getApi(
             Api.baseUrl +
-                Api.getAgent +
+                Api.getSpecificVendor +
                 jsonDecode(responseUser.body)['id'].toString(),
             jsonData["token"]);
         if (responseUserData == null || responseUserData.statusCode != 200) {
