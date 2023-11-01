@@ -14,37 +14,15 @@ const baseImage = "https://resource.bgbot.app";
 class Api {
   static const baseUrl = "https://resource.bgbot.app/api/v1";
   static const login = "/auth/token";
-  static const getAgent = "/agents/getAgent/";
   static const user = "/auth/";
-  static const notification = "/agents/getAgentNotifications/";
   static const changePassword = "/auth/changeNewPassword/";
   static const addProduct = "/products/addProduct/";
 
 //Vendor
-  static const vendorList = "/agents/listAllMyVendors";
-  static const vendorMyList = "/agents/listThirdPartyMyVendor";
-  static const agentCreateVendor = "/agents/agentCreateVendor";
-  static const getSpecificVendor = "/agents/getVendor/";
-  static const getVendorProducts = "/agents/listVendorProducts/";
-  static const filterVendorProduct =
-      "/agents/filterVendorProductsBySubCategory";
-  static const listVendorOrders = "/agents/listVendorOrders/";
-  static const getVendorRatings = "/agents/getVendorAverageRating/";
-  static const createVendor = "/agents/agentCreateVendor/";
-  static const createVendorOtherBusiness =
-      "/vendors/createVendorOtherBusiness/";
-  static const agentAddProductToVendor = '/agents/agentAddProductToVendor';
-
-  //order
-  static const orderList = "/agents/getAllMyVendorsOrders/";
+  static const getSpecificVendor = "/vendors/getVendor/";
+  static const orderList = "/vendors/";
 
   //Rider
-  static const riderList = "/agents/listAllRiders";
-  static const getSpecificRider = "/agents/getRider/";
-  static const assignRiderTask = "/agents/assignOrdersToRider";
-  static const riderHistory = "/agents/ridersHistories/";
-  static const category = "/categories/list";
-  static const report = "/report/CreateReport";
 
   //BusinessTypes
   static const businessType = "/categories/list";
