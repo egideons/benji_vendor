@@ -1,19 +1,19 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
 
+import 'package:benji_vendor/src/common_widgets/email%20textformfield.dart';
+import 'package:benji_vendor/src/common_widgets/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/common_widgets/password%20textformfield.dart';
+import 'package:benji_vendor/src/common_widgets/reusable%20authentication%20first%20half.dart';
+import 'package:benji_vendor/src/controller/login_controller.dart';
+import 'package:benji_vendor/src/model/login_model.dart';
+import 'package:benji_vendor/theme/responsive_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 
-import '../../src/common_widgets/email textformfield.dart';
-import '../../src/common_widgets/my fixed snackBar.dart';
-import '../../src/common_widgets/password textformfield.dart';
-import '../../src/common_widgets/reusable authentication first half.dart';
 import '../../src/providers/constants.dart';
-import '../../src/splash screens/login splash screen.dart';
 import '../../theme/colors.dart';
-import '../../theme/responsive_constant.dart';
-import 'forgot password.dart';
-import 'signup.dart';
+import 'forgot_password.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -23,6 +23,13 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  //=========================== INITIAL STATE ====================================\\
+  @override
+  void initState() {
+    super.initState();
+    _isObscured = true;
+  }
+
   //=========================== ALL VARIABBLES ====================================\\
 
   //=========================== CONTROLLERS ====================================\\
@@ -35,9 +42,10 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
 
   //=========================== BOOL VALUES ====================================\\
+
   bool isLoading = false;
-  bool isChecked = false;
-  var isObscured;
+
+  var _isObscured;
 
   //=========================== STYLE ====================================\\
 
@@ -50,46 +58,22 @@ class _LoginState extends State<Login> {
   FocusNode passwordFocusNode = FocusNode();
 
   //=========================== FUNCTIONS ====================================\\
-  Future<void> loadData() async {
-    setState(() {
-      isLoading = true;
-    });
 
-    // Simulating a delay of 3 seconds
-    await Future.delayed(const Duration(seconds: 2));
-
-    //Display snackBar
-    myFixedSnackBar(
-      context,
-      "Login Successful".toUpperCase(),
-      kSuccessColor,
-      const Duration(
-        seconds: 2,
-      ),
-    );
-
-    // Navigate to the new page
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const LoginSplashScreen()),
-      (route) => false,
-    );
-
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  //=========================== INITIAL STATE ====================================\\
-  @override
-  void initState() {
-    super.initState();
-    isObscured = true;
-  }
+  //Navigate to forgotPassword
+  void toForgotPasswordPage() => Get.to(
+        () => const ForgotPassword(),
+        duration: const Duration(milliseconds: 500),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Forgot Password",
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.rightToLeft,
+      );
 
   @override
   Widget build(BuildContext context) {
-    final media = MediaQuery.of(context).size;
-
+    var media = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
       child: Scaffold(
@@ -99,97 +83,57 @@ class _LoginState extends State<Login> {
           maintainBottomViewPadding: true,
           child: LayoutGrid(
             columnSizes: breakPointDynamic(
-                media.width, [1.fr], [1.fr], [1.fr, 1.fr], [1.fr, 1.fr]),
-            rowSizes: [auto, 1.fr],
+              media.width,
+              [1.fr],
+              [1.fr],
+              [1.fr, 1.fr],
+              [1.fr, 1.fr],
+            ),
+            rowSizes: breakPointDynamic(
+              media.width,
+              [auto, 1.fr],
+              [auto, 1.fr],
+              [1.fr],
+              [1.fr],
+            ),
             children: [
               Column(
                 children: [
-                  Row(
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(24),
-                        onTap: () {
-                          Navigator.of(context).pop(context);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(
-                            8.0,
-                          ),
-                          child: SizedBox(
-                            width: 48,
-                            height: 48,
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  left: 0,
-                                  top: 0,
-                                  child: Container(
-                                    width: 48,
-                                    height: 48,
-                                    decoration: ShapeDecoration(
-                                      color: const Color(
-                                        0xFFFEF8F8,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        side: const BorderSide(
-                                          width: 0.50,
-                                          color: Color(
-                                            0xFFFDEDED,
-                                          ),
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                          24,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Icon(
-                                      Icons.arrow_back_ios_new_rounded,
-                                      color: kAccentColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   Expanded(
                     child: ReusableAuthenticationFirstHalf(
                       title: "Log In",
                       subtitle: "Please log in to your existing account",
-                      decoration: const ShapeDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(
-                            "assets/images/login/avatar-image.png",
-                          ),
-                          fit: BoxFit.cover,
-                        ),
-                        shape: CircleBorder(),
+                      curves: Curves.easeInOut,
+                      duration: const Duration(milliseconds: 300),
+                      containerChild: Center(
+                        child: Image.asset("assets/icons/support.png"),
+                      ),
+                      decoration: ShapeDecoration(
+                        color: kPrimaryColor,
+                        shape: const OvalBorder(),
                       ),
                       imageContainerHeight:
-                          deviceType(media.width) > 2 ? 200 : 88,
+                          deviceType(media.width) > 2 ? 200 : 120,
                     ),
                   ),
                 ],
               ),
               Container(
-                height: media.height,
                 width: media.width,
+                height: media.height,
                 padding: const EdgeInsets.only(
-                  top: kDefaultPadding,
+                  top: kDefaultPadding / 2,
                   left: kDefaultPadding,
                   right: kDefaultPadding,
                 ),
                 decoration: BoxDecoration(
+                  color: kPrimaryColor,
                   borderRadius: BorderRadius.only(
                     topLeft:
                         Radius.circular(breakPoint(media.width, 24, 24, 0, 0)),
                     topRight:
                         Radius.circular(breakPoint(media.width, 24, 24, 0, 0)),
                   ),
-                  color: kPrimaryColor,
                 ),
                 child: ListView(
                   physics: const BouncingScrollPhysics(),
@@ -205,9 +149,7 @@ class _LoginState extends State<Login> {
                               'Email',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Color(
-                                  0xFF31343D,
-                                ),
+                                color: kTextBlackColor,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -239,9 +181,7 @@ class _LoginState extends State<Login> {
                             child: Text(
                               'Password',
                               style: TextStyle(
-                                color: Color(
-                                  0xFF31343D,
-                                ),
+                                color: kTextBlackColor,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -252,7 +192,7 @@ class _LoginState extends State<Login> {
                             controller: passwordController,
                             passwordFocusNode: passwordFocusNode,
                             keyboardType: TextInputType.visiblePassword,
-                            obscureText: isObscured,
+                            obscureText: _isObscured,
                             textInputAction: TextInputAction.done,
                             validator: (value) {
                               RegExp passwordPattern = RegExp(
@@ -272,10 +212,10 @@ class _LoginState extends State<Login> {
                             suffixIcon: IconButton(
                               onPressed: () {
                                 setState(() {
-                                  isObscured = !isObscured;
+                                  _isObscured = !_isObscured;
                                 });
                               },
-                              icon: isObscured
+                              icon: _isObscured
                                   ? const Icon(
                                       Icons.visibility_off_rounded,
                                     )
@@ -290,43 +230,10 @@ class _LoginState extends State<Login> {
                     ),
                     kHalfSizedBox,
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Checkbox(
-                              value: isChecked,
-                              splashRadius: 50,
-                              activeColor: kSecondaryColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  5,
-                                ),
-                              ),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  isChecked = newValue!;
-                                });
-                              },
-                            ),
-                            const Text(
-                              "Remember me ",
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
                         TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const ForgotPassword(),
-                              ),
-                            );
-                          },
+                          onPressed: toForgotPasswordPage,
                           child: Text(
                             "Forgot Password",
                             style: myAccentFontStyle,
@@ -335,131 +242,22 @@ class _LoginState extends State<Login> {
                       ],
                     ),
                     kSizedBox,
-                    isLoading
-                        ? Center(
-                            child: SpinKitChasingDots(
-                              color: kAccentColor,
-                              duration: const Duration(seconds: 2),
-                            ),
-                          )
-                        : ElevatedButton(
-                            onPressed: (() async {
-                              if (_formKey.currentState!.validate()) {
-                                loadData();
-                              }
-                            }),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: kAccentColor,
-                              maximumSize: Size(
-                                MediaQuery.of(context).size.width,
-                                62,
-                              ),
-                              minimumSize: Size(
-                                MediaQuery.of(context).size.width,
-                                60,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  16,
-                                ),
-                              ),
-                              elevation: 10,
-                              shadowColor: kDarkGreyColor,
-                            ),
-                            child: Text(
-                              "Log in".toUpperCase(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
+                    GetBuilder<LoginController>(builder: (controller) {
+                      return MyElevatedButton(
+                        title: "LOG IN",
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            SendLogin data = SendLogin(
+                                password: passwordController.text,
+                                username: emailController.text);
+
+                            await controller.login(data);
+                          }
+                        },
+                        isLoading: controller.isLoad.value,
+                      );
+                    }),
                     kHalfSizedBox,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Don't have an account? ",
-                          style: TextStyle(
-                            color: Color(
-                              0xFF646982,
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => const SignUp(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "Sign up",
-                            style: myAccentFontStyle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    kHalfSizedBox,
-                    Center(
-                      child: Column(
-                        children: [
-                          const Text(
-                            "Or log in with ",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(
-                                0xFF646982,
-                              ),
-                            ),
-                          ),
-                          kSizedBox,
-                          InkWell(
-                            borderRadius: BorderRadius.circular(10),
-                            onTap: () {},
-                            child: Container(
-                              width: MediaQuery.of(context).size.width / 2,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                  10,
-                                ),
-                                border: Border.all(
-                                  color: kGreyColor1,
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                          "assets/images/icons/google-signup-icon.png",
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const Text(
-                                    "Google",
-                                    style: TextStyle(
-                                      color: kTextBlackColor,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          kSizedBox,
-                        ],
-                      ),
-                    ),
                   ],
                 ),
               ),

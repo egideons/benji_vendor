@@ -107,7 +107,7 @@ class _ProductState extends State<Product> {
                           minimumSizeHeight: 35,
                           maximumSizeWidth: 65,
                           maximumSizeHeight: 35,
-                          buttonTitle: "+ Add",
+                          title: "+ Add",
                           titleFontSize: 12,
                         )
                       ],

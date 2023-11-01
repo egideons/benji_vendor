@@ -10,7 +10,7 @@ class MyDisabledOutlinedElevatedButton extends StatelessWidget {
   final double minimumSizeHeight;
   final double maximumSizeWidth;
   final double maximumSizeHeight;
-  final String buttonTitle;
+  final String title;
   final double titleFontSize;
 
   const MyDisabledOutlinedElevatedButton({
@@ -20,7 +20,7 @@ class MyDisabledOutlinedElevatedButton extends StatelessWidget {
     required this.minimumSizeHeight,
     required this.maximumSizeWidth,
     required this.maximumSizeHeight,
-    required this.buttonTitle,
+    required this.title,
     required this.titleFontSize,
   });
 
@@ -52,7 +52,7 @@ class MyDisabledOutlinedElevatedButton extends StatelessWidget {
         ),
       ),
       child: Text(
-        buttonTitle,
+        title,
         style: TextStyle(
           color: kTextGreyColor,
           fontSize: titleFontSize,

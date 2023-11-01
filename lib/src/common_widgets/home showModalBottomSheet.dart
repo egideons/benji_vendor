@@ -167,14 +167,7 @@ Future<dynamic> OrdersContainerBottomSheet(
                               children: [
                                 MyElevatedButton(
                                   onPressed: () {},
-                                  elevation: 10.0,
-                                  circularBorderRadius: 10,
-                                  minimumSizeWidth: 90,
-                                  minimumSizeHeight: 30,
-                                  maximumSizeWidth: 90,
-                                  maximumSizeHeight: 30,
-                                  buttonTitle: "Done",
-                                  titleFontSize: 14,
+                                  title: "Done",
                                 ),
                                 MyOutlinedElevatedButton(
                                   onPressed: () {},
@@ -184,7 +177,7 @@ Future<dynamic> OrdersContainerBottomSheet(
                                   minimumSizeHeight: 30,
                                   maximumSizeWidth: 90,
                                   maximumSizeHeight: 30,
-                                  buttonTitle: "Cancel",
+                                  title: "Cancel",
                                   titleFontSize: 14,
                                 ),
                               ],

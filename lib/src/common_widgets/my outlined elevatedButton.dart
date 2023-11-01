@@ -11,7 +11,7 @@ class MyOutlinedElevatedButton extends StatelessWidget {
   final double minimumSizeHeight;
   final double maximumSizeWidth;
   final double maximumSizeHeight;
-  final String buttonTitle;
+  final String title;
   final double titleFontSize;
   final double elevation;
 
@@ -23,7 +23,7 @@ class MyOutlinedElevatedButton extends StatelessWidget {
     required this.minimumSizeHeight,
     required this.maximumSizeWidth,
     required this.maximumSizeHeight,
-    required this.buttonTitle,
+    required this.title,
     required this.titleFontSize,
     required this.elevation,
   });
@@ -53,7 +53,7 @@ class MyOutlinedElevatedButton extends StatelessWidget {
         ),
       ),
       child: Text(
-        buttonTitle,
+        title,
         style: TextStyle(
           color: kAccentColor,
           fontSize: titleFontSize,

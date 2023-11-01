@@ -64,7 +64,6 @@ class _OrderDetailsState extends State<OrderDetails> {
       child: Scaffold(
         appBar: MyAppBar(
           title: "Order Details",
-          toolbarHeight: 80,
           elevation: 0.0,
           actions: const [],
           backgroundColor: kPrimaryColor,
@@ -737,7 +736,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   onPressed: () {
                                     processOrderCanceled();
                                   },
-                                  buttonTitle: "Cancel Order",
+                                  title: "Cancel Order",
                                   elevation: 10.0,
                                   titleFontSize: 16.09,
                                   circularBorderRadius: 10.0,
@@ -752,16 +751,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   onPressed: () {
                                     processOrderAccepted();
                                   },
-                                  elevation: 10.0,
-                                  buttonTitle: "Accept Order",
-                                  titleFontSize: 16.09,
-                                  circularBorderRadius: 10.0,
-                                  maximumSizeHeight: 50.07,
-                                  maximumSizeWidth:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                  minimumSizeHeight: 50.07,
-                                  minimumSizeWidth:
-                                      MediaQuery.of(context).size.width / 2.5,
+                                  title: "Accept Order",
                                 ),
                               ],
                             ),

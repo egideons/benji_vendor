@@ -203,7 +203,6 @@ class _AddProductState extends State<AddProduct> {
           backgroundColor: kPrimaryColor,
           appBar: MyAppBar(
             title: "Add New Item ",
-            toolbarHeight: 80,
             backgroundColor: kPrimaryColor,
             elevation: 0.0,
             actions: const [],
@@ -886,7 +885,7 @@ class _AddProductState extends State<AddProduct> {
                                 child: MyOutlinedElevatedButton(
                                   onPressed: () {},
                                   elevation: 10.0,
-                                  buttonTitle: "+ Add a variety",
+                                  title: "+ Add a variety",
                                   titleFontSize: 16,
                                   circularBorderRadius: 20,
                                   maximumSizeHeight: 30,
@@ -898,7 +897,7 @@ class _AddProductState extends State<AddProduct> {
                             : const Align(
                                 alignment: Alignment.bottomRight,
                                 child: MyDisabledOutlinedElevatedButton(
-                                  buttonTitle: "Disabled",
+                                  title: "Disabled",
                                   titleFontSize: 14,
                                   circularBorderRadius: 20,
                                   maximumSizeHeight: 30,
@@ -910,14 +909,7 @@ class _AddProductState extends State<AddProduct> {
                         kSizedBox,
                         MyElevatedButton(
                           onPressed: () {},
-                          elevation: 10.0,
-                          buttonTitle: "Save",
-                          titleFontSize: 14,
-                          circularBorderRadius: 20,
-                          maximumSizeHeight: 56,
-                          maximumSizeWidth: MediaQuery.of(context).size.width,
-                          minimumSizeHeight: 56,
-                          minimumSizeWidth: MediaQuery.of(context).size.width,
+                          title: "Save",
                         ),
                       ],
                     ),

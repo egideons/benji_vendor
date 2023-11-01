@@ -1,6 +1,6 @@
 // ignore_for_file: camel_case_types, file_names
 
-import 'package:benji_vendor/app/auth/signup.dart';
+import 'package:benji_vendor/app/auth/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -20,7 +20,7 @@ class _StartupSplashscreenState extends State<StartupSplashscreen> {
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 4), () {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const SignUp()),
+          MaterialPageRoute(builder: (context) => const Login()),
           (route) => false);
     });
     return Scaffold(

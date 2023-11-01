@@ -43,7 +43,6 @@ class _NotificationsState extends State<Notifications> {
         backgroundColor: kPrimaryColor,
         appBar: MyAppBar(
           title: "Notifications",
-          toolbarHeight: 80,
           backgroundColor: kPrimaryColor,
           elevation: 0.0,
           actions: const [],
