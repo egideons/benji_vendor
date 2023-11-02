@@ -1,13 +1,13 @@
 // ignore_for_file: file_names
 
 import 'package:benji_vendor/app/product/edit_product.dart';
+import 'package:benji_vendor/src/common_widgets/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -26,49 +26,40 @@ class ViewProduct extends StatefulWidget {
 }
 
 class _ViewProductState extends State<ViewProduct> {
+  bool deleteProductLoad = false;
+
   void _deleteModal() => Get.defaultDialog(
-        title: "What do you want to do?",
+        title: "You are about to delete: ${widget.product.name}",
         titleStyle: const TextStyle(
           fontSize: 20,
           color: kTextBlackColor,
           fontWeight: FontWeight.w700,
         ),
         content: const SizedBox(height: 0),
-        cancel: ElevatedButton(
-          onPressed: () => _deleteProduct(widget.product.id),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: kPrimaryColor,
-            elevation: 10.0,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(color: kAccentColor),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            shadowColor: kBlackColor.withOpacity(0.4),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              FaIcon(FontAwesomeIcons.solidTrashCan, color: kAccentColor),
-              kHalfWidthSizedBox,
-              Text(
-                "Delete",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: kAccentColor,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
+        confirm: Container(
+          padding: const EdgeInsets.all(10),
+          child: MyElevatedButton(
+            title: 'Delete',
+            onPressed: _deleteProduct,
+            isLoading: deleteProductLoad,
           ),
         ),
       );
 
-  _deleteProduct(String id) async {
+  _deleteProduct() async {
+    setState(() {
+      deleteProductLoad = true;
+    });
+    // await FormController.instance.deleteAuth(
+    //     Api.baseUrl + Api.deleteProduct + widget.product.id, 'deleteProduct');
     final response = await http.delete(
-      Uri.parse(Api.baseUrl + Api.deleteProduct + id),
+      Uri.parse(Api.baseUrl + Api.deleteProduct + widget.product.id),
       headers: authHeader(),
     );
+    setState(() {
+      deleteProductLoad = false;
+    });
+    print('${response.body} ${response.statusCode}');
     if (response.statusCode != 200) {
       ApiProcessorController.errorSnack('Error occured');
       return;
@@ -191,7 +182,7 @@ class _ViewProductState extends State<ViewProduct> {
                                     ),
                                   ),
                                   ListTile(
-                                    onTap: () {},
+                                    onTap: _deleteModal,
                                     leading: Icon(
                                       Icons.delete,
                                       color: kAccentColor,
