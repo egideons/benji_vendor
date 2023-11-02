@@ -17,6 +17,7 @@ class Api {
   static const user = "/auth/";
   static const changePassword = "/auth/changeNewPassword/";
   static const addProduct = "/products/addProduct/";
+  static const changeProduct = "/products/changeProduct/";
 
 //Vendor
   static const getSpecificVendor = "/vendors/getVendor/";

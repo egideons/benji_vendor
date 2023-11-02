@@ -1,8 +1,10 @@
 // ignore_for_file: file_names
 
+import 'package:benji_vendor/app/product/edit_product.dart';
 import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../src/common_widgets/section/showModalBottomSheet.dart';
 import '../../src/common_widgets/section/showModalBottomSheetTitleWithIcon.dart';
@@ -20,6 +22,18 @@ class ViewProduct extends StatefulWidget {
 
 class _ViewProductState extends State<ViewProduct> {
   //============================ ALL VARIABLES ===============================\\
+  _editProduct() {
+    Get.to(
+      () => EditProduct(product: widget.product),
+      routeName: 'EditProduct',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +118,7 @@ class _ViewProductState extends State<ViewProduct> {
                                     height: kDefaultPadding * 3,
                                   ),
                                   ListTile(
-                                    onTap: () {},
+                                    onTap: _editProduct,
                                     leading: Icon(
                                       Icons.edit,
                                       color: kAccentColor,
