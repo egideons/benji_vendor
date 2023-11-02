@@ -70,6 +70,7 @@ class _ProductState extends State<Product> {
 
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
     return MyResponsivePadding(
       child: GestureDetector(
         onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
@@ -79,6 +80,7 @@ class _ProductState extends State<Product> {
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Container(
+                constraints: BoxConstraints(maxHeight: media.height),
                 color: kPrimaryColor,
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.all(
