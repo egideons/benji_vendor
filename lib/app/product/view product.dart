@@ -1,15 +1,14 @@
 // ignore_for_file: file_names
 
 import 'package:benji_vendor/app/product/edit_product.dart';
+import 'package:benji_vendor/app/product/product.dart';
 import 'package:benji_vendor/src/common_widgets/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
-import 'package:benji_vendor/src/controller/error_controller.dart';
+import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 import '../../src/common_widgets/section/showModalBottomSheet.dart';
 import '../../src/common_widgets/section/showModalBottomSheetTitleWithIcon.dart';
@@ -38,10 +37,13 @@ class _ViewProductState extends State<ViewProduct> {
         content: const SizedBox(height: 0),
         confirm: Container(
           padding: const EdgeInsets.all(10),
-          child: MyElevatedButton(
-            title: 'Delete',
-            onPressed: _deleteProduct,
-            isLoading: deleteProductLoad,
+          child: GetBuilder<FormController>(
+            id: 'deleteProduct',
+            builder: (controller) => MyElevatedButton(
+              title: 'Delete',
+              onPressed: _deleteProduct,
+              isLoading: controller.isLoad.value,
+            ),
           ),
         ),
       );
@@ -50,23 +52,34 @@ class _ViewProductState extends State<ViewProduct> {
     setState(() {
       deleteProductLoad = true;
     });
-    // await FormController.instance.deleteAuth(
-    //     Api.baseUrl + Api.deleteProduct + widget.product.id, 'deleteProduct');
-    final response = await http.delete(
-      Uri.parse(Api.baseUrl + Api.deleteProduct + widget.product.id),
-      headers: authHeader(),
-    );
+    await FormController.instance.deleteAuth(
+        Api.baseUrl + Api.deleteProduct + widget.product.id,
+        'deleteProduct',
+        'Error occured',
+        'Deleted successfully');
+    // final response = await http.delete(
+    //   Uri.parse(Api.baseUrl + Api.deleteProduct + widget.product.id),
+    //   headers: authHeader(),
+    // );
+
+    final status = FormController.instance.status;
     setState(() {
       deleteProductLoad = false;
     });
-    print('${response.body} ${response.statusCode}');
-    if (response.statusCode != 200) {
-      ApiProcessorController.errorSnack('Error occured');
+    print('${status.value} ooo');
+    if (status.value != 200) {
       return;
     }
 
-    ApiProcessorController.successSnack('Deleted successfully');
-    Get.back();
+    Get.offAll(
+      () => const Product(),
+      routeName: 'Product',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
   }
 
   _editProduct() {

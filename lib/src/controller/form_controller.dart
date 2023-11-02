@@ -27,6 +27,7 @@ class FormController extends GetxController {
       headers: authHeader(),
     );
     status.value = response.statusCode;
+    update([tag]);
     if (response.statusCode != 200) {
       ApiProcessorController.errorSnack(errorMsg);
       isLoad.value = false;
@@ -36,7 +37,7 @@ class FormController extends GetxController {
 
     ApiProcessorController.successSnack(successMsg);
     isLoad.value = false;
-    responseObject.value = jsonDecode(response.body) as Map;
+    // responseObject.value = jsonDecode(response.body) as Map;
     update([tag]);
   }
 
