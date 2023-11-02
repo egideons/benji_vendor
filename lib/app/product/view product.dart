@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
+import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/app/product/edit_product.dart';
-import 'package:benji_vendor/app/product/product.dart';
 import 'package:benji_vendor/src/common_widgets/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
@@ -72,8 +72,8 @@ class _ViewProductState extends State<ViewProduct> {
     }
 
     Get.offAll(
-      () => const Product(),
-      routeName: 'Product',
+      () => OverView(currentIndex: 2),
+      routeName: 'OverView',
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,

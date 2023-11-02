@@ -16,15 +16,23 @@ class OverView extends StatefulWidget {
   final product = Get.put(ProductController());
   final order = Get.put(OrderController());
   final form = Get.put(FormController());
-
-  OverView({super.key});
+  final int currentIndex;
+  OverView({super.key, this.currentIndex = 0});
 
   @override
   State<OverView> createState() => _OverViewState();
 }
 
 class _OverViewState extends State<OverView> {
-  int _currentIndex = 0;
+  @override
+  void initState() {
+    _currentIndex = widget.currentIndex;
+
+    super.initState();
+  }
+
+//======== variables =========//
+  late int _currentIndex;
 
   final List<Widget> _pages = const [
     Dashboard(),
