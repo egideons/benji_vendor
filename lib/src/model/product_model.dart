@@ -2,7 +2,7 @@ import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/model/vendor_model.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 
-class Product {
+class ProductModel {
   String id;
   String name;
   String description;
@@ -15,7 +15,7 @@ class Product {
   VendorModel vendor;
   SubCategory subCategory;
 
-  Product({
+  ProductModel({
     required this.id,
     required this.name,
     required this.description,
@@ -29,9 +29,9 @@ class Product {
     required this.subCategory,
   });
 
-  factory Product.fromJson(Map<String, dynamic>? json) {
+  factory ProductModel.fromJson(Map<String, dynamic>? json) {
     json ??= {};
-    return Product(
+    return ProductModel(
       id: json["id"] ?? notAvailable,
       name: json["name"] ?? notAvailable,
       description: json["description"] ?? notAvailable,

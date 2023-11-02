@@ -1,16 +1,18 @@
 // ignore_for_file: file_names
 
+import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/common_widgets/button/category button section.dart';
 import '../../src/common_widgets/section/showModalBottomSheet.dart';
 import '../../src/common_widgets/section/showModalBottomSheetTitleWithIcon.dart';
+import '../../src/model/product_model.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
 class ViewProduct extends StatefulWidget {
-  const ViewProduct({super.key});
+  final ProductModel product;
+  const ViewProduct({super.key, required this.product});
 
   @override
   State<ViewProduct> createState() => _ViewProductState();
@@ -19,48 +21,9 @@ class ViewProduct extends StatefulWidget {
 class _ViewProductState extends State<ViewProduct> {
   //============================ ALL VARIABLES ===============================\\
 
-  //============================== CATEGORY BUTTONS ===========================\\
-  final List _categoryButtonText = [
-    "Protein",
-    "Stew Type",
-    "",
-    "",
-    "",
-  ];
-
-  final List<Color> _categoryButtonBgColor = [
-    kAccentColor,
-    const Color(
-      0xFFF2F2F2,
-    ),
-    const Color(
-      0xFFF2F2F2,
-    ),
-    const Color(
-      0xFFF2F2F2,
-    ),
-    const Color(
-      0xFFF2F2F2,
-    ),
-  ];
-  final List<Color> _categoryButtonFontColor = [
-    kPrimaryColor,
-    const Color(
-      0xFF828282,
-    ),
-    const Color(
-      0xFF828282,
-    ),
-    const Color(
-      0xFF828282,
-    ),
-    const Color(
-      0xFF828282,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final media = MediaQuery.of(context).size;
     return MyResponsivePadding(
       child: Scaffold(
         appBar: AppBar(
@@ -80,13 +43,8 @@ class _ViewProductState extends State<ViewProduct> {
                 height: 320,
                 decoration: const ShapeDecoration(
                   shape: RoundedRectangleBorder(),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                      "assets/images/food/pasta.png",
-                    ),
-                  ),
                 ),
+                child: MyImage(url: widget.product.productImage),
               ),
             ),
             Positioned(
@@ -224,13 +182,13 @@ class _ViewProductState extends State<ViewProduct> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Smokey Jollof Rice",
+                            widget.product.name,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color(
                                 0xFF302F3C,
                               ),
@@ -239,8 +197,8 @@ class _ViewProductState extends State<ViewProduct> {
                             ),
                           ),
                           Text(
-                            "₦850",
-                            style: TextStyle(
+                            "₦${widget.product.price}",
+                            style: const TextStyle(
                               color: Color(
                                 0xFF333333,
                               ),
@@ -252,9 +210,9 @@ class _ViewProductState extends State<ViewProduct> {
                         ],
                       ),
                       kSizedBox,
-                      const Text(
-                        "This is a short description about the food you mentoned which is a restaurant food in this case.",
-                        style: TextStyle(
+                      Text(
+                        widget.product.description,
+                        style: const TextStyle(
                           color: Color(
                             0xFF676565,
                           ),
@@ -263,13 +221,12 @@ class _ViewProductState extends State<ViewProduct> {
                         ),
                       ),
                       kSizedBox,
-                      const SizedBox(
-                        width: 67,
-                        height: 17,
+                      SizedBox(
+                        width: media.width,
                         child: Text(
-                          'Qty: 3200',
+                          'Qty: ${widget.product.quantityAvailable}',
                           textAlign: TextAlign.right,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Color(
                               0xFF828282,
                             ),
@@ -279,50 +236,6 @@ class _ViewProductState extends State<ViewProduct> {
                         ),
                       ),
                       kSizedBox,
-                      CategoryButtonSection(
-                        category: _categoryButtonText,
-                        categorybgColor: _categoryButtonBgColor,
-                        categoryFontColor: _categoryButtonFontColor,
-                      ),
-                      kSizedBox,
-                      const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Beef (₦2,000)',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Sen',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          kSizedBox,
-                          Text(
-                            'Fish (₦2,000)',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Sen',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          kSizedBox,
-                          Text(
-                            'Goat Meat (₦2,000)',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14,
-                              fontFamily: 'Sen',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          kSizedBox,
-                        ],
-                      )
                     ],
                   ),
                 ),

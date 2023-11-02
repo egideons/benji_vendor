@@ -9,7 +9,7 @@ import '../../providers/constants.dart';
 
 class VendorsProductContainer extends StatefulWidget {
   final Function() onTap;
-  final Product product;
+  final ProductModel product;
 
   const VendorsProductContainer(
       {super.key, required this.onTap, required this.product});

@@ -1,6 +1,8 @@
+import 'package:benji_vendor/app/product/view%20product.dart';
 import 'package:benji_vendor/src/common_widgets/container/vendors_product_container.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
+import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,6 +46,19 @@ class _ProductState extends State<Product> {
     Get.to(
       () => const AddProduct(),
       routeName: 'AddProduct',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  _viewProduct(ProductModel product) {
+    Get.to(
+      () => ViewProduct(product: product),
+      routeName: 'ViewProduct',
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
@@ -113,7 +128,8 @@ class _ProductState extends State<Product> {
                             itemCount: controller.products.length,
                             itemBuilder: (BuildContext context, int index) {
                               return VendorsProductContainer(
-                                onTap: () {},
+                                onTap: () =>
+                                    _viewProduct(controller.products[index]),
                                 product: controller.products[index],
                               );
                             },

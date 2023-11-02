@@ -15,7 +15,7 @@ class ProductController extends GetxController {
   }
 
   var isLoad = false.obs;
-  var products = <Product>[].obs;
+  var products = <ProductModel>[].obs;
 
   var loadedAll = false.obs;
   var isLoadMore = false.obs;
@@ -65,10 +65,10 @@ class ProductController extends GetxController {
       isLoad.value = false;
       return;
     }
-    List<Product> data = [];
+    List<ProductModel> data = [];
     try {
       data = (jsonDecode(responseData)['items'] as List)
-          .map((e) => Product.fromJson(e))
+          .map((e) => ProductModel.fromJson(e))
           .toList();
       products.value += data;
     } catch (e) {
