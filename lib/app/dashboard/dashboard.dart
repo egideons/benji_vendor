@@ -142,7 +142,9 @@ class _DashboardState extends State<Dashboard> {
                     child: CircleAvatar(
                       maxRadius: 25,
                       minRadius: 20,
-                      backgroundColor: kSecondaryColor,
+                      backgroundColor: kTransparentColor,
+                      backgroundImage: const AssetImage(
+                          'assets/images/profile/avatar-image.jpg'),
                       child: ClipOval(
                         child: MyImage(url: controller.user.value.shopImage),
                       ),
