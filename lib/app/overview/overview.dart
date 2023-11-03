@@ -1,6 +1,7 @@
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
+import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,8 @@ class OverView extends StatefulWidget {
   final product = Get.put(ProductController());
   final order = Get.put(OrderController());
   final form = Get.put(FormController());
+  final reviews = Get.put(ReviewsController());
+
   final int currentIndex;
   OverView({super.key, this.currentIndex = 0});
 

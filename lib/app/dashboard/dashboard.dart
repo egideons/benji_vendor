@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:benji_vendor/app/others/user%20reviews.dart';
+import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,6 +40,19 @@ class _DashboardState extends State<Dashboard> {
     Get.to(
       () => const AddProduct(),
       routeName: 'AddProduct',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  _reviewsPage() {
+    Get.to(
+      () => const ReviewsPage(),
+      routeName: 'ReviewsPage',
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
@@ -344,13 +357,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const UserReviews(),
-                              ),
-                            );
-                          },
+                          onPressed: _reviewsPage,
                           child: Text(
                             'See All Reviews',
                             style: TextStyle(

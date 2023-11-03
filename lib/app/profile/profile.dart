@@ -1,4 +1,4 @@
-import 'package:benji_vendor/app/others/user%20reviews.dart';
+import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/common_widgets/section/profile_first_half.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
@@ -26,6 +26,19 @@ void _logOut() async {
     routeName: "Login",
     predicate: (routes) => false,
     popGesture: false,
+    transition: Transition.rightToLeft,
+  );
+}
+
+_reviewsPage() {
+  Get.to(
+    () => const ReviewsPage(),
+    routeName: 'ReviewsPage',
+    duration: const Duration(milliseconds: 300),
+    fullscreenDialog: true,
+    curve: Curves.easeIn,
+    preventDuplicates: true,
+    popGesture: true,
     transition: Transition.rightToLeft,
   );
 }
@@ -269,13 +282,7 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                   child: ListTile(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const UserReviews(),
-                        ),
-                      );
-                    },
+                    onTap: _reviewsPage,
                     leading: Icon(
                       Icons.keyboard_command_key_rounded,
                       color: kAccentColor,

@@ -16,6 +16,8 @@ Color kAccentColor = const Color(
   0xFFEC2623,
 );
 
+Color kStarColor = const Color(0xFFFF6838);
+
 Color kLoadingColor = const Color(
   0xFFFFA927,
 );
