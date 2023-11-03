@@ -1,3 +1,4 @@
+import 'package:benji_vendor/app/orders/order_details.dart';
 import 'package:benji_vendor/src/common_widgets/card/empty.dart';
 import 'package:benji_vendor/src/common_widgets/container/vendors_order_container.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
@@ -28,6 +29,19 @@ class _OrdersState extends State<Orders> {
     scrollController.dispose();
 
     super.dispose();
+  }
+
+  _orderDetails() {
+    Get.to(
+      () => const OrderDetails(),
+      routeName: 'OrderDetails',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
   }
 
   //========= variables ==========//
@@ -78,8 +92,11 @@ class _OrdersState extends State<Orders> {
                                   itemCount: controller.orderList.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return VendorsOrderContainer(
-                                      order: controller.orderList[index],
+                                    return InkWell(
+                                      onTap: _orderDetails,
+                                      child: VendorsOrderContainer(
+                                        order: controller.orderList[index],
+                                      ),
                                     );
                                   },
                                 ),
