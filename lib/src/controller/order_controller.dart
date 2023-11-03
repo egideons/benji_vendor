@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order.dart';
@@ -21,6 +22,7 @@ class OrderController extends GetxController {
   var isLoadMore = false.obs;
   var loadNum = 10.obs;
   var total = 0.obs;
+  var status = StatusType.delivered.obs;
 
   Future<void> scrollListener(scrollController) async {
     if (OrderController.instance.loadedAll.value) {
@@ -31,8 +33,17 @@ class OrderController extends GetxController {
         !scrollController.position.outOfRange) {
       OrderController.instance.isLoadMore.value = true;
       update();
-      await OrderController.instance.getOrders();
+      await OrderController.instance.getOrdersBy();
     }
+  }
+
+  setStatus([StatusType newStatus = StatusType.delivered]) async {
+    status.value = newStatus;
+    orderList.value = [];
+    loadNum.value = 10;
+    loadedAll.value = false;
+    update();
+    await getOrdersBy();
   }
 
   Future getTotal() async {
@@ -51,7 +62,7 @@ class OrderController extends GetxController {
     update();
   }
 
-  Future getOrders() async {
+  Future getOrdersBy() async {
     if (loadedAll.value) {
       return;
     }
