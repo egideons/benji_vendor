@@ -1,5 +1,6 @@
-import 'package:benji_vendor/app/product/products.dart';
+import 'package:benji_vendor/src/model/address_model.dart';
 import 'package:benji_vendor/src/model/client_model.dart';
+import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 
 class Order {
@@ -10,6 +11,7 @@ class Order {
   String assignedStatus;
   String deliveryStatus;
   Client client;
+  List<Orderitem> orderitems;
 
   Order({
     required this.id,
@@ -19,6 +21,7 @@ class Order {
     required this.assignedStatus,
     required this.deliveryStatus,
     required this.client,
+    required this.orderitems,
   });
 
   factory Order.fromJson(Map<String, dynamic>? json) {
@@ -31,6 +34,11 @@ class Order {
       assignedStatus: json["assigned_status"] ?? "PEND",
       deliveryStatus: json["delivery_status"] ?? "PEND",
       client: Client.fromJson(json["client"]),
+      orderitems: json["orderitems"] == null
+          ? []
+          : (json["orderitems"] as List)
+              .map((item) => Orderitem.fromJson(item))
+              .toList(),
     );
   }
   Map<String, dynamic> toJson() => {
@@ -41,32 +49,37 @@ class Order {
         "assigned_status": assignedStatus,
         "delivery_status": deliveryStatus,
         "client": client.toJson(),
+        "orderitems": orderitems.map((item) => (item).toJson()).toList(),
       };
 }
 
 class Orderitem {
   String id;
-  Product product;
+  ProductModel product;
   int quantity;
+  DeliveryAddress deliveryAddress;
 
   Orderitem({
     required this.id,
     required this.product,
     required this.quantity,
+    required this.deliveryAddress,
   });
 
   factory Orderitem.fromJson(Map<String, dynamic>? json) {
     json ??= {};
     return Orderitem(
       id: json["id"] ?? notAvailable,
-      product: json["product"],
+      product: ProductModel.fromJson(json["product"]),
+      deliveryAddress: DeliveryAddress.fromJson(json["delivery_address"]),
       quantity: json["quantity"] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "product": product,
+        "product": product.toJson(),
+        "delivery_address": deliveryAddress.toJson(),
         "quantity": quantity,
       };
 }
