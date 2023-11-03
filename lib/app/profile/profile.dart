@@ -1,4 +1,6 @@
 import 'package:benji_vendor/app/others/reviews.dart';
+import 'package:benji_vendor/app/profile/personal_info.dart';
+import 'package:benji_vendor/app/profile/settings.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,27 @@ _reviewsPage() {
     transition: Transition.rightToLeft,
   );
 }
+
+void _toPersonalInfo() => Get.to(
+      () => const PersonalInfo(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "PersonalInfo",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+void _toSettings() => Get.to(
+      () => const Settings(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "Settings",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
 
 class _ProfileState extends State<Profile> {
   @override
@@ -106,7 +129,7 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     children: [
                       ListTile(
-                        onTap: () {},
+                        onTap: _toPersonalInfo,
                         leading: Icon(
                           Icons.person_outlined,
                           color: kAccentColor,
@@ -146,7 +169,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       ListTile(
-                        onTap: () {},
+                        onTap: _toSettings,
                         leading: Icon(
                           Icons.settings_rounded,
                           color: kAccentColor,
