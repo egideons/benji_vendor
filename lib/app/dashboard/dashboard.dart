@@ -2,6 +2,7 @@
 
 import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -185,161 +186,6 @@ class _DashboardState extends State<Dashboard> {
                   left: kDefaultPadding,
                   right: kDefaultPadding,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Total Revenue',
-                            style: TextStyle(
-                              color: Color(
-                                0xFF32343E,
-                              ),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          Text(
-                            "₦2,241",
-                            style: TextStyle(
-                              color: Color(
-                                0xFF32343E,
-                              ),
-                              fontSize: 22,
-                              fontFamily: 'Sen',
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 40,
-                      padding: const EdgeInsets.only(
-                        top: 6.10,
-                        left: 8.72,
-                        right: 6.10,
-                        bottom: 6.10,
-                      ),
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                            width: 0.44,
-                            color: Color(
-                              0xFFE8E9EC,
-                            ),
-                          ),
-                          borderRadius: BorderRadius.circular(
-                            6.98,
-                          ),
-                        ),
-                      ),
-                      child: DropdownButton<String>(
-                        value: dropDownItemValue,
-                        onChanged: dropDownOnChanged,
-                        elevation: 20,
-                        borderRadius: BorderRadius.circular(
-                          16,
-                        ),
-                        underline: Container(
-                          color: kTransparentColor,
-                          height: 0,
-                        ),
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                        ),
-                        iconEnabledColor: kAccentColor,
-                        iconDisabledColor: kGreyColor2,
-                        items: const [
-                          DropdownMenuItem<String>(
-                            value: "Daily",
-                            enabled: true,
-                            child: Text(
-                              "Daily",
-                              style: TextStyle(
-                                color: Color(
-                                  0xFF9B9BA5,
-                                ),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: "Weekly",
-                            enabled: true,
-                            child: Text(
-                              "Weekly",
-                              style: TextStyle(
-                                color: Color(
-                                  0xFF9B9BA5,
-                                ),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: "Monthly",
-                            enabled: true,
-                            child: Text(
-                              "Monthly",
-                              style: TextStyle(
-                                color: Color(
-                                  0xFF9B9BA5,
-                                ),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: "Yearly",
-                            enabled: true,
-                            child: Text(
-                              "Yearly",
-                              style: TextStyle(
-                                color: Color(
-                                  0xFF9B9BA5,
-                                ),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    kHalfWidthSizedBox,
-                    Container(
-                      child: TextButton(
-                        onPressed: () {},
-                        onLongPress: null,
-                        child: Text(
-                          'See Details',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              kSizedBox,
-              Container(
-                margin: const EdgeInsets.only(
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                ),
                 child: Column(
                   children: [
                     Row(
@@ -371,36 +217,40 @@ class _DashboardState extends State<Dashboard> {
                       ],
                     ),
                     kHalfSizedBox,
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.star_sharp,
-                          color: kAccentColor,
-                          size: 30,
-                        ),
-                        kWidthSizedBox,
-                        Text(
-                          '4.9',
-                          style: TextStyle(
+                    GetBuilder<ReviewsController>(
+                      initState: (state) async =>
+                          await ReviewsController.instance.getReviews(0),
+                      builder: (controller) => Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.star_sharp,
                             color: kAccentColor,
-                            fontSize: 21.80,
-                            fontWeight: FontWeight.w700,
+                            size: 30,
                           ),
-                        ),
-                        kWidthSizedBox,
-                        const Text(
-                          'Total 20 Reviews',
-                          style: TextStyle(
-                            color: Color(
-                              0xFF32343E,
+                          kWidthSizedBox,
+                          Text(
+                            '4.9',
+                            style: TextStyle(
+                              color: kAccentColor,
+                              fontSize: 21.80,
+                              fontWeight: FontWeight.w700,
                             ),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
                           ),
-                        ),
-                      ],
+                          kWidthSizedBox,
+                          Text(
+                            'Total ${controller.reviews.length} Reviews',
+                            style: const TextStyle(
+                              color: Color(
+                                0xFF32343E,
+                              ),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     kSizedBox,
                     Row(

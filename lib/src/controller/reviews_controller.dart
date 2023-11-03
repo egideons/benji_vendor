@@ -31,11 +31,12 @@ class ReviewsController extends GetxController {
     await getReviews();
   }
 
-  Future getReviews() async {
+  Future getReviews([int? value]) async {
     isLoad.value = true;
 
     try {
-      reviews.value = await getRatingsByVendorIdAndOrRating(ratingValue.value);
+      reviews.value =
+          await getRatingsByVendorIdAndOrRating(value ?? ratingValue.value);
       print(reviews.value);
     } catch (e) {
       consoleLog(e.toString());
