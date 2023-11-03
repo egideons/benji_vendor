@@ -15,6 +15,7 @@ import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../src/components/appbar/home appBar vendor name.dart';
@@ -47,7 +48,7 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  _addProduct() {
+  addProduct() {
     Get.to(
       () => const AddProduct(),
       routeName: 'AddProduct',
@@ -86,7 +87,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  _profilePage() {
+  profilePage() {
     Get.to(
       () => const Profile(),
       routeName: 'Profile',
@@ -128,18 +129,17 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return MyResponsivePadding(
       child: Scaffold(
-        backgroundColor: kPrimaryColor,
         floatingActionButton: FloatingActionButton(
-          onPressed: _addProduct,
+          onPressed: addProduct,
           elevation: 20.0,
           backgroundColor: kAccentColor,
           foregroundColor: kPrimaryColor,
           tooltip: "Add a product",
-          child: const Icon(Icons.add),
+          child: const FaIcon(FontAwesomeIcons.plus),
         ),
         appBar: AppBar(
-          backgroundColor: kPrimaryColor,
           automaticallyImplyLeading: false,
+          backgroundColor: kPrimaryColor,
           titleSpacing: kDefaultPadding / 2,
           elevation: 0.0,
           title: GetBuilder<UserController>(
@@ -150,7 +150,7 @@ class _DashboardState extends State<Dashboard> {
                     horizontal: kDefaultPadding / 2,
                   ),
                   child: GestureDetector(
-                    onTap: _profilePage,
+                    onTap: profilePage,
                     child: CircleAvatar(
                       maxRadius: 25,
                       minRadius: 20,
