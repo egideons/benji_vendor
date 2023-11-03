@@ -9,16 +9,24 @@ import 'package:get/get.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
+enum StatusType { delivered, pending, cancelled }
+
 class Orders extends StatefulWidget {
-  const Orders({super.key});
+  final StatusType status;
+
+  const Orders({super.key, this.status = StatusType.delivered});
 
   @override
   State<Orders> createState() => _OrdersState();
 }
 
 class _OrdersState extends State<Orders> {
+  //===== variable =====//
+  late StatusType _status;
+
   @override
   void initState() {
+    _status = widget.status;
     super.initState();
     scrollController.addListener(
         () => OrderController.instance.scrollListener(scrollController));
@@ -30,6 +38,27 @@ class _OrdersState extends State<Orders> {
 
     super.dispose();
   }
+
+  void clickDelivered() async {
+    setState(() {
+      _status = StatusType.delivered;
+    });
+  }
+
+  void clickPending() async {
+    setState(() {
+      _status = StatusType.pending;
+    });
+  }
+
+  void clickCancelled() async {
+    setState(() {
+      _status = StatusType.cancelled;
+    });
+  }
+
+  bool checkStatus(StatusType? theStatus, StatusType currentStatus) =>
+      theStatus == currentStatus;
 
   _orderDetails() {
     Get.to(
@@ -72,7 +101,97 @@ class _OrdersState extends State<Orders> {
                 ),
                 kSizedBox,
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  checkStatus(_status, StatusType.delivered)
+                                      ? kAccentColor
+                                      : const Color(0xFFF2F2F2),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16))),
+                            ),
+                            onPressed: clickDelivered,
+                            child: Text(
+                              'Delivered',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color:
+                                    checkStatus(_status, StatusType.delivered)
+                                        ? kTextWhiteColor
+                                        : kGreyColor2,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  checkStatus(_status, StatusType.pending)
+                                      ? kAccentColor
+                                      : const Color(0xFFF2F2F2),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(16))),
+                            ),
+                            onPressed: clickPending,
+                            child: Text(
+                              'Pending',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: checkStatus(_status, StatusType.pending)
+                                    ? kTextWhiteColor
+                                    : kGreyColor2,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  checkStatus(_status, StatusType.cancelled)
+                                      ? kAccentColor
+                                      : kDefaultCategoryBackgroundColor,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(16),
+                                ),
+                              ),
+                            ),
+                            onPressed: clickCancelled,
+                            child: Text(
+                              'Cancelled',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color:
+                                    checkStatus(_status, StatusType.cancelled)
+                                        ? kTextWhiteColor
+                                        : kGreyColor2,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    kSizedBox,
                     GetBuilder<OrderController>(
                       initState: (state) async {
                         await OrderController.instance.getOrders();

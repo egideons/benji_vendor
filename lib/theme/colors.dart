@@ -16,6 +16,8 @@ Color kAccentColor = const Color(
   0xFFEC2623,
 );
 
+const Color kDefaultCategoryBackgroundColor = Color(0xFFF2F2F2);
+
 Color kStarColor = const Color(0xFFFF6838);
 
 Color kLoadingColor = const Color(

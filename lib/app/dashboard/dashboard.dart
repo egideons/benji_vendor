@@ -17,7 +17,6 @@ import 'package:get/get.dart';
 
 import '../../src/common_widgets/appbar/home appBar vendor name.dart';
 import '../../src/common_widgets/container/home orders container.dart';
-import '../../src/common_widgets/section/home showModalBottomSheet.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
@@ -101,6 +100,18 @@ class _DashboardState extends State<Dashboard> {
   _productsPage() {
     Get.to(
       () => const OverView(currentIndex: 2),
+      routeName: 'OverView',
+      duration: const Duration(milliseconds: 0),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: false,
+      popGesture: true,
+    );
+  }
+
+  _ordersPage() {
+    Get.to(
+      () => const OverView(currentIndex: 1),
       routeName: 'OverView',
       duration: const Duration(milliseconds: 0),
       fullscreenDialog: true,
@@ -196,24 +207,12 @@ class _DashboardState extends State<Dashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     OrdersContainer(
-                      onTap: () {
-                        OrdersContainerBottomSheet(
-                          context,
-                          "20 Running",
-                          20,
-                        );
-                      },
+                      onTap: _ordersPage,
                       numberOfOrders: "20",
                       typeOfOrders: "Active",
                     ),
                     OrdersContainer(
-                      onTap: () {
-                        OrdersContainerBottomSheet(
-                          context,
-                          "5 Pending",
-                          5,
-                        );
-                      },
+                      onTap: _ordersPage,
                       numberOfOrders: "05",
                       typeOfOrders: "Pending",
                     ),
