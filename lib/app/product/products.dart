@@ -164,7 +164,8 @@ class _ProductState extends State<Product> {
                                       ),
                                     )
                                   : const SizedBox(),
-                              controller.loadedAll.value
+                              controller.loadedAll.value &&
+                                      controller.products.isNotEmpty
                                   ? Container(
                                       margin: const EdgeInsets.only(
                                           top: 20, bottom: 20),

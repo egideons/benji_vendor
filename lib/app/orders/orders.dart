@@ -226,15 +226,22 @@ class _OrdersState extends State<Orders> {
                                   ),
                                 )
                               : const SizedBox(),
-                          controller.loadedAll.value
-                              ? Container(
-                                  margin: const EdgeInsets.only(
-                                      top: 20, bottom: 20),
-                                  height: 10,
-                                  width: 10,
-                                  decoration: ShapeDecoration(
-                                      shape: const CircleBorder(),
-                                      color: kPageSkeletonColor),
+                          controller.loadedAll.value &&
+                                  controller.orderList.isNotEmpty
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      margin: const EdgeInsets.only(
+                                          top: 20, bottom: 20),
+                                      height: 10,
+                                      width: 10,
+                                      decoration: ShapeDecoration(
+                                          shape: const CircleBorder(),
+                                          color: kPageSkeletonColor),
+                                    ),
+                                  ],
                                 )
                               : const SizedBox(),
                         ],
