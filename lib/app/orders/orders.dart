@@ -12,9 +12,7 @@ import '../../theme/colors.dart';
 enum StatusType { delivered, pending, cancelled }
 
 class Orders extends StatefulWidget {
-  final StatusType status;
-
-  const Orders({super.key, this.status = StatusType.delivered});
+  const Orders({super.key});
 
   @override
   State<Orders> createState() => _OrdersState();
@@ -22,11 +20,9 @@ class Orders extends StatefulWidget {
 
 class _OrdersState extends State<Orders> {
   //===== variable =====//
-  late StatusType _status;
 
   @override
   void initState() {
-    _status = widget.status;
     super.initState();
     scrollController.addListener(
         () => OrderController.instance.scrollListener(scrollController));

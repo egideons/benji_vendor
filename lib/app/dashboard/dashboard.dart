@@ -2,12 +2,14 @@
 
 import 'dart:math';
 
+import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/app/product/view_product.dart';
 import 'package:benji_vendor/src/common_widgets/card/empty.dart';
 import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
@@ -109,7 +111,9 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  _ordersPage() {
+  _ordersPage(StatusType status) {
+    OrderController.instance.setStatus(status);
+
     Get.to(
       () => const OverView(currentIndex: 1),
       routeName: 'OverView',
@@ -207,12 +211,12 @@ class _DashboardState extends State<Dashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     OrdersContainer(
-                      onTap: _ordersPage,
+                      onTap: () => _ordersPage(StatusType.delivered),
                       numberOfOrders: "20",
                       typeOfOrders: "Active",
                     ),
                     OrdersContainer(
-                      onTap: _ordersPage,
+                      onTap: () => _ordersPage(StatusType.pending),
                       numberOfOrders: "05",
                       typeOfOrders: "Pending",
                     ),
