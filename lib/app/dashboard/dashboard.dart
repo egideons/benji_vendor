@@ -113,7 +113,6 @@ class _DashboardState extends State<Dashboard> {
 
   _ordersPage(StatusType status) {
     OrderController.instance.setStatus(status);
-
     Get.to(
       () => const OverView(currentIndex: 1),
       routeName: 'OverView',
@@ -136,9 +135,7 @@ class _DashboardState extends State<Dashboard> {
           backgroundColor: kAccentColor,
           foregroundColor: kPrimaryColor,
           tooltip: "Add a product",
-          child: const Icon(
-            Icons.add,
-          ),
+          child: const Icon(Icons.add),
         ),
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
