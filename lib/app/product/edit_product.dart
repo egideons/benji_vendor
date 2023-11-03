@@ -106,7 +106,7 @@ class _EditProductState extends State<EditProduct> {
       'is_recommended': true,
       'is_trending': true,
     };
-    print(data);
+    consoleLog("$data");
     await FormController.instance.postAuthstream(
         Api.baseUrl + Api.changeProduct + widget.product.id,
         data,
