@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_unnecessary_containers
 
 import 'package:benji_vendor/app/others/reviews.dart';
+import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
+import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -63,6 +65,19 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+  _profilePage() {
+    Get.to(
+      () => const Profile(),
+      routeName: 'Profile',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MyResponsivePadding(
@@ -83,38 +98,31 @@ class _DashboardState extends State<Dashboard> {
           automaticallyImplyLeading: false,
           titleSpacing: kDefaultPadding / 2,
           elevation: 0.0,
-          title: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: kDefaultPadding / 2,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const Profile(),
-                      ),
-                    );
-                  },
-                  child: CircleAvatar(
-                    maxRadius: 25,
-                    minRadius: 20,
-                    backgroundColor: kSecondaryColor,
-                    child: ClipOval(
-                      child: Image.asset(
-                        "assets/images/profile/super-maria.png",
-                        fit: BoxFit.cover,
+          title: GetBuilder<UserController>(
+            builder: (controller) => Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: kDefaultPadding / 2,
+                  ),
+                  child: GestureDetector(
+                    onTap: _profilePage,
+                    child: CircleAvatar(
+                      maxRadius: 25,
+                      minRadius: 20,
+                      backgroundColor: kSecondaryColor,
+                      child: ClipOval(
+                        child: MyImage(url: controller.user.value.shopImage),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const AppBarVendor(
-                vendorName: "Ntachi-Osa",
-                vendorLocation: "Independence Layout, Enugu",
-              ),
-            ],
+                AppBarVendor(
+                  vendorName: controller.user.value.shopName,
+                  vendorLocation: controller.user.value.address,
+                ),
+              ],
+            ),
           ),
           actions: [
             IconButton(
