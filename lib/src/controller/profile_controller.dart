@@ -35,7 +35,7 @@ class ProfileController extends GetxController {
     token = UserController.instance.user.value.token;
     int uuid = UserController.instance.user.value.id;
 
-    var url = "${Api.baseUrl}/agents/changeAgent/$uuid";
+    var url = "${Api.baseUrl}/vendors/changeVendor/$uuid";
 
     Map body = {
       "username": userName ?? "",
