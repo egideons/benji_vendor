@@ -156,7 +156,7 @@ class _ProfileState extends State<Profile> {
                           color: kAccentColor,
                         ),
                         title: const Text(
-                          'Shop Info',
+                          'Business Info',
                           style: TextStyle(
                             color: Color(
                               0xFF333333,
