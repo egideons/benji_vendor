@@ -3,9 +3,9 @@
 import 'dart:async';
 import 'dart:ui' as ui; // Import the ui library with an alias
 
-import 'package:benji_vendor/src/common_widgets/appbar/my%20appbar.dart';
-import 'package:benji_vendor/src/common_widgets/button/my%20elevatedButton.dart';
-import 'package:benji_vendor/src/common_widgets/input/my_textformfield.dart';
+import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +16,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../src/googleMaps/location_service.dart';
-import '../../src/providers/constants.dart';
-import '../../theme/colors.dart';
+import '../../../src/googleMaps/location_service.dart';
+import '../../../src/providers/constants.dart';
+import '../../../theme/colors.dart';
 
 class GetLocationOnMap extends StatefulWidget {
   const GetLocationOnMap({super.key});

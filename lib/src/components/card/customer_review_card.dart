@@ -1,4 +1,4 @@
-import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
+import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/model/rating_model.dart';
 import 'package:flutter/material.dart';
 

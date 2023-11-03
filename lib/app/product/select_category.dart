@@ -1,12 +1,12 @@
 // ignore_for_file: file_names
 
-import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/common_widgets/appbar/my appbar.dart';
-import '../../src/common_widgets/button/my elevatedButton.dart';
-import '../../src/common_widgets/input/my_textformfield2.dart';
-import '../../src/common_widgets/section/showModalBottomSheetTitleWithIcon.dart';
+import '../../src/components/appbar/my appbar.dart';
+import '../../src/components/button/my elevatedButton.dart';
+import '../../src/components/input/my_textformfield2.dart';
+import '../../src/components/section/showModalBottomSheetTitleWithIcon.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/successful_screen.dart';

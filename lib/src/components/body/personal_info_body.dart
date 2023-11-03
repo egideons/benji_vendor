@@ -3,13 +3,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:benji_vendor/google_maps/get_location_on_map.dart';
-import 'package:benji_vendor/src/common_widgets/button/my%20elevatedButton.dart';
-import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
-import 'package:benji_vendor/src/common_widgets/input/my_maps_textformfield.dart';
-import 'package:benji_vendor/src/common_widgets/input/name_textformfield.dart';
-import 'package:benji_vendor/src/common_widgets/section/location_list_tile.dart';
-import 'package:benji_vendor/src/common_widgets/section/my%20floating%20snackbar.dart';
+import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
+import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/components/image/my_image.dart';
+import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
+import 'package:benji_vendor/src/components/input/name_textformfield.dart';
+import 'package:benji_vendor/src/components/section/location_list_tile.dart';
+import 'package:benji_vendor/src/components/section/my%20floating%20snackbar.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/profile_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';

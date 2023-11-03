@@ -1,6 +1,6 @@
-import 'package:benji_vendor/src/common_widgets/appbar/my%20appbar.dart';
-import 'package:benji_vendor/src/common_widgets/card/customer_review_card.dart';
-import 'package:benji_vendor/src/common_widgets/card/empty.dart';
+import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/card/customer_review_card.dart';
+import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/providers/constants.dart';
 import 'package:benji_vendor/theme/colors.dart';

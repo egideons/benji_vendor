@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
-import '../providers/constants.dart';
+import '../../src/providers/constants.dart';
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({super.key});

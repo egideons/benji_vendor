@@ -1,6 +1,6 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
-import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../theme/colors.dart';

@@ -1,13 +1,13 @@
 import 'package:benji_vendor/app/product/view_product.dart';
-import 'package:benji_vendor/src/common_widgets/card/empty.dart';
-import 'package:benji_vendor/src/common_widgets/container/vendors_product_container.dart';
-import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/components/card/empty.dart';
+import 'package:benji_vendor/src/components/container/vendors_product_container.dart';
+import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../src/common_widgets/button/my outlined elevatedButton.dart';
+import '../../src/components/button/my outlined elevatedButton.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import 'add_new_product.dart';
