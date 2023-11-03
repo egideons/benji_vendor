@@ -1,4 +1,5 @@
-import 'package:benji_vendor/app/product/view%20product.dart';
+import 'package:benji_vendor/app/product/view_product.dart';
+import 'package:benji_vendor/src/common_widgets/card/empty.dart';
 import 'package:benji_vendor/src/common_widgets/container/vendors_product_container.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
@@ -9,7 +10,7 @@ import 'package:get/get.dart';
 import '../../src/common_widgets/button/my outlined elevatedButton.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import 'add new product.dart';
+import 'add_new_product.dart';
 
 class Product extends StatefulWidget {
   const Product({super.key});
@@ -127,17 +128,27 @@ class _ProductState extends State<Product> {
                           },
                           init: ProductController(),
                           builder: (controller) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: controller.products.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return VendorsProductContainer(
-                                  onTap: () =>
-                                      _viewProduct(controller.products[index]),
-                                  product: controller.products[index],
-                                );
-                              },
-                            );
+                            return controller.isLoad.value &&
+                                    controller.products.isEmpty
+                                ? Center(
+                                    child: CircularProgressIndicator(
+                                      color: kAccentColor,
+                                    ),
+                                  )
+                                : controller.products.isEmpty
+                                    ? const EmptyCard()
+                                    : ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: controller.products.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return VendorsProductContainer(
+                                            onTap: () => _viewProduct(
+                                                controller.products[index]),
+                                            product: controller.products[index],
+                                          );
+                                        },
+                                      );
                           },
                         ),
                         GetBuilder<ProductController>(
@@ -153,7 +164,8 @@ class _ProductState extends State<Product> {
                                       ),
                                     )
                                   : const SizedBox(),
-                              controller.loadedAll.value
+                              controller.loadedAll.value &&
+                                      controller.products.isNotEmpty
                                   ? Container(
                                       margin: const EdgeInsets.only(
                                           top: 20, bottom: 20),

@@ -1,6 +1,8 @@
-import 'package:benji_vendor/app/others/user%20reviews.dart';
+import 'package:benji_vendor/app/others/reviews.dart';
+import 'package:benji_vendor/app/profile/personal_info.dart';
+import 'package:benji_vendor/app/profile/settings.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
-import 'package:benji_vendor/src/common_widgets/section/profile_first_half.dart';
+import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,6 +32,40 @@ void _logOut() async {
   );
 }
 
+_reviewsPage() {
+  Get.to(
+    () => const ReviewsPage(),
+    routeName: 'ReviewsPage',
+    duration: const Duration(milliseconds: 300),
+    fullscreenDialog: true,
+    curve: Curves.easeIn,
+    preventDuplicates: true,
+    popGesture: true,
+    transition: Transition.rightToLeft,
+  );
+}
+
+void _toPersonalInfo() => Get.to(
+      () => const PersonalInfo(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "PersonalInfo",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+void _toSettings() => Get.to(
+      () => const Settings(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "Settings",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
@@ -57,7 +93,6 @@ class _ProfileState extends State<Profile> {
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
-              ProfileFirstHalf(availableBalance: doubleFormattedText(1000000)),
               Padding(
                 padding: const EdgeInsets.only(
                   top: kDefaultPadding,
@@ -95,7 +130,7 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     children: [
                       ListTile(
-                        onTap: () {},
+                        onTap: _toPersonalInfo,
                         leading: Icon(
                           Icons.person_outlined,
                           color: kAccentColor,
@@ -135,7 +170,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       ListTile(
-                        onTap: () {},
+                        onTap: _toSettings,
                         leading: Icon(
                           Icons.settings_rounded,
                           color: kAccentColor,
@@ -189,13 +224,13 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     children: [
                       ListTile(
-                        onTap: () {},
+                        onTap: _reviewsPage,
                         leading: Icon(
-                          Icons.payment_rounded,
+                          Icons.keyboard_command_key_rounded,
                           color: kAccentColor,
                         ),
                         title: const Text(
-                          'Withdrawal History',
+                          'User Reviews',
                           style: TextStyle(
                             color: Color(
                               0xFF333333,
@@ -224,75 +259,23 @@ class _ProfileState extends State<Profile> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        trailing: const Text(
-                          '29K',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: Color(
-                              0xFF9B9BA5,
+                        trailing: GetBuilder<OrderController>(
+                          initState: (state) async =>
+                              await OrderController.instance.getTotal(),
+                          builder: (controller) => Text(
+                            controller.total.value.toString(),
+                            textAlign: TextAlign.right,
+                            style: const TextStyle(
+                              color: Color(
+                                0xFF9B9BA5,
+                              ),
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
                             ),
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                  bottom: kDefaultPadding / 1.5,
-                ),
-                child: Container(
-                  width: 327,
-                  height: 78,
-                  padding: const EdgeInsets.all(
-                    kDefaultPadding / 2,
-                  ),
-                  decoration: ShapeDecoration(
-                    color: kPrimaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        15,
-                      ),
-                    ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x0F000000),
-                        blurRadius: 24,
-                        offset: Offset(0, 4),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: ListTile(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const UserReviews(),
-                        ),
-                      );
-                    },
-                    leading: Icon(
-                      Icons.keyboard_command_key_rounded,
-                      color: kAccentColor,
-                    ),
-                    title: const Text(
-                      'User Reviews',
-                      style: TextStyle(
-                        color: Color(
-                          0xFF333333,
-                        ),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios_rounded,
-                    ),
                   ),
                 ),
               ),

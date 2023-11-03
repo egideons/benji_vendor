@@ -1,12 +1,10 @@
 // ignore_for_file: file_names
 
+import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../../src/common_widgets/appbar/my appbar.dart';
-import '../../src/common_widgets/button/my elevatedButton.dart';
-import '../../src/common_widgets/button/my outlined elevatedButton.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
@@ -224,19 +222,13 @@ class _OrderDetailsState extends State<OrderDetails> {
                           width: 56,
                           height: 56,
                           decoration: ShapeDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage(
-                                "assets/images/food/jollof-rice-chicken-plantain.png",
-                              ),
-                              fit: BoxFit.fill,
-                            ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
                             ),
                           ),
+                          child: const MyImage(url: ''),
                         ),
                         const SizedBox(
-                          width: 182.38,
                           child: Text.rich(
                             maxLines: 3,
                             softWrap: true,
@@ -261,7 +253,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: "x 2",
+                                  text: "x 1",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 12.52,
@@ -328,6 +320,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ],
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
@@ -342,16 +335,16 @@ class _OrderDetailsState extends State<OrderDetails> {
                     ),
                     kSizedBox,
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CircleAvatar(
-                          radius: 30,
-                          child: ClipOval(
-                            child: Image.asset(
-                              "assets/images/customer/blessing-elechi.png",
-                              fit: BoxFit.fill,
-                              height: 60,
-                              width: 60,
+                        Container(
+                          margin:
+                              const EdgeInsets.only(right: kDefaultPadding * 2),
+                          child: const CircleAvatar(
+                            radius: 30,
+                            child: ClipOval(
+                              child: MyImage(
+                                url: '',
+                              ),
                             ),
                           ),
                         ),
@@ -402,32 +395,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                             ),
                           ],
                         ),
-                        Container(
-                          width: 40,
-                          height: 40,
-                          decoration: ShapeDecoration(
-                            color: kAccentColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            shadows: [
-                              BoxShadow(
-                                blurRadius: 4,
-                                spreadRadius: 0.7,
-                                color: kBlackColor.withOpacity(0.4),
-                                offset: const Offset(0, 4),
-                              )
-                            ],
-                          ),
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.phone_rounded,
-                              color: kPrimaryColor,
-                              size: 20,
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ],
@@ -469,7 +436,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Subtotal',
+                          'Item',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 12.52,
@@ -498,52 +465,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                               ),
                               TextSpan(
                                 text: '5,000',
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 14.30,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
-                    ),
-                    kHalfSizedBox,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Delivery Fee',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12.52,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "₦",
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 9.83,
-                                  fontFamily: 'Sen',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              TextSpan(
-                                text: ' ',
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 12.52,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '300',
                                 style: TextStyle(
                                   color: Color(0xFF222222),
                                   fontSize: 14.30,
@@ -606,155 +527,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: kDefaultPadding * 2,
-              ),
-              isOrderCanceled
-                  ? Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.all(15),
-                      decoration: ShapeDecoration(
-                        color: const Color(0xFFFEF8F8),
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                            width: 0.50,
-                            color: Color(0xFFFDEDED),
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            color: kAccentColor,
-                            Icons.info_outline_rounded,
-                            size: 30,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Order Canceled',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16.09,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: -0.32,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: const Text(
-                                  'This order has been canceled',
-                                  style: TextStyle(
-                                    color: Color(0xFF6E6E6E),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    letterSpacing: -0.28,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  : isOrderAccepted
-                      ? Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.all(15),
-                          decoration: ShapeDecoration(
-                            color: const Color(0xFFFEF8F8),
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                width: 0.50,
-                                color: Color(0xFFFDEDED),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                color: kAccentColor,
-                                Icons.info_outline_rounded,
-                                size: 30,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Awaiting Delivery',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16.09,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: -0.32,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.5,
-                                    child: const Text(
-                                      'The delivery man is on his way to deliver this product',
-                                      style: TextStyle(
-                                        color: Color(0xFF6E6E6E),
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        letterSpacing: -0.28,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        )
-                      : isOrderProcessing
-                          ? SpinKitChasingDots(
-                              color: kAccentColor,
-                              duration: const Duration(seconds: 2),
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                MyOutlinedElevatedButton(
-                                  onPressed: () {
-                                    processOrderCanceled();
-                                  },
-                                  title: "Cancel Order",
-                                  elevation: 10.0,
-                                  titleFontSize: 16.09,
-                                  circularBorderRadius: 10.0,
-                                  maximumSizeHeight: 50.07,
-                                  maximumSizeWidth:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                  minimumSizeHeight: 50.07,
-                                  minimumSizeWidth:
-                                      MediaQuery.of(context).size.width / 2.5,
-                                ),
-                                MyElevatedButton(
-                                  onPressed: () {
-                                    processOrderAccepted();
-                                  },
-                                  title: "Accept Order",
-                                ),
-                              ],
-                            ),
               kSizedBox,
             ],
           ),

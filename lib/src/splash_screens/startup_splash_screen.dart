@@ -1,17 +1,27 @@
 import 'package:benji_vendor/src/controller/auth_controller.dart';
+import 'package:benji_vendor/src/controller/form_controller.dart';
+import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/login_controller.dart';
+import 'package:benji_vendor/src/controller/order_controller.dart';
+import 'package:benji_vendor/src/controller/product_controller.dart';
+import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
-import '../../src/providers/constants.dart';
+import '../providers/constants.dart';
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({super.key});
   final user = Get.put(UserController());
   final login = Get.put(LoginController());
+  final product = Get.put(ProductController());
+  final order = Get.put(OrderController());
+  final form = Get.put(FormController());
+  final reviews = Get.put(ReviewsController());
+  final latLngDetail = Get.put(LatLngDetailController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

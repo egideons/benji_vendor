@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order.dart';
@@ -20,6 +21,8 @@ class OrderController extends GetxController {
   var loadedAll = false.obs;
   var isLoadMore = false.obs;
   var loadNum = 10.obs;
+  var total = 0.obs;
+  var status = StatusType.delivered.obs;
 
   Future<void> scrollListener(scrollController) async {
     if (OrderController.instance.loadedAll.value) {
@@ -30,26 +33,40 @@ class OrderController extends GetxController {
         !scrollController.position.outOfRange) {
       OrderController.instance.isLoadMore.value = true;
       update();
-      await OrderController.instance.getOrders();
+      await OrderController.instance.getOrdersBy();
     }
   }
 
-  Future getOrders({
-    bool first = false,
-  }) async {
-    if (first) {
-      loadNum.value = 10;
+  setStatus([StatusType newStatus = StatusType.delivered]) async {
+    status.value = newStatus;
+    orderList.value = [];
+    loadNum.value = 10;
+    loadedAll.value = false;
+    update();
+    await getOrdersBy();
+  }
+
+  Future getTotal() async {
+    late String token;
+    String id = UserController.instance.user.value.id.toString();
+    var url = "${Api.baseUrl}${Api.orderList}$id/listMyOrders?start=0&end=1";
+    token = UserController.instance.user.value.token;
+    http.Response? response = await HandleData.getApi(url, token);
+
+    try {
+      total.value = jsonDecode(response?.body ?? '{}')['total'];
+    } catch (e) {
+      total.value = 0;
+      consoleLog(e.toString());
     }
+    update();
+  }
+
+  Future getOrdersBy() async {
     if (loadedAll.value) {
       return;
-    }
-    if (!first) {
-      isLoadMore.value = true;
     }
     isLoad.value = true;
-    if (loadedAll.value) {
-      return;
-    }
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
@@ -59,10 +76,10 @@ class OrderController extends GetxController {
     http.Response? response = await HandleData.getApi(url, token);
     var responseData = await ApiProcessorController.errorState(response);
     if (responseData == null) {
-      if (!first) {
-        isLoadMore.value = false;
-      }
       isLoad.value = false;
+      loadedAll.value = true;
+      isLoadMore.value = false;
+      update();
       return;
     }
     List<Order> data = [];

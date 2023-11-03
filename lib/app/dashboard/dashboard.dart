@@ -1,17 +1,28 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:benji_vendor/app/others/user%20reviews.dart';
+import 'dart:math';
+
+import 'package:benji_vendor/app/orders/orders.dart';
+import 'package:benji_vendor/app/others/reviews.dart';
+import 'package:benji_vendor/app/overview/overview.dart';
+import 'package:benji_vendor/app/product/view_product.dart';
+import 'package:benji_vendor/src/common_widgets/card/empty.dart';
+import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/controller/order_controller.dart';
+import 'package:benji_vendor/src/controller/product_controller.dart';
+import 'package:benji_vendor/src/controller/reviews_controller.dart';
+import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../src/common_widgets/appbar/home appBar vendor name.dart';
 import '../../src/common_widgets/container/home orders container.dart';
-import '../../src/common_widgets/section/home showModalBottomSheet.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
-import '../product/add new product.dart';
+import '../product/add_new_product.dart';
 import '../profile/profile.dart';
 
 class Dashboard extends StatefulWidget {
@@ -49,6 +60,71 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+  _reviewsPage() {
+    Get.to(
+      () => const ReviewsPage(),
+      routeName: 'ReviewsPage',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  _productDetail(ProductModel product) {
+    Get.to(
+      () => ViewProduct(product: product),
+      routeName: 'ViewProduct',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  _profilePage() {
+    Get.to(
+      () => const Profile(),
+      routeName: 'Profile',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  _productsPage() {
+    Get.to(
+      () => const OverView(currentIndex: 2),
+      routeName: 'OverView',
+      duration: const Duration(milliseconds: 0),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: false,
+      popGesture: true,
+    );
+  }
+
+  _ordersPage(StatusType status) {
+    OrderController.instance.setStatus(status);
+
+    Get.to(
+      () => const OverView(currentIndex: 1),
+      routeName: 'OverView',
+      duration: const Duration(milliseconds: 0),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: false,
+      popGesture: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MyResponsivePadding(
@@ -69,38 +145,33 @@ class _DashboardState extends State<Dashboard> {
           automaticallyImplyLeading: false,
           titleSpacing: kDefaultPadding / 2,
           elevation: 0.0,
-          title: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: kDefaultPadding / 2,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const Profile(),
-                      ),
-                    );
-                  },
-                  child: CircleAvatar(
-                    maxRadius: 25,
-                    minRadius: 20,
-                    backgroundColor: kSecondaryColor,
-                    child: ClipOval(
-                      child: Image.asset(
-                        "assets/images/profile/super-maria.png",
-                        fit: BoxFit.cover,
+          title: GetBuilder<UserController>(
+            builder: (controller) => Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: kDefaultPadding / 2,
+                  ),
+                  child: GestureDetector(
+                    onTap: _profilePage,
+                    child: CircleAvatar(
+                      maxRadius: 25,
+                      minRadius: 20,
+                      backgroundColor: kTransparentColor,
+                      backgroundImage: const AssetImage(
+                          'assets/images/profile/avatar-image.jpg'),
+                      child: ClipOval(
+                        child: MyImage(url: controller.user.value.shopImage),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const AppBarVendor(
-                vendorName: "Ntachi-Osa",
-                vendorLocation: "Independence Layout, Enugu",
-              ),
-            ],
+                AppBarVendor(
+                  vendorName: controller.user.value.shopName,
+                  vendorLocation: controller.user.value.address,
+                ),
+              ],
+            ),
           ),
           actions: [
             IconButton(
@@ -140,24 +211,12 @@ class _DashboardState extends State<Dashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     OrdersContainer(
-                      onTap: () {
-                        OrdersContainerBottomSheet(
-                          context,
-                          "20 Running",
-                          20,
-                        );
-                      },
+                      onTap: () => _ordersPage(StatusType.delivered),
                       numberOfOrders: "20",
                       typeOfOrders: "Active",
                     ),
                     OrdersContainer(
-                      onTap: () {
-                        OrdersContainerBottomSheet(
-                          context,
-                          "5 Pending",
-                          5,
-                        );
-                      },
+                      onTap: () => _ordersPage(StatusType.pending),
                       numberOfOrders: "05",
                       typeOfOrders: "Pending",
                     ),
@@ -167,161 +226,6 @@ class _DashboardState extends State<Dashboard> {
               const SizedBox(
                 height: kDefaultPadding * 2,
               ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Total Revenue',
-                            style: TextStyle(
-                              color: Color(
-                                0xFF32343E,
-                              ),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          Text(
-                            "₦2,241",
-                            style: TextStyle(
-                              color: Color(
-                                0xFF32343E,
-                              ),
-                              fontSize: 22,
-                              fontFamily: 'Sen',
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 40,
-                      padding: const EdgeInsets.only(
-                        top: 6.10,
-                        left: 8.72,
-                        right: 6.10,
-                        bottom: 6.10,
-                      ),
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          side: const BorderSide(
-                            width: 0.44,
-                            color: Color(
-                              0xFFE8E9EC,
-                            ),
-                          ),
-                          borderRadius: BorderRadius.circular(
-                            6.98,
-                          ),
-                        ),
-                      ),
-                      child: DropdownButton<String>(
-                        value: dropDownItemValue,
-                        onChanged: dropDownOnChanged,
-                        elevation: 20,
-                        borderRadius: BorderRadius.circular(
-                          16,
-                        ),
-                        underline: Container(
-                          color: kTransparentColor,
-                          height: 0,
-                        ),
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                        ),
-                        iconEnabledColor: kAccentColor,
-                        iconDisabledColor: kGreyColor2,
-                        items: const [
-                          DropdownMenuItem<String>(
-                            value: "Daily",
-                            enabled: true,
-                            child: Text(
-                              "Daily",
-                              style: TextStyle(
-                                color: Color(
-                                  0xFF9B9BA5,
-                                ),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: "Weekly",
-                            enabled: true,
-                            child: Text(
-                              "Weekly",
-                              style: TextStyle(
-                                color: Color(
-                                  0xFF9B9BA5,
-                                ),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: "Monthly",
-                            enabled: true,
-                            child: Text(
-                              "Monthly",
-                              style: TextStyle(
-                                color: Color(
-                                  0xFF9B9BA5,
-                                ),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: "Yearly",
-                            enabled: true,
-                            child: Text(
-                              "Yearly",
-                              style: TextStyle(
-                                color: Color(
-                                  0xFF9B9BA5,
-                                ),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    kHalfWidthSizedBox,
-                    Container(
-                      child: TextButton(
-                        onPressed: () {},
-                        onLongPress: null,
-                        child: Text(
-                          'See Details',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              kSizedBox,
               Container(
                 margin: const EdgeInsets.only(
                   left: kDefaultPadding,
@@ -344,13 +248,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const UserReviews(),
-                              ),
-                            );
-                          },
+                          onPressed: _reviewsPage,
                           child: Text(
                             'See All Reviews',
                             style: TextStyle(
@@ -364,36 +262,44 @@ class _DashboardState extends State<Dashboard> {
                       ],
                     ),
                     kHalfSizedBox,
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.star_sharp,
-                          color: kAccentColor,
-                          size: 30,
-                        ),
-                        kWidthSizedBox,
-                        Text(
-                          '4.9',
-                          style: TextStyle(
+                    GetBuilder<ReviewsController>(
+                      initState: (state) {
+                        ReviewsController.instance.getReviews(0);
+                        ReviewsController.instance.getAvgRating();
+                      },
+                      builder: (controller) => Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.star_sharp,
                             color: kAccentColor,
-                            fontSize: 21.80,
-                            fontWeight: FontWeight.w700,
+                            size: 30,
                           ),
-                        ),
-                        kWidthSizedBox,
-                        const Text(
-                          'Total 20 Reviews',
-                          style: TextStyle(
-                            color: Color(
-                              0xFF32343E,
+                          kWidthSizedBox,
+                          Text(
+                            controller.avgRating.value
+                                .toPrecision(1)
+                                .toString(),
+                            style: TextStyle(
+                              color: kAccentColor,
+                              fontSize: 21.80,
+                              fontWeight: FontWeight.w700,
                             ),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
                           ),
-                        ),
-                      ],
+                          kWidthSizedBox,
+                          Text(
+                            'Total ${controller.total.value} Reviews',
+                            style: const TextStyle(
+                              color: Color(
+                                0xFF32343E,
+                              ),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     kSizedBox,
                     Row(
@@ -402,7 +308,7 @@ class _DashboardState extends State<Dashboard> {
                         SizedBox(
                           height: 16.57,
                           child: Text(
-                            'Popular items this week',
+                            'Latest Products',
                             style: TextStyle(
                               color: kTextGreyColor,
                               fontSize: 14,
@@ -411,7 +317,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: _productsPage,
                           child: Text(
                             'See All',
                             style: TextStyle(
@@ -429,52 +335,70 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               Container(
-                height: 180,
-                margin: const EdgeInsets.only(
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                ),
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: const EdgeInsets.only(
-                        right: kDefaultPadding,
-                        bottom: kDefaultPadding / 1.5,
-                      ),
-                      padding: const EdgeInsets.only(
-                        top: kDefaultPadding / 1.5,
-                        left: kDefaultPadding,
-                        right: kDefaultPadding / 1.5,
-                      ),
-                      width: MediaQuery.of(context).size.width * 0.41,
-                      decoration: ShapeDecoration(
-                        color: kGreyColor1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            kDefaultPadding,
-                          ),
-                        ),
-                        shadows: const [
-                          BoxShadow(
-                            color: Color(
-                              0x0F000000,
-                            ),
-                            blurRadius: 24,
-                            offset: Offset(
-                              0,
-                              4,
-                            ),
-                            spreadRadius: 4,
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
+                  height: 180,
+                  margin: const EdgeInsets.only(
+                    left: kDefaultPadding,
+                    right: kDefaultPadding,
+                  ),
+                  child: GetBuilder<ProductController>(
+                      initState: (state) async =>
+                          await ProductController.instance.getProducts(),
+                      builder: (controller) {
+                        return controller.isLoad.value
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: kAccentColor,
+                                ),
+                              )
+                            : controller.products.isEmpty
+                                ? const EmptyCard()
+                                : ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        min(controller.products.length, 5),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(
+                                          right: kDefaultPadding,
+                                          bottom: kDefaultPadding / 1.5,
+                                        ),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.41,
+                                        decoration: ShapeDecoration(
+                                          color: kGreyColor1,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              kDefaultPadding,
+                                            ),
+                                          ),
+                                          shadows: const [
+                                            BoxShadow(
+                                              color: Color(
+                                                0x0F000000,
+                                              ),
+                                              blurRadius: 24,
+                                              offset: Offset(
+                                                0,
+                                                4,
+                                              ),
+                                              spreadRadius: 4,
+                                            )
+                                          ],
+                                        ),
+                                        child: InkWell(
+                                          onTap: () => _productDetail(
+                                              controller.products[index]),
+                                          child: MyImage(
+                                              url: controller.products[index]
+                                                  .productImage),
+                                        ),
+                                      );
+                                    },
+                                  );
+                      })),
             ],
           ),
         ),
