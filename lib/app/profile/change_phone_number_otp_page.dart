@@ -4,8 +4,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:benji_vendor/src/common_widgets/appbar/my%20appbar.dart';
-import 'package:benji_vendor/src/common_widgets/section/my%20fixed%20snackBar.dart';
 import 'package:benji_vendor/src/common_widgets/input/otp_textFormField.dart';
+import 'package:benji_vendor/src/common_widgets/section/my%20fixed%20snackBar.dart';
 import 'package:benji_vendor/src/common_widgets/section/reusable%20authentication%20first%20half.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/theme/responsive_constant.dart';
@@ -18,16 +18,15 @@ import 'package:http/http.dart' as http;
 import '../../main.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import 'reset_password.dart';
 
-class OTPResetPassword extends StatefulWidget {
-  const OTPResetPassword({super.key});
+class OTPChangePhoneNumber extends StatefulWidget {
+  const OTPChangePhoneNumber({super.key});
 
   @override
-  State<OTPResetPassword> createState() => _OTPResetPasswordState();
+  State<OTPChangePhoneNumber> createState() => _OTPChangePhoneNumberState();
 }
 
-class _OTPResetPasswordState extends State<OTPResetPassword> {
+class _OTPChangePhoneNumberState extends State<OTPChangePhoneNumber> {
   //=========================== INITIAL STATE ====================================\\
   @override
   void initState() {
@@ -86,10 +85,12 @@ class _OTPResetPasswordState extends State<OTPResetPassword> {
   }
 
   //================= Resend OTP ======================\\
-  void _resendOTP() async {
-    String? userEmail = prefs.getString('email');
+  void resendOTP() async {
+    // Implement your resend OTP logic here
+    // For example, you could restart the timer and reset the `_timerComplete` state.
+    String? userPhoneNumber = prefs.getString('userPhoneNumber');
 
-    if (userEmail == null) {
+    if (userPhoneNumber == null) {
       myFixedSnackBar(
         context,
         "Something went wrong".toUpperCase(),
@@ -113,11 +114,11 @@ class _OTPResetPasswordState extends State<OTPResetPassword> {
       // );
     }
 
-    final url =
-        Uri.parse('${Api.baseUrl}/auth/requestForgotPassword/$userEmail');
+    // final url =
+    //     Uri.parse('${Api.baseUrl}/auth/requestForgotPassword/$userEmail');
 
-    final body = {};
-    await http.post(url, body: body);
+    // final body = {};
+    // await http.post(url, body: body);
 
     setState(() {
       _secondsRemaining = 60;
@@ -141,7 +142,8 @@ class _OTPResetPasswordState extends State<OTPResetPassword> {
     final response = await http.get(url);
     try {
       Map resp = jsonDecode(response.body);
-      bool res = response.statusCode == 200;
+      bool res =
+          response.statusCode == 200 && resp['message'].toString() == 'true';
       await prefs.setString('token', resp['otp']);
       return res;
     } catch (e) {
@@ -171,16 +173,16 @@ class _OTPResetPasswordState extends State<OTPResetPassword> {
       );
 
       // Navigate to the new page
-      Get.to(
-        () => const ResetPassword(),
-        routeName: 'ResetPassword',
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        preventDuplicates: true,
-        popGesture: true,
-        transition: Transition.rightToLeft,
-      );
+      // Get.to(
+      //   () => const ResetPassword(),
+      //   routeName: 'ResetPassword',
+      //   duration: const Duration(milliseconds: 300),
+      //   fullscreenDialog: true,
+      //   curve: Curves.easeIn,
+      //   preventDuplicates: true,
+      //   popGesture: true,
+      //   transition: Transition.rightToLeft,
+      // );
     } else {
       myFixedSnackBar(
         context,
@@ -317,7 +319,7 @@ class _OTPResetPasswordState extends State<OTPResetPassword> {
                           Row(
                             children: [
                               TextButton(
-                                onPressed: _timerComplete ? _resendOTP : null,
+                                onPressed: _timerComplete ? resendOTP : null,
                                 child: AnimatedDefaultTextStyle(
                                   style: TextStyle(
                                     fontSize: 15,

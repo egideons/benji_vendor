@@ -100,7 +100,6 @@ class _AddProductState extends State<AddProduct> {
       'is_recommended': true,
       'is_trending': true,
     };
-    print(data);
     await FormController.instance.postAuthstream(Api.baseUrl + Api.addProduct,
         data, {'product_image': selectedImage}, 'addProduct');
   }
@@ -225,7 +224,6 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     final mediaWidth = MediaQuery.of(context).size.width;
-    final mediaHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
       child: Scaffold(

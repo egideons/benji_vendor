@@ -1,23 +1,14 @@
-import 'package:benji_vendor/src/controller/form_controller.dart';
-import 'package:benji_vendor/src/controller/order_controller.dart';
-import 'package:benji_vendor/src/controller/product_controller.dart';
-import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../theme/colors.dart';
 import '../dashboard/dashboard.dart';
 import '../orders/orders.dart';
-import '../product/product.dart';
+import '../product/products.dart';
 import '../profile/profile.dart';
 
 class OverView extends StatefulWidget {
-  final user = Get.put(UserController());
-  final product = Get.put(ProductController());
-  final order = Get.put(OrderController());
-  final form = Get.put(FormController());
   final int currentIndex;
-  OverView({super.key, this.currentIndex = 0});
+  const OverView({super.key, this.currentIndex = 0});
 
   @override
   State<OverView> createState() => _OverViewState();

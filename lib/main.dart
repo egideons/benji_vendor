@@ -1,4 +1,4 @@
-import 'package:benji_vendor/src/splash%20screens/startup%20splash%20screen.dart';
+import 'package:benji_vendor/src/splash_screens/startup_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

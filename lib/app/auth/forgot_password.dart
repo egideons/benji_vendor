@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, file_names
 
-import 'package:benji_vendor/src/common_widgets/input/email%20textformfield.dart';
+import 'package:benji_vendor/src/common_widgets/input/email_textformfield.dart';
 import 'package:benji_vendor/src/common_widgets/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/common_widgets/section/my%20fixed%20snackBar.dart';
 import 'package:benji_vendor/src/common_widgets/section/reusable%20authentication%20first%20half.dart';

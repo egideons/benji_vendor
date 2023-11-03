@@ -1,18 +1,17 @@
 // ignore_for_file: camel_case_types, file_names
 
+import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:flutter/material.dart';
 
-import '../../app/overview/overview.dart';
-
-class SignUpSplashScreen extends StatelessWidget {
-  const SignUpSplashScreen({super.key});
+class LoginSplashScreen extends StatelessWidget {
+  const LoginSplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => OverView(),
+          builder: (context) => const OverView(),
         ),
       );
     });
@@ -32,7 +31,7 @@ class SignUpSplashScreen extends StatelessWidget {
                 decoration: const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(
-                      "assets/animations/splash screen/registration successful.gif",
+                      "assets/animations/splash screen/successful.gif",
                     ),
                   ),
                   shape: BoxShape.circle,
