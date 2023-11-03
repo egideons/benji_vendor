@@ -1,10 +1,17 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'dart:math';
+
 import 'package:benji_vendor/app/others/reviews.dart';
+import 'package:benji_vendor/app/overview/overview.dart';
+import 'package:benji_vendor/app/product/view%20product.dart';
+import 'package:benji_vendor/src/common_widgets/card/empty.dart';
 import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -65,6 +72,19 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+  _productDetail(ProductModel product) {
+    Get.to(
+      () => ViewProduct(product: product),
+      routeName: 'ViewProduct',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
   _profilePage() {
     Get.to(
       () => const Profile(),
@@ -75,6 +95,18 @@ class _DashboardState extends State<Dashboard> {
       preventDuplicates: true,
       popGesture: true,
       transition: Transition.rightToLeft,
+    );
+  }
+
+  _productsPage() {
+    Get.to(
+      () => OverView(currentIndex: 2),
+      routeName: 'OverView',
+      duration: const Duration(milliseconds: 0),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: false,
+      popGesture: true,
     );
   }
 
@@ -226,8 +258,10 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     kHalfSizedBox,
                     GetBuilder<ReviewsController>(
-                      initState: (state) async =>
-                          await ReviewsController.instance.getReviews(0),
+                      initState: (state) async {
+                        await ReviewsController.instance.getReviews(0);
+                        ReviewsController.instance.getAvgRating();
+                      },
                       builder: (controller) => Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -239,7 +273,9 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           kWidthSizedBox,
                           Text(
-                            '4.9',
+                            controller.avgRating.value
+                                .toPrecision(1)
+                                .toString(),
                             style: TextStyle(
                               color: kAccentColor,
                               fontSize: 21.80,
@@ -267,7 +303,7 @@ class _DashboardState extends State<Dashboard> {
                         SizedBox(
                           height: 16.57,
                           child: Text(
-                            'Popular items this week',
+                            'Latest Products',
                             style: TextStyle(
                               color: kTextGreyColor,
                               fontSize: 14,
@@ -276,7 +312,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: _productsPage,
                           child: Text(
                             'See All',
                             style: TextStyle(
@@ -294,52 +330,70 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
               Container(
-                height: 180,
-                margin: const EdgeInsets.only(
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                ),
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: const EdgeInsets.only(
-                        right: kDefaultPadding,
-                        bottom: kDefaultPadding / 1.5,
-                      ),
-                      padding: const EdgeInsets.only(
-                        top: kDefaultPadding / 1.5,
-                        left: kDefaultPadding,
-                        right: kDefaultPadding / 1.5,
-                      ),
-                      width: MediaQuery.of(context).size.width * 0.41,
-                      decoration: ShapeDecoration(
-                        color: kGreyColor1,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            kDefaultPadding,
-                          ),
-                        ),
-                        shadows: const [
-                          BoxShadow(
-                            color: Color(
-                              0x0F000000,
-                            ),
-                            blurRadius: 24,
-                            offset: Offset(
-                              0,
-                              4,
-                            ),
-                            spreadRadius: 4,
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
+                  height: 180,
+                  margin: const EdgeInsets.only(
+                    left: kDefaultPadding,
+                    right: kDefaultPadding,
+                  ),
+                  child: GetBuilder<ProductController>(
+                      initState: (state) async =>
+                          await ProductController.instance.getProducts(),
+                      builder: (controller) {
+                        return controller.isLoad.value
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: kAccentColor,
+                                ),
+                              )
+                            : controller.products.isEmpty
+                                ? const EmptyCard()
+                                : ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount:
+                                        min(controller.products.length, 5),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Container(
+                                        margin: const EdgeInsets.only(
+                                          right: kDefaultPadding,
+                                          bottom: kDefaultPadding / 1.5,
+                                        ),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.41,
+                                        decoration: ShapeDecoration(
+                                          color: kGreyColor1,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              kDefaultPadding,
+                                            ),
+                                          ),
+                                          shadows: const [
+                                            BoxShadow(
+                                              color: Color(
+                                                0x0F000000,
+                                              ),
+                                              blurRadius: 24,
+                                              offset: Offset(
+                                                0,
+                                                4,
+                                              ),
+                                              spreadRadius: 4,
+                                            )
+                                          ],
+                                        ),
+                                        child: InkWell(
+                                          onTap: () => _productDetail(
+                                              controller.products[index]),
+                                          child: MyImage(
+                                              url: controller.products[index]
+                                                  .productImage),
+                                        ),
+                                      );
+                                    },
+                                  );
+                      })),
             ],
           ),
         ),

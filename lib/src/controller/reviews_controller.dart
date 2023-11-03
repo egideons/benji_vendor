@@ -16,6 +16,7 @@ class ReviewsController extends GetxController {
 
   var isLoad = false.obs;
   var ratingValue = 0.obs;
+  var avgRating = 0.0.obs;
   var reviews = <Ratings>[].obs;
 
   Future<void> scrollListener(scrollController, [int value = 0]) async {
@@ -23,6 +24,15 @@ class ReviewsController extends GetxController {
         !scrollController.position.outOfRange) {
       setRatingValue(value);
     }
+  }
+
+  getAvgRating() {
+    double total = 0.0;
+    for (Ratings review in reviews) {
+      total += review.ratingValue;
+    }
+    avgRating.value = total;
+    update();
   }
 
   Future setRatingValue([int value = 0]) async {
