@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/app/overview/overview.dart';
-import 'package:benji_vendor/app/product/view%20product.dart';
+import 'package:benji_vendor/app/product/view_product.dart';
 import 'package:benji_vendor/src/common_widgets/card/empty.dart';
 import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
@@ -21,7 +21,7 @@ import '../../src/common_widgets/section/home showModalBottomSheet.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
-import '../product/add new product.dart';
+import '../product/add_new_product.dart';
 import '../profile/profile.dart';
 
 class Dashboard extends StatefulWidget {
@@ -100,7 +100,7 @@ class _DashboardState extends State<Dashboard> {
 
   _productsPage() {
     Get.to(
-      () => OverView(currentIndex: 2),
+      () => const OverView(currentIndex: 2),
       routeName: 'OverView',
       duration: const Duration(milliseconds: 0),
       fullscreenDialog: true,

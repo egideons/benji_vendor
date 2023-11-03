@@ -104,8 +104,6 @@ class ProfileController extends GetxController {
         body: body,
       );
 
-      var jsonData = jsonDecode(response.body);
-
       if (response.statusCode == 200) {
         ApiProcessorController.successSnack("Password Changed Successfully");
         Get.offAll(

@@ -55,7 +55,6 @@ class ReviewsController extends GetxController {
     try {
       reviews.value =
           await getRatingsByVendorIdAndOrRating(value ?? ratingValue.value);
-      print(reviews.value);
     } catch (e) {
       consoleLog(e.toString());
     }

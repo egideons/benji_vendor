@@ -1,4 +1,4 @@
-import 'package:benji_vendor/app/product/view%20product.dart';
+import 'package:benji_vendor/app/product/view_product.dart';
 import 'package:benji_vendor/src/common_widgets/card/empty.dart';
 import 'package:benji_vendor/src/common_widgets/container/vendors_product_container.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import '../../src/common_widgets/button/my outlined elevatedButton.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import 'add new product.dart';
+import 'add_new_product.dart';
 
 class Product extends StatefulWidget {
   const Product({super.key});

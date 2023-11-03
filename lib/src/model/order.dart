@@ -1,4 +1,4 @@
-import 'package:benji_vendor/app/product/product.dart';
+import 'package:benji_vendor/app/product/products.dart';
 import 'package:benji_vendor/src/model/client_model.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 
