@@ -2,10 +2,10 @@
 
 import 'dart:io';
 
-import 'package:benji_vendor/src/common_widgets/appbar/my%20appbar.dart';
-import 'package:benji_vendor/src/common_widgets/button/my%20elevatedButton.dart';
-import 'package:benji_vendor/src/common_widgets/input/my_item_drop.dart';
-import 'package:benji_vendor/src/common_widgets/input/my_textformfield.dart';
+import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/components/input/my_item_drop.dart';
+import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
@@ -106,7 +106,7 @@ class _EditProductState extends State<EditProduct> {
       'is_recommended': true,
       'is_trending': true,
     };
-    print(data);
+    consoleLog("$data");
     await FormController.instance.postAuthstream(
         Api.baseUrl + Api.changeProduct + widget.product.id,
         data,

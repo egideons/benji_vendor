@@ -1,5 +1,5 @@
-import 'package:benji_vendor/src/common_widgets/appbar/my%20appbar.dart';
-import 'package:benji_vendor/src/common_widgets/body/change_phone_number_body.dart';
+import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/body/change_phone_number_body.dart';
 import 'package:flutter/material.dart';
 
 class ChangePhoneNumber extends StatelessWidget {

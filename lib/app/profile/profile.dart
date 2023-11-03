@@ -1,7 +1,7 @@
 import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/app/profile/personal_info.dart';
 import 'package:benji_vendor/app/profile/settings.dart';
-import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';

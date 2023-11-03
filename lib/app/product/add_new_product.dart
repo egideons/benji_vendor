@@ -2,20 +2,23 @@
 
 import 'dart:io';
 
-import 'package:benji_vendor/src/common_widgets/appbar/my%20appbar.dart';
-import 'package:benji_vendor/src/common_widgets/button/my%20elevatedButton.dart';
-import 'package:benji_vendor/src/common_widgets/input/my_item_drop.dart';
-import 'package:benji_vendor/src/common_widgets/input/my_textformfield.dart';
+import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/components/input/my_item_drop.dart';
+import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
+import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
+import '../overview/overview.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
@@ -102,6 +105,18 @@ class _AddProductState extends State<AddProduct> {
     };
     await FormController.instance.postAuthstream(Api.baseUrl + Api.addProduct,
         data, {'product_image': selectedImage}, 'addProduct');
+    if (FormController.instance.status.toString().startsWith('2')) {
+      ProductController.instance.reset();
+      Get.offAll(
+        () => const OverView(currentIndex: 2),
+        routeName: 'OverView',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        popGesture: true,
+        transition: Transition.rightToLeft,
+      );
+    }
   }
 
   pickProductImage(ImageSource source) async {

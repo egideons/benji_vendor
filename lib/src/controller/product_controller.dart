@@ -34,6 +34,13 @@ class ProductController extends GetxController {
     }
   }
 
+  reset() {
+    loadedAll.value = false;
+    loadNum.value = 10;
+    products.value = [];
+    update();
+  }
+
   Future getProducts() async {
     if (loadedAll.value) {
       return;

@@ -128,27 +128,33 @@ class FormController extends GetxController {
       request.files
           .add(await http.MultipartFile.fromPath(key, files[key]!.path));
     }
+    print(request.files);
 
     request.headers.addAll(headers);
 
     data.forEach((key, value) {
       request.fields[key] = value.toString();
     });
-    print('stream response $response');
-    try {
-      response = await request.send();
-      status.value = response.statusCode;
-      final normalResp = await http.Response.fromStream(response);
-      print('stream response ${normalResp.body}');
-      if (response.statusCode != 200) {
-        ApiProcessorController.successSnack(successMsg);
-        isLoad.value = false;
-        update([tag]);
-        return;
-      }
-    } catch (e) {
-      response = null;
+    print('request.fields ${request.fields}');
+    print('stream response emma $response');
+    // try {
+    response = await request.send();
+    print('pass 1 $response');
+    status.value = response.statusCode;
+    print('pass 2');
+    final normalResp = await http.Response.fromStream(response);
+    print('pass 3 ${response.statusCode}');
+    print('resp response $normalResp');
+    print('stream response ${normalResp.body}');
+    if (response.statusCode == 200) {
+      ApiProcessorController.successSnack(successMsg);
+      isLoad.value = false;
+      update([tag]);
+      return;
     }
+    // } catch (e) {
+    //   response = null;
+    // }
 
     ApiProcessorController.errorSnack(errorMsg);
     isLoad.value = false;
