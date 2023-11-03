@@ -17,6 +17,28 @@ class FormController extends GetxController {
   var status = 0.obs;
   var responseObject = {}.obs;
 
+  Future getAuth(String url, String tag,
+      [String errorMsg = "Error occurred"]) async {
+    isLoad.value = true;
+    update([tag]);
+    final response = await http.get(
+      Uri.parse(url),
+      headers: authHeader(),
+    );
+    status.value = response.statusCode;
+    update([tag]);
+    if (response.statusCode != 200) {
+      ApiProcessorController.errorSnack(errorMsg);
+      isLoad.value = false;
+      update([tag]);
+      return;
+    }
+
+    responseObject.value = (jsonDecode(response.body) as Map);
+    isLoad.value = false;
+    update([tag]);
+  }
+
   Future deleteAuth(String url, String tag,
       [String errorMsg = "Error occurred",
       String successMsg = "Submitted successfully"]) async {
@@ -37,7 +59,6 @@ class FormController extends GetxController {
 
     ApiProcessorController.successSnack(successMsg);
     isLoad.value = false;
-    // responseObject.value = jsonDecode(response.body) as Map;
     update([tag]);
   }
 

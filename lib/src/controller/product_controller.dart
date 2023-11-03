@@ -34,22 +34,13 @@ class ProductController extends GetxController {
     }
   }
 
-  Future getProducts({
-    bool first = false,
-  }) async {
-    if (first) {
-      loadNum.value = 10;
-    }
+  Future getProducts() async {
     if (loadedAll.value) {
       return;
     }
-    if (!first) {
-      isLoadMore.value = true;
-    }
+
     isLoad.value = true;
-    if (loadedAll.value) {
-      return;
-    }
+
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
@@ -59,9 +50,6 @@ class ProductController extends GetxController {
     http.Response? response = await HandleData.getApi(url, token);
     var responseData = await ApiProcessorController.errorState(response);
     if (responseData == null) {
-      if (!first) {
-        isLoadMore.value = false;
-      }
       isLoad.value = false;
       return;
     }
