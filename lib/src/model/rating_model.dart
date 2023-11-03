@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:benji_vendor/src/model/user_model.dart';
+import 'package:benji_vendor/src/model/client_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +10,7 @@ class Ratings {
   final double ratingValue;
   final String comment;
   final DateTime created;
-  final UserModel client;
+  final Client client;
 
   Ratings({
     required this.id,
@@ -29,7 +29,7 @@ class Ratings {
       created: json['created'] == null
           ? DateTime.now()
           : DateTime.parse(json['created']),
-      client: UserModel.fromJson(json['client']),
+      client: Client.fromJson(json['client']),
     );
   }
 }

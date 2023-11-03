@@ -172,7 +172,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
               },
               builder: (controller) => Column(
                 children: [
-                  controller.isLoad.value
+                  controller.isLoad.value && controller.reviews.isEmpty
                       ? Center(
                           child: CircularProgressIndicator(
                             color: kAccentColor,

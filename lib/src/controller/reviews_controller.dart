@@ -17,6 +17,7 @@ class ReviewsController extends GetxController {
   var isLoad = false.obs;
   var ratingValue = 0.obs;
   var avgRating = 0.0.obs;
+  var total = 0.obs;
   var reviews = <Ratings>[].obs;
 
   Future<void> scrollListener(scrollController, [int value = 0]) async {
@@ -26,17 +27,24 @@ class ReviewsController extends GetxController {
     }
   }
 
-  getAvgRating() {
-    double total = 0.0;
-    for (Ratings review in reviews) {
-      total += review.ratingValue;
+  getAvgRating() async {
+    int id = UserController.instance.user.value.id;
+
+    final response = await http.get(
+      Uri.parse('$baseURL/vendors/$id/getVendorAverageRating'),
+      headers: authHeader(),
+    );
+    if (response.statusCode == 200) {
+      avgRating.value = jsonDecode(response.body);
+    } else {
+      avgRating.value = 0;
     }
-    avgRating.value = total;
     update();
   }
 
   Future setRatingValue([int value = 0]) async {
     ratingValue.value = value;
+    reviews.value = [];
     update();
     await getReviews();
   }
@@ -58,6 +66,7 @@ class ReviewsController extends GetxController {
   Future<List<Ratings>> getRatingsByVendorIdAndOrRating(int rating,
       {start = 0, end = 100}) async {
     int id = UserController.instance.user.value.id;
+    total.value = 0;
 
     // url to be changed to vendor endpoint
     late http.Response response;
@@ -68,9 +77,11 @@ class ReviewsController extends GetxController {
         headers: authHeader(),
       );
       if (response.statusCode == 200) {
-        return (jsonDecode(response.body) as List)
-            .map((item) => Ratings.fromJson(item))
-            .toList();
+        List data = (jsonDecode(response.body) as List);
+        total.value = data.length;
+        update();
+
+        return (data).map((item) => Ratings.fromJson(item)).toList();
       } else {
         return [];
       }
@@ -80,8 +91,13 @@ class ReviewsController extends GetxController {
             '$baseURL/vendors/$id/getAllVendorRatings?start=$start&end=$end'),
         headers: authHeader(),
       );
+
       if (response.statusCode == 200) {
-        return (jsonDecode(response.body)['items'] as List)
+        Map data = jsonDecode(response.body);
+        total.value = data['total'];
+        update();
+
+        return (data['items'] as List)
             .map((item) => Ratings.fromJson(item))
             .toList();
       } else {

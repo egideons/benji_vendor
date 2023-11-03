@@ -258,8 +258,8 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     kHalfSizedBox,
                     GetBuilder<ReviewsController>(
-                      initState: (state) async {
-                        await ReviewsController.instance.getReviews(0);
+                      initState: (state) {
+                        ReviewsController.instance.getReviews(0);
                         ReviewsController.instance.getAvgRating();
                       },
                       builder: (controller) => Row(
@@ -284,7 +284,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                           kWidthSizedBox,
                           Text(
-                            'Total ${controller.reviews.length} Reviews',
+                            'Total ${controller.total.value} Reviews',
                             style: const TextStyle(
                               color: Color(
                                 0xFF32343E,
