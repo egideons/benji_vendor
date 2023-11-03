@@ -106,7 +106,7 @@ class _AboutAppState extends State<AboutApp> {
                           ),
                         ),
                         const Text(
-                          "Benji CRM",
+                          "Benji Vendor",
                           style: TextStyle(
                             color: kTextBlackColor,
                             fontSize: 16,
