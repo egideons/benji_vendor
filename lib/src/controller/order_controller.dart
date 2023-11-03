@@ -35,6 +35,22 @@ class OrderController extends GetxController {
     }
   }
 
+  Future getTotal() async {
+    late String token;
+    String id = UserController.instance.user.value.id.toString();
+    var url = "${Api.baseUrl}${Api.orderList}$id/listMyOrders?start=0&end=1";
+    token = UserController.instance.user.value.token;
+    http.Response? response = await HandleData.getApi(url, token);
+
+    try {
+      total.value = jsonDecode(response?.body ?? '{}')['total'];
+    } catch (e) {
+      total.value = 0;
+      consoleLog(e.toString());
+    }
+    update();
+  }
+
   Future getOrders() async {
     if (loadedAll.value) {
       return;
@@ -57,7 +73,6 @@ class OrderController extends GetxController {
     }
     List<Order> data = [];
     try {
-      total.value = jsonDecode(responseData)['total'];
       data = (jsonDecode(responseData)['items'] as List)
           .map((e) => Order.fromJson(e))
           .toList();

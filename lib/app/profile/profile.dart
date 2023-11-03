@@ -260,6 +260,8 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         trailing: GetBuilder<OrderController>(
+                          initState: (state) async =>
+                              await OrderController.instance.getTotal(),
                           builder: (controller) => Text(
                             controller.total.value.toString(),
                             textAlign: TextAlign.right,
