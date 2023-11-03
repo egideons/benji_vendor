@@ -66,7 +66,6 @@ class ReviewsController extends GetxController {
   Future<List<Ratings>> getRatingsByVendorIdAndOrRating(int rating,
       {start = 0, end = 100}) async {
     int id = UserController.instance.user.value.id;
-    total.value = 0;
 
     // url to be changed to vendor endpoint
     late http.Response response;
@@ -83,6 +82,9 @@ class ReviewsController extends GetxController {
 
         return (data).map((item) => Ratings.fromJson(item)).toList();
       } else {
+        total.value = 0;
+        update();
+
         return [];
       }
     } else {
@@ -101,6 +103,9 @@ class ReviewsController extends GetxController {
             .map((item) => Ratings.fromJson(item))
             .toList();
       } else {
+        total.value = 0;
+        update();
+
         return [];
       }
     }

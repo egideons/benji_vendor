@@ -51,6 +51,9 @@ class ProductController extends GetxController {
     var responseData = await ApiProcessorController.errorState(response);
     if (responseData == null) {
       isLoad.value = false;
+      loadedAll.value = true;
+      isLoadMore.value = false;
+      update();
       return;
     }
     List<ProductModel> data = [];

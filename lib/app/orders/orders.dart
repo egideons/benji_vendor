@@ -1,3 +1,4 @@
+import 'package:benji_vendor/src/common_widgets/card/empty.dart';
 import 'package:benji_vendor/src/common_widgets/container/vendors_order_container.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
@@ -63,15 +64,25 @@ class _OrdersState extends State<Orders> {
                         await OrderController.instance.getOrders();
                       },
                       init: OrderController(),
-                      builder: (controller) => ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: controller.orderList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return VendorsOrderContainer(
-                            order: controller.orderList[index],
-                          );
-                        },
-                      ),
+                      builder: (controller) => controller.isLoad.value &&
+                              controller.orderList.isEmpty
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: kAccentColor,
+                              ),
+                            )
+                          : controller.orderList.isEmpty
+                              ? const EmptyCard()
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: controller.orderList.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return VendorsOrderContainer(
+                                      order: controller.orderList[index],
+                                    );
+                                  },
+                                ),
                     ),
                     GetBuilder<OrderController>(
                       builder: (controller) => Column(

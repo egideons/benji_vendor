@@ -34,22 +34,11 @@ class OrderController extends GetxController {
     }
   }
 
-  Future getOrders({
-    bool first = false,
-  }) async {
-    if (first) {
-      loadNum.value = 10;
-    }
+  Future getOrders() async {
     if (loadedAll.value) {
       return;
-    }
-    if (!first) {
-      isLoadMore.value = true;
     }
     isLoad.value = true;
-    if (loadedAll.value) {
-      return;
-    }
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
@@ -59,10 +48,10 @@ class OrderController extends GetxController {
     http.Response? response = await HandleData.getApi(url, token);
     var responseData = await ApiProcessorController.errorState(response);
     if (responseData == null) {
-      if (!first) {
-        isLoadMore.value = false;
-      }
       isLoad.value = false;
+      loadedAll.value = true;
+      isLoadMore.value = false;
+      update();
       return;
     }
     List<Order> data = [];

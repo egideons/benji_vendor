@@ -1,4 +1,5 @@
 import 'package:benji_vendor/app/product/view%20product.dart';
+import 'package:benji_vendor/src/common_widgets/card/empty.dart';
 import 'package:benji_vendor/src/common_widgets/container/vendors_product_container.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
@@ -127,17 +128,27 @@ class _ProductState extends State<Product> {
                           },
                           init: ProductController(),
                           builder: (controller) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: controller.products.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return VendorsProductContainer(
-                                  onTap: () =>
-                                      _viewProduct(controller.products[index]),
-                                  product: controller.products[index],
-                                );
-                              },
-                            );
+                            return controller.isLoad.value &&
+                                    controller.products.isEmpty
+                                ? Center(
+                                    child: CircularProgressIndicator(
+                                      color: kAccentColor,
+                                    ),
+                                  )
+                                : controller.products.isEmpty
+                                    ? const EmptyCard()
+                                    : ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: controller.products.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return VendorsProductContainer(
+                                            onTap: () => _viewProduct(
+                                                controller.products[index]),
+                                            product: controller.products[index],
+                                          );
+                                        },
+                                      );
                           },
                         ),
                         GetBuilder<ProductController>(
