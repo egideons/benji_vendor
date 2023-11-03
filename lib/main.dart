@@ -34,17 +34,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
         scrollbarTheme: ScrollbarThemeData(
-          thumbColor: MaterialStateProperty.all(
-            kDarkGreyColor,
-          ),
-          radius: const Radius.circular(
-            6,
-          ),
+          thumbColor: MaterialStateProperty.all(kDarkGreyColor),
+          radius: const Radius.circular(6),
         ),
-        textTheme: GoogleFonts.senTextTheme(
-          // Update the textTheme property
-          Theme.of(context).textTheme, // Use the default theme
-        ),
+        textTheme: GoogleFonts.senTextTheme(Theme.of(context).textTheme),
       ),
       // initialRoute: StartupSplashscreen.routeName,
       home: SplashScreen(),
