@@ -2,6 +2,7 @@ import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/app/profile/personal_info.dart';
 import 'package:benji_vendor/app/profile/settings.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -258,15 +259,17 @@ class _ProfileState extends State<Profile> {
                             fontWeight: FontWeight.w400,
                           ),
                         ),
-                        trailing: const Text(
-                          '29K',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            color: Color(
-                              0xFF9B9BA5,
+                        trailing: GetBuilder<OrderController>(
+                          builder: (controller) => Text(
+                            controller.total.value.toString(),
+                            textAlign: TextAlign.right,
+                            style: const TextStyle(
+                              color: Color(
+                                0xFF9B9BA5,
+                              ),
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
                             ),
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),

@@ -20,6 +20,7 @@ class OrderController extends GetxController {
   var loadedAll = false.obs;
   var isLoadMore = false.obs;
   var loadNum = 10.obs;
+  var total = 0.obs;
 
   Future<void> scrollListener(scrollController) async {
     if (OrderController.instance.loadedAll.value) {
@@ -56,6 +57,7 @@ class OrderController extends GetxController {
     }
     List<Order> data = [];
     try {
+      total.value = jsonDecode(responseData)['total'];
       data = (jsonDecode(responseData)['items'] as List)
           .map((e) => Order.fromJson(e))
           .toList();
