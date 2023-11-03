@@ -1,10 +1,10 @@
-import 'package:benji_vendor/src/splash_screens/startup_splash_screen.dart';
+import 'package:benji_vendor/app/splash_screens/startup_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'theme/app_theme.dart';
 import 'theme/colors.dart';
 
 late SharedPreferences prefs;
@@ -32,14 +32,10 @@ class MyApp extends StatelessWidget {
       title: "Benji Vendor",
       color: kPrimaryColor,
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(
-        scrollbarTheme: ScrollbarThemeData(
-          thumbColor: MaterialStateProperty.all(kDarkGreyColor),
-          radius: const Radius.circular(6),
-        ),
-        textTheme: GoogleFonts.senTextTheme(Theme.of(context).textTheme),
-      ),
-      // initialRoute: StartupSplashscreen.routeName,
+      defaultTransition: Transition.rightToLeft,
+      themeMode: ThemeMode.light,
+      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
       home: SplashScreen(),
     );
   }
