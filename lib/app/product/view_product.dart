@@ -6,6 +6,7 @@ import 'package:benji_vendor/src/common_widgets/button/my%20elevatedButton.dart'
 import 'package:benji_vendor/src/common_widgets/image/my_image.dart';
 import 'package:benji_vendor/src/common_widgets/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
+import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,9 +71,9 @@ class _ViewProductState extends State<ViewProduct> {
     if (status.value != 200) {
       return;
     }
-
+    ProductController.instance.reset();
     Get.offAll(
-      () => OverView(currentIndex: 2),
+      () => const OverView(currentIndex: 2),
       routeName: 'OverView',
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
