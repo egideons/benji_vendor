@@ -106,7 +106,7 @@ class _LoginState extends State<Login> {
                       curves: Curves.easeInOut,
                       duration: const Duration(milliseconds: 300),
                       containerChild: Center(
-                        child: Image.asset("assets/icons/support.png"),
+                        child: Image.asset("assets/icons/store.png"),
                       ),
                       decoration: ShapeDecoration(
                         color: kPrimaryColor,
