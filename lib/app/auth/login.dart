@@ -250,7 +250,6 @@ class _LoginState extends State<Login> {
                             SendLogin data = SendLogin(
                                 password: passwordController.text,
                                 username: emailController.text);
-
                             await controller.login(data);
                           }
                         },
