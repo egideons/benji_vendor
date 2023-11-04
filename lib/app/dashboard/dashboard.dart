@@ -23,7 +23,6 @@ import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
 import '../product/add_new_product.dart';
-import '../profile/profile.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -88,14 +87,13 @@ class _DashboardState extends State<Dashboard> {
 
   _profilePage() {
     Get.to(
-      () => const Profile(),
-      routeName: 'Profile',
-      duration: const Duration(milliseconds: 300),
+      () => const OverView(currentIndex: 3),
+      routeName: 'OverView',
+      duration: const Duration(milliseconds: 0),
       fullscreenDialog: true,
       curve: Curves.easeIn,
-      preventDuplicates: true,
+      preventDuplicates: false,
       popGesture: true,
-      transition: Transition.rightToLeft,
     );
   }
 

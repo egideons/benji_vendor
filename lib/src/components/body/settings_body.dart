@@ -1,6 +1,5 @@
 import 'package:benji_vendor/app/profile/about_app.dart';
 import 'package:benji_vendor/app/profile/change_password.dart';
-import 'package:benji_vendor/app/profile/change_phone_number.dart';
 import 'package:benji_vendor/src/providers/constants.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -27,17 +26,6 @@ class _SettingsBodyState extends State<SettingsBody> {
   final scrollController = ScrollController();
 
   //==================================================== Navigation ===========================================================\\
-
-  toChangePhoneNumber() => Get.to(
-        () => const ChangePhoneNumber(),
-        routeName: 'ChangePhoneNumber',
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        preventDuplicates: true,
-        popGesture: true,
-        transition: Transition.rightToLeft,
-      );
 
   void _toChangePassword() async {
     await Get.to(
@@ -75,47 +63,6 @@ class _SettingsBodyState extends State<SettingsBody> {
           padding: const EdgeInsets.all(10),
           physics: const BouncingScrollPhysics(),
           children: [
-            InkWell(
-              onTap: toChangePhoneNumber,
-              child: Container(
-                width: media.width,
-                decoration: ShapeDecoration(
-                  color: kPrimaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  shadows: const [
-                    BoxShadow(
-                      color: Color(0x0F000000),
-                      blurRadius: 24,
-                      offset: Offset(0, 4),
-                      spreadRadius: 0,
-                    ),
-                  ],
-                ),
-                child: ListTile(
-                  enableFeedback: true,
-                  leading: FaIcon(
-                    FontAwesomeIcons.phone,
-                    color: kAccentColor,
-                  ),
-                  title: const Text(
-                    "Change phone number",
-                    style: TextStyle(
-                      color: kTextBlackColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  trailing: const Icon(
-                    FontAwesomeIcons.chevronRight,
-                    size: 16,
-                    color: kTextBlackColor,
-                  ),
-                ),
-              ),
-            ),
-            kHalfSizedBox,
             InkWell(
               onTap: _toChangePassword,
               borderRadius: BorderRadius.circular(12),

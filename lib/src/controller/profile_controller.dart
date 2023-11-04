@@ -24,13 +24,14 @@ class ProfileController extends GetxController {
 
 //===================== Update Personal Profile ==================\\
 
-  Future<bool> updateProfile(
-      {String? userName,
-      phoneNumber,
-      firstName,
-      lastName,
-      address,
-      bool isCurrent = true}) async {
+  Future<bool> updateProfile({
+    String? firstName,
+    lastName,
+    address,
+    phone,
+    latitude,
+    longitude,
+  }) async {
     late String token;
     token = UserController.instance.user.value.token;
     int uuid = UserController.instance.user.value.id;
@@ -38,10 +39,12 @@ class ProfileController extends GetxController {
     var url = "${Api.baseUrl}/vendors/changeVendor/$uuid";
 
     Map body = {
-      "username": userName ?? "",
+      "phone": phone ?? "",
       "first_name": firstName ?? "",
       "last_name": lastName ?? "",
       "address": address ?? "",
+      "latitude": latitude ?? "",
+      "longitude": longitude ?? "",
     };
     try {
       var response = await http.put(
@@ -56,7 +59,8 @@ class ProfileController extends GetxController {
 
       //Print the response in the console:
       // will do this when the endpoint stops returning null (save the new data)
-      // UserController.instance.saveUser(response.body, UserController.instance.user.value.token)
+      UserController.instance
+          .saveUser(response.body, UserController.instance.user.value.token);
 
       if (response.statusCode == 200) {
         ApiProcessorController.successSnack(

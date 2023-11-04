@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
-import 'package:benji_vendor/src/components/image/my_image.dart';
+import 'package:benji_vendor/src/components/input/my_intl_phonefield.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/name_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
@@ -17,7 +17,6 @@ import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
 import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
-import 'package:benji_vendor/theme/responsive_constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +24,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../theme/colors.dart';
 import '../../providers/constants.dart';
@@ -42,10 +42,12 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   void initState() {
     super.initState();
     userCode = UserController.instance.user.value.code;
-    userNameEC.text = UserController.instance.user.value.username;
     firstNameEC.text = UserController.instance.user.value.firstName;
     lastNameEC.text = UserController.instance.user.value.lastName;
     mapsLocationEC.text = UserController.instance.user.value.address;
+    userPhoneNumberEC.text = UserController.instance.user.value.phone;
+    latitude = latitude;
+    longitude = longitude;
   }
 
   @override
@@ -81,8 +83,10 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   final mapsLocationEC = TextEditingController();
   final LatLngDetailController latLngDetailController =
       LatLngDetailController.instance;
+  final userPhoneNumberEC = TextEditingController();
 
   //=========================== FOCUS NODES ====================================\\
+  final userPhoneNumberFN = FocusNode();
   final userNameFN = FocusNode();
   final firstNameFN = FocusNode();
   final lastNameFN = FocusNode();
@@ -295,11 +299,12 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
       _isLoading = true;
     });
     await ProfileController.instance.updateProfile(
-      userName: userNameEC.text,
       firstName: firstNameEC.text,
       lastName: lastNameEC.text,
       address: mapsLocationEC.text,
-      isCurrent: true,
+      phone: "+234${userPhoneNumberEC.text}",
+      latitude: latitude,
+      longitude: longitude,
     );
 
     setState(() {
@@ -359,102 +364,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Stack(
-                            children: [
-                              selectedImage == null
-                                  ? Container(
-                                      height: deviceType(media.width) == 1
-                                          ? 100
-                                          : 150,
-                                      width: deviceType(media.width) == 1
-                                          ? 100
-                                          : 150,
-                                      decoration: ShapeDecoration(
-                                        color: kPageSkeletonColor,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        ),
-                                      ),
-                                      child: MyImage(
-                                          url: UserController
-                                              .instance.user.value.profileLogo),
-                                    )
-                                  : Container(
-                                      height: deviceType(media.width) == 1
-                                          ? 100
-                                          : 150,
-                                      width: deviceType(media.width) == 1
-                                          ? 100
-                                          : 150,
-                                      decoration: ShapeDecoration(
-                                        color: kPageSkeletonColor,
-                                        image: DecorationImage(
-                                          image: FileImage(selectedImage!),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(100),
-                                        ),
-                                      ),
-                                    ),
-                              Positioned(
-                                bottom: 0,
-                                right: 5,
-                                child: InkWell(
-                                  onTap: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      elevation: 20,
-                                      barrierColor:
-                                          kBlackColor.withOpacity(0.8),
-                                      showDragHandle: true,
-                                      useSafeArea: true,
-                                      isDismissible: true,
-                                      isScrollControlled: true,
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(
-                                            kDefaultPadding,
-                                          ),
-                                        ),
-                                      ),
-                                      enableDrag: true,
-                                      builder: (builder) =>
-                                          _profilePicBottomSheet(),
-                                    );
-                                  },
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Container(
-                                    height:
-                                        deviceType(media.width) == 1 ? 35 : 50,
-                                    width:
-                                        deviceType(media.width) == 1 ? 35 : 50,
-                                    decoration: ShapeDecoration(
-                                      color: kAccentColor,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: FaIcon(
-                                        FontAwesomeIcons.pencil,
-                                        size: 18,
-                                        color: kPrimaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
                       kWidthSizedBox,
                       Expanded(
                         child: Column(
@@ -540,36 +449,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Username".toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        kHalfSizedBox,
-                        NameTextFormField(
-                          controller: userNameEC,
-                          hintText: "Enter a username",
-                          validator: (value) {
-                            //Min. of 3 characters
-                            RegExp userNamePattern = RegExp(r'^.{3,}$');
-
-                            if (value == null || value!.isEmpty) {
-                              userNameFN.requestFocus();
-                              return "Enter a username";
-                            } else if (!userNamePattern.hasMatch(value)) {
-                              userNameFN.requestFocus();
-                              return "Username must be at least 3 characters";
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            userNameEC.text = value;
-                          },
-                          textInputAction: TextInputAction.next,
-                          nameFocusNode: userNameFN,
-                        ),
                         kSizedBox,
                         Text(
                           "First Name".toUpperCase(),
@@ -628,6 +507,38 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                           },
                           onSaved: (value) {
                             lastNameEC.text = value;
+                          },
+                        ),
+                        kSizedBox,
+                        Text(
+                          "Phone Number".toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        MyIntlPhoneField(
+                          controller: userPhoneNumberEC,
+                          initialCountryCode: "NG",
+                          invalidNumberMessage: "Invalid phone number",
+                          dropdownIconPosition: IconPosition.trailing,
+                          showCountryFlag: true,
+                          showDropdownIcon: true,
+                          dropdownIcon: Icon(Icons.arrow_drop_down_rounded,
+                              color: kAccentColor),
+                          textInputAction: TextInputAction.next,
+                          focusNode: userPhoneNumberFN,
+                          validator: (value) {
+                            if (value == null ||
+                                userPhoneNumberEC.text.isEmpty) {
+                              return "Field cannot be empty";
+                            } else {
+                              return null;
+                            }
+                          },
+                          onSaved: (value) {
+                            userPhoneNumberEC.text = value!;
                           },
                         ),
                         kSizedBox,
