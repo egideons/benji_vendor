@@ -117,14 +117,17 @@ class _BusinessInfoState extends State<BusinessInfo> {
   Future<void> saveChanges() async {
     final userId = UserController.instance.user.value.id;
     Map data = {
-      "shop_name": UserController.instance.user.value.username,
-      "weekOpeningHours": UserController.instance.user.value.shopImage,
-      "satOpeningHours": UserController.instance.user.value.username,
-      "sunWeekOpeningHours": UserController.instance.user.value.username,
-      "weekClosingHours": UserController.instance.user.value.username,
-      "satClosingHours": UserController.instance.user.value.username,
-      "sunWeekClosingHours": UserController.instance.user.value.username,
+      "shop_name": shopNameEC.text,
+      "weekOpeningHours": vendorMonToFriOpeningHoursEC.text,
+      "satOpeningHours": vendorSatOpeningHoursEC.text,
+      "sunWeekOpeningHours": vendorSunOpeningHoursEC.text,
+      "weekClosingHours": vendorMonToFriClosingHoursEC.text,
+      "satClosingHours": vendorSatClosingHoursEC.text,
+      "sunWeekClosingHours": vendorSunClosingHoursEC.text,
     };
+    print(data);
+    print(Api.baseUrl + Api.changeVendor + userId.toString());
+    print({'shop_image': selectedCoverImage, 'profileLogo': selectedLogoImage});
 
     await FormController.instance.postAuthstream(
         Api.baseUrl + Api.changeVendor + userId.toString(),
@@ -780,6 +783,27 @@ class _BusinessInfoState extends State<BusinessInfo> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
+                        kSizedBox,
+                        MyBlueTextFormField(
+                          controller: vendorSunClosingHoursEC,
+                          validator: (value) {
+                            if (value == null || value!.isEmpty) {
+                              return "Field cannot be empty";
+                            } else {
+                              return null;
+                            }
+                          },
+                          onSaved: (value) {},
+                          inputFormatters: [
+                            FilteringTextInputFormatter.singleLineFormatter,
+                            UppercaseTextInputFormatter(), // Custom formatter to make text uppercase
+                          ],
+                          textInputAction: TextInputAction.next,
+                          focusNode: vendorSunClosingHoursFN,
+                          hintText: "00:00 AM",
+                          textInputType: TextInputType.text,
+                        ),
+                        kSizedBox
                       ],
                     )
                   ],
