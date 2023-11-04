@@ -167,8 +167,8 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ),
                 AppBarVendor(
-                  vendorName: controller.user.value.shopName,
-                  vendorLocation: controller.user.value.address,
+                  vendorName: controller.user.value.username,
+                  vendorLocation: controller.user.value.code,
                 ),
               ],
             ),
