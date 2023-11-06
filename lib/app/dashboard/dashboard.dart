@@ -15,10 +15,12 @@ import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../src/components/appbar/home appBar vendor name.dart';
 import '../../src/components/container/home orders container.dart';
+import '../../src/controller/notification_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
@@ -46,7 +48,7 @@ class _DashboardState extends State<Dashboard> {
     });
   }
 
-  _addProduct() {
+  addProduct() {
     Get.to(
       () => const AddProduct(),
       routeName: 'AddProduct',
@@ -85,7 +87,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  _profilePage() {
+  profilePage() {
     Get.to(
       () => const OverView(currentIndex: 3),
       routeName: 'OverView',
@@ -111,7 +113,6 @@ class _DashboardState extends State<Dashboard> {
 
   _ordersPage(StatusType status) {
     OrderController.instance.setStatus(status);
-
     Get.to(
       () => const OverView(currentIndex: 1),
       routeName: 'OverView',
@@ -123,24 +124,32 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+  void toNotificationsPage() => Get.to(
+        () => const Notifications(),
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Notifications",
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.downToUp,
+      );
+
   @override
   Widget build(BuildContext context) {
     return MyResponsivePadding(
       child: Scaffold(
-        backgroundColor: kPrimaryColor,
         floatingActionButton: FloatingActionButton(
-          onPressed: _addProduct,
+          onPressed: addProduct,
           elevation: 20.0,
           backgroundColor: kAccentColor,
           foregroundColor: kPrimaryColor,
           tooltip: "Add a product",
-          child: const Icon(
-            Icons.add,
-          ),
+          child: const FaIcon(FontAwesomeIcons.plus),
         ),
         appBar: AppBar(
-          backgroundColor: kPrimaryColor,
           automaticallyImplyLeading: false,
+          backgroundColor: kPrimaryColor,
           titleSpacing: kDefaultPadding / 2,
           elevation: 0.0,
           title: GetBuilder<UserController>(
@@ -151,7 +160,7 @@ class _DashboardState extends State<Dashboard> {
                     horizontal: kDefaultPadding / 2,
                   ),
                   child: GestureDetector(
-                    onTap: _profilePage,
+                    onTap: profilePage,
                     child: CircleAvatar(
                       maxRadius: 25,
                       minRadius: 20,
@@ -172,25 +181,43 @@ class _DashboardState extends State<Dashboard> {
             ),
           ),
           actions: [
-            IconButton(
-              iconSize: 30,
-              onPressed: () {
-                Get.to(
-                  () => const Notifications(),
-                  routeName: 'Notifications',
-                  duration: const Duration(milliseconds: 300),
-                  fullscreenDialog: true,
-                  curve: Curves.easeIn,
-                  preventDuplicates: true,
-                  popGesture: true,
-                  transition: Transition.rightToLeft,
-                );
-              },
-              splashRadius: 20,
-              icon: Icon(
-                Icons.notifications_outlined,
-                color: kAccentColor,
-              ),
+            Stack(
+              children: [
+                IconButton(
+                  iconSize: 20,
+                  onPressed: toNotificationsPage,
+                  icon: FaIcon(
+                    FontAwesomeIcons.bell,
+                    color: kAccentColor,
+                    size: 30,
+                  ),
+                ),
+                Positioned(
+                  top: 10,
+                  right: 5,
+                  child: Container(
+                    height: 20,
+                    width: 20,
+                    decoration: ShapeDecoration(
+                      color: kAccentColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        formatNumber(NotificationController
+                            .instance.notification.length),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
             kWidthSizedBox,
           ],

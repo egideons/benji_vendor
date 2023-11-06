@@ -53,13 +53,9 @@ class _OverViewState extends State<OverView> {
           color: kAccentColor,
         ),
         showSelectedLabels: true,
-        unselectedItemColor: const Color(
-          0xFFBDBDBD,
-        ),
+        unselectedItemColor: const Color(0xFFBDBDBD),
         unselectedIconTheme: const IconThemeData(
-          color: Color(
-            0xFFBDBDBD,
-          ),
+          color: Color(0xFFBDBDBD),
         ),
         showUnselectedLabels: true,
         enableFeedback: true,

@@ -5,10 +5,8 @@ import 'dart:convert';
 
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/components/input/otp_textFormField.dart';
-import 'package:benji_vendor/src/components/section/my%20fixed%20snackBar.dart';
 import 'package:benji_vendor/src/components/section/reusable%20authentication%20first%20half.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/theme/responsive_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,7 +14,9 @@ import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
 
 import '../../main.dart';
+import '../../src/components/section/my_fixed_snackbar.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 
 class OTPChangePhoneNumber extends StatefulWidget {
@@ -96,7 +96,7 @@ class _OTPChangePhoneNumberState extends State<OTPChangePhoneNumber> {
         "Something went wrong".toUpperCase(),
         kAccentColor,
         const Duration(
-          seconds: 2,
+          seconds: 2
         ),
       );
 

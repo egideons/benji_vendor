@@ -254,7 +254,7 @@ class _PackagesState extends State<Packages>
                                                     const TextSpan(text: " "),
                                                     TextSpan(
                                                       text:
-                                                          "₦${formattedText(snapshot.data![index].prices)}",
+                                                          "₦${doubleFormattedText(snapshot.data![index].prices)}",
                                                       style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w700,
@@ -331,7 +331,7 @@ class _PackagesState extends State<Packages>
                                                     const TextSpan(text: " "),
                                                     TextSpan(
                                                       text:
-                                                          "₦${formattedText(snapshot.data![index].prices)}",
+                                                          "₦${doubleFormattedText(snapshot.data![index].prices)}",
                                                       style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w700,

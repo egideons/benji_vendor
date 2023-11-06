@@ -9,7 +9,7 @@ import 'package:benji_vendor/src/components/input/my_intl_phonefield.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/name_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
-import 'package:benji_vendor/src/components/section/my%20floating%20snackbar.dart';
+import 'package:benji_vendor/src/components/section/my_floating_snackbar.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/profile_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
@@ -98,7 +98,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   File? selectedImage;
 
   //=========================== WIDGETS ====================================\\
-  Widget _profilePicBottomSheet() {
+  Widget profilePicBottomSheet() {
     return Container(
       height: 140,
       width: MediaQuery.of(context).size.width,
@@ -298,6 +298,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
     setState(() {
       _isLoading = true;
     });
+
     await ProfileController.instance.updateProfile(
       firstName: firstNameEC.text,
       lastName: lastNameEC.text,
@@ -322,11 +323,10 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
 
     mySnackBar(
       context,
+      kSuccessColor,
       "Success!",
       "ID copied to clipboard",
-      const Duration(
-        seconds: 2,
-      ),
+      const Duration(seconds: 2),
     );
   }
 

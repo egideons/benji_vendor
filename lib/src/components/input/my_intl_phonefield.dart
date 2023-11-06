@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../theme/colors.dart';
+import '../../providers/api_url.dart';
 import '../../providers/constants.dart';
 
 class MyIntlPhoneField extends StatelessWidget {
@@ -51,10 +52,10 @@ class MyIntlPhoneField extends StatelessWidget {
       ),
       cursorColor: kSecondaryColor,
       onChanged: (phone) {
-        print(phone.completeNumber);
+        consoleLog(phone.completeNumber);
       },
       onCountryChanged: (country) {
-        print('Country changed to: ${country.name}');
+        consoleLog('Country changed to: ${country.name}');
       },
       decoration: InputDecoration(
         hintText: "Enter phone Number",

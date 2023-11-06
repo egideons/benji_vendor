@@ -2,7 +2,8 @@ import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/components/input/password_textformfield.dart';
 import 'package:benji_vendor/src/components/section/reusable%20authentication%20first%20half.dart';
 import 'package:benji_vendor/src/controller/profile_controller.dart';
-import 'package:benji_vendor/theme/responsive_constant.dart';
+import '../../src/providers/responsive_constants.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';

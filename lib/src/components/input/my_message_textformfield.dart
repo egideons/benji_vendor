@@ -1,83 +1,86 @@
-// ignore_for_file: file_names,
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../theme/colors.dart';
-import '../../src/providers/responsive_constants.dart';
 
-class MyBlueTextFormField extends StatelessWidget {
+class MyMessageTextFormField extends StatelessWidget {
   final String hintText;
-  final TextInputType textInputType;
   final TextEditingController controller;
   final FormFieldValidator validator;
   final dynamic onSaved;
   final TextInputAction textInputAction;
   final FocusNode focusNode;
-  final bool? isEnabled;
-  final VoidCallback? click;
-  final Widget? suffixIcon;
-  final List<TextInputFormatter>? inputFormatters;
+  final int maxLines;
+  final int maxLength;
+  final TextInputType keyboardType;
+  final void Function(String value)? onChanged;
 
-  const MyBlueTextFormField({
+  const MyMessageTextFormField({
     super.key,
     required this.controller,
     required this.validator,
     this.onSaved,
+    this.onChanged,
     required this.textInputAction,
     required this.focusNode,
     required this.hintText,
-    required this.textInputType,
-    this.isEnabled,
-    this.click,
-    this.suffixIcon,
-    this.inputFormatters,
+    required this.maxLines,
+    required this.keyboardType,
+    required this.maxLength,
   });
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
     return TextFormField(
+      onChanged: onChanged,
       focusNode: focusNode,
       controller: controller,
-      validator: validator,
       onSaved: onSaved,
       textInputAction: textInputAction,
       textAlign: TextAlign.start,
       cursorColor: kSecondaryColor,
       autocorrect: true,
+      validator: validator,
+      maxLines: maxLines,
       enableSuggestions: true,
-      keyboardType: textInputType,
-      maxLines: 1,
-      enabled: isEnabled ?? true,
-      onTap: click,
-      inputFormatters: inputFormatters,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      mouseCursor: SystemMouseCursors.click,
+      enableInteractiveSelection: true,
+      keyboardType: keyboardType,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+      maxLength: maxLength,
+      scrollPhysics: const BouncingScrollPhysics(),
+      textCapitalization: TextCapitalization.sentences,
       style: TextStyle(
         color: kSecondaryColor,
-        fontSize: 14,
+        fontSize: 18,
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
         hintText: hintText,
-        errorStyle: TextStyle(color: kAccentColor),
-        suffixIcon: Container(
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.all(10),
-            width: deviceType(media.width) >= 2 ? 50 : 30,
-            child: suffixIcon ?? const Icon(null)),
+        errorStyle: const TextStyle(
+          color: kErrorColor,
+        ),
         filled: true,
         fillColor: Colors.blue.shade50,
         focusColor: Colors.blue.shade50,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Colors.blue.shade50),
+          borderSide: BorderSide(
+            color: Colors.blue.shade50,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Colors.blue.shade50),
+          borderSide: BorderSide(
+            color: Colors.blue.shade50,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide(color: Colors.blue.shade50),
+          borderSide: BorderSide(
+            color: Colors.blue.shade50,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -87,9 +90,7 @@ class MyBlueTextFormField extends StatelessWidget {
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(
-            10.0,
-          ),
+          borderRadius: BorderRadius.circular(10.0),
           borderSide: const BorderSide(
             color: kErrorBorderColor,
             width: 2.0,

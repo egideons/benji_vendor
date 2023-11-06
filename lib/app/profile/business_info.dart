@@ -11,7 +11,6 @@ import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:benji_vendor/theme/colors.dart';
-import 'package:benji_vendor/theme/responsive_constant.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +19,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 
 class BusinessInfo extends StatefulWidget {
   const BusinessInfo({super.key});
@@ -125,9 +125,10 @@ class _BusinessInfoState extends State<BusinessInfo> {
       "satClosingHours": vendorSatClosingHoursEC.text,
       "sunWeekClosingHours": vendorSunClosingHoursEC.text,
     };
-    print(data);
-    print(Api.baseUrl + Api.changeVendor + userId.toString());
-    print({'shop_image': selectedCoverImage, 'profileLogo': selectedLogoImage});
+    consoleLog("$data");
+    consoleLog(Api.baseUrl + Api.changeVendor + userId.toString());
+    consoleLog(
+        "shop_image: $selectedCoverImage, profileLogo: $selectedLogoImage");
 
     await FormController.instance.postAuthstream(
         Api.baseUrl + Api.changeVendor + userId.toString(),
