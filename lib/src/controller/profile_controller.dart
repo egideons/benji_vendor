@@ -46,23 +46,26 @@ class ProfileController extends GetxController {
       "latitude": latitude ?? "",
       "longitude": longitude ?? "",
     };
+    print('our body $body');
     try {
-      var response = await http.put(
+      var response = await http.post(
         Uri.parse(url),
         headers: {
-          HttpHeaders.contentTypeHeader: header,
+          HttpHeaders.contentTypeHeader: 'multipart/form-data',
           HttpHeaders.authorizationHeader: "Bearer $token",
           "Content-Type": content,
         },
         body: jsonEncode(body),
       );
+      print(response.body);
+      print(response.statusCode);
 
       //Print the response in the console:
       // will do this when the endpoint stops returning null (save the new data)
-      UserController.instance
-          .saveUser(response.body, UserController.instance.user.value.token);
 
       if (response.statusCode == 200) {
+        UserController.instance
+            .saveUser(response.body, UserController.instance.user.value.token);
         ApiProcessorController.successSnack(
             "Your changes have been saved successfully.");
       } else {

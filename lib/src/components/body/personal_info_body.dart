@@ -302,7 +302,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
       firstName: firstNameEC.text,
       lastName: lastNameEC.text,
       address: mapsLocationEC.text,
-      phone: "+234${userPhoneNumberEC.text}",
+      phone: userPhoneNumberEC.text,
       latitude: latitude,
       longitude: longitude,
     );
