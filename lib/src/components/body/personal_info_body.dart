@@ -10,11 +10,13 @@ import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/name_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
 import 'package:benji_vendor/src/components/section/my%20floating%20snackbar.dart';
+import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/profile_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
+import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
 import 'package:benji_vendor/theme/responsive_constant.dart';
@@ -294,6 +296,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
     setState(() {
       _isLoading = true;
     });
+
     await ProfileController.instance.updateProfile(
       userName: userNameEC.text,
       firstName: firstNameEC.text,
