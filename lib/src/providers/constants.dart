@@ -4,6 +4,24 @@ import 'package:intl/intl.dart';
 
 import '../../theme/colors.dart';
 
+String formatDateAndTime(DateTime dateTime) {
+  // Format the date as '23 Feb 2020'
+  String formattedDate = DateFormat('dd MMM y').format(dateTime);
+
+  // Format the time as '1:20PM'
+  String formattedTime = DateFormat.jm().format(dateTime);
+
+  // Combine the formatted date and time
+  String formattedDateTime = '$formattedDate • $formattedTime';
+
+  return formattedDateTime;
+}
+
+String formattedText(double value) {
+  final numberFormat = NumberFormat('#,##0.00');
+  return numberFormat.format(value);
+}
+
 String doubleFormattedText(double value) {
   final numberFormat = NumberFormat('#,##0.00');
   return numberFormat.format(value);
