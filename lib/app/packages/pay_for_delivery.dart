@@ -488,7 +488,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                                 ),
                               ),
                               Text(
-                                '₦${formattedText(_subTotal)}',
+                                '₦${doubleFormattedText(_subTotal)}',
                                 style: TextStyle(
                                   color: kTextGreyColor,
                                   fontSize: 16,
@@ -511,7 +511,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                                 ),
                               ),
                               Text(
-                                '₦${formattedText(deliveryFee)}',
+                                '₦${doubleFormattedText(deliveryFee)}',
                                 style: TextStyle(
                                   color: kTextGreyColor,
                                   fontSize: 16,
@@ -534,7 +534,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                                 ),
                               ),
                               Text(
-                                '₦${formattedText(serviceFee)}',
+                                '₦${doubleFormattedText(serviceFee)}',
                                 style: TextStyle(
                                   color: kTextGreyColor,
                                   fontSize: 16,
@@ -561,7 +561,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                             ),
                           ),
                           Text(
-                            '₦${formattedText(_totalPrice)}',
+                            '₦${doubleFormattedText(_totalPrice)}',
                             style: TextStyle(
                               color: kTextGreyColor,
                               fontSize: 16,
@@ -582,7 +582,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                         ),
                       )
                     : MyElevatedButton(
-                        title: "Pay - ₦${formattedText(_totalPrice)}",
+                        title: "Pay - ₦${doubleFormattedText(_totalPrice)}",
                         onPressed: () {
                           _placeOrder();
                         },

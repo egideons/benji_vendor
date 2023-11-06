@@ -20,6 +20,7 @@ import 'package:get/get.dart';
 
 import '../../src/components/appbar/home appBar vendor name.dart';
 import '../../src/components/container/home orders container.dart';
+import '../../src/controller/notification_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
@@ -123,6 +124,17 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
+  void toNotificationsPage() => Get.to(
+        () => const Notifications(),
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Notifications",
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.downToUp,
+      );
+
   @override
   Widget build(BuildContext context) {
     return MyResponsivePadding(
@@ -169,25 +181,43 @@ class _DashboardState extends State<Dashboard> {
             ),
           ),
           actions: [
-            IconButton(
-              iconSize: 30,
-              onPressed: () {
-                Get.to(
-                  () => const Notifications(),
-                  routeName: 'Notifications',
-                  duration: const Duration(milliseconds: 300),
-                  fullscreenDialog: true,
-                  curve: Curves.easeIn,
-                  preventDuplicates: true,
-                  popGesture: true,
-                  transition: Transition.rightToLeft,
-                );
-              },
-              splashRadius: 20,
-              icon: Icon(
-                Icons.notifications_outlined,
-                color: kAccentColor,
-              ),
+            Stack(
+              children: [
+                IconButton(
+                  iconSize: 20,
+                  onPressed: toNotificationsPage,
+                  icon: FaIcon(
+                    FontAwesomeIcons.bell,
+                    color: kAccentColor,
+                    size: 30,
+                  ),
+                ),
+                Positioned(
+                  top: 10,
+                  right: 5,
+                  child: Container(
+                    height: 20,
+                    width: 20,
+                    decoration: ShapeDecoration(
+                      color: kAccentColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        formatNumber(NotificationController
+                            .instance.notification.length),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
             kWidthSizedBox,
           ],

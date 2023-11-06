@@ -40,10 +40,10 @@ class _ViewPackageState extends State<ViewPackage> {
       widget.deliveryItem.receiverPhoneNumber,
       widget.deliveryItem.dropOffAddress,
       widget.deliveryItem.itemName,
-      (formattedText(widget.deliveryItem.itemQuantity.toDouble())),
+      (doubleFormattedText(widget.deliveryItem.itemQuantity.toDouble())),
       "${widget.deliveryItem.itemWeight.start} KG - ${widget.deliveryItem.itemWeight.end} KG",
-      "₦ ${formattedText(widget.deliveryItem.itemValue.toDouble())}",
-      "₦ ${formattedText(widget.deliveryItem.prices)}",
+      "₦ ${doubleFormattedText(widget.deliveryItem.itemValue.toDouble())}",
+      "₦ ${doubleFormattedText(widget.deliveryItem.prices)}",
     ];
   }
 
