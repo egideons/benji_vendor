@@ -24,13 +24,14 @@ class ProfileController extends GetxController {
 
 //===================== Update Personal Profile ==================\\
 
-  Future<bool> updateProfile(
-      {String? userName,
-      phoneNumber,
-      firstName,
-      lastName,
-      address,
-      bool isCurrent = true}) async {
+  Future<bool> updateProfile({
+    String? firstName,
+    lastName,
+    address,
+    phone,
+    latitude,
+    longitude,
+  }) async {
     late String token;
     token = UserController.instance.user.value.token;
     int uuid = UserController.instance.user.value.id;
@@ -38,27 +39,33 @@ class ProfileController extends GetxController {
     var url = "${Api.baseUrl}/vendors/changeVendor/$uuid";
 
     Map body = {
-      "username": userName ?? "",
+      "phone": phone ?? "",
       "first_name": firstName ?? "",
       "last_name": lastName ?? "",
       "address": address ?? "",
+      "latitude": latitude ?? "",
+      "longitude": longitude ?? "",
     };
+    print('our body $body');
     try {
-      var response = await http.put(
+      var response = await http.post(
         Uri.parse(url),
         headers: {
-          HttpHeaders.contentTypeHeader: header,
+          HttpHeaders.contentTypeHeader: 'multipart/form-data',
           HttpHeaders.authorizationHeader: "Bearer $token",
           "Content-Type": content,
         },
         body: jsonEncode(body),
       );
+      print(response.body);
+      print(response.statusCode);
 
       //Print the response in the console:
       // will do this when the endpoint stops returning null (save the new data)
-      // UserController.instance.saveUser(response.body, UserController.instance.user.value.token)
 
       if (response.statusCode == 200) {
+        UserController.instance
+            .saveUser(response.body, UserController.instance.user.value.token);
         ApiProcessorController.successSnack(
             "Your changes have been saved successfully.");
       } else {
