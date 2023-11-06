@@ -2,22 +2,18 @@
 
 import 'dart:math';
 
-import 'package:benji/src/components/appbar/my_appbar.dart';
-import 'package:benji/src/repo/utils/helpers.dart';
-import 'package:benji/theme/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_squad/flutter_squad.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/route_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 
-import '../../src/components/button/my_elevatedbutton.dart';
+import '../../src/components/appbar/my appbar.dart';
+import '../../src/components/button/my elevatedButton.dart';
+import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
-import '../../src/providers/responsive_constant.dart';
-import '../../src/repo/models/user/user_model.dart';
-import '../../src/repo/utils/constant.dart';
-import '../home/home.dart';
+import '../../src/providers/helper.dart';
+import '../../src/providers/responsive_constants.dart';
+import '../../theme/colors.dart';
 
 class PayForDelivery extends StatefulWidget {
   final String status,
@@ -160,7 +156,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     final response = await http.post(
       Uri.parse('$baseURL/sendPackage/createItemPackage/'),
       body: body,
-      headers: await authHeader(),
+      headers: authHeader(),
     );
 
     return response.statusCode == 200 && response.body == '"Package Created."';
@@ -176,19 +172,19 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     // DateTime now = DateTime.now();
     // String formattedDateAndTime = formatDateAndTime(now);
 
-    SquadTransactionResponse? response = await Squad.checkout(
-      context,
-      charge(),
-      sandbox: true,
-      showAppbar: false,
-      appBar: AppBarConfig(
-        color: kAccentColor,
-        leadingIcon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
-      ),
-    );
-    debugPrint(
-      "Squad transaction completed======>${response?.toJson().toString()}",
-    );
+    // SquadTransactionResponse? response = await Squad.checkout(
+    //   context,
+    //   charge(),
+    //   sandbox: true,
+    //   showAppbar: false,
+    //   appBar: AppBarConfig(
+    //     color: kAccentColor,
+    //     leadingIcon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
+    //   ),
+    // );
+    // debugPrint(
+    //   "Squad transaction completed======>${response?.toJson().toString()}",
+    // );
 
     //     .then(
     //   (value) async {
@@ -244,20 +240,20 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     // );
   }
 
-  Charge charge() {
-    return Charge(
-      amount: (_subTotal * 100).toInt() + (deliveryFee * 100).toInt(),
-      publicKey: squadPublicKey,
-      email: "$_userEmail",
-      currencyCode: _currency,
-      transactionRef: "BENJI-PYM-${generateRandomString(10)}",
-      paymentChannels: ["card", "bank", "ussd", "transfer"],
-      customerName: "$_userFirstName $_userLastName",
-      callbackUrl: null,
-      metadata: {"name": _userFirstName, "age": 23},
-      passCharge: true,
-    );
-  }
+  // Charge charge() {
+  //   return Charge(
+  //     amount: (_subTotal * 100).toInt() + (deliveryFee * 100).toInt(),
+  //     publicKey: squadPublicKey,
+  //     email: "$_userEmail",
+  //     currencyCode: _currency,
+  //     transactionRef: "BENJI-PYM-${generateRandomString(10)}",
+  //     paymentChannels: ["card", "bank", "ussd", "transfer"],
+  //     customerName: "$_userFirstName $_userLastName",
+  //     callbackUrl: null,
+  //     metadata: {"name": _userFirstName, "age": 23},
+  //     passCharge: true,
+  //   );
+  // }
 
   String generateRandomString(int len) {
     const chars =
@@ -299,25 +295,26 @@ class _PayForDeliveryState extends State<PayForDelivery> {
   }
 
   _getUserData() async {
-    checkAuth(context);
-    User? user = await getUser();
-    setState(() {
-      _userFirstName = user!.firstName;
-      _userLastName = user.lastName;
-      _userEmail = user.email;
-    });
+    // checkAuth(context);
+    // User? user = await getUser();
+    // setState(() {
+    //   _userFirstName = user!.firstName;
+    //   _userLastName = user.lastName;
+    //   _userEmail = user.email;
+    // });
   }
 
-  void _toHomeScreen() => Get.offAll(
-        () => const Home(),
-        routeName: 'Home',
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        popGesture: false,
-        predicate: (routes) => false,
-        transition: Transition.rightToLeft,
-      );
+  void toHomeScreen() => {};
+  //  Get.offAll(
+  //       () => const Home(),
+  //       routeName: 'Home',
+  //       duration: const Duration(milliseconds: 300),
+  //       fullscreenDialog: true,
+  //       curve: Curves.easeIn,
+  //       popGesture: false,
+  //       predicate: (routes) => false,
+  //       transition: Transition.rightToLeft,
+  //     );
 
   @override
   Widget build(BuildContext context) {
@@ -331,7 +328,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
           elevation: 0,
           actions: [
             IconButton(
-              onPressed: _toHomeScreen,
+              onPressed: toHomeScreen,
               icon: FaIcon(
                 FontAwesomeIcons.house,
                 size: 18,
@@ -402,10 +399,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         separatorBuilder: (BuildContext context, int index) =>
-                            Divider(
-                          height: 1,
-                          color: kGreyColor,
-                        ),
+                            const Divider(height: 1, color: kGreyColor1),
                         itemBuilder: (BuildContext context, int index) =>
                             ListTile(
                           contentPadding: EdgeInsets.zero,

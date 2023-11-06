@@ -6,7 +6,7 @@ import 'package:benji_vendor/src/components/input/password_textformfield.dart';
 import 'package:benji_vendor/src/components/section/reusable%20authentication%20first%20half.dart';
 import 'package:benji_vendor/src/controller/login_controller.dart';
 import 'package:benji_vendor/src/model/login_model.dart';
-import 'package:benji_vendor/theme/responsive_constant.dart';
+import '../../src/providers/responsive_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:get/get.dart';

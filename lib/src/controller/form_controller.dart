@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:benji_vendor/src/controller/error_controller.dart';
+import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -128,24 +129,24 @@ class FormController extends GetxController {
       request.files
           .add(await http.MultipartFile.fromPath(key, files[key]!.path));
     }
-    print(request.files);
+    consoleLog("${request.files}");
 
     request.headers.addAll(headers);
 
     data.forEach((key, value) {
       request.fields[key] = value.toString();
     });
-    print('request.fields ${request.fields}');
-    print('stream response emma $response');
+    consoleLog('request.fields ${request.fields}');
+    consoleLog('stream response emma $response');
     // try {
     response = await request.send();
-    print('pass 1 $response');
+    consoleLog('pass 1 $response');
     status.value = response.statusCode;
-    print('pass 2');
+    consoleLog('pass 2');
     final normalResp = await http.Response.fromStream(response);
-    print('pass 3 ${response.statusCode}');
-    print('resp response $normalResp');
-    print('stream response ${normalResp.body}');
+    consoleLog('pass 3 ${response.statusCode}');
+    consoleLog('resp response $normalResp');
+    consoleLog('stream response ${normalResp.body}');
     if (response.statusCode == 200) {
       ApiProcessorController.successSnack(successMsg);
       isLoad.value = false;

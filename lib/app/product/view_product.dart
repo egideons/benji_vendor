@@ -67,7 +67,7 @@ class _ViewProductState extends State<ViewProduct> {
     setState(() {
       deleteProductLoad = false;
     });
-    print('${status.value} ooo');
+    consoleLog('${status.value} ooo');
     if (status.value != 200) {
       return;
     }

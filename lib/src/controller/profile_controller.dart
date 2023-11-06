@@ -46,7 +46,7 @@ class ProfileController extends GetxController {
       "latitude": latitude ?? "",
       "longitude": longitude ?? "",
     };
-    print('our body $body');
+    consoleLog('our body $body');
     try {
       var response = await http.post(
         Uri.parse(url),
@@ -57,9 +57,9 @@ class ProfileController extends GetxController {
         },
         body: jsonEncode(body),
       );
-      print(response.body);
-      print(response.statusCode);
-      print(response.body);
+      consoleLog(response.body);
+      consoleLog("${response.statusCode}");
+      consoleLog(response.body);
       //Print the response in the console:
       // will do this when the endpoint stops returning null (save the new data)
 
