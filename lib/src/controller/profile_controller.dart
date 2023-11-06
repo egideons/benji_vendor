@@ -58,11 +58,8 @@ class ProfileController extends GetxController {
         body: jsonEncode(body),
       );
       print(response.body);
-<<<<<<< HEAD
-=======
       print(response.statusCode);
-
->>>>>>> be2de8fb86787b8c72b731a492607d547a9cdbae
+      print(response.body);
       //Print the response in the console:
       // will do this when the endpoint stops returning null (save the new data)
 
