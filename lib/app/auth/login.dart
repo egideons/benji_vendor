@@ -106,7 +106,7 @@ class _LoginState extends State<Login> {
                       curves: Curves.easeInOut,
                       duration: const Duration(milliseconds: 300),
                       containerChild: Center(
-                        child: Image.asset("assets/icons/support.png"),
+                        child: Image.asset("assets/icons/store.png"),
                       ),
                       decoration: ShapeDecoration(
                         color: kPrimaryColor,
@@ -250,7 +250,6 @@ class _LoginState extends State<Login> {
                             SendLogin data = SendLogin(
                                 password: passwordController.text,
                                 username: emailController.text);
-
                             await controller.login(data);
                           }
                         },
