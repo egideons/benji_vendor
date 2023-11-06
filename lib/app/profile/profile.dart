@@ -1,4 +1,5 @@
 import 'package:benji_vendor/app/others/reviews.dart';
+import 'package:benji_vendor/app/profile/business_info.dart';
 import 'package:benji_vendor/app/profile/personal_info.dart';
 import 'package:benji_vendor/app/profile/settings.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
@@ -44,6 +45,17 @@ _reviewsPage() {
     transition: Transition.rightToLeft,
   );
 }
+
+void _toBusinessInfo() => Get.to(
+      () => const BusinessInfo(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "BusinessInfo",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
 
 void _toPersonalInfo() => Get.to(
       () => const PersonalInfo(),
@@ -150,7 +162,7 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       ListTile(
-                        onTap: () {},
+                        onTap: _toBusinessInfo,
                         leading: Icon(
                           Icons.business_rounded,
                           color: kAccentColor,

@@ -2,6 +2,7 @@ import 'package:benji_vendor/src/controller/auth_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/login_controller.dart';
+import 'package:benji_vendor/src/controller/notification_controller.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/profile_controller.dart';
@@ -24,6 +25,7 @@ class SplashScreen extends StatelessWidget {
   final reviews = Get.put(ReviewsController());
   final latLngDetail = Get.put(LatLngDetailController());
   final profile = Get.put(ProfileController());
+  final notify = Get.put(NotificationController());
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
