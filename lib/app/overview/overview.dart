@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../theme/colors.dart';
 import '../dashboard/dashboard.dart';
@@ -27,7 +28,7 @@ class _OverViewState extends State<OverView> {
   final List<Widget> pages = const [
     Dashboard(),
     Orders(),
-    Product(),
+    Products(),
     Profile(),
   ];
 
@@ -62,19 +63,19 @@ class _OverViewState extends State<OverView> {
             activeIcon: Icon(Icons.grid_view_rounded),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag_outlined),
+            icon: FaIcon(FontAwesomeIcons.receipt),
             label: "Orders",
-            activeIcon: Icon(Icons.shopping_bag_rounded),
+            activeIcon: FaIcon(FontAwesomeIcons.receipt),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
+            icon: FaIcon(FontAwesomeIcons.basketShopping),
             label: "Products",
-            activeIcon: Icon(Icons.menu_rounded),
+            activeIcon: FaIcon(FontAwesomeIcons.basketShopping),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_2_outlined),
+            icon: FaIcon(FontAwesomeIcons.user),
             label: "Profile",
-            activeIcon: Icon(Icons.person_2_rounded),
+            activeIcon: FaIcon(FontAwesomeIcons.solidUser),
           ),
         ],
       ),

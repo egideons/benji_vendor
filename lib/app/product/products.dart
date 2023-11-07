@@ -12,14 +12,14 @@ import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import 'add_new_product.dart';
 
-class Product extends StatefulWidget {
-  const Product({super.key});
+class Products extends StatefulWidget {
+  const Products({super.key});
 
   @override
-  State<Product> createState() => _ProductState();
+  State<Products> createState() => _ProductsState();
 }
 
-class _ProductState extends State<Product> {
+class _ProductsState extends State<Products> {
   @override
   void initState() {
     super.initState();
@@ -43,7 +43,7 @@ class _ProductState extends State<Product> {
   TextEditingController searchController = TextEditingController();
 
   //===================== Fucntions =======================\\
-  _addProduct() {
+  addProduct() {
     Get.to(
       () => const AddProduct(),
       routeName: 'AddProduct',
@@ -56,7 +56,7 @@ class _ProductState extends State<Product> {
     );
   }
 
-  _viewProduct(ProductModel product) {
+  viewProduct(ProductModel product) {
     Get.to(
       () => ViewProduct(product: product),
       routeName: 'ViewProduct',
@@ -71,118 +71,111 @@ class _ProductState extends State<Product> {
 
   @override
   Widget build(BuildContext context) {
-    final media = MediaQuery.of(context).size;
+    // final media = MediaQuery.of(context).size;
     return MyResponsivePadding(
       child: GestureDetector(
         onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
         child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: kPrimaryColor,
+            elevation: 0,
+            title: const Text(
+              'Your Products',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: MyOutlinedElevatedButton(
+                  elevation: 5.0,
+                  onPressed: addProduct,
+                  circularBorderRadius: 10,
+                  minimumSizeWidth: 65,
+                  minimumSizeHeight: 35,
+                  maximumSizeWidth: 65,
+                  maximumSizeHeight: 35,
+                  title: "Add",
+                  titleFontSize: 12,
+                ),
+              )
+            ],
+          ),
           body: SafeArea(
             maintainBottomViewPadding: true,
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Container(
-                constraints: BoxConstraints(maxHeight: media.height),
-                color: kPrimaryColor,
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.all(
-                  kDefaultPadding,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Product',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          MyOutlinedElevatedButton(
-                            elevation: 5.0,
-                            onPressed: _addProduct,
-                            circularBorderRadius: 10,
-                            minimumSizeWidth: 65,
-                            minimumSizeHeight: 35,
-                            maximumSizeWidth: 65,
-                            maximumSizeHeight: 35,
-                            title: "+ Add",
-                            titleFontSize: 12,
-                          )
-                        ],
+            child: Scrollbar(
+              child: ListView(
+                controller: scrollController,
+                padding: const EdgeInsets.all(kDefaultPadding),
+                physics: const BouncingScrollPhysics(),
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      GetBuilder<ProductController>(
+                        initState: (state) async {
+                          await ProductController.instance.getProducts();
+                        },
+                        init: ProductController(),
+                        builder: (controller) {
+                          return controller.isLoad.value &&
+                                  controller.products.isEmpty
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: kAccentColor,
+                                  ),
+                                )
+                              : controller.products.isEmpty
+                                  ? const EmptyCard()
+                                  : ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: controller.products.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return VendorsProductContainer(
+                                          onTap: () => viewProduct(
+                                              controller.products[index]),
+                                          product: controller.products[index],
+                                        );
+                                      },
+                                    );
+                        },
                       ),
-                    ),
-                    kSizedBox,
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        GetBuilder<ProductController>(
-                          initState: (state) async {
-                            await ProductController.instance.getProducts();
-                          },
-                          init: ProductController(),
-                          builder: (controller) {
-                            return controller.isLoad.value &&
-                                    controller.products.isEmpty
+                      GetBuilder<ProductController>(
+                        initState: (state) async {
+                          await ProductController.instance.getProducts();
+                        },
+                        builder: (controller) => Column(
+                          children: [
+                            controller.isLoadMore.value
                                 ? Center(
                                     child: CircularProgressIndicator(
                                       color: kAccentColor,
                                     ),
                                   )
-                                : controller.products.isEmpty
-                                    ? const EmptyCard()
-                                    : ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: controller.products.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return VendorsProductContainer(
-                                            onTap: () => _viewProduct(
-                                                controller.products[index]),
-                                            product: controller.products[index],
-                                          );
-                                        },
-                                      );
-                          },
+                                : const SizedBox(),
+                            controller.loadedAll.value &&
+                                    controller.products.isNotEmpty
+                                ? Container(
+                                    margin: const EdgeInsets.only(
+                                        top: 20, bottom: 20),
+                                    height: 10,
+                                    width: 10,
+                                    decoration: ShapeDecoration(
+                                        shape: const CircleBorder(),
+                                        color: kPageSkeletonColor),
+                                  )
+                                : const SizedBox(),
+                          ],
                         ),
-                        GetBuilder<ProductController>(
-                          initState: (state) async {
-                            await ProductController.instance.getProducts();
-                          },
-                          builder: (controller) => Column(
-                            children: [
-                              controller.isLoadMore.value
-                                  ? Center(
-                                      child: CircularProgressIndicator(
-                                        color: kAccentColor,
-                                      ),
-                                    )
-                                  : const SizedBox(),
-                              controller.loadedAll.value &&
-                                      controller.products.isNotEmpty
-                                  ? Container(
-                                      margin: const EdgeInsets.only(
-                                          top: 20, bottom: 20),
-                                      height: 10,
-                                      width: 10,
-                                      decoration: ShapeDecoration(
-                                          shape: const CircleBorder(),
-                                          color: kPageSkeletonColor),
-                                    )
-                                  : const SizedBox(),
-                            ],
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
           ),

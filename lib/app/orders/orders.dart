@@ -50,7 +50,7 @@ class _OrdersState extends State<Orders> {
   bool checkStatus(StatusType? theStatus, StatusType currentStatus) =>
       theStatus == currentStatus;
 
-  _orderDetails() {
+  orderDetails() {
     Get.to(
       () => const OrderDetails(),
       routeName: 'OrderDetails',
@@ -208,7 +208,7 @@ class _OrdersState extends State<Orders> {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return InkWell(
-                                      onTap: _orderDetails,
+                                      onTap: orderDetails,
                                       child: VendorsOrderContainer(
                                         order: controller.orderList[index],
                                       ),

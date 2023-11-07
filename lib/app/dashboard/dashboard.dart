@@ -45,6 +45,7 @@ class _DashboardState extends State<Dashboard> {
 
 //=================================== ALL VARIABLES =====================================\\
   int? numberOfNotifications;
+  final scrollController = ScrollController();
 
 //=================================== DROP DOWN BUTTON =====================================\\
 
@@ -107,7 +108,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  _productsPage() {
+  productsPage() {
     Get.to(
       () => const OverView(currentIndex: 2),
       routeName: 'OverView',
@@ -119,7 +120,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  _ordersPage(StatusType status) {
+  ordersPage(StatusType status) {
     OrderController.instance.setStatus(status);
     Get.to(
       () => const OverView(currentIndex: 1),
@@ -164,9 +165,8 @@ class _DashboardState extends State<Dashboard> {
             builder: (controller) => Row(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: kDefaultPadding / 2,
-                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                   child: GestureDetector(
                     onTap: profilePage,
                     child: CircleAvatar(
@@ -231,52 +231,44 @@ class _DashboardState extends State<Dashboard> {
         ),
         body: SafeArea(
           maintainBottomViewPadding: true,
-          child: ListView(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(
-                  kDefaultPadding,
-                ),
-                child: Row(
+          child: Scrollbar(
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              controller: scrollController,
+              scrollDirection: Axis.vertical,
+              padding: const EdgeInsets.all(kDefaultPadding),
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     OrdersContainer(
-                      onTap: () => _ordersPage(StatusType.delivered),
-                      numberOfOrders: "20",
-                      typeOfOrders: "Active",
+                      onTap: () => ordersPage(StatusType.delivered),
+                      numberOfOrders: OrderController
+                          .instance.status.value.index
+                          .toString(),
+                      typeOfOrders: "Delivered",
                     ),
                     OrdersContainer(
-                      onTap: () => _ordersPage(StatusType.pending),
-                      numberOfOrders: "05",
+                      onTap: () => ordersPage(StatusType.pending),
+                      numberOfOrders: OrderController
+                          .instance.status.value.index
+                          .toString(),
                       typeOfOrders: "Pending",
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(
-                height: kDefaultPadding * 2,
-              ),
-              Container(
-                margin: const EdgeInsets.only(
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                ),
-                child: Column(
+                kSizedBox,
+                Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          height: 16.57,
-                          child: Text(
-                            'Reviews',
-                            style: TextStyle(
-                              color: kTextGreyColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
+                        Text(
+                          'Reviews',
+                          style: TextStyle(
+                            color: kTextGreyColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                         TextButton(
@@ -303,30 +295,28 @@ class _DashboardState extends State<Dashboard> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Icon(
-                            Icons.star_sharp,
-                            color: kAccentColor,
-                            size: 30,
+                          FaIcon(
+                            FontAwesomeIcons.solidStar,
+                            color: kStarColor,
+                            size: 20,
                           ),
-                          kWidthSizedBox,
+                          kHalfWidthSizedBox,
                           Text(
                             controller.avgRating.value
                                 .toPrecision(1)
                                 .toString(),
                             style: TextStyle(
-                              color: kAccentColor,
-                              fontSize: 21.80,
+                              color: kStarColor,
+                              fontSize: 20,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           kWidthSizedBox,
                           Text(
-                            'Total ${controller.total.value} Reviews',
+                            'You have ${formatNumber(controller.total.value)} Reviews',
                             style: const TextStyle(
-                              color: Color(
-                                0xFF32343E,
-                              ),
-                              fontSize: 14,
+                              color: Color(0xFF32343E),
+                              fontSize: 18,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -337,19 +327,16 @@ class _DashboardState extends State<Dashboard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          height: 16.57,
-                          child: Text(
-                            'Latest Products',
-                            style: TextStyle(
-                              color: kTextGreyColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
+                        Text(
+                          'Latest Products',
+                          style: TextStyle(
+                            color: kTextGreyColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
                         TextButton(
-                          onPressed: _productsPage,
+                          onPressed: productsPage,
                           child: Text(
                             'See All',
                             style: TextStyle(
@@ -365,73 +352,71 @@ class _DashboardState extends State<Dashboard> {
                     kHalfSizedBox,
                   ],
                 ),
-              ),
-              Container(
-                  height: 180,
-                  margin: const EdgeInsets.only(
-                    left: kDefaultPadding,
-                    right: kDefaultPadding,
-                  ),
-                  child: GetBuilder<ProductController>(
-                      initState: (state) async =>
-                          await ProductController.instance.getProducts(),
-                      builder: (controller) {
-                        return controller.isLoad.value
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                  color: kAccentColor,
-                                ),
-                              )
-                            : controller.products.isEmpty
-                                ? const EmptyCard()
-                                : ListView.builder(
-                                    physics: const BouncingScrollPhysics(),
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount:
-                                        min(controller.products.length, 5),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Container(
-                                        margin: const EdgeInsets.only(
-                                          right: kDefaultPadding,
-                                          bottom: kDefaultPadding / 1.5,
-                                        ),
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.41,
-                                        decoration: ShapeDecoration(
-                                          color: kGreyColor1,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              kDefaultPadding,
-                                            ),
+                SizedBox(
+                    height: 180,
+                    child: GetBuilder<ProductController>(
+                        initState: (state) async =>
+                            await ProductController.instance.getProducts(),
+                        builder: (controller) {
+                          return controller.isLoad.value
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: kAccentColor,
+                                  ),
+                                )
+                              : controller.products.isEmpty
+                                  ? const EmptyCard()
+                                  : ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount:
+                                          min(controller.products.length, 5),
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Container(
+                                          margin: const EdgeInsets.only(
+                                            right: kDefaultPadding,
+                                            bottom: kDefaultPadding / 1.5,
                                           ),
-                                          shadows: const [
-                                            BoxShadow(
-                                              color: Color(
-                                                0x0F000000,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.41,
+                                          decoration: ShapeDecoration(
+                                            color: kGreyColor1,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                kDefaultPadding,
                                               ),
-                                              blurRadius: 24,
-                                              offset: Offset(
-                                                0,
-                                                4,
-                                              ),
-                                              spreadRadius: 4,
-                                            )
-                                          ],
-                                        ),
-                                        child: InkWell(
-                                          onTap: () => _productDetail(
-                                              controller.products[index]),
-                                          child: MyImage(
-                                              url: controller.products[index]
-                                                  .productImage),
-                                        ),
-                                      );
-                                    },
-                                  );
-                      })),
-            ],
+                                            ),
+                                            shadows: const [
+                                              BoxShadow(
+                                                color: Color(
+                                                  0x0F000000,
+                                                ),
+                                                blurRadius: 24,
+                                                offset: Offset(
+                                                  0,
+                                                  4,
+                                                ),
+                                                spreadRadius: 4,
+                                              )
+                                            ],
+                                          ),
+                                          child: InkWell(
+                                            onTap: () => _productDetail(
+                                                controller.products[index]),
+                                            child: MyImage(
+                                                url: controller.products[index]
+                                                    .productImage),
+                                          ),
+                                        );
+                                      },
+                                    );
+                        })),
+              ],
+            ),
           ),
         ),
       ),
