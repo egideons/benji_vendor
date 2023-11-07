@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, invalid_use_of_protected_member
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
@@ -23,7 +22,6 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../theme/colors.dart';
@@ -69,11 +67,10 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
 
   //=========================== BOOL VALUES ====================================\\
 
-  bool _isLoading = false;
-  bool _typing = false;
+  bool isTyping = false;
 
   //======================================== GLOBAL KEYS ==============================================\\
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   //=========================== CONTROLLERS ====================================\\
   final scrollController = ScrollController();
@@ -92,156 +89,10 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   final lastNameFN = FocusNode();
   final mapsLocationFN = FocusNode();
 
-  //=========================== IMAGE PICKER ====================================\\
-
-  final ImagePicker _picker = ImagePicker();
-  File? selectedImage;
-
-  //=========================== WIDGETS ====================================\\
-  Widget profilePicBottomSheet() {
-    return Container(
-      height: 140,
-      width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.only(
-        left: kDefaultPadding,
-        right: kDefaultPadding,
-        bottom: kDefaultPadding,
-      ),
-      child: Column(
-        children: <Widget>[
-          const Text(
-            "Profile photo",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          kSizedBox,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      uploadProfilePic(ImageSource.camera);
-                    },
-                    borderRadius: BorderRadius.circular(100),
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                          side: const BorderSide(
-                            width: 0.5,
-                            color: kGreyColor1,
-                          ),
-                        ),
-                      ),
-                      child: Center(
-                        child: FaIcon(
-                          FontAwesomeIcons.camera,
-                          color: kAccentColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  kHalfSizedBox,
-                  const Text("Camera"),
-                ],
-              ),
-              kWidthSizedBox,
-              Column(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      uploadProfilePic(ImageSource.gallery);
-                    },
-                    borderRadius: BorderRadius.circular(100),
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                          side: const BorderSide(
-                            width: 0.5,
-                            color: kGreyColor1,
-                          ),
-                        ),
-                      ),
-                      child: Center(
-                        child: FaIcon(
-                          FontAwesomeIcons.image,
-                          color: kAccentColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  kHalfSizedBox,
-                  const Text(
-                    "Gallery",
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  //===================== Profile Picture ==========================\\
-
-  uploadProfilePic(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(source: source);
-    if (image != null) {
-      selectedImage = File(image.path);
-      setState(() {});
-      // User? user = await getUser();
-      // final url =
-      //     Uri.parse('$baseURL/clients/changeClientProfileImage/${user!.id}');
-
-      // Create a multipart request
-      // final request = http.MultipartRequest('PUT', url);
-
-      // Set headers
-      // request.headers.addAll(await authHeader());
-
-      // Add the image file to the request
-      // request.files.add(http.MultipartFile(
-      //   'image',
-      //   selectedImage!.readAsBytes().asStream(),
-      //   selectedImage!.lengthSync(),
-      //   filename: 'image.jpg',
-      //   contentType:
-      //       MediaType('image', 'jpeg'), // Adjust content type as needed
-      // ));
-
-      // Send the request and await the response
-      // final http.StreamedResponse response = await request.send();
-
-      // Check if the request was successful (status code 200)
-      // if (response.statusCode == 200) {
-      //   // Image successfully uploaded
-      //   if (kDebugMode) {
-      //     print(await response.stream.bytesToString());
-      //     print('Image uploaded successfully');
-      //   }
-      // } else {
-      //   // Handle the error (e.g., server error)
-      //   if (kDebugMode) {
-      //     print('Error uploading image: ${response.reasonPhrase}');
-      //   }
-      // }
-    }
-  }
-
   //========================================================================\\
   //=========================== FUNCTIONS ====================================\\
   //Google Maps
-  _setLocation(index) async {
+  setLocation(index) async {
     final newLocation = placePredictions[index].description!;
     selectedLocation.value = newLocation;
 
@@ -273,7 +124,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
     }
   }
 
-  void _toGetLocationOnMap() async {
+  void getLocationOnMap() async {
     await Get.to(
       () => const GetLocationOnMap(),
       routeName: 'GetLocationOnMap',
@@ -295,10 +146,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   }
 
   Future<void> updateData() async {
-    setState(() {
-      _isLoading = true;
-    });
-
     await ProfileController.instance.updateProfile(
       firstName: firstNameEC.text,
       lastName: lastNameEC.text,
@@ -307,14 +154,10 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
       latitude: latitude,
       longitude: longitude,
     );
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   //===================== COPY TO CLIPBOARD =======================\\
-  void _copyToClipboard(BuildContext context, String userCode) {
+  void copyToClipboard(BuildContext context, String userCode) {
     Clipboard.setData(
       ClipboardData(text: userCode),
     );
@@ -346,7 +189,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
               builder: (controller) {
                 return Container(
                   width: media.width,
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(kDefaultPadding),
                   decoration: ShapeDecoration(
                     color: kPrimaryColor,
                     shape: RoundedRectangleBorder(
@@ -361,69 +204,58 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                       ),
                     ],
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      kWidthSizedBox,
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              controller.user.value.username,
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              textAlign: TextAlign.start,
-                              style: const TextStyle(
-                                color: kTextBlackColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            Text(
-                              controller.user.value.email,
-                              softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: kTextBlackColor,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            Wrap(
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(top: 11),
-                                  child: Text(
-                                    userCode!,
-                                    softWrap: true,
-                                    style: const TextStyle(
-                                      color: kTextBlackColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    _copyToClipboard(context, userCode!);
-                                  },
-                                  tooltip: "Copy ID",
-                                  mouseCursor: SystemMouseCursors.click,
-                                  icon: FaIcon(
-                                    FontAwesomeIcons.copy,
-                                    size: 14,
-                                    color: kAccentColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                      Text(
+                        controller.user.value.username,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
+                      ),
+                      Text(
+                        controller.user.value.email,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            userCode!,
+                            softWrap: true,
+                            style: const TextStyle(
+                              color: kTextBlackColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              copyToClipboard(context, userCode!);
+                            },
+                            tooltip: "Copy ID",
+                            mouseCursor: SystemMouseCursors.click,
+                            icon: FaIcon(
+                              FontAwesomeIcons.solidCopy,
+                              size: 14,
+                              color: kAccentColor,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -432,7 +264,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
             ),
             kSizedBox,
             Text(
-              "Edit your profile".toUpperCase(),
+              "Edit your personal profile".toUpperCase(),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: kTextBlackColor,
@@ -440,9 +272,18 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                 fontWeight: FontWeight.w700,
               ),
             ),
+            const Text(
+              "Your personal profile is not visible to users",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: kTextBlackColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
             kSizedBox,
             Form(
-              key: _formKey,
+              key: formKey,
               child: ValueListenableBuilder(
                   valueListenable: selectedLocation,
                   builder: (context, selectedLocationValue, index) {
@@ -575,7 +416,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                                 placeAutoComplete(value);
                                 setState(() {
                                   selectedLocation.value = value;
-                                  _typing = true;
+                                  isTyping = true;
                                 });
                                 if (kDebugMode) {
                                   print(
@@ -602,7 +443,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                               color: kLightGreyColor,
                             ),
                             ElevatedButton.icon(
-                              onPressed: _toGetLocationOnMap,
+                              onPressed: getLocationOnMap,
                               icon: FaIcon(
                                 FontAwesomeIcons.locationArrow,
                                 color: kAccentColor,
@@ -635,10 +476,10 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                             kHalfSizedBox,
                             SizedBox(
                               height: () {
-                                if (_typing == false) {
+                                if (isTyping == false) {
                                   return 0.0;
                                 }
-                                if (_typing == true) {
+                                if (isTyping == true) {
                                   return 150.0;
                                 }
                               }(),
@@ -650,7 +491,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                                   itemCount: placePredictions.length,
                                   itemBuilder: (context, index) =>
                                       LocationListTile(
-                                    onTap: () => _setLocation(index),
+                                    onTap: () => setLocation(index),
                                     location:
                                         placePredictions[index].description!,
                                   ),
@@ -664,21 +505,23 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                     );
                   }),
             ),
-            _isLoading
-                ? Center(
-                    child: CircularProgressIndicator(color: kAccentColor),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(kDefaultPadding),
-                    child: MyElevatedButton(
-                      onPressed: (() async {
-                        if (_formKey.currentState!.validate()) {
-                          updateData();
-                        }
-                      }),
-                      title: "Save",
-                    ),
-                  ),
+            Padding(
+              padding: const EdgeInsets.all(kDefaultPadding),
+              child: GetBuilder<ProfileController>(
+                init: ProfileController(),
+                builder: (saving) {
+                  return MyElevatedButton(
+                    onPressed: (() async {
+                      if (formKey.currentState!.validate()) {
+                        updateData();
+                      }
+                    }),
+                    isLoading: saving.isLoad.value,
+                    title: "Save",
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

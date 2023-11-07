@@ -6,6 +6,7 @@ import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../src/providers/constants.dart';
@@ -19,326 +20,252 @@ class Profile extends StatefulWidget {
   State<Profile> createState() => _ProfileState();
 }
 
-void _logOut() async {
-  await UserController.instance.deleteUser();
-  Get.offAll(
-    () => const Login(),
-    duration: const Duration(milliseconds: 300),
-    fullscreenDialog: true,
-    curve: Curves.easeIn,
-    routeName: "Login",
-    predicate: (routes) => false,
-    popGesture: false,
-    transition: Transition.rightToLeft,
-  );
-}
-
-_reviewsPage() {
-  Get.to(
-    () => const ReviewsPage(),
-    routeName: 'ReviewsPage',
-    duration: const Duration(milliseconds: 300),
-    fullscreenDialog: true,
-    curve: Curves.easeIn,
-    preventDuplicates: true,
-    popGesture: true,
-    transition: Transition.rightToLeft,
-  );
-}
-
-void _toBusinessInfo() => Get.to(
-      () => const BusinessInfo(),
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      routeName: "BusinessInfo",
-      preventDuplicates: true,
-      popGesture: false,
-      transition: Transition.rightToLeft,
-    );
-
-void _toPersonalInfo() => Get.to(
-      () => const PersonalInfo(),
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      routeName: "PersonalInfo",
-      preventDuplicates: true,
-      popGesture: false,
-      transition: Transition.rightToLeft,
-    );
-void _toSettings() => Get.to(
-      () => const Settings(),
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      routeName: "Settings",
-      preventDuplicates: true,
-      popGesture: false,
-      transition: Transition.rightToLeft,
-    );
-
 class _ProfileState extends State<Profile> {
+  void logOut() async {
+    await UserController.instance.deleteUser();
+    Get.offAll(
+      () => const Login(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "Login",
+      predicate: (routes) => false,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  reviewsPage() {
+    Get.to(
+      () => const ReviewsPage(),
+      routeName: 'ReviewsPage',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  void toBusinessInfo() => Get.to(
+        () => const BusinessInfo(),
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "BusinessInfo",
+        preventDuplicates: true,
+        popGesture: false,
+        transition: Transition.rightToLeft,
+      );
+
+  void toPersonalInfo() => Get.to(
+        () => const PersonalInfo(),
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "PersonalInfo",
+        preventDuplicates: true,
+        popGesture: false,
+        transition: Transition.rightToLeft,
+      );
+  void toSettings() => Get.to(
+        () => const Settings(),
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Settings",
+        preventDuplicates: true,
+        popGesture: false,
+        transition: Transition.rightToLeft,
+      );
+
   @override
   Widget build(BuildContext context) {
     return MyResponsivePadding(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kAccentColor,
-          title: const Padding(
-            padding: EdgeInsets.only(
-              left: kDefaultPadding,
-            ),
-            child: Text(
-              'My Profile',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
+          elevation: 0,
+          title: const Text(
+            'My Profile',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
             ),
           ),
-          elevation: 0.0,
         ),
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: ListView(
             scrollDirection: Axis.vertical,
+            padding: const EdgeInsets.all(10),
             children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: kDefaultPadding,
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                  bottom: kDefaultPadding / 1.5,
-                ),
-                child: Container(
-                  width: 327,
-                  height: 190,
-                  padding: const EdgeInsets.all(
-                    kDefaultPadding / 2,
+              Container(
+                padding: const EdgeInsets.all(kDefaultPadding),
+                decoration: ShapeDecoration(
+                  color: kPrimaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                  decoration: ShapeDecoration(
-                    color: kPrimaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        15,
-                      ),
+                  shadows: const [
+                    BoxShadow(
+                      color: Color(0x0F000000),
+                      blurRadius: 24,
+                      offset: Offset(0, 4),
+                      spreadRadius: 0,
                     ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(
-                          0x0F000000,
-                        ),
-                        blurRadius: 24,
-                        offset: Offset(
-                          0,
-                          4,
-                        ),
-                        spreadRadius: 0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        onTap: _toPersonalInfo,
-                        leading: Icon(
-                          Icons.person_outlined,
-                          color: kAccentColor,
-                        ),
-                        title: const Text(
-                          'Personal Info',
-                          style: TextStyle(
-                            color: Color(
-                              0xFF333333,
-                            ),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios_rounded,
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      onTap: toPersonalInfo,
+                      leading: FaIcon(FontAwesomeIcons.solidUser,
+                          color: kAccentColor),
+                      title: const Text(
+                        'Personal Info',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                      ListTile(
-                        onTap: _toBusinessInfo,
-                        leading: Icon(
-                          Icons.business_rounded,
-                          color: kAccentColor,
-                        ),
-                        title: const Text(
-                          'Business Info',
-                          style: TextStyle(
-                            color: Color(
-                              0xFF333333,
-                            ),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios_rounded,
+                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                    ),
+                    ListTile(
+                      onTap: toBusinessInfo,
+                      leading: FaIcon(
+                        FontAwesomeIcons.store,
+                        color: kAccentColor,
+                      ),
+                      title: const Text(
+                        'Business Info',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                      ListTile(
-                        onTap: _toSettings,
-                        leading: Icon(
-                          Icons.settings_rounded,
-                          color: kAccentColor,
-                        ),
-                        title: const Text(
-                          'Settings',
-                          style: TextStyle(
-                            color: Color(
-                              0xFF333333,
-                            ),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios_rounded,
+                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                    ),
+                    ListTile(
+                      onTap: toSettings,
+                      leading: FaIcon(
+                        FontAwesomeIcons.gear,
+                        color: kAccentColor,
+                      ),
+                      title: const Text(
+                        'Settings',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                    ],
-                  ),
+                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                  bottom: kDefaultPadding / 1.5,
+              kSizedBox,
+              Container(
+                padding: const EdgeInsets.all(kDefaultPadding),
+                decoration: ShapeDecoration(
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  shadows: const [
+                    BoxShadow(
+                      color: Color(0x0F000000),
+                      blurRadius: 24,
+                      offset: Offset(0, 4),
+                      spreadRadius: 0,
+                    )
+                  ],
                 ),
-                child: Container(
-                  width: 327,
-                  height: 141,
-                  padding: const EdgeInsets.all(
-                    kDefaultPadding / 2,
-                  ),
-                  decoration: ShapeDecoration(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                child: Column(
+                  children: [
+                    ListTile(
+                      onTap: reviewsPage,
+                      leading: FaIcon(
+                        FontAwesomeIcons.solidComment,
+                        color: kAccentColor,
+                      ),
+                      title: const Text(
+                        'User Reviews',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
                     ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(
-                          0x0F000000,
-                        ),
-                        blurRadius: 24,
-                        offset: Offset(0, 4),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        onTap: _reviewsPage,
-                        leading: Icon(
-                          Icons.keyboard_command_key_rounded,
-                          color: kAccentColor,
-                        ),
-                        title: const Text(
-                          'User Reviews',
-                          style: TextStyle(
-                            color: Color(
-                              0xFF333333,
-                            ),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        trailing: const Icon(
-                          Icons.arrow_forward_ios_rounded,
+                    ListTile(
+                      leading: FaIcon(
+                        FontAwesomeIcons.receipt,
+                        color: kAccentColor,
+                      ),
+                      title: const Text(
+                        'Number of Orders',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
-                      ListTile(
-                        onTap: () {},
-                        leading: Icon(
-                          Icons.receipt_long_outlined,
-                          color: kAccentColor,
-                        ),
-                        title: const Text(
-                          'Number of Orders',
-                          style: TextStyle(
-                            color: Color(
-                              0xFF333333,
-                            ),
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        trailing: GetBuilder<OrderController>(
-                          initState: (state) async =>
-                              await OrderController.instance.getTotal(),
-                          builder: (controller) => Text(
-                            controller.total.value.toString(),
-                            textAlign: TextAlign.right,
-                            style: const TextStyle(
-                              color: Color(
-                                0xFF9B9BA5,
-                              ),
-                              fontSize: 17,
-                              fontWeight: FontWeight.w700,
-                            ),
+                      trailing: GetBuilder<OrderController>(
+                        initState: (state) async =>
+                            await OrderController.instance.getTotal(),
+                        builder: (controller) => Text(
+                          formatNumber(controller.total.value),
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                            color: Color(0xFF9B9BA5),
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                  bottom: kDefaultPadding / 1.5,
+              kSizedBox,
+              Container(
+                padding: const EdgeInsets.all(kDefaultPadding),
+                decoration: ShapeDecoration(
+                  color: kPrimaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  shadows: const [
+                    BoxShadow(
+                      color: Color(0x0F000000),
+                      blurRadius: 24,
+                      offset: Offset(0, 4),
+                      spreadRadius: 0,
+                    )
+                  ],
                 ),
-                child: Container(
-                  width: 327,
-                  height: 78,
-                  padding: const EdgeInsets.all(
-                    kDefaultPadding / 2,
+                child: ListTile(
+                  onTap: logOut,
+                  leading: FaIcon(
+                    FontAwesomeIcons.rightFromBracket,
+                    color: kAccentColor,
                   ),
-                  decoration: ShapeDecoration(
-                    color: kPrimaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        15,
-                      ),
-                    ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x0F000000),
-                        blurRadius: 24,
-                        offset: Offset(0, 4),
-                        spreadRadius: 0,
-                      )
-                    ],
-                  ),
-                  child: ListTile(
-                    onTap: _logOut,
-                    leading: Icon(
-                      Icons.logout_rounded,
-                      color: kAccentColor,
-                    ),
-                    title: const Text(
-                      'Log Out',
-                      style: TextStyle(
-                        color: Color(
-                          0xFF333333,
-                        ),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    trailing: const Icon(
-                      Icons.arrow_forward_ios_rounded,
+                  title: const Text(
+                    'Log Out',
+                    style: TextStyle(
+                      color: kTextBlackColor,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
+                  trailing: const FaIcon(FontAwesomeIcons.chevronRight),
                 ),
               ),
             ],

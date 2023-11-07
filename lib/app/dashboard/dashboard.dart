@@ -66,11 +66,11 @@ class _DashboardState extends State<Dashboard> {
       curve: Curves.easeIn,
       preventDuplicates: true,
       popGesture: true,
-      transition: Transition.rightToLeft,
+      transition: Transition.downToUp,
     );
   }
 
-  _reviewsPage() {
+  reviewsPage() {
     Get.to(
       () => const ReviewsPage(),
       routeName: 'ReviewsPage',
@@ -83,7 +83,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  _productDetail(ProductModel product) {
+  productDetail(ProductModel product) {
     Get.to(
       () => ViewProduct(product: product),
       routeName: 'ViewProduct',
@@ -272,7 +272,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         TextButton(
-                          onPressed: _reviewsPage,
+                          onPressed: reviewsPage,
                           child: Text(
                             'See All Reviews',
                             style: TextStyle(
@@ -405,7 +405,7 @@ class _DashboardState extends State<Dashboard> {
                                             ],
                                           ),
                                           child: InkWell(
-                                            onTap: () => _productDetail(
+                                            onTap: () => productDetail(
                                                 controller.products[index]),
                                             child: MyImage(
                                                 url: controller.products[index]

@@ -113,67 +113,62 @@ class _ProductsState extends State<Products> {
                 padding: const EdgeInsets.all(kDefaultPadding),
                 physics: const BouncingScrollPhysics(),
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      GetBuilder<ProductController>(
-                        initState: (state) async {
-                          await ProductController.instance.getProducts();
-                        },
-                        init: ProductController(),
-                        builder: (controller) {
-                          return controller.isLoad.value &&
-                                  controller.products.isEmpty
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                    color: kAccentColor,
-                                  ),
-                                )
-                              : controller.products.isEmpty
-                                  ? const EmptyCard()
-                                  : ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: controller.products.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return VendorsProductContainer(
-                                          onTap: () => viewProduct(
-                                              controller.products[index]),
-                                          product: controller.products[index],
-                                        );
-                                      },
+                  GetBuilder<ProductController>(
+                    initState: (state) async {
+                      await ProductController.instance.getProducts();
+                    },
+                    init: ProductController(),
+                    builder: (controller) {
+                      return controller.isLoad.value &&
+                              controller.products.isEmpty
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: kAccentColor,
+                              ),
+                            )
+                          : controller.products.isEmpty
+                              ? const EmptyCard()
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: controller.products.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return VendorsProductContainer(
+                                      onTap: () => viewProduct(
+                                          controller.products[index]),
+                                      product: controller.products[index],
                                     );
-                        },
-                      ),
-                      GetBuilder<ProductController>(
-                        initState: (state) async {
-                          await ProductController.instance.getProducts();
-                        },
-                        builder: (controller) => Column(
-                          children: [
-                            controller.isLoadMore.value
-                                ? Center(
-                                    child: CircularProgressIndicator(
-                                      color: kAccentColor,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            controller.loadedAll.value &&
-                                    controller.products.isNotEmpty
-                                ? Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 20, bottom: 20),
-                                    height: 10,
-                                    width: 10,
-                                    decoration: ShapeDecoration(
-                                        shape: const CircleBorder(),
-                                        color: kPageSkeletonColor),
-                                  )
-                                : const SizedBox(),
-                          ],
-                        ),
-                      )
-                    ],
+                                  },
+                                );
+                    },
+                  ),
+                  GetBuilder<ProductController>(
+                    initState: (state) async {
+                      await ProductController.instance.getProducts();
+                    },
+                    builder: (controller) => Column(
+                      children: [
+                        controller.isLoadMore.value
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: kAccentColor,
+                                ),
+                              )
+                            : const SizedBox(),
+                        controller.loadedAll.value &&
+                                controller.products.isNotEmpty
+                            ? Container(
+                                margin:
+                                    const EdgeInsets.only(top: 20, bottom: 20),
+                                height: 10,
+                                width: 10,
+                                decoration: ShapeDecoration(
+                                    shape: const CircleBorder(),
+                                    color: kPageSkeletonColor),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
                   ),
                 ],
               ),
