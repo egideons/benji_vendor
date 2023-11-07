@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../theme/colors.dart';
 import '../dashboard/dashboard.dart';
@@ -17,85 +18,64 @@ class OverView extends StatefulWidget {
 class _OverViewState extends State<OverView> {
   @override
   void initState() {
-    _currentIndex = widget.currentIndex;
-
+    currentIndex = widget.currentIndex;
     super.initState();
   }
 
 //======== variables =========//
-  late int _currentIndex;
+  late int currentIndex;
 
-  final List<Widget> _pages = const [
+  final List<Widget> pages = const [
     Dashboard(),
     Orders(),
-    Product(),
+    Products(),
     Profile(),
   ];
 
-  void _onTappedBar(int index) {
+  void onTappedNavBar(int index) {
     setState(() {
-      _currentIndex = index;
+      currentIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: pages[currentIndex],
       backgroundColor: kPrimaryColor,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: kPrimaryColor,
-        currentIndex: _currentIndex,
-        onTap: _onTappedBar,
+        currentIndex: currentIndex,
+        onTap: onTappedNavBar,
         elevation: 20.0,
         selectedItemColor: kAccentColor,
-        selectedIconTheme: IconThemeData(
-          color: kAccentColor,
-        ),
+        selectedIconTheme: IconThemeData(color: kAccentColor),
         showSelectedLabels: true,
         unselectedItemColor: const Color(0xFFBDBDBD),
-        unselectedIconTheme: const IconThemeData(
-          color: Color(0xFFBDBDBD),
-        ),
+        unselectedIconTheme: const IconThemeData(color: Color(0xFFBDBDBD)),
         showUnselectedLabels: true,
         enableFeedback: true,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.grid_view,
-            ),
+            icon: Icon(Icons.grid_view),
             label: "Overview",
-            activeIcon: Icon(
-              Icons.grid_view_rounded,
-            ),
+            activeIcon: Icon(Icons.grid_view_rounded),
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_bag_outlined,
-            ),
+            icon: FaIcon(FontAwesomeIcons.receipt),
             label: "Orders",
-            activeIcon: Icon(
-              Icons.shopping_bag_rounded,
-            ),
+            activeIcon: FaIcon(FontAwesomeIcons.receipt),
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.menu,
-            ),
+            icon: FaIcon(FontAwesomeIcons.basketShopping),
             label: "Products",
-            activeIcon: Icon(
-              Icons.menu_rounded,
-            ),
+            activeIcon: FaIcon(FontAwesomeIcons.basketShopping),
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_2_outlined,
-            ),
+            icon: FaIcon(FontAwesomeIcons.user),
             label: "Profile",
-            activeIcon: Icon(
-              Icons.person_2_rounded,
-            ),
+            activeIcon: FaIcon(FontAwesomeIcons.solidUser),
           ),
         ],
       ),

@@ -21,6 +21,7 @@ class ProfileController extends GetxController {
   ProfileController({this.isFirst});
 
   var user = UserModel.fromJson(null).obs;
+  var isLoad = false.obs;
 
 //===================== Update Personal Profile ==================\\
 
@@ -35,6 +36,8 @@ class ProfileController extends GetxController {
     late String token;
     token = UserController.instance.user.value.token;
     int uuid = UserController.instance.user.value.id;
+    isLoad.value = true;
+    update();
 
     var url = "${Api.baseUrl}/vendors/changeVendor/$uuid";
 
@@ -79,6 +82,8 @@ class ProfileController extends GetxController {
           "An unexpected error occurred. \nERROR: $e \nPlease contact admin.");
     }
 
+    isLoad.value = false;
+    update();
     return false;
   }
 
@@ -90,6 +95,8 @@ class ProfileController extends GetxController {
       confirmPassword,
       bool isCurrent = true}) async {
     late String token;
+    isLoad.value = true;
+    update();
 
     var url = "${Api.baseUrl}${Api.changePassword}";
     token = UserController.instance.user.value.token;
@@ -135,5 +142,7 @@ class ProfileController extends GetxController {
       ApiProcessorController.errorSnack(
           "An unexpected error occurred. \nERROR: $e \nPlease try again.");
     }
+    isLoad.value = false;
+    update();
   }
 }

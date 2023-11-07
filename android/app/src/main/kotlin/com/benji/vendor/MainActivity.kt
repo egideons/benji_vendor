@@ -1,4 +1,4 @@
-package com.benji.benji_vendor
+package com.benji.vendor
 
 import io.flutter.embedding.android.FlutterActivity
 

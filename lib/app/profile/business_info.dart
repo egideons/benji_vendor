@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:benji_vendor/app/profile/my_blue_textformfield.dart';
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
@@ -73,6 +74,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
   final vendorMonToFriClosingHoursEC = TextEditingController();
   final vendorSatClosingHoursEC = TextEditingController();
   final vendorSunClosingHoursEC = TextEditingController();
+  final businessBioEC = TextEditingController();
 
   //=================================== FOCUS NODES ====================================\\
   final shopNameFN = FocusNode();
@@ -82,6 +84,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
   final vendorMonToFriClosingHoursFN = FocusNode();
   final vendorSatClosingHoursFN = FocusNode();
   final vendorSunClosingHoursFN = FocusNode();
+  final businessBioFN = FocusNode();
 
   //============================================= FUNCTIONS ===============================================\\
 
@@ -637,7 +640,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
                           onSaved: (value) {},
                           inputFormatters: [
                             FilteringTextInputFormatter.singleLineFormatter,
-                            UppercaseTextInputFormatter(), // Custom formatter to make text uppercase
+                            UppercaseTextInputFormatter(),
                           ],
                           textInputAction: TextInputAction.next,
                           focusNode: vendorMonToFriOpeningHoursFN,
@@ -665,7 +668,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
                           onSaved: (value) {},
                           inputFormatters: [
                             FilteringTextInputFormatter.singleLineFormatter,
-                            UppercaseTextInputFormatter(), // Custom formatter to make text uppercase
+                            UppercaseTextInputFormatter(),
                           ],
                           textInputAction: TextInputAction.next,
                           focusNode: vendorMonToFriClosingHoursFN,
@@ -703,7 +706,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
                           onSaved: (value) {},
                           inputFormatters: [
                             FilteringTextInputFormatter.singleLineFormatter,
-                            UppercaseTextInputFormatter(), // Custom formatter to make text uppercase
+                            UppercaseTextInputFormatter(),
                           ],
                           textInputAction: TextInputAction.next,
                           focusNode: vendorSatOpeningHoursFN,
@@ -769,7 +772,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
                           onSaved: (value) {},
                           inputFormatters: [
                             FilteringTextInputFormatter.singleLineFormatter,
-                            UppercaseTextInputFormatter(), // Custom formatter to make text uppercase
+                            UppercaseTextInputFormatter(),
                           ],
                           textInputAction: TextInputAction.next,
                           focusNode: vendorSunOpeningHoursFN,
@@ -797,16 +800,36 @@ class _BusinessInfoState extends State<BusinessInfo> {
                           onSaved: (value) {},
                           inputFormatters: [
                             FilteringTextInputFormatter.singleLineFormatter,
-                            UppercaseTextInputFormatter(), // Custom formatter to make text uppercase
+                            UppercaseTextInputFormatter(),
                           ],
                           textInputAction: TextInputAction.next,
                           focusNode: vendorSunClosingHoursFN,
                           hintText: "00:00 AM",
                           textInputType: TextInputType.text,
                         ),
-                        kSizedBox
+                        kSizedBox,
+                        const Text(
+                          "Business description",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        kSizedBox,
+                        MyMessageTextFormField(
+                          controller: businessBioEC,
+                          validator: (value) {
+                            return null;
+                          },
+                          textInputAction: TextInputAction.go,
+                          focusNode: businessBioFN,
+                          hintText: "Business description",
+                          maxLines: 10,
+                          keyboardType: TextInputType.text,
+                          maxLength: 1000,
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
