@@ -17,85 +17,64 @@ class OverView extends StatefulWidget {
 class _OverViewState extends State<OverView> {
   @override
   void initState() {
-    _currentIndex = widget.currentIndex;
-
+    currentIndex = widget.currentIndex;
     super.initState();
   }
 
 //======== variables =========//
-  late int _currentIndex;
+  late int currentIndex;
 
-  final List<Widget> _pages = const [
+  final List<Widget> pages = const [
     Dashboard(),
     Orders(),
     Product(),
     Profile(),
   ];
 
-  void _onTappedBar(int index) {
+  void onTappedNavBar(int index) {
     setState(() {
-      _currentIndex = index;
+      currentIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: pages[currentIndex],
       backgroundColor: kPrimaryColor,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: kPrimaryColor,
-        currentIndex: _currentIndex,
-        onTap: _onTappedBar,
+        currentIndex: currentIndex,
+        onTap: onTappedNavBar,
         elevation: 20.0,
         selectedItemColor: kAccentColor,
-        selectedIconTheme: IconThemeData(
-          color: kAccentColor,
-        ),
+        selectedIconTheme: IconThemeData(color: kAccentColor),
         showSelectedLabels: true,
         unselectedItemColor: const Color(0xFFBDBDBD),
-        unselectedIconTheme: const IconThemeData(
-          color: Color(0xFFBDBDBD),
-        ),
+        unselectedIconTheme: const IconThemeData(color: Color(0xFFBDBDBD)),
         showUnselectedLabels: true,
         enableFeedback: true,
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.grid_view,
-            ),
+            icon: Icon(Icons.grid_view),
             label: "Overview",
-            activeIcon: Icon(
-              Icons.grid_view_rounded,
-            ),
+            activeIcon: Icon(Icons.grid_view_rounded),
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_bag_outlined,
-            ),
+            icon: Icon(Icons.shopping_bag_outlined),
             label: "Orders",
-            activeIcon: Icon(
-              Icons.shopping_bag_rounded,
-            ),
+            activeIcon: Icon(Icons.shopping_bag_rounded),
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.menu,
-            ),
+            icon: Icon(Icons.menu),
             label: "Products",
-            activeIcon: Icon(
-              Icons.menu_rounded,
-            ),
+            activeIcon: Icon(Icons.menu_rounded),
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_2_outlined,
-            ),
+            icon: Icon(Icons.person_2_outlined),
             label: "Profile",
-            activeIcon: Icon(
-              Icons.person_2_rounded,
-            ),
+            activeIcon: Icon(Icons.person_2_rounded),
           ),
         ],
       ),
