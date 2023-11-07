@@ -98,3 +98,6 @@ convertToCurrency(String e) {
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[0]},");
   return newStr;
 }
+
+const String squadPublicKey =
+    'sandbox_pk_416415c8a3d27e85e971a3d0475734442ffbb124b579';

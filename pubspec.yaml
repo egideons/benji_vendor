@@ -39,8 +39,9 @@ dependencies:
   pdf: ^3.10.4
   screenshot: ^2.1.0
   share_plus: ^7.1.0
-  flutter_squad:
   path_provider:
+  fluttertoast:
+  flutter_squad:
 
 dev_dependencies:
   flutter_test:

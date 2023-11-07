@@ -36,7 +36,15 @@ class Dashboard extends StatefulWidget {
 typedef ModalContentBuilder = Widget Function(BuildContext);
 
 class _DashboardState extends State<Dashboard> {
+  @override
+  void initState() {
+    super.initState();
+    Get.put(NotificationController());
+    numberOfNotifications = NotificationController.instance.notification.length;
+  }
+
 //=================================== ALL VARIABLES =====================================\\
+  int? numberOfNotifications;
 
 //=================================== DROP DOWN BUTTON =====================================\\
 
@@ -206,8 +214,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     child: Center(
                       child: Text(
-                        formatNumber(NotificationController
-                            .instance.notification.length),
+                        formatNumber(numberOfNotifications!),
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 9,

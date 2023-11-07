@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_squad/flutter_squad.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
@@ -172,19 +173,19 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     // DateTime now = DateTime.now();
     // String formattedDateAndTime = formatDateAndTime(now);
 
-    // SquadTransactionResponse? response = await Squad.checkout(
-    //   context,
-    //   charge(),
-    //   sandbox: true,
-    //   showAppbar: false,
-    //   appBar: AppBarConfig(
-    //     color: kAccentColor,
-    //     leadingIcon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
-    //   ),
-    // );
-    // debugPrint(
-    //   "Squad transaction completed======>${response?.toJson().toString()}",
-    // );
+    SquadTransactionResponse? response = await Squad.checkout(
+      context,
+      charge(),
+      sandbox: true,
+      showAppbar: false,
+      appBar: AppBarConfig(
+        color: kAccentColor,
+        leadingIcon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
+      ),
+    );
+    debugPrint(
+      "Squad transaction completed======>${response?.toJson().toString()}",
+    );
 
     //     .then(
     //   (value) async {
@@ -240,20 +241,20 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     // );
   }
 
-  // Charge charge() {
-  //   return Charge(
-  //     amount: (_subTotal * 100).toInt() + (deliveryFee * 100).toInt(),
-  //     publicKey: squadPublicKey,
-  //     email: "$_userEmail",
-  //     currencyCode: _currency,
-  //     transactionRef: "BENJI-PYM-${generateRandomString(10)}",
-  //     paymentChannels: ["card", "bank", "ussd", "transfer"],
-  //     customerName: "$_userFirstName $_userLastName",
-  //     callbackUrl: null,
-  //     metadata: {"name": _userFirstName, "age": 23},
-  //     passCharge: true,
-  //   );
-  // }
+  Charge charge() {
+    return Charge(
+      amount: (_subTotal * 100).toInt() + (deliveryFee * 100).toInt(),
+      publicKey: squadPublicKey,
+      email: "$_userEmail",
+      currencyCode: _currency,
+      transactionRef: "BENJI-PYM-${generateRandomString(10)}",
+      paymentChannels: ["card", "bank", "ussd", "transfer"],
+      customerName: "$_userFirstName $_userLastName",
+      callbackUrl: null,
+      metadata: {"name": _userFirstName, "age": 23},
+      passCharge: true,
+    );
+  }
 
   String generateRandomString(int len) {
     const chars =
