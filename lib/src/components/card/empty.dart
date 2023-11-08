@@ -20,7 +20,7 @@ class EmptyCard extends StatelessWidget {
             ),
             kSizedBox,
             Text(
-              "Oops!, There is nothing here",
+              "Oops! There is nothing here",
               style: TextStyle(
                 color: kTextGreyColor,
                 fontSize: 18,

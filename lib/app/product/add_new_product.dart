@@ -241,8 +241,8 @@ class _AddProductState extends State<AddProduct> {
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(color: kPrimaryColor),
-          child: GetBuilder<ProductController>(
-            init: ProductController(),
+          child: GetBuilder<FormController>(
+            init: FormController(),
             builder: (saving) {
               return MyElevatedButton(
                 onPressed: () async {
@@ -355,7 +355,10 @@ class _AddProductState extends State<AddProduct> {
                         dropdownMenuEntries: productType == null
                             ? [
                                 const DropdownMenuEntry(
-                                    value: 'Loading...', label: 'Loading...')
+                                  value: 'Loading...',
+                                  label: 'Loading...',
+                                  enabled: false,
+                                )
                               ]
                             : productType!
                                 .map((item) => DropdownMenuEntry(
@@ -364,7 +367,7 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       kSizedBox,
                       const Text(
-                        'Sub Category',
+                        'Product Category',
                         style: TextStyle(
                           color: kTextBlackColor,
                           fontSize: 16,
@@ -379,7 +382,10 @@ class _AddProductState extends State<AddProduct> {
                         dropdownMenuEntries: subCategoryEC == null
                             ? [
                                 const DropdownMenuEntry(
-                                    value: 'Loading...', label: 'Loading...')
+                                  value: 'Loading...',
+                                  label: 'Loading...',
+                                  enabled: false,
+                                )
                               ]
                             : subCategoryEC!
                                 .map((item) => DropdownMenuEntry(

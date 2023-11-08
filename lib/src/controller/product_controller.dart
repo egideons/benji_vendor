@@ -37,7 +37,7 @@ class ProductController extends GetxController {
   reset() {
     loadedAll.value = false;
     loadNum.value = 10;
-    products.value = [];
+    products.value = products.toList();
     update();
   }
 
