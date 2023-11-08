@@ -104,8 +104,7 @@ class _EditProductState extends State<EditProduct> {
       'description': productDescriptionEC.text,
       'price': productPriceEC.text,
       'quantity_available': productQuantityEC.text,
-
-      'sub_category_id': productSubCategoryEC.text,
+      'sub_category_id': subCategoryEC.text,
     };
     consoleLog("$data");
     await FormController.instance.putAuthstream(
