@@ -120,7 +120,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
 
   //===================== BOOL VALUES =======================\\
 
-  bool _isScrollToTopBtnVisible = false;
+  bool isScrollToTopBtnVisible = false;
   bool _processingRequest = false;
 
   //===================== FUNCTIONS =======================\\
@@ -276,21 +276,21 @@ class _PayForDeliveryState extends State<PayForDelivery> {
       curve: Curves.easeInOut,
     );
     setState(() {
-      _isScrollToTopBtnVisible = false;
+      isScrollToTopBtnVisible = false;
     });
   }
 
   Future<void> _scrollListener() async {
     if (_scrollController.position.pixels >= 200 &&
-        _isScrollToTopBtnVisible != true) {
+        isScrollToTopBtnVisible != true) {
       setState(() {
-        _isScrollToTopBtnVisible = true;
+        isScrollToTopBtnVisible = true;
       });
     }
     if (_scrollController.position.pixels < 200 &&
-        _isScrollToTopBtnVisible == true) {
+        isScrollToTopBtnVisible == true) {
       setState(() {
-        _isScrollToTopBtnVisible = false;
+        isScrollToTopBtnVisible = false;
       });
     }
   }
@@ -340,7 +340,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
           ],
           backgroundColor: kPrimaryColor,
         ),
-        floatingActionButton: _isScrollToTopBtnVisible
+        floatingActionButton: isScrollToTopBtnVisible
             ? FloatingActionButton(
                 onPressed: _scrollToTop,
                 mini: deviceType(media.width) > 2 ? false : true,

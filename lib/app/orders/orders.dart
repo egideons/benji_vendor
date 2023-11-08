@@ -72,6 +72,7 @@ class _OrdersState extends State<Orders> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kPrimaryColor,
+          automaticallyImplyLeading: false,
           elevation: 0,
           title: const Text(
             'Your Orders',

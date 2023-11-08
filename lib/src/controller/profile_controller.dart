@@ -69,6 +69,8 @@ class ProfileController extends GetxController {
       if (response.statusCode == 200) {
         UserController.instance
             .saveUser(response.body, UserController.instance.user.value.token);
+        await Future.delayed(
+            const Duration(milliseconds: 500), () => Get.back());
         ApiProcessorController.successSnack(
             "Your changes have been saved successfully.");
       } else {
