@@ -94,10 +94,10 @@ class VendorsOrderContainer extends StatelessWidget {
               SizedBox(
                 width: media.width * 0.6 - 2,
                 // color: kAccentColor,
-                child: const Wrap(
+                child: Wrap(
                   alignment: WrapAlignment.spaceBetween,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       child: Text(
                         "Hot Kitchen",
                         maxLines: 2,
@@ -108,14 +108,14 @@ class VendorsOrderContainer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 5,
                     ),
                     SizedBox(
                       child: Text(
-                        'created date',
+                        order.created,
                         overflow: TextOverflow.clip,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),

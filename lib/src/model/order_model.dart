@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:benji_vendor/src/model/address_model.dart';
 import 'package:benji_vendor/src/model/client_model.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
@@ -12,6 +13,7 @@ class OrderModel {
   String deliveryStatus;
   Client client;
   List<Orderitem> orderitems;
+  String created;
 
   OrderModel({
     required this.id,
@@ -22,6 +24,7 @@ class OrderModel {
     required this.deliveryStatus,
     required this.client,
     required this.orderitems,
+    required this.created,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic>? json) {
@@ -39,6 +42,7 @@ class OrderModel {
           : (json["orderitems"] as List)
               .map((item) => Orderitem.fromJson(item))
               .toList(),
+      created: json["created"] ?? notAvailable,
     );
   }
   Map<String, dynamic> toJson() => {
@@ -50,6 +54,7 @@ class OrderModel {
         "delivery_status": deliveryStatus,
         "client": client.toJson(),
         "orderitems": orderitems.map((item) => (item).toJson()).toList(),
+        "created": created,
       };
 }
 

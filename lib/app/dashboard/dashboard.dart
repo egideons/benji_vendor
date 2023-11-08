@@ -57,7 +57,7 @@ class _DashboardState extends State<Dashboard> {
       const Duration(milliseconds: 500),
       () {
         ProductController.instance.getProducts();
-        OrderController.instance.getOrdersBy();
+        OrderController.instance.getOrdersByStatus();
         ReviewsController.instance.getAvgRating();
       },
     );

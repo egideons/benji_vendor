@@ -116,16 +116,14 @@ class _OrdersState extends State<Orders> {
                           style: TextStyle(
                             color: checkStatus(controller.status.value,
                                     StatusType.delivered)
-                                ? kTextWhiteColor
+                                ? kPrimaryColor
                                 : kGreyColor2,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 15,
-                      ),
+                      const SizedBox(width: 15),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: checkStatus(
@@ -143,40 +141,40 @@ class _OrdersState extends State<Orders> {
                           style: TextStyle(
                             color: checkStatus(
                                     controller.status.value, StatusType.pending)
-                                ? kTextWhiteColor
+                                ? kPrimaryColor
                                 : kGreyColor2,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
-                      const SizedBox(width: 15),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: checkStatus(
-                                  controller.status.value, StatusType.cancelled)
-                              ? kAccentColor
-                              : kDefaultCategoryBackgroundColor,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(16),
-                            ),
-                          ),
-                        ),
-                        onPressed: clickCancelled,
-                        child: Text(
-                          'Cancelled',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: checkStatus(controller.status.value,
-                                    StatusType.cancelled)
-                                ? kTextWhiteColor
-                                : kGreyColor2,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
+                      // const SizedBox(width: 15),
+                      // ElevatedButton(
+                      //   style: ElevatedButton.styleFrom(
+                      //     backgroundColor: checkStatus(
+                      //             controller.status.value, StatusType.cancelled)
+                      //         ? kAccentColor
+                      //         : kDefaultCategoryBackgroundColor,
+                      //     shape: const RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.all(
+                      //         Radius.circular(16),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   onPressed: clickCancelled,
+                      //   child: Text(
+                      //     'Cancelled',
+                      //     textAlign: TextAlign.center,
+                      //     style: TextStyle(
+                      //       color: checkStatus(controller.status.value,
+                      //               StatusType.cancelled)
+                      //           ? kPrimaryColor
+                      //           : kGreyColor2,
+                      //       fontSize: 14,
+                      //       fontWeight: FontWeight.w400,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -184,24 +182,25 @@ class _OrdersState extends State<Orders> {
               kSizedBox,
               GetBuilder<OrderController>(
                 initState: (state) async {
-                  await OrderController.instance.getOrdersBy();
+                  await OrderController.instance.getOrdersByStatus();
                 },
                 init: OrderController(),
                 builder: (controller) => controller.isLoad.value &&
-                        controller.orderList.isEmpty
+                        controller.vendorsOrderList.isEmpty
                     ? Center(
                         child: CircularProgressIndicator(color: kAccentColor),
                       )
-                    : controller.orderList.isEmpty
+                    : controller.vendorsOrderList.isEmpty
                         ? const EmptyCard()
                         : ListView.builder(
                             shrinkWrap: true,
-                            itemCount: controller.orderList.length,
+                            itemCount: controller.vendorsOrderList.length,
+                            physics: const BouncingScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
                               return InkWell(
                                 onTap: orderDetails,
                                 child: VendorsOrderContainer(
-                                  order: controller.orderList[index],
+                                  order: controller.vendorsOrderList[index],
                                 ),
                               );
                             },
@@ -217,7 +216,7 @@ class _OrdersState extends State<Orders> {
                           )
                         : const SizedBox(),
                     controller.loadedAll.value &&
-                            controller.orderList.isNotEmpty
+                            controller.vendorsOrderList.isNotEmpty
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

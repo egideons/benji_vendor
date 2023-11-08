@@ -1,3 +1,4 @@
+import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/main.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/user_model.dart';
@@ -43,6 +44,19 @@ Map<String, String> authHeader([String? authToken, String? contentType]) {
     res['Content-Type'] = contentType;
   }
   return res;
+}
+
+String statusTypeConverter(StatusType statusType) {
+  if (statusType == StatusType.delivered) {
+    return "COMP";
+  }
+  if (statusType == StatusType.pending) {
+    return "PEND";
+  }
+  if (statusType == StatusType.cancelled) {
+    return "CANC";
+  }
+  return "COMP";
 }
 
 class UppercaseTextInputFormatter extends TextInputFormatter {
