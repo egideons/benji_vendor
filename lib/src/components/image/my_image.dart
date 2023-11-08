@@ -13,14 +13,13 @@ class MyImage extends StatelessWidget {
     return CachedNetworkImage(
       imageUrl: url == null ? '' : '$baseImage$url',
       fit: BoxFit.cover,
-      progressIndicatorBuilder: (context, url, downloadProgress) =>
-          const Center(
-              child: CupertinoActivityIndicator(
-        color: kRedColor,
+      progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+          child: CupertinoActivityIndicator(
+        color: kAccentColor,
       )),
-      errorWidget: (context, url, error) => const Icon(
+      errorWidget: (context, url, error) => Icon(
         Icons.error,
-        color: kRedColor,
+        color: kAccentColor,
       ),
     );
   }
