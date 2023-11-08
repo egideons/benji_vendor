@@ -171,7 +171,7 @@ class FormController extends GetxController {
       [String errorMsg = "Error occurred",
       String successMsg = "Submitted successfully"]) async {
     http.StreamedResponse? response;
-
+    print('we in the in');
     isLoad.value = true;
     update();
     update([tag]);
@@ -191,7 +191,7 @@ class FormController extends GetxController {
     request.headers.addAll(headers);
 
     data.forEach((key, value) {
-      request.fields[key] = value.toString();
+      request.fields[key] = value;
     });
     consoleLog('request.fields ${request.fields}');
     consoleLog('stream response emma $response');

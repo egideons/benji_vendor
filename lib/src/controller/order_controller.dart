@@ -10,13 +10,15 @@ import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../providers/helper.dart';
+
 class OrderController extends GetxController {
   static OrderController get instance {
     return Get.find<OrderController>();
   }
 
   var isLoad = false.obs;
-  var orderList = <OrderModel>[].obs;
+  var vendorsOrderList = <OrderModel>[].obs;
 
   var loadedAll = false.obs;
   var isLoadMore = false.obs;
@@ -25,7 +27,7 @@ class OrderController extends GetxController {
   var status = StatusType.delivered.obs;
 
   deleteCachedOrders() {
-    orderList.value = <OrderModel>[];
+    vendorsOrderList.value = <OrderModel>[];
     loadedAll.value = false;
     isLoadMore.value = false;
     loadNum.value = 10;
@@ -42,23 +44,24 @@ class OrderController extends GetxController {
         !scrollController.position.outOfRange) {
       OrderController.instance.isLoadMore.value = true;
       update();
-      await OrderController.instance.getOrdersBy();
+      await OrderController.instance.getOrdersByStatus();
     }
   }
 
   setStatus([StatusType newStatus = StatusType.delivered]) async {
     status.value = newStatus;
-    orderList.value = [];
+    vendorsOrderList.value = [];
     loadNum.value = 10;
     loadedAll.value = false;
     update();
-    await getOrdersBy();
+    await getOrdersByStatus();
   }
 
   Future getTotal() async {
     late String token;
     String id = UserController.instance.user.value.id.toString();
-    var url = "${Api.baseUrl}${Api.orderList}$id/listMyOrders?start=0&end=1";
+    var url =
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrders?start=0&end=1";
     token = UserController.instance.user.value.token;
     http.Response? response = await HandleData.getApi(url, token);
 
@@ -72,7 +75,7 @@ class OrderController extends GetxController {
     update();
   }
 
-  Future getOrdersBy() async {
+  Future getOrdersByStatus() async {
     if (loadedAll.value) {
       return;
     }
@@ -80,11 +83,13 @@ class OrderController extends GetxController {
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.orderList}$id/listMyOrders?start=${loadNum.value - 10}&end=${loadNum.value}";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?status=${statusTypeConverter(status.value)}";
+    consoleLog(url);
     loadNum.value += 10;
     token = UserController.instance.user.value.token;
     http.Response? response = await HandleData.getApi(url, token);
     var responseData = await ApiProcessorController.errorState(response);
+    consoleLog(response!.body);
     if (responseData == null) {
       isLoad.value = false;
       loadedAll.value = true;
@@ -94,10 +99,11 @@ class OrderController extends GetxController {
     }
     List<OrderModel> data = [];
     try {
-      data = (jsonDecode(responseData)['items'] as List)
+      // data = (jsonDecode(responseData)['items'] as List)
+      data = (jsonDecode(responseData) as List)
           .map((e) => OrderModel.fromJson(e))
           .toList();
-      orderList.value += data;
+      vendorsOrderList.value += data;
     } catch (e) {
       consoleLog(e.toString());
     }

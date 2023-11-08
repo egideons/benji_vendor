@@ -35,9 +35,9 @@ class ReviewsController extends GetxController {
       headers: authHeader(),
     );
     if (response.statusCode == 200) {
-      avgRating.value = jsonDecode(response.body);
+      avgRating.value = double.parse(response.body);
     } else {
-      avgRating.value = 0;
+      avgRating.value = 0.0;
     }
     update();
   }

@@ -24,7 +24,7 @@ class Api {
 
 //Vendor
   static const getSpecificVendor = "/vendors/getVendor/";
-  static const orderList = "/vendors/";
+  static const vendorsOrderList = "/vendors/";
 
   //Rider
 

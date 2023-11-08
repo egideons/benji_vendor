@@ -37,7 +37,7 @@ class _EditProductState extends State<EditProduct> {
     isToggled = true;
     // productTypeEC.text = widget.product
     productImages = Api.baseUrl + baseImage + widget.product.productImage;
-    subCategoryEC.text = widget.product.subCategory.name;
+    subCategoryEC.text = widget.product.subCategory.id;
     productNameEC.text = widget.product.name;
     productDescriptionEC.text = widget.product.description;
     productPriceEC.text = widget.product.price.toString();
@@ -106,10 +106,11 @@ class _EditProductState extends State<EditProduct> {
       'quantity_available': productQuantityEC.text,
       'sub_category_id': subCategoryEC.text,
     };
+    Map<dynamic, dynamic> dataBody = {'data': data};
     consoleLog("$data");
     await FormController.instance.putAuthstream(
         Api.baseUrl + Api.changeProduct + widget.product.id,
-        data,
+        dataBody,
         {'product_image': selectedImages},
         'addProduct');
   }
@@ -323,32 +324,32 @@ class _EditProductState extends State<EditProduct> {
                       ),
                     ),
                     kSizedBox,
-                    const Text(
-                      'Product Type',
-                      style: TextStyle(
-                        color: kTextBlackColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.32,
-                      ),
-                    ),
-                    kHalfSizedBox,
-                    ItemDropDownMenu(
-                      itemEC: productTypeEC,
-                      hintText: "Choose product type",
-                      dropdownMenuEntries: productType == null
-                          ? [
-                              const DropdownMenuEntry(
-                                value: 'Loading...',
-                                label: 'Loading...',
-                                enabled: false,
-                              )
-                            ]
-                          : productType!
-                              .map((item) => DropdownMenuEntry(
-                                  value: item.id, label: item.name))
-                              .toList(),
-                    ),
+                    // const Text(
+                    //   'Product Type',
+                    //   style: TextStyle(
+                    //     color: kTextBlackColor,
+                    //     fontSize: 16,
+                    //     fontWeight: FontWeight.w700,
+                    //     letterSpacing: -0.32,
+                    //   ),
+                    // ),
+                    // kHalfSizedBox,
+                    // ItemDropDownMenu(
+                    //   itemEC: productTypeEC,
+                    //   hintText: "Choose product type",
+                    //   dropdownMenuEntries: productType == null
+                    //       ? [
+                    //           const DropdownMenuEntry(
+                    //             value: 'Loading...',
+                    //             label: 'Loading...',
+                    //             enabled: false,
+                    //           )
+                    //         ]
+                    //       : productType!
+                    //           .map((item) => DropdownMenuEntry(
+                    //               value: item.id, label: item.name))
+                    //           .toList(),
+                    // ),
                     kSizedBox,
                     const Text(
                       'Product Category',
@@ -362,7 +363,7 @@ class _EditProductState extends State<EditProduct> {
                     kHalfSizedBox,
                     ItemDropDownMenu(
                       itemEC: subCategoryEC,
-                      hintText: subCategoryEC.text,
+                      hintText: widget.product.subCategory.name,
                       dropdownMenuEntries: subCategory == null
                           ? [
                               const DropdownMenuEntry(
@@ -424,7 +425,7 @@ class _EditProductState extends State<EditProduct> {
                       textInputType: TextInputType.number,
                       textCapitalization: TextCapitalization.sentences,
                       validator: (value) {
-                        const pricePattern = r'^\d+(\.\d{2})?$';
+                        const pricePattern = r'^\d+(\.\d{1,2})?$';
                         if (value == null || value!.isEmpty) {
                           productPriceFN.requestFocus();
                           return "Enter the unit price";
