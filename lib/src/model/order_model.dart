@@ -3,7 +3,7 @@ import 'package:benji_vendor/src/model/client_model.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 
-class Order {
+class OrderModel {
   String id;
   String code;
   double totalPrice;
@@ -13,7 +13,7 @@ class Order {
   Client client;
   List<Orderitem> orderitems;
 
-  Order({
+  OrderModel({
     required this.id,
     required this.code,
     required this.totalPrice,
@@ -24,9 +24,9 @@ class Order {
     required this.orderitems,
   });
 
-  factory Order.fromJson(Map<String, dynamic>? json) {
+  factory OrderModel.fromJson(Map<String, dynamic>? json) {
     json ??= {};
-    return Order(
+    return OrderModel(
       id: json["id"] ?? notAvailable,
       code: json["code"] ?? notAvailable,
       totalPrice: json["total_price"] ?? 0.0,

@@ -4,6 +4,7 @@ import 'package:benji_vendor/app/profile/personal_info.dart';
 import 'package:benji_vendor/app/profile/settings.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
+import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,6 +24,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   void logOut() async {
     await UserController.instance.deleteUser();
+    await ProductController.instance.deleteCachedProducts();
+    await OrderController.instance.deleteCachedOrders();
     Get.offAll(
       () => const Login(),
       duration: const Duration(milliseconds: 300),

@@ -1,10 +1,10 @@
-import 'package:benji_vendor/src/model/order.dart';
+import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:benji_vendor/src/model/rider_model.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 
 class RiderHistory {
   String id;
-  Order order;
+  OrderModel order;
   RiderItem driver;
   String acceptanceStatus;
   String deliveryStatus;
@@ -25,7 +25,7 @@ class RiderHistory {
     json ??= {};
     return RiderHistory(
         id: json["id"] ?? notAvailable,
-        order: Order.fromJson(json["order"]),
+        order: OrderModel.fromJson(json["order"]),
         driver: RiderItem.fromJson(json["driver"]),
         acceptanceStatus: json["acceptance_status"] ?? "PEND",
         deliveryStatus: json["delivery_status"] ?? "pending",

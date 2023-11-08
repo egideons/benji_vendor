@@ -1,6 +1,6 @@
 // ignore_for_file: unused_field
 
-import 'package:benji_vendor/src/model/order.dart';
+import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import '../../../theme/colors.dart';
 import '../../providers/constants.dart';
 
 class VendorsOrderContainer extends StatelessWidget {
-  final Order order;
+  final OrderModel order;
   const VendorsOrderContainer({super.key, required this.order});
 
   @override
@@ -54,7 +54,7 @@ class VendorsOrderContainer extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   image: const DecorationImage(
                     image: AssetImage(
-                      "assets/images/vendors/ntachi-osa.png",
+                      "assets/icons/store.png",
                     ),
                     fit: BoxFit.cover,
                   ),
