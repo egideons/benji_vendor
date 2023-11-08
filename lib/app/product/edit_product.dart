@@ -8,7 +8,6 @@ import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
-import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
@@ -105,15 +104,11 @@ class _EditProductState extends State<EditProduct> {
       'description': productDescriptionEC.text,
       'price': productPriceEC.text,
       'quantity_available': productQuantityEC.text,
-      'sub_category_id': subCategoryEC.text,
-      'product_type': productTypeEC.text,
-      'vendor_id': UserController.instance.user.value.id,
-      'is_available': true,
-      'is_recommended': true,
-      'is_trending': true,
+
+      'sub_category_id': productSubCategoryEC.text,
     };
     consoleLog("$data");
-    await FormController.instance.postAuthstream(
+    await FormController.instance.putAuthstream(
         Api.baseUrl + Api.changeProduct + widget.product.id,
         data,
         {'product_image': selectedImages},
