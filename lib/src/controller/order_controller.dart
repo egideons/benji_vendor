@@ -63,7 +63,8 @@ class OrderController extends GetxController {
     http.Response? response = await HandleData.getApi(url, token);
 
     try {
-      total.value = jsonDecode(response?.body ?? '{}')['total'];
+      total.value =
+          jsonDecode(response?.body ?? ({'total': 0}).toString())['total'];
     } catch (e) {
       total.value = 0;
       consoleLog(e.toString());
