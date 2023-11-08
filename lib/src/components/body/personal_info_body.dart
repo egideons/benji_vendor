@@ -209,7 +209,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        controller.user.value.username,
+                        "Username: ${controller.user.value.username}",
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
@@ -221,14 +221,14 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                         ),
                       ),
                       Text(
-                        controller.user.value.email,
+                        "Business Email: ${controller.user.value.email}",
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: kTextBlackColor,
-                          fontSize: 12,
+                          fontSize: 16,
                           fontWeight: FontWeight.w400,
                         ),
                       ),

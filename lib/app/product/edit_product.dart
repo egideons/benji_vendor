@@ -343,7 +343,6 @@ class _EditProductState extends State<EditProduct> {
                       kHalfSizedBox,
                       ItemDropDownMenu(
                         itemEC: productTypeEC,
-                        mediaWidth: mediaWidth - 40,
                         hintText: "Choose product type",
                         dropdownMenuEntries: _productType == null
                             ? [
@@ -368,7 +367,6 @@ class _EditProductState extends State<EditProduct> {
                       kHalfSizedBox,
                       ItemDropDownMenu(
                         itemEC: productSubCategoryEC,
-                        mediaWidth: mediaWidth - 40,
                         hintText: "Choose a Sub Category",
                         dropdownMenuEntries: _subCategory == null
                             ? [

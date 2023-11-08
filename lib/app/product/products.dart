@@ -79,11 +79,12 @@ class _ProductsState extends State<Products> {
           appBar: AppBar(
             backgroundColor: kPrimaryColor,
             elevation: 0,
+            automaticallyImplyLeading: false,
             title: const Text(
               'Your Products',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.black,
+                color: kTextBlackColor,
                 fontSize: 20,
                 fontWeight: FontWeight.w700,
               ),
@@ -92,7 +93,7 @@ class _ProductsState extends State<Products> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: MyOutlinedElevatedButton(
-                  elevation: 5.0,
+                  elevation: 5,
                   onPressed: addProduct,
                   circularBorderRadius: 10,
                   minimumSizeWidth: 65,

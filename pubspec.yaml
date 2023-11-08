@@ -42,6 +42,8 @@ dependencies:
   path_provider:
   fluttertoast:
   flutter_squad:
+  flutter_carousel_widget:
+  readmore:
 
 dev_dependencies:
   flutter_test:

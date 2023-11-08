@@ -13,9 +13,11 @@ import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../src/components/input/my_message_textformfield.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../overview/overview.dart';
@@ -44,32 +46,24 @@ class _AddProductState extends State<AddProduct> {
   //============================= ALL VARIABLES =====================================\\
 
   //===================== GLOBAL KEYS =======================\\
-  final _formKey = GlobalKey<FormState>();
-
-  //================================== DROP DOWN BUTTONFORMFIELD ====================================\\
-  String dropDownItemValue = "Food";
+  final formKey = GlobalKey<FormState>();
 
   //================================== FOCUS NODES ====================================\\
-  FocusNode productType = FocusNode();
-  FocusNode productNameFN = FocusNode();
-  FocusNode productDescriptionFN = FocusNode();
-  FocusNode productPriceFN = FocusNode();
-  FocusNode productQuantityFN = FocusNode();
-  FocusNode productDiscountFN = FocusNode();
-
-  void dropDownOnChanged(String? onChanged) {
-    setState(() {
-      dropDownItemValue = onChanged!;
-    });
-  }
+  final productType = FocusNode();
+  final productNameFN = FocusNode();
+  final productDescriptionFN = FocusNode();
+  final productPriceFN = FocusNode();
+  final productQuantityFN = FocusNode();
+  final productDiscountFN = FocusNode();
 
   //================================== CONTROLLERS ====================================\\
-  TextEditingController productNameEC = TextEditingController();
-  TextEditingController productDescriptionEC = TextEditingController();
-  TextEditingController productPriceEC = TextEditingController();
-  TextEditingController productQuantityEC = TextEditingController();
-  TextEditingController productSubCategoryEC = TextEditingController();
-  TextEditingController productTypeEC = TextEditingController();
+  final scrollController = ScrollController();
+  final productNameEC = TextEditingController();
+  final productDescriptionEC = TextEditingController();
+  final productPriceEC = TextEditingController();
+  final productQuantityEC = TextEditingController();
+  final productSubCategoryEC = TextEditingController();
+  final productTypeEC = TextEditingController();
 
   //================================== VALUES ====================================\\
 
@@ -87,10 +81,10 @@ class _AddProductState extends State<AddProduct> {
   //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker _picker = ImagePicker();
-  File? selectedImage;
+  File? selectedImages;
 
   //================================== FUNCTIONS ====================================\\
-  _submit() async {
+  submit() async {
     Map data = {
       'name': productNameEC.text,
       'description': productDescriptionEC.text,
@@ -104,7 +98,7 @@ class _AddProductState extends State<AddProduct> {
       'is_trending': true,
     };
     await FormController.instance.postAuthstream(Api.baseUrl + Api.addProduct,
-        data, {'product_image': selectedImage}, 'addProduct');
+        data, {'product_image': selectedImages}, 'addProduct');
     if (FormController.instance.status.toString().startsWith('2')) {
       ProductController.instance.reset();
       Get.offAll(
@@ -124,7 +118,7 @@ class _AddProductState extends State<AddProduct> {
       source: source,
     );
     if (image != null) {
-      selectedImage = File(image.path);
+      selectedImages = File(image.path);
       setState(() {});
     }
   }
@@ -141,26 +135,12 @@ class _AddProductState extends State<AddProduct> {
       ),
       child: Column(
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Upload Product Image",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              InkWell(
-                borderRadius: BorderRadius.circular(80),
-                onTap: () {},
-                child: Icon(
-                  Icons.delete_rounded,
-                  color: kAccentColor,
-                ),
-              ),
-            ],
+          const Text(
+            "Upload Product Images",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           kSizedBox,
           Row(
@@ -185,16 +165,16 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       ),
-                      child: Icon(
-                        Icons.camera_alt_rounded,
-                        color: kAccentColor,
+                      child: Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.camera,
+                          color: kAccentColor,
+                        ),
                       ),
                     ),
                   ),
                   kHalfSizedBox,
-                  const Text(
-                    "Camera",
-                  ),
+                  const Text("Camera"),
                 ],
               ),
               kWidthSizedBox,
@@ -217,9 +197,11 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       ),
-                      child: Icon(
-                        Icons.image,
-                        color: kAccentColor,
+                      child: Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.solidImages,
+                          color: kAccentColor,
+                        ),
                       ),
                     ),
                   ),
@@ -238,31 +220,46 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
       child: Scaffold(
         backgroundColor: kPrimaryColor,
         appBar: MyAppBar(
-          title: "Add New Item ",
+          title: "Add New Product",
           backgroundColor: kPrimaryColor,
-          elevation: 0.0,
+          elevation: 0,
           actions: const [],
+        ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(color: kPrimaryColor),
+          child: GetBuilder<ProductController>(
+            init: ProductController(),
+            builder: (saving) {
+              return MyElevatedButton(
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    submit();
+                  }
+                },
+                isLoading: saving.isLoad.value,
+                title: "Save",
+              );
+            },
+          ),
         ),
         body: SafeArea(
           maintainBottomViewPadding: true,
-          child: Container(
-            // color: kAccentColor,
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(
-              kDefaultPadding,
-            ),
+          child: Scrollbar(
             child: ListView(
+              controller: scrollController,
               physics: const BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
+              padding: const EdgeInsets.all(kDefaultPadding),
               children: [
                 Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -301,7 +298,7 @@ class _AddProductState extends State<AddProduct> {
                           ),
                           child: Align(
                             alignment: Alignment.center,
-                            child: selectedImage == null
+                            child: selectedImages == null
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -310,24 +307,22 @@ class _AddProductState extends State<AddProduct> {
                                       ),
                                       kHalfSizedBox,
                                       const Text(
-                                        'Upload product image',
+                                        'Upload product images',
                                         style: TextStyle(
-                                          color: Color(
-                                            0xFF808080,
-                                          ),
+                                          color: kTextBlackColor,
                                           fontSize: 12,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ],
                                   )
-                                : selectedImage == null
+                                : selectedImages == null
                                     ? const SizedBox()
                                     : GridTile(
                                         child: Container(
                                           decoration: BoxDecoration(
                                             image: DecorationImage(
-                                              image: FileImage(selectedImage!),
+                                              image: FileImage(selectedImages!),
                                             ),
                                           ),
                                         ),
@@ -336,10 +331,10 @@ class _AddProductState extends State<AddProduct> {
                         ),
                       ),
                       kSizedBox,
-                      Text(
+                      const Text(
                         'Product Type',
                         style: TextStyle(
-                          color: kTextGreyColor,
+                          color: kTextBlackColor,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.32,
@@ -348,7 +343,6 @@ class _AddProductState extends State<AddProduct> {
                       kHalfSizedBox,
                       ItemDropDownMenu(
                         itemEC: productTypeEC,
-                        mediaWidth: mediaWidth - 40,
                         hintText: "Choose product type",
                         dropdownMenuEntries: _productType == null
                             ? [
@@ -361,10 +355,10 @@ class _AddProductState extends State<AddProduct> {
                                 .toList(),
                       ),
                       kSizedBox,
-                      Text(
+                      const Text(
                         'Sub Category',
                         style: TextStyle(
-                          color: kTextGreyColor,
+                          color: kTextBlackColor,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.32,
@@ -373,8 +367,7 @@ class _AddProductState extends State<AddProduct> {
                       kHalfSizedBox,
                       ItemDropDownMenu(
                         itemEC: productSubCategoryEC,
-                        mediaWidth: mediaWidth - 40,
-                        hintText: "Choose a Sub Category",
+                        hintText: "Select a category for your product",
                         dropdownMenuEntries: _subCategory == null
                             ? [
                                 const DropdownMenuEntry(
@@ -389,7 +382,7 @@ class _AddProductState extends State<AddProduct> {
                       const Text(
                         'Product Name',
                         style: TextStyle(
-                          color: Color(0xFF575757),
+                          color: kTextBlackColor,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.32,
@@ -415,39 +408,10 @@ class _AddProductState extends State<AddProduct> {
                         },
                       ),
                       kSizedBox,
-                      Text(
-                        'Product Description',
-                        style: TextStyle(
-                          color: kTextGreyColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.32,
-                        ),
-                      ),
-                      kHalfSizedBox,
-                      MyTextFormField(
-                        controller: productDescriptionEC,
-                        focusNode: productDescriptionFN,
-                        hintText: "Enter the description here",
-                        textInputAction: TextInputAction.next,
-                        textInputType: TextInputType.text,
-                        textCapitalization: TextCapitalization.sentences,
-                        validator: (value) {
-                          if (value == null || value!.isEmpty) {
-                            productDescriptionFN.requestFocus();
-                            return "Enter the product name";
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          productDescriptionEC.text = value!;
-                        },
-                      ),
-                      kSizedBox,
-                      Text(
+                      const Text(
                         'Unit Price',
                         style: TextStyle(
-                          color: kTextGreyColor,
+                          color: kTextBlackColor,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.32,
@@ -457,7 +421,7 @@ class _AddProductState extends State<AddProduct> {
                       MyTextFormField(
                         controller: productPriceEC,
                         focusNode: productPriceFN,
-                        hintText: "Enter the unit price here",
+                        hintText: "Enter the unit price here (NGN)",
                         textInputAction: TextInputAction.next,
                         textInputType: TextInputType.number,
                         textCapitalization: TextCapitalization.sentences,
@@ -478,10 +442,10 @@ class _AddProductState extends State<AddProduct> {
                         },
                       ),
                       kSizedBox,
-                      Text(
+                      const Text(
                         'Quantity',
                         style: TextStyle(
-                          color: kTextGreyColor,
+                          color: kTextBlackColor,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           letterSpacing: -0.32,
@@ -512,15 +476,36 @@ class _AddProductState extends State<AddProduct> {
                         },
                       ),
                       kSizedBox,
-                      MyElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
-                            _submit();
-                          }
-                        },
-                        title: "Save",
+                      const Text(
+                        'Product Description',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.32,
+                        ),
                       ),
+                      kHalfSizedBox,
+                      MyMessageTextFormField(
+                        controller: productDescriptionEC,
+                        focusNode: productDescriptionFN,
+                        hintText: "Enter the description here",
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.text,
+                        maxLines: 10,
+                        maxLength: 1000,
+                        validator: (value) {
+                          if (value == null || value!.isEmpty) {
+                            productDescriptionFN.requestFocus();
+                            return "Enter the product name";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          productDescriptionEC.text = value!;
+                        },
+                      ),
+                      kSizedBox,
                     ],
                   ),
                 ),

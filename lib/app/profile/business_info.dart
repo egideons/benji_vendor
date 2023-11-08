@@ -7,6 +7,7 @@ import 'package:benji_vendor/app/profile/my_blue_textformfield.dart';
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
@@ -118,6 +119,12 @@ class _BusinessInfoState extends State<BusinessInfo> {
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
+    if (selectedCoverImage == null) {
+      ApiProcessorController.errorSnack("Please select a cover image");
+    }
+    if (selectedLogoImage == null) {
+      ApiProcessorController.errorSnack("Please select a logo image");
+    }
     final userId = UserController.instance.user.value.id;
     Map data = {
       "shop_name": shopNameEC.text,
@@ -127,6 +134,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
       "weekClosingHours": vendorMonToFriClosingHoursEC.text,
       "satClosingHours": vendorSatClosingHoursEC.text,
       "sunWeekClosingHours": vendorSunClosingHoursEC.text,
+      // "businessDescription": businessBioEC.text,
     };
     consoleLog("$data");
     consoleLog(Api.baseUrl + Api.changeVendor + userId.toString());
@@ -819,8 +827,13 @@ class _BusinessInfoState extends State<BusinessInfo> {
                         MyMessageTextFormField(
                           controller: businessBioEC,
                           validator: (value) {
-                            return null;
+                            if (value == null || value!.isEmpty) {
+                              return "Field cannot be empty";
+                            } else {
+                              return null;
+                            }
                           },
+                          onSaved: (value) {},
                           textInputAction: TextInputAction.go,
                           focusNode: businessBioFN,
                           hintText: "Business description",
