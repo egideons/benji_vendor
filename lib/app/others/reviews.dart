@@ -5,6 +5,7 @@ import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/providers/constants.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class ReviewsPage extends StatefulWidget {
@@ -18,21 +19,78 @@ const List<int> stars = [5, 4, 3, 2, 1];
 
 class _ReviewsPageState extends State<ReviewsPage> {
   @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(scrollListener);
+  }
+
+  final scrollController = ScrollController();
+
+  bool isScrollToTopBtnVisible = false;
+
+  Future<void> scrollToTop() async {
+    await scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    setState(() {
+      isScrollToTopBtnVisible = false;
+    });
+  }
+
+  Future<void> scrollListener() async {
+    if (scrollController.position.pixels >= 200 &&
+        isScrollToTopBtnVisible != true) {
+      setState(() {
+        isScrollToTopBtnVisible = true;
+      });
+    }
+    if (scrollController.position.pixels < 200 &&
+        isScrollToTopBtnVisible == true) {
+      setState(() {
+        isScrollToTopBtnVisible = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
     return Scaffold(
       appBar: MyAppBar(
         backgroundColor: kPrimaryColor,
-        title: "Reviews",
+        title: "User Reviews",
         actions: const [],
         elevation: 0.0,
       ),
-      backgroundColor: kPrimaryColor,
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+      floatingActionButton: isScrollToTopBtnVisible
+          ? FloatingActionButton(
+              onPressed: scrollToTop,
+              mini: true,
+              backgroundColor: kAccentColor,
+              enableFeedback: true,
+              mouseCursor: SystemMouseCursors.click,
+              tooltip: "Scroll to top",
+              hoverColor: kAccentColor,
+              hoverElevation: 50.0,
+              child: const Icon(Icons.keyboard_arrow_up),
+            )
+          : const SizedBox(),
+      body: Scrollbar(
         child: ListView(
           shrinkWrap: true,
+          padding: const EdgeInsets.all(kDefaultPadding),
+          physics: const BouncingScrollPhysics(),
+          controller: scrollController,
           children: [
+            const Text(
+              "Reviews & Ratings",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
             kSizedBox,
             Container(
               width: media.width,
@@ -58,13 +116,6 @@ class _ReviewsPageState extends State<ReviewsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Reviews & Ratings",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       vertical: kDefaultPadding,
@@ -134,9 +185,9 @@ class _ReviewsPageState extends State<ReviewsPage> {
                                           },
                                           child: Row(
                                             children: [
-                                              const Icon(
-                                                Icons.star,
-                                                size: 20,
+                                              const FaIcon(
+                                                FontAwesomeIcons.solidStar,
+                                                size: 18,
                                               ),
                                               const SizedBox(
                                                 width: kDefaultPadding * 0.2,
@@ -187,7 +238,8 @@ class _ReviewsPageState extends State<ReviewsPage> {
                               itemCount: controller.reviews.length,
                               itemBuilder: (BuildContext context, int index) =>
                                   CostumerReviewCard(
-                                      rating: controller.reviews[index]),
+                                rating: controller.reviews[index],
+                              ),
                             ),
                   kSizedBox,
                 ],

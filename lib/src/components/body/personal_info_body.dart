@@ -58,7 +58,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
 //==========================================================================================\\
 
 //======================================== ALL VARIABLES ==============================================\\
-  final String countryDialCode = '234';
+  final String countryDialCode = '+234';
   String? userCode;
   String? latitude;
   String? longitude;
@@ -150,7 +150,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
       firstName: firstNameEC.text,
       lastName: lastNameEC.text,
       address: mapsLocationEC.text,
-      phone: userPhoneNumberEC.text,
+      phone: countryDialCode + userPhoneNumberEC.text,
       latitude: latitude,
       longitude: longitude,
     );

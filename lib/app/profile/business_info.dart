@@ -62,7 +62,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
   final _formKey = GlobalKey<FormState>();
 
   //===================== BOOL VALUES =======================\\
-  bool _isScrollToTopBtnVisible = false;
+  bool isScrollToTopBtnVisible = false;
   final bool _savingChanges = false;
   final bool _typing = false;
 
@@ -338,21 +338,21 @@ class _BusinessInfoState extends State<BusinessInfo> {
       curve: Curves.easeInOut,
     );
     setState(() {
-      _isScrollToTopBtnVisible = false;
+      isScrollToTopBtnVisible = false;
     });
   }
 
   Future<void> _scrollListener() async {
     if (scrollController.position.pixels >= 100 &&
-        _isScrollToTopBtnVisible != true) {
+        isScrollToTopBtnVisible != true) {
       setState(() {
-        _isScrollToTopBtnVisible = true;
+        isScrollToTopBtnVisible = true;
       });
     }
     if (scrollController.position.pixels < 100 &&
-        _isScrollToTopBtnVisible == true) {
+        isScrollToTopBtnVisible == true) {
       setState(() {
-        _isScrollToTopBtnVisible = false;
+        isScrollToTopBtnVisible = false;
       });
     }
   }
@@ -388,7 +388,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
             ),
           );
         }),
-        floatingActionButton: _isScrollToTopBtnVisible
+        floatingActionButton: isScrollToTopBtnVisible
             ? FloatingActionButton(
                 onPressed: _scrollToTop,
                 mini: deviceType(media.width) > 2 ? false : true,
