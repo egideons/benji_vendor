@@ -6,6 +6,7 @@ import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
@@ -35,11 +36,11 @@ class _AddProductState extends State<AddProduct> {
     super.initState();
     isToggled = true;
     getSubCategories().then((value) {
-      _subCategory = value;
+      subCategoryEC = value;
       setState(() {});
     });
     getProductType().then((value) {
-      _productType = value;
+      productType = value;
       setState(() {});
     });
   }
@@ -49,7 +50,7 @@ class _AddProductState extends State<AddProduct> {
   final formKey = GlobalKey<FormState>();
 
   //================================== FOCUS NODES ====================================\\
-  final productType = FocusNode();
+  final productTypeFN = FocusNode();
   final productNameFN = FocusNode();
   final productDescriptionFN = FocusNode();
   final productPriceFN = FocusNode();
@@ -67,8 +68,8 @@ class _AddProductState extends State<AddProduct> {
 
   //================================== VALUES ====================================\\
 
-  List<SubCategory>? _subCategory;
-  List<ProductTypeModel>? _productType;
+  List<SubCategory>? subCategoryEC;
+  List<ProductTypeModel>? productType;
 
   bool isChecked = false;
   bool isChecked2 = false;
@@ -85,6 +86,15 @@ class _AddProductState extends State<AddProduct> {
 
   //================================== FUNCTIONS ====================================\\
   submit() async {
+    if (selectedImages == null) {
+      ApiProcessorController.errorSnack("Please select product images");
+    }
+    if (productType == null || productTypeEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please select a product type");
+    }
+    if (subCategoryEC == null || productSubCategoryEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please select a category");
+    }
     Map data = {
       'name': productNameEC.text,
       'description': productDescriptionEC.text,
@@ -113,7 +123,7 @@ class _AddProductState extends State<AddProduct> {
     }
   }
 
-  pickProductImage(ImageSource source) async {
+  pickProductImages(ImageSource source) async {
     final XFile? image = await _picker.pickImage(
       source: source,
     );
@@ -124,16 +134,14 @@ class _AddProductState extends State<AddProduct> {
   }
 
   //=========================== WIDGETS ====================================\\
-  Widget uploadProductImage() {
+  Widget uploadProductImages() {
     return Container(
-      height: 140,
+      height: 160,
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.only(
-        left: kDefaultPadding,
-        right: kDefaultPadding,
-        bottom: kDefaultPadding,
-      ),
+      padding: const EdgeInsets.all(10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           const Text(
             "Upload Product Images",
@@ -150,7 +158,7 @@ class _AddProductState extends State<AddProduct> {
                 children: [
                   InkWell(
                     onTap: () {
-                      pickProductImage(ImageSource.camera);
+                      pickProductImages(ImageSource.camera);
                     },
                     borderRadius: BorderRadius.circular(100),
                     child: Container(
@@ -182,7 +190,7 @@ class _AddProductState extends State<AddProduct> {
                 children: [
                   InkWell(
                     onTap: () {
-                      pickProductImage(ImageSource.gallery);
+                      pickProductImages(ImageSource.gallery);
                     },
                     borderRadius: BorderRadius.circular(100),
                     child: Container(
@@ -279,7 +287,7 @@ class _AddProductState extends State<AddProduct> {
                               ),
                             ),
                             enableDrag: true,
-                            builder: ((builder) => uploadProductImage()),
+                            builder: ((builder) => uploadProductImages()),
                           );
                         },
                         splashColor: kAccentColor.withOpacity(0.1),
@@ -344,12 +352,12 @@ class _AddProductState extends State<AddProduct> {
                       ItemDropDownMenu(
                         itemEC: productTypeEC,
                         hintText: "Choose product type",
-                        dropdownMenuEntries: _productType == null
+                        dropdownMenuEntries: productType == null
                             ? [
                                 const DropdownMenuEntry(
                                     value: 'Loading...', label: 'Loading...')
                               ]
-                            : _productType!
+                            : productType!
                                 .map((item) => DropdownMenuEntry(
                                     value: item.id, label: item.name))
                                 .toList(),
@@ -368,12 +376,12 @@ class _AddProductState extends State<AddProduct> {
                       ItemDropDownMenu(
                         itemEC: productSubCategoryEC,
                         hintText: "Select a category for your product",
-                        dropdownMenuEntries: _subCategory == null
+                        dropdownMenuEntries: subCategoryEC == null
                             ? [
                                 const DropdownMenuEntry(
                                     value: 'Loading...', label: 'Loading...')
                               ]
-                            : _subCategory!
+                            : subCategoryEC!
                                 .map((item) => DropdownMenuEntry(
                                     value: item.id, label: item.name))
                                 .toList(),
@@ -467,7 +475,7 @@ class _AddProductState extends State<AddProduct> {
                             return "Enter the quantity";
                           }
                           if (!RegExp(quantityPattern).hasMatch(value)) {
-                            return "Most be number";
+                            return "Must be number";
                           }
                           return null;
                         },

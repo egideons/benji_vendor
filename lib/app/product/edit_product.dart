@@ -13,8 +13,10 @@ import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../src/components/input/my_message_textformfield.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
@@ -47,10 +49,7 @@ class _EditProductState extends State<EditProduct> {
   //============================= ALL VARIABLES =====================================\\
 
   //===================== GLOBAL KEYS =======================\\
-  final _formKey = GlobalKey<FormState>();
-
-  //================================== DROP DOWN BUTTONFORMFIELD ====================================\\
-  String dropDownItemValue = "Food";
+  final formKey = GlobalKey<FormState>();
 
   //================================== FOCUS NODES ====================================\\
   FocusNode productType = FocusNode();
@@ -59,12 +58,6 @@ class _EditProductState extends State<EditProduct> {
   FocusNode productPriceFN = FocusNode();
   FocusNode productQuantityFN = FocusNode();
   FocusNode productDiscountFN = FocusNode();
-
-  void dropDownOnChanged(String? onChanged) {
-    setState(() {
-      dropDownItemValue = onChanged!;
-    });
-  }
 
   //================================== CONTROLLERS ====================================\\
   TextEditingController productNameEC = TextEditingController();
@@ -114,7 +107,7 @@ class _EditProductState extends State<EditProduct> {
         'addProduct');
   }
 
-  pickProductImage(ImageSource source) async {
+  pickProductImages(ImageSource source) async {
     final XFile? image = await _picker.pickImage(
       source: source,
     );
@@ -125,37 +118,21 @@ class _EditProductState extends State<EditProduct> {
   }
 
   //=========================== WIDGETS ====================================\\
-  Widget uploadProductImage() {
+  Widget uploadProductImages() {
     return Container(
-      height: 140,
+      height: 160,
       width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.only(
-        left: kDefaultPadding,
-        right: kDefaultPadding,
-        bottom: kDefaultPadding,
-      ),
+      padding: const EdgeInsets.all(10),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Upload Product Image",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              InkWell(
-                borderRadius: BorderRadius.circular(80),
-                onTap: () {},
-                child: Icon(
-                  Icons.delete_rounded,
-                  color: kAccentColor,
-                ),
-              ),
-            ],
+          const Text(
+            "Upload Product Images",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           kSizedBox,
           Row(
@@ -165,7 +142,7 @@ class _EditProductState extends State<EditProduct> {
                 children: [
                   InkWell(
                     onTap: () {
-                      pickProductImage(ImageSource.camera);
+                      pickProductImages(ImageSource.camera);
                     },
                     borderRadius: BorderRadius.circular(100),
                     child: Container(
@@ -180,16 +157,16 @@ class _EditProductState extends State<EditProduct> {
                           ),
                         ),
                       ),
-                      child: Icon(
-                        Icons.camera_alt_rounded,
-                        color: kAccentColor,
+                      child: Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.camera,
+                          color: kAccentColor,
+                        ),
                       ),
                     ),
                   ),
                   kHalfSizedBox,
-                  const Text(
-                    "Camera",
-                  ),
+                  const Text("Camera"),
                 ],
               ),
               kWidthSizedBox,
@@ -197,7 +174,7 @@ class _EditProductState extends State<EditProduct> {
                 children: [
                   InkWell(
                     onTap: () {
-                      pickProductImage(ImageSource.gallery);
+                      pickProductImages(ImageSource.gallery);
                     },
                     borderRadius: BorderRadius.circular(100),
                     child: Container(
@@ -212,9 +189,11 @@ class _EditProductState extends State<EditProduct> {
                           ),
                         ),
                       ),
-                      child: Icon(
-                        Icons.image,
-                        color: kAccentColor,
+                      child: Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.solidImages,
+                          color: kAccentColor,
+                        ),
                       ),
                     ),
                   ),
@@ -233,7 +212,6 @@ class _EditProductState extends State<EditProduct> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaWidth = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
       child: Scaffold(
@@ -257,7 +235,7 @@ class _EditProductState extends State<EditProduct> {
               scrollDirection: Axis.vertical,
               children: [
                 Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -277,7 +255,7 @@ class _EditProductState extends State<EditProduct> {
                               ),
                             ),
                             enableDrag: true,
-                            builder: ((builder) => uploadProductImage()),
+                            builder: ((builder) => uploadProductImages()),
                           );
                         },
                         splashColor: kAccentColor.withOpacity(0.1),
@@ -409,35 +387,6 @@ class _EditProductState extends State<EditProduct> {
                       ),
                       kSizedBox,
                       Text(
-                        'Product Description',
-                        style: TextStyle(
-                          color: kTextGreyColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.32,
-                        ),
-                      ),
-                      kHalfSizedBox,
-                      MyTextFormField(
-                        controller: productDescriptionEC,
-                        focusNode: productDescriptionFN,
-                        hintText: "Enter the description here",
-                        textInputAction: TextInputAction.next,
-                        textInputType: TextInputType.text,
-                        textCapitalization: TextCapitalization.sentences,
-                        validator: (value) {
-                          if (value == null || value!.isEmpty) {
-                            productDescriptionFN.requestFocus();
-                            return "Enter the product name";
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          productDescriptionEC.text = value!;
-                        },
-                      ),
-                      kSizedBox,
-                      Text(
                         'Unit Price',
                         style: TextStyle(
                           color: kTextGreyColor,
@@ -487,7 +436,7 @@ class _EditProductState extends State<EditProduct> {
                         hintText: "Enter the quantity here",
                         textInputAction: TextInputAction.done,
                         textInputType: TextInputType.number,
-                        textCapitalization: TextCapitalization.sentences,
+                        textCapitalization: TextCapitalization.characters,
                         validator: (value) {
                           const quantityPattern = r'^[1-9]\d*$';
 
@@ -496,7 +445,7 @@ class _EditProductState extends State<EditProduct> {
                             return "Enter the quantity";
                           }
                           if (!RegExp(quantityPattern).hasMatch(value)) {
-                            return "Most be number";
+                            return "Must be number";
                           }
                           return null;
                         },
@@ -505,10 +454,40 @@ class _EditProductState extends State<EditProduct> {
                         },
                       ),
                       kSizedBox,
+                      const Text(
+                        'Product Description',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.32,
+                        ),
+                      ),
+                      kHalfSizedBox,
+                      MyMessageTextFormField(
+                        controller: productDescriptionEC,
+                        focusNode: productDescriptionFN,
+                        hintText: "Enter the description here",
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.text,
+                        maxLines: 10,
+                        maxLength: 1000,
+                        validator: (value) {
+                          if (value == null || value!.isEmpty) {
+                            productDescriptionFN.requestFocus();
+                            return "Enter the product name";
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          productDescriptionEC.text = value!;
+                        },
+                      ),
+                      kSizedBox,
                       MyElevatedButton(
                         onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            _formKey.currentState!.save();
+                          if (formKey.currentState!.validate()) {
+                            formKey.currentState!.save();
                             _submit();
                           }
                         },
