@@ -300,10 +300,6 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             kHalfSizedBox,
                             GetBuilder<ReviewsController>(
-                              initState: (state) {
-                                ReviewsController.instance.getReviews(0);
-                                ReviewsController.instance.getAvgRating();
-                              },
                               builder: (controller) => Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.start,

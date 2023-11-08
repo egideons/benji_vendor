@@ -150,9 +150,7 @@ class _OrdersState extends State<Orders> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 15,
-                      ),
+                      const SizedBox(width: 15),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: checkStatus(
@@ -189,36 +187,33 @@ class _OrdersState extends State<Orders> {
                   await OrderController.instance.getOrdersBy();
                 },
                 init: OrderController(),
-                builder: (controller) =>
-                    controller.isLoad.value && controller.orderList.isEmpty
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              color: kAccentColor,
-                            ),
-                          )
-                        : controller.orderList.isEmpty
-                            ? const EmptyCard()
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: controller.orderList.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return InkWell(
-                                    onTap: orderDetails,
-                                    child: VendorsOrderContainer(
-                                      order: controller.orderList[index],
-                                    ),
-                                  );
-                                },
-                              ),
+                builder: (controller) => controller.isLoad.value &&
+                        controller.orderList.isEmpty
+                    ? Center(
+                        child: CircularProgressIndicator(color: kAccentColor),
+                      )
+                    : controller.orderList.isEmpty
+                        ? const EmptyCard()
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: controller.orderList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return InkWell(
+                                onTap: orderDetails,
+                                child: VendorsOrderContainer(
+                                  order: controller.orderList[index],
+                                ),
+                              );
+                            },
+                          ),
               ),
               GetBuilder<OrderController>(
                 builder: (controller) => Column(
                   children: [
                     controller.isLoadMore.value
                         ? Center(
-                            child: CircularProgressIndicator(
-                              color: kAccentColor,
-                            ),
+                            child:
+                                CircularProgressIndicator(color: kAccentColor),
                           )
                         : const SizedBox(),
                     controller.loadedAll.value &&
