@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
@@ -18,6 +19,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../src/components/input/my_message_textformfield.dart';
+import '../../src/controller/error_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
@@ -34,16 +36,19 @@ class _EditProductState extends State<EditProduct> {
   void initState() {
     super.initState();
     isToggled = true;
+    // productTypeEC.text = widget.product
+    productImages = Api.baseUrl + baseImage + widget.product.productImage;
+    subCategoryEC.text = widget.product.subCategory.name;
     productNameEC.text = widget.product.name;
     productDescriptionEC.text = widget.product.description;
     productPriceEC.text = widget.product.price.toString();
     productQuantityEC.text = widget.product.quantityAvailable.toString();
     getSubCategories().then((value) {
-      _subCategory = value;
+      subCategory = value;
       setState(() {});
     });
     getProductType().then((value) {
-      _productType = value;
+      productType = value;
       setState(() {});
     });
   }
@@ -53,7 +58,7 @@ class _EditProductState extends State<EditProduct> {
   final formKey = GlobalKey<FormState>();
 
   //================================== FOCUS NODES ====================================\\
-  FocusNode productType = FocusNode();
+  FocusNode productTypeFN = FocusNode();
   FocusNode productNameFN = FocusNode();
   FocusNode productDescriptionFN = FocusNode();
   FocusNode productPriceFN = FocusNode();
@@ -65,13 +70,13 @@ class _EditProductState extends State<EditProduct> {
   TextEditingController productDescriptionEC = TextEditingController();
   TextEditingController productPriceEC = TextEditingController();
   TextEditingController productQuantityEC = TextEditingController();
-  TextEditingController productSubCategoryEC = TextEditingController();
+  TextEditingController subCategoryEC = TextEditingController();
   TextEditingController productTypeEC = TextEditingController();
 
   //================================== VALUES ====================================\\
 
-  List<SubCategory>? _subCategory;
-  List<ProductTypeModel>? _productType;
+  List<SubCategory>? subCategory;
+  List<ProductTypeModel>? productType;
 
   bool isChecked = false;
   bool isChecked2 = false;
@@ -83,17 +88,24 @@ class _EditProductState extends State<EditProduct> {
 
   //=========================== IMAGE PICKER ====================================\\
 
-  final ImagePicker _picker = ImagePicker();
-  File? selectedImage;
+  final ImagePicker picker = ImagePicker();
+  File? selectedImages;
+  String? productImages;
 
   //================================== FUNCTIONS ====================================\\
   submit() async {
+    // if (selectedImages == ) {
+    //   ApiProcessorController.errorSnack("Please select product images");
+    // }
+    if (subCategoryEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please select a category");
+    }
     Map data = {
       'name': productNameEC.text,
       'description': productDescriptionEC.text,
       'price': productPriceEC.text,
       'quantity_available': productQuantityEC.text,
-      'sub_category_id': productSubCategoryEC.text,
+      'sub_category_id': subCategoryEC.text,
       'product_type': productTypeEC.text,
       'vendor_id': UserController.instance.user.value.id,
       'is_available': true,
@@ -104,16 +116,16 @@ class _EditProductState extends State<EditProduct> {
     await FormController.instance.postAuthstream(
         Api.baseUrl + Api.changeProduct + widget.product.id,
         data,
-        {'product_image': selectedImage},
+        {'product_image': selectedImages},
         'addProduct');
   }
 
   pickProductImages(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(
+    final XFile? image = await picker.pickImage(
       source: source,
     );
     if (image != null) {
-      selectedImage = File(image.path);
+      selectedImages = File(image.path);
       setState(() {});
     }
   }
@@ -199,9 +211,7 @@ class _EditProductState extends State<EditProduct> {
                     ),
                   ),
                   kHalfSizedBox,
-                  const Text(
-                    "Gallery",
-                  ),
+                  const Text("Gallery"),
                 ],
               ),
             ],
@@ -220,7 +230,7 @@ class _EditProductState extends State<EditProduct> {
         appBar: MyAppBar(
           title: "Edit Product ",
           backgroundColor: kPrimaryColor,
-          elevation: 0.0,
+          elevation: 0,
           actions: const [],
         ),
         bottomNavigationBar: Container(
@@ -288,33 +298,29 @@ class _EditProductState extends State<EditProduct> {
                         ),
                         child: Align(
                           alignment: Alignment.center,
-                          child: selectedImage == null
+                          child: selectedImages == null
                               ? Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.asset(
-                                      "assets/icons/image-upload.png",
-                                    ),
+                                    MyImage(url: productImages!),
                                     kHalfSizedBox,
                                     const Text(
-                                      'Upload product image',
+                                      'Upload product images',
                                       style: TextStyle(
-                                        color: Color(
-                                          0xFF808080,
-                                        ),
+                                        color: kTextBlackColor,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
                                   ],
                                 )
-                              : selectedImage == null
+                              : selectedImages == null
                                   ? const SizedBox()
                                   : GridTile(
                                       child: Container(
                                         decoration: BoxDecoration(
                                           image: DecorationImage(
-                                            image: FileImage(selectedImage!),
+                                            image: FileImage(selectedImages!),
                                           ),
                                         ),
                                       ),
@@ -323,10 +329,10 @@ class _EditProductState extends State<EditProduct> {
                       ),
                     ),
                     kSizedBox,
-                    Text(
+                    const Text(
                       'Product Type',
                       style: TextStyle(
-                        color: kTextGreyColor,
+                        color: kTextBlackColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.32,
@@ -336,21 +342,24 @@ class _EditProductState extends State<EditProduct> {
                     ItemDropDownMenu(
                       itemEC: productTypeEC,
                       hintText: "Choose product type",
-                      dropdownMenuEntries: _productType == null
+                      dropdownMenuEntries: productType == null
                           ? [
                               const DropdownMenuEntry(
-                                  value: 'Loading...', label: 'Loading...')
+                                value: 'Loading...',
+                                label: 'Loading...',
+                                enabled: false,
+                              )
                             ]
-                          : _productType!
+                          : productType!
                               .map((item) => DropdownMenuEntry(
                                   value: item.id, label: item.name))
                               .toList(),
                     ),
                     kSizedBox,
-                    Text(
+                    const Text(
                       'Product Category',
                       style: TextStyle(
-                        color: kTextGreyColor,
+                        color: kTextBlackColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.32,
@@ -358,14 +367,17 @@ class _EditProductState extends State<EditProduct> {
                     ),
                     kHalfSizedBox,
                     ItemDropDownMenu(
-                      itemEC: productSubCategoryEC,
-                      hintText: "Choose a Sub Category",
-                      dropdownMenuEntries: _subCategory == null
+                      itemEC: subCategoryEC,
+                      hintText: subCategoryEC.text,
+                      dropdownMenuEntries: subCategory == null
                           ? [
                               const DropdownMenuEntry(
-                                  value: 'Loading...', label: 'Loading...')
+                                value: 'Loading...',
+                                label: 'Loading...',
+                                enabled: false,
+                              )
                             ]
-                          : _subCategory!
+                          : subCategory!
                               .map((item) => DropdownMenuEntry(
                                   value: item.id, label: item.name))
                               .toList(),
@@ -374,7 +386,7 @@ class _EditProductState extends State<EditProduct> {
                     const Text(
                       'Product Name',
                       style: TextStyle(
-                        color: Color(0xFF575757),
+                        color: kTextBlackColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.32,
@@ -400,10 +412,10 @@ class _EditProductState extends State<EditProduct> {
                       },
                     ),
                     kSizedBox,
-                    Text(
+                    const Text(
                       'Unit Price',
                       style: TextStyle(
-                        color: kTextGreyColor,
+                        color: kTextBlackColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.32,
@@ -434,10 +446,10 @@ class _EditProductState extends State<EditProduct> {
                       },
                     ),
                     kSizedBox,
-                    Text(
+                    const Text(
                       'Quantity',
                       style: TextStyle(
-                        color: kTextGreyColor,
+                        color: kTextBlackColor,
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.32,
