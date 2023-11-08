@@ -9,6 +9,7 @@ import 'package:benji_vendor/app/product/view_product.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
@@ -46,14 +47,22 @@ class _DashboardState extends State<Dashboard> {
 //=================================== ALL VARIABLES =====================================\\
   int? numberOfNotifications;
   final scrollController = ScrollController();
+  bool refreshing = false;
 
-//=================================== DROP DOWN BUTTON =====================================\\
-
-  String dropDownItemValue = "Daily";
-
-  void dropDownOnChanged(String? newValue) {
+  Future<void> handleRefresh() async {
     setState(() {
-      dropDownItemValue = newValue!;
+      refreshing = true;
+    });
+    await Future.delayed(
+      const Duration(milliseconds: 500),
+      () {
+        ProductController.instance.getProducts();
+        OrderController.instance.getOrdersBy();
+        ReviewsController.instance.getAvgRating();
+      },
+    );
+    setState(() {
+      refreshing = false;
     });
   }
 
@@ -147,275 +156,284 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return MyResponsivePadding(
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: addProduct,
-          elevation: 20.0,
-          backgroundColor: kAccentColor,
-          foregroundColor: kPrimaryColor,
-          tooltip: "Add a product",
-          child: const FaIcon(FontAwesomeIcons.plus),
-        ),
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: kPrimaryColor,
-          titleSpacing: kDefaultPadding / 2,
-          elevation: 0.0,
-          title: GetBuilder<UserController>(
-            builder: (controller) => Row(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  child: GestureDetector(
-                    onTap: profilePage,
-                    child: CircleAvatar(
-                      maxRadius: 25,
-                      minRadius: 20,
-                      backgroundColor: kTransparentColor,
-                      backgroundImage: const AssetImage(
-                          'assets/images/profile/avatar-image.jpg'),
-                      child: ClipOval(
-                        child: MyImage(url: controller.user.value.shopImage),
-                      ),
-                    ),
-                  ),
-                ),
-                AppBarVendor(
-                  vendorName: controller.user.value.username,
-                  vendorLocation: controller.user.value.code,
-                ),
-              ],
-            ),
+      child: MyLiquidRefresh(
+        onRefresh: handleRefresh,
+        child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: addProduct,
+            elevation: 20.0,
+            backgroundColor: kAccentColor,
+            foregroundColor: kPrimaryColor,
+            tooltip: "Add a product",
+            child: const FaIcon(FontAwesomeIcons.plus),
           ),
-          actions: [
-            Stack(
-              children: [
-                IconButton(
-                  iconSize: 20,
-                  onPressed: toNotificationsPage,
-                  icon: FaIcon(
-                    FontAwesomeIcons.bell,
-                    color: kAccentColor,
-                    size: 30,
-                  ),
-                ),
-                Positioned(
-                  top: 10,
-                  right: 5,
-                  child: Container(
-                    height: 20,
-                    width: 20,
-                    decoration: ShapeDecoration(
-                      color: kAccentColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        formatNumber(numberOfNotifications!),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 9,
-                          fontWeight: FontWeight.w400,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: kPrimaryColor,
+            titleSpacing: kDefaultPadding / 2,
+            elevation: 0.0,
+            title: GetBuilder<UserController>(
+              builder: (controller) => Row(
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                    child: GestureDetector(
+                      onTap: profilePage,
+                      child: CircleAvatar(
+                        maxRadius: 25,
+                        minRadius: 20,
+                        backgroundColor: kTransparentColor,
+                        backgroundImage: const AssetImage(
+                            'assets/images/profile/avatar-image.jpg'),
+                        child: ClipOval(
+                          child: MyImage(url: controller.user.value.shopImage),
                         ),
                       ),
                     ),
                   ),
-                )
-              ],
+                  AppBarVendor(
+                    vendorName: controller.user.value.username,
+                    vendorLocation: controller.user.value.code,
+                  ),
+                ],
+              ),
             ),
-            kWidthSizedBox,
-          ],
-        ),
-        body: SafeArea(
-          maintainBottomViewPadding: true,
-          child: Scrollbar(
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
-              controller: scrollController,
-              scrollDirection: Axis.vertical,
-              padding: const EdgeInsets.all(kDefaultPadding),
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    OrdersContainer(
-                      onTap: () => ordersPage(StatusType.delivered),
-                      numberOfOrders: OrderController
-                          .instance.status.value.index
-                          .toString(),
-                      typeOfOrders: "Delivered",
+            actions: [
+              Stack(
+                children: [
+                  IconButton(
+                    iconSize: 20,
+                    onPressed: toNotificationsPage,
+                    icon: FaIcon(
+                      FontAwesomeIcons.bell,
+                      color: kAccentColor,
+                      size: 30,
                     ),
-                    OrdersContainer(
-                      onTap: () => ordersPage(StatusType.pending),
-                      numberOfOrders: OrderController
-                          .instance.status.value.index
-                          .toString(),
-                      typeOfOrders: "Pending",
-                    ),
-                  ],
-                ),
-                kSizedBox,
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ),
+                  // Positioned(
+                  //   top: 10,
+                  //   right: 5,
+                  //   child: Container(
+                  //     height: 20,
+                  //     width: 20,
+                  //     decoration: ShapeDecoration(
+                  //       color: kAccentColor,
+                  //       shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(100),
+                  //       ),
+                  //     ),
+                  //     child: Center(
+                  //       child: Text(
+                  //         formatNumber(numberOfNotifications!),
+                  //         textAlign: TextAlign.center,
+                  //         style: const TextStyle(
+                  //           fontSize: 9,
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // )
+                ],
+              ),
+              kWidthSizedBox,
+            ],
+          ),
+          body: SafeArea(
+            maintainBottomViewPadding: true,
+            child: Scrollbar(
+              child: refreshing
+                  ? CircularProgressIndicator(color: kAccentColor)
+                  : ListView(
+                      physics: const BouncingScrollPhysics(),
+                      controller: scrollController,
+                      scrollDirection: Axis.vertical,
+                      padding: const EdgeInsets.all(kDefaultPadding),
                       children: [
-                        Text(
-                          'Reviews',
-                          style: TextStyle(
-                            color: kTextGreyColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: reviewsPage,
-                          child: Text(
-                            'See All Reviews',
-                            style: TextStyle(
-                              color: kAccentColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              decoration: TextDecoration.underline,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OrdersContainer(
+                              onTap: () => ordersPage(StatusType.delivered),
+                              numberOfOrders: OrderController
+                                  .instance.status.value.index
+                                  .toString(),
+                              typeOfOrders: "Delivered",
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    kHalfSizedBox,
-                    GetBuilder<ReviewsController>(
-                      initState: (state) {
-                        ReviewsController.instance.getReviews(0);
-                        ReviewsController.instance.getAvgRating();
-                      },
-                      builder: (controller) => Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.solidStar,
-                            color: kStarColor,
-                            size: 20,
-                          ),
-                          kHalfWidthSizedBox,
-                          Text(
-                            controller.avgRating.value
-                                .toPrecision(1)
-                                .toString(),
-                            style: TextStyle(
-                              color: kStarColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
+                            OrdersContainer(
+                              onTap: () => ordersPage(StatusType.pending),
+                              numberOfOrders: OrderController
+                                  .instance.status.value.index
+                                  .toString(),
+                              typeOfOrders: "Pending",
                             ),
-                          ),
-                          kWidthSizedBox,
-                          Text(
-                            'You have ${formatNumber(controller.total.value)} Reviews',
-                            style: const TextStyle(
-                              color: Color(0xFF32343E),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    kSizedBox,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Latest Products',
-                          style: TextStyle(
-                            color: kTextGreyColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          ],
                         ),
-                        TextButton(
-                          onPressed: productsPage,
-                          child: Text(
-                            'See All',
-                            style: TextStyle(
-                              color: kAccentColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    kHalfSizedBox,
-                  ],
-                ),
-                SizedBox(
-                    height: 180,
-                    child: GetBuilder<ProductController>(
-                        initState: (state) async =>
-                            await ProductController.instance.getProducts(),
-                        builder: (controller) {
-                          return controller.isLoad.value
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                    color: kAccentColor,
+                        kSizedBox,
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Reviews',
+                                  style: TextStyle(
+                                    color: kTextGreyColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                )
-                              : controller.products.isEmpty
-                                  ? const EmptyCard()
-                                  : ListView.builder(
-                                      physics: const BouncingScrollPhysics(),
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount:
-                                          min(controller.products.length, 5),
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return Container(
-                                          margin: const EdgeInsets.only(
-                                            right: kDefaultPadding,
-                                            bottom: kDefaultPadding / 1.5,
+                                ),
+                                TextButton(
+                                  onPressed: reviewsPage,
+                                  child: Text(
+                                    'See All Reviews',
+                                    style: TextStyle(
+                                      color: kAccentColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            kHalfSizedBox,
+                            GetBuilder<ReviewsController>(
+                              builder: (controller) => Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  FaIcon(
+                                    FontAwesomeIcons.solidStar,
+                                    color: kStarColor,
+                                    size: 20,
+                                  ),
+                                  kHalfWidthSizedBox,
+                                  Text(
+                                    controller.avgRating.value
+                                        .toPrecision(1)
+                                        .toString(),
+                                    style: TextStyle(
+                                      color: kStarColor,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  kWidthSizedBox,
+                                  Text(
+                                    'You have ${formatNumber(controller.total.value)} Reviews',
+                                    style: const TextStyle(
+                                      color: Color(0xFF32343E),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            kSizedBox,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Latest Products',
+                                  style: TextStyle(
+                                    color: kTextGreyColor,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: productsPage,
+                                  child: Text(
+                                    'See All',
+                                    style: TextStyle(
+                                      color: kAccentColor,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            kHalfSizedBox,
+                          ],
+                        ),
+                        SizedBox(
+                            height: 180,
+                            child: GetBuilder<ProductController>(
+                                initState: (state) async =>
+                                    await ProductController.instance
+                                        .getProducts(),
+                                builder: (controller) {
+                                  return controller.isLoad.value
+                                      ? Center(
+                                          child: CircularProgressIndicator(
+                                            color: kAccentColor,
                                           ),
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.41,
-                                          decoration: ShapeDecoration(
-                                            color: kGreyColor1,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                kDefaultPadding,
-                                              ),
-                                            ),
-                                            shadows: const [
-                                              BoxShadow(
-                                                color: Color(
-                                                  0x0F000000,
-                                                ),
-                                                blurRadius: 24,
-                                                offset: Offset(
-                                                  0,
-                                                  4,
-                                                ),
-                                                spreadRadius: 4,
-                                              )
-                                            ],
-                                          ),
-                                          child: InkWell(
-                                            onTap: () => productDetail(
-                                                controller.products[index]),
-                                            child: MyImage(
-                                                url: controller.products[index]
-                                                    .productImage),
-                                          ),
-                                        );
-                                      },
-                                    );
-                        })),
-              ],
+                                        )
+                                      : controller.products.isEmpty
+                                          ? const EmptyCard()
+                                          : ListView.builder(
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: min(
+                                                  controller.products.length,
+                                                  5),
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return Container(
+                                                  margin: const EdgeInsets.only(
+                                                    right: kDefaultPadding,
+                                                    bottom:
+                                                        kDefaultPadding / 1.5,
+                                                  ),
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.41,
+                                                  decoration: ShapeDecoration(
+                                                    color: kGreyColor1,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                        kDefaultPadding,
+                                                      ),
+                                                    ),
+                                                    shadows: const [
+                                                      BoxShadow(
+                                                        color: Color(
+                                                          0x0F000000,
+                                                        ),
+                                                        blurRadius: 24,
+                                                        offset: Offset(
+                                                          0,
+                                                          4,
+                                                        ),
+                                                        spreadRadius: 4,
+                                                      )
+                                                    ],
+                                                  ),
+                                                  child: InkWell(
+                                                    onTap: () => productDetail(
+                                                        controller
+                                                            .products[index]),
+                                                    child: MyImage(
+                                                        url: controller
+                                                            .products[index]
+                                                            .productImage),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                })),
+                      ],
+                    ),
             ),
           ),
         ),

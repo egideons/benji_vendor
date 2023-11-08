@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
-import 'package:benji_vendor/src/model/order.dart';
+import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -16,13 +16,22 @@ class OrderController extends GetxController {
   }
 
   var isLoad = false.obs;
-  var orderList = <Order>[].obs;
+  var orderList = <OrderModel>[].obs;
 
   var loadedAll = false.obs;
   var isLoadMore = false.obs;
   var loadNum = 10.obs;
   var total = 0.obs;
   var status = StatusType.delivered.obs;
+
+  deleteCachedOrders() {
+    orderList.value = <OrderModel>[];
+    loadedAll.value = false;
+    isLoadMore.value = false;
+    loadNum.value = 10;
+    total.value = 0;
+    status.value = StatusType.delivered;
+  }
 
   Future<void> scrollListener(scrollController) async {
     if (OrderController.instance.loadedAll.value) {
@@ -82,10 +91,10 @@ class OrderController extends GetxController {
       update();
       return;
     }
-    List<Order> data = [];
+    List<OrderModel> data = [];
     try {
       data = (jsonDecode(responseData)['items'] as List)
-          .map((e) => Order.fromJson(e))
+          .map((e) => OrderModel.fromJson(e))
           .toList();
       orderList.value += data;
     } catch (e) {

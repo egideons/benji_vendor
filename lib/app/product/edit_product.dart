@@ -14,6 +14,7 @@ import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../src/components/input/my_message_textformfield.dart';
@@ -86,7 +87,7 @@ class _EditProductState extends State<EditProduct> {
   File? selectedImage;
 
   //================================== FUNCTIONS ====================================\\
-  _submit() async {
+  submit() async {
     Map data = {
       'name': productNameEC.text,
       'description': productDescriptionEC.text,
@@ -222,282 +223,285 @@ class _EditProductState extends State<EditProduct> {
           elevation: 0.0,
           actions: const [],
         ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(color: kPrimaryColor),
+          child: GetBuilder<FormController>(
+            init: FormController(),
+            builder: (saving) {
+              return MyElevatedButton(
+                onPressed: () async {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    submit();
+                  }
+                },
+                isLoading: saving.isLoad.value,
+                title: "Save",
+              );
+            },
+          ),
+        ),
         body: SafeArea(
           maintainBottomViewPadding: true,
-          child: Container(
-            // color: kAccentColor,
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(
-              kDefaultPadding,
-            ),
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              children: [
-                Form(
-                  key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            elevation: 20,
-                            barrierColor: kBlackColor.withOpacity(0.8),
-                            showDragHandle: true,
-                            useSafeArea: true,
-                            isDismissible: true,
-                            isScrollControlled: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(kDefaultPadding),
-                              ),
-                            ),
-                            enableDrag: true,
-                            builder: ((builder) => uploadProductImages()),
-                          );
-                        },
-                        splashColor: kAccentColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(16),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 144,
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                width: 0.50,
-                                color: Color(0xFFE6E6E6),
-                              ),
-                              borderRadius: BorderRadius.circular(16),
+          child: ListView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(kDefaultPadding),
+            children: [
+              Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          elevation: 20,
+                          barrierColor: kBlackColor.withOpacity(0.8),
+                          showDragHandle: true,
+                          useSafeArea: true,
+                          isDismissible: true,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(kDefaultPadding),
                             ),
                           ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: selectedImage == null
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        "assets/icons/image-upload.png",
-                                      ),
-                                      kHalfSizedBox,
-                                      const Text(
-                                        'Upload product image',
-                                        style: TextStyle(
-                                          color: Color(
-                                            0xFF808080,
-                                          ),
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
+                          enableDrag: true,
+                          builder: ((builder) => uploadProductImages()),
+                        );
+                      },
+                      splashColor: kAccentColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 144,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                              width: 0.50,
+                              color: Color(0xFFE6E6E6),
+                            ),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: selectedImage == null
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      "assets/icons/image-upload.png",
+                                    ),
+                                    kHalfSizedBox,
+                                    const Text(
+                                      'Upload product image',
+                                      style: TextStyle(
+                                        color: Color(
+                                          0xFF808080,
                                         ),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
                                       ),
-                                    ],
-                                  )
-                                : selectedImage == null
-                                    ? const SizedBox()
-                                    : GridTile(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: FileImage(selectedImage!),
-                                            ),
+                                    ),
+                                  ],
+                                )
+                              : selectedImage == null
+                                  ? const SizedBox()
+                                  : GridTile(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: FileImage(selectedImage!),
                                           ),
                                         ),
                                       ),
-                          ),
+                                    ),
                         ),
                       ),
-                      kSizedBox,
-                      Text(
-                        'Product Type',
-                        style: TextStyle(
-                          color: kTextGreyColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.32,
-                        ),
+                    ),
+                    kSizedBox,
+                    Text(
+                      'Product Type',
+                      style: TextStyle(
+                        color: kTextGreyColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.32,
                       ),
-                      kHalfSizedBox,
-                      ItemDropDownMenu(
-                        itemEC: productTypeEC,
-                        hintText: "Choose product type",
-                        dropdownMenuEntries: _productType == null
-                            ? [
-                                const DropdownMenuEntry(
-                                    value: 'Loading...', label: 'Loading...')
-                              ]
-                            : _productType!
-                                .map((item) => DropdownMenuEntry(
-                                    value: item.id, label: item.name))
-                                .toList(),
+                    ),
+                    kHalfSizedBox,
+                    ItemDropDownMenu(
+                      itemEC: productTypeEC,
+                      hintText: "Choose product type",
+                      dropdownMenuEntries: _productType == null
+                          ? [
+                              const DropdownMenuEntry(
+                                  value: 'Loading...', label: 'Loading...')
+                            ]
+                          : _productType!
+                              .map((item) => DropdownMenuEntry(
+                                  value: item.id, label: item.name))
+                              .toList(),
+                    ),
+                    kSizedBox,
+                    Text(
+                      'Product Category',
+                      style: TextStyle(
+                        color: kTextGreyColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.32,
                       ),
-                      kSizedBox,
-                      Text(
-                        'Sub Category',
-                        style: TextStyle(
-                          color: kTextGreyColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.32,
-                        ),
+                    ),
+                    kHalfSizedBox,
+                    ItemDropDownMenu(
+                      itemEC: productSubCategoryEC,
+                      hintText: "Choose a Sub Category",
+                      dropdownMenuEntries: _subCategory == null
+                          ? [
+                              const DropdownMenuEntry(
+                                  value: 'Loading...', label: 'Loading...')
+                            ]
+                          : _subCategory!
+                              .map((item) => DropdownMenuEntry(
+                                  value: item.id, label: item.name))
+                              .toList(),
+                    ),
+                    kSizedBox,
+                    const Text(
+                      'Product Name',
+                      style: TextStyle(
+                        color: Color(0xFF575757),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.32,
                       ),
-                      kHalfSizedBox,
-                      ItemDropDownMenu(
-                        itemEC: productSubCategoryEC,
-                        hintText: "Choose a Sub Category",
-                        dropdownMenuEntries: _subCategory == null
-                            ? [
-                                const DropdownMenuEntry(
-                                    value: 'Loading...', label: 'Loading...')
-                              ]
-                            : _subCategory!
-                                .map((item) => DropdownMenuEntry(
-                                    value: item.id, label: item.name))
-                                .toList(),
+                    ),
+                    kHalfSizedBox,
+                    MyTextFormField(
+                      controller: productNameEC,
+                      focusNode: productNameFN,
+                      hintText: "Enter the product name here",
+                      textInputAction: TextInputAction.next,
+                      textInputType: TextInputType.name,
+                      textCapitalization: TextCapitalization.sentences,
+                      validator: (value) {
+                        if (value == null || value!.isEmpty) {
+                          productNameFN.requestFocus();
+                          return "Enter the product name";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        productNameEC.text = value!;
+                      },
+                    ),
+                    kSizedBox,
+                    Text(
+                      'Unit Price',
+                      style: TextStyle(
+                        color: kTextGreyColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.32,
                       ),
-                      kSizedBox,
-                      const Text(
-                        'Product Name',
-                        style: TextStyle(
-                          color: Color(0xFF575757),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.32,
-                        ),
-                      ),
-                      kHalfSizedBox,
-                      MyTextFormField(
-                        controller: productNameEC,
-                        focusNode: productNameFN,
-                        hintText: "Enter the product name here",
-                        textInputAction: TextInputAction.next,
-                        textInputType: TextInputType.name,
-                        textCapitalization: TextCapitalization.sentences,
-                        validator: (value) {
-                          if (value == null || value!.isEmpty) {
-                            productNameFN.requestFocus();
-                            return "Enter the product name";
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          productNameEC.text = value!;
-                        },
-                      ),
-                      kSizedBox,
-                      Text(
-                        'Unit Price',
-                        style: TextStyle(
-                          color: kTextGreyColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.32,
-                        ),
-                      ),
-                      kHalfSizedBox,
-                      MyTextFormField(
-                        controller: productPriceEC,
-                        focusNode: productPriceFN,
-                        hintText: "Enter the unit price here",
-                        textInputAction: TextInputAction.next,
-                        textInputType: TextInputType.number,
-                        textCapitalization: TextCapitalization.sentences,
-                        validator: (value) {
-                          const pricePattern = r'^\d+(\.\d{2})?$';
-                          if (value == null || value!.isEmpty) {
-                            productPriceFN.requestFocus();
-                            return "Enter the unit price";
-                          }
+                    ),
+                    kHalfSizedBox,
+                    MyTextFormField(
+                      controller: productPriceEC,
+                      focusNode: productPriceFN,
+                      hintText: "Enter the unit price here",
+                      textInputAction: TextInputAction.next,
+                      textInputType: TextInputType.number,
+                      textCapitalization: TextCapitalization.sentences,
+                      validator: (value) {
+                        const pricePattern = r'^\d+(\.\d{2})?$';
+                        if (value == null || value!.isEmpty) {
+                          productPriceFN.requestFocus();
+                          return "Enter the unit price";
+                        }
 
-                          if (!RegExp(pricePattern).hasMatch(value)) {
-                            return "Incorrect format for price eg. 550.50";
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          productPriceEC.text = value!;
-                        },
+                        if (!RegExp(pricePattern).hasMatch(value)) {
+                          return "Incorrect format for price eg. 550.50";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        productPriceEC.text = value!;
+                      },
+                    ),
+                    kSizedBox,
+                    Text(
+                      'Quantity',
+                      style: TextStyle(
+                        color: kTextGreyColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.32,
                       ),
-                      kSizedBox,
-                      Text(
-                        'Quantity',
-                        style: TextStyle(
-                          color: kTextGreyColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.32,
-                        ),
-                      ),
-                      kHalfSizedBox,
-                      MyTextFormField(
-                        controller: productQuantityEC,
-                        focusNode: productQuantityFN,
-                        hintText: "Enter the quantity here",
-                        textInputAction: TextInputAction.done,
-                        textInputType: TextInputType.number,
-                        textCapitalization: TextCapitalization.characters,
-                        validator: (value) {
-                          const quantityPattern = r'^[1-9]\d*$';
+                    ),
+                    kHalfSizedBox,
+                    MyTextFormField(
+                      controller: productQuantityEC,
+                      focusNode: productQuantityFN,
+                      hintText: "Enter the quantity here",
+                      textInputAction: TextInputAction.done,
+                      textInputType: TextInputType.number,
+                      textCapitalization: TextCapitalization.characters,
+                      validator: (value) {
+                        const quantityPattern = r'^[1-9]\d*$';
 
-                          if (value == null || value!.isEmpty) {
-                            productQuantityFN.requestFocus();
-                            return "Enter the quantity";
-                          }
-                          if (!RegExp(quantityPattern).hasMatch(value)) {
-                            return "Must be number";
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          productQuantityEC.text = value!;
-                        },
+                        if (value == null || value!.isEmpty) {
+                          productQuantityFN.requestFocus();
+                          return "Enter the quantity";
+                        }
+                        if (!RegExp(quantityPattern).hasMatch(value)) {
+                          return "Must be number";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        productQuantityEC.text = value!;
+                      },
+                    ),
+                    kSizedBox,
+                    const Text(
+                      'Product Description',
+                      style: TextStyle(
+                        color: kTextBlackColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.32,
                       ),
-                      kSizedBox,
-                      const Text(
-                        'Product Description',
-                        style: TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.32,
-                        ),
-                      ),
-                      kHalfSizedBox,
-                      MyMessageTextFormField(
-                        controller: productDescriptionEC,
-                        focusNode: productDescriptionFN,
-                        hintText: "Enter the description here",
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.text,
-                        maxLines: 10,
-                        maxLength: 1000,
-                        validator: (value) {
-                          if (value == null || value!.isEmpty) {
-                            productDescriptionFN.requestFocus();
-                            return "Enter the product name";
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          productDescriptionEC.text = value!;
-                        },
-                      ),
-                      kSizedBox,
-                      MyElevatedButton(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            formKey.currentState!.save();
-                            _submit();
-                          }
-                        },
-                        title: "Save",
-                      ),
-                    ],
-                  ),
+                    ),
+                    kHalfSizedBox,
+                    MyMessageTextFormField(
+                      controller: productDescriptionEC,
+                      focusNode: productDescriptionFN,
+                      hintText: "Enter the description here",
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.text,
+                      maxLines: 10,
+                      maxLength: 1000,
+                      validator: (value) {
+                        if (value == null || value!.isEmpty) {
+                          productDescriptionFN.requestFocus();
+                          return "Enter the product name";
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {
+                        productDescriptionEC.text = value!;
+                      },
+                    ),
+                    kSizedBox,
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

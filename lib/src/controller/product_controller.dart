@@ -21,6 +21,13 @@ class ProductController extends GetxController {
   var isLoadMore = false.obs;
   var loadNum = 10.obs;
 
+  deleteCachedProducts() async {
+    products.value = <ProductModel>[];
+    loadedAll.value = false;
+    isLoadMore.value = false;
+    loadNum.value = 10;
+  }
+
   Future<void> scrollListener(scrollController) async {
     if (ProductController.instance.loadedAll.value) {
       return;
@@ -37,7 +44,7 @@ class ProductController extends GetxController {
   reset() {
     loadedAll.value = false;
     loadNum.value = 10;
-    products.value = [];
+    products.value = products.toList();
     update();
   }
 
