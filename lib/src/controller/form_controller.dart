@@ -165,4 +165,60 @@ class FormController extends GetxController {
     update([tag]);
     return;
   }
+
+  Future putAuthstream(
+      String url, Map data, Map<String, File?> files, String tag,
+      [String errorMsg = "Error occurred",
+      String successMsg = "Submitted successfully"]) async {
+    http.StreamedResponse? response;
+
+    isLoad.value = true;
+    update();
+    update([tag]);
+
+    var request = http.MultipartRequest("PUT", Uri.parse(url));
+    Map<String, String> headers = authHeader();
+
+    for (String key in files.keys) {
+      if (files[key] == null) {
+        continue;
+      }
+      request.files
+          .add(await http.MultipartFile.fromPath(key, files[key]!.path));
+    }
+    consoleLog("${request.files}");
+
+    request.headers.addAll(headers);
+
+    data.forEach((key, value) {
+      request.fields[key] = value.toString();
+    });
+    consoleLog('request.fields ${request.fields}');
+    consoleLog('stream response emma $response');
+    // try {
+    response = await request.send();
+    consoleLog('pass 1 $response');
+    status.value = response.statusCode;
+    consoleLog('pass 2');
+    final normalResp = await http.Response.fromStream(response);
+    consoleLog('pass 3 ${response.statusCode}');
+    consoleLog('resp response $normalResp');
+    consoleLog('stream response ${normalResp.body}');
+    if (response.statusCode == 200) {
+      ApiProcessorController.successSnack(successMsg);
+      isLoad.value = false;
+      update();
+      update([tag]);
+      return;
+    }
+    // } catch (e) {
+    //   response = null;
+    // }
+
+    ApiProcessorController.errorSnack(errorMsg);
+    isLoad.value = false;
+    update();
+    update([tag]);
+    return;
+  }
 }

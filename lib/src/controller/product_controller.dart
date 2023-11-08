@@ -25,6 +25,7 @@ class ProductController extends GetxController {
     products.value = <ProductModel>[];
     loadedAll.value = false;
     isLoadMore.value = false;
+    isLoad.value = false;
     loadNum.value = 10;
   }
 
