@@ -5,11 +5,14 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
+import '../controller/user_controller.dart';
 import '../model/create_vendor_model.dart';
 
 // API URLS AND HTTP CALL FUNCTIONS
 const baseURL = "https://resource.bgbot.app/api/v1";
 const baseImage = "https://resource.bgbot.app";
+
+var vendorId = UserController.instance.user.value.id;
 
 class Api {
   static const baseUrl = "https://resource.bgbot.app/api/v1";
@@ -17,7 +20,6 @@ class Api {
   static const user = "/auth/";
   static const changePassword = "/auth/changeNewPassword/";
   static const addProduct = "/products/addProduct";
-  static const changeVendor = "/vendors/changeVendor/";
   static const changeProduct = "/products/changeProduct/";
   static const deleteProduct = "/products/deleteProduct/";
   static const notification = "/vendors/";
@@ -25,6 +27,10 @@ class Api {
 //Vendor
   static const getSpecificVendor = "/vendors/getVendor/";
   static const vendorsOrderList = "/vendors/";
+  static const changeVendorPersonalProfile =
+      "/vendors/changeVendorpersonalprofile/";
+  static const changeVendorBusinessProfile =
+      "/vendors/changeVendorbusinessprofile/";
 
   //Rider
 

@@ -12,6 +12,7 @@ import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -35,8 +36,9 @@ class _EditProductState extends State<EditProduct> {
   void initState() {
     super.initState();
     isToggled = true;
-    // productTypeEC.text = widget.product
-    productImages = Api.baseUrl + baseImage + widget.product.productImage;
+    // productTypeEC.text = widget.product.name;
+    subCategoryEC.text = widget.product.subCategory.name;
+    productImages = widget.product.productImage;
     subCategoryEC.text = widget.product.subCategory.id;
     productNameEC.text = widget.product.name;
     productDescriptionEC.text = widget.product.description;
@@ -92,10 +94,10 @@ class _EditProductState extends State<EditProduct> {
   String? productImages;
 
   //================================== FUNCTIONS ====================================\\
-  submit() async {
-    // if (selectedImages == ) {
-    //   ApiProcessorController.errorSnack("Please select product images");
-    // }
+  Future<void> submit() async {
+    if (selectedImages == null && productImages!.isEmpty) {
+      ApiProcessorController.errorSnack("Please select product images");
+    }
     if (subCategoryEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please select a category");
     }
@@ -107,12 +109,13 @@ class _EditProductState extends State<EditProduct> {
       'sub_category_id': subCategoryEC.text,
     };
     Map<dynamic, dynamic> dataBody = {'data': data};
-    consoleLog("$data");
-    await FormController.instance.putAuthstream(
-        Api.baseUrl + Api.changeProduct + widget.product.id,
-        dataBody,
-        {'product_image': selectedImages},
-        'addProduct');
+    consoleLog("This is the data : $data");
+    await FormController.instance.postAuthstream(
+      Api.baseUrl + Api.changeProduct + widget.product.id,
+      dataBody,
+      {'product_image': selectedImages},
+      'editProduct',
+    );
   }
 
   pickProductImages(ImageSource source) async {
@@ -218,6 +221,7 @@ class _EditProductState extends State<EditProduct> {
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
       child: Scaffold(
@@ -253,76 +257,84 @@ class _EditProductState extends State<EditProduct> {
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(kDefaultPadding),
             children: [
+              Column(
+                children: [
+                  selectedImages == null
+                      ? Container(
+                          width: media.width,
+                          height: 144,
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                width: 0.50,
+                                color: Color(0xFFE6E6E6),
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: Center(
+                            child: MyImage(url: productImages!),
+                          ),
+                        )
+                      : GridTile(
+                          child: DottedBorder(
+                            color: kLightGreyColor,
+                            borderPadding: const EdgeInsets.all(3),
+                            padding: const EdgeInsets.all(kDefaultPadding / 2),
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(20),
+                            child: Container(
+                              width: media.width,
+                              height: 144,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: FileImage(selectedImages!),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                  kHalfSizedBox,
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        elevation: 20,
+                        barrierColor: kBlackColor.withOpacity(0.8),
+                        showDragHandle: true,
+                        useSafeArea: true,
+                        isDismissible: true,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(kDefaultPadding),
+                          ),
+                        ),
+                        enableDrag: true,
+                        builder: ((builder) => uploadProductImages()),
+                      );
+                    },
+                    splashColor: kAccentColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        'Upload product images',
+                        style: TextStyle(
+                          color: kAccentColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Form(
                 key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          elevation: 20,
-                          barrierColor: kBlackColor.withOpacity(0.8),
-                          showDragHandle: true,
-                          useSafeArea: true,
-                          isDismissible: true,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(kDefaultPadding),
-                            ),
-                          ),
-                          enableDrag: true,
-                          builder: ((builder) => uploadProductImages()),
-                        );
-                      },
-                      splashColor: kAccentColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 144,
-                        decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(
-                              width: 0.50,
-                              color: Color(0xFFE6E6E6),
-                            ),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: selectedImages == null
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    MyImage(url: productImages!),
-                                    kHalfSizedBox,
-                                    const Text(
-                                      'Upload product images',
-                                      style: TextStyle(
-                                        color: kTextBlackColor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : selectedImages == null
-                                  ? const SizedBox()
-                                  : GridTile(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: FileImage(selectedImages!),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                        ),
-                      ),
-                    ),
                     kSizedBox,
                     // const Text(
                     //   'Product Type',

@@ -26,10 +26,12 @@ class ProfileController extends GetxController {
 //===================== Update Personal Profile ==================\\
 
   Future<bool> updateProfile({
-    String? firstName,
+    String? profileLogo,
+    firstName,
     lastName,
     address,
     phone,
+    gender,
     latitude,
     longitude,
   }) async {
@@ -39,13 +41,16 @@ class ProfileController extends GetxController {
     isLoad.value = true;
     update();
 
-    var url = "${Api.baseUrl}/vendors/changeVendor/$uuid";
+    var url = "${Api.baseUrl}${Api.changeVendorPersonalProfile}$uuid";
+    consoleLog(url);
 
     Map body = {
+      "profileLogo": profileLogo ?? "",
       "phone": phone ?? "",
       "first_name": firstName ?? "",
       "last_name": lastName ?? "",
       "address": address ?? "",
+      "gender": gender ?? "",
       "latitude": latitude ?? "",
       "longitude": longitude ?? "",
     };
@@ -60,8 +65,8 @@ class ProfileController extends GetxController {
         },
         body: jsonEncode(body),
       );
-      consoleLog(response.body);
-      consoleLog("${response.statusCode}");
+      consoleLog("Response body: ${response.body}");
+      consoleLog("Response Status Code: ${response.statusCode}");
       consoleLog(response.body);
       //Print the response in the console:
       // will do this when the endpoint stops returning null (save the new data)

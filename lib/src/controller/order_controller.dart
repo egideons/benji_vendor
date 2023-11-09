@@ -83,7 +83,7 @@ class OrderController extends GetxController {
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?status=${statusTypeConverter(status.value)}";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?status=${statusTypeConverter(status.value)}&start=0&end=100";
     consoleLog(url);
     loadNum.value += 10;
     token = UserController.instance.user.value.token;
@@ -99,10 +99,11 @@ class OrderController extends GetxController {
     }
     List<OrderModel> data = [];
     try {
-      // data = (jsonDecode(responseData)['items'] as List)
-      data = (jsonDecode(responseData) as List)
+      data = (jsonDecode(responseData)['items'] as List)
+          // data = (jsonDecode(responseData) as List)
           .map((e) => OrderModel.fromJson(e))
           .toList();
+      consoleLog(data.toString());
       vendorsOrderList.value += data;
     } catch (e) {
       consoleLog(e.toString());

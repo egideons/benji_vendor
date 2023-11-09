@@ -36,6 +36,7 @@ class _ViewProductState extends State<ViewProduct> {
   void initState() {
     super.initState();
     scrollController.addListener(scrollListener);
+    consoleLog(widget.product.productImage);
   }
 
   bool deleteProductLoad = false;

@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field
 
+import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +15,6 @@ class VendorsOrderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int qty = 0;
     final media = MediaQuery.of(context).size;
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -50,27 +50,24 @@ class VendorsOrderContainer extends StatelessWidget {
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                  color: kPageSkeletonColor,
+                  color: kLightGreyColor,
                   borderRadius: BorderRadius.circular(16),
-                  image: const DecorationImage(
-                    image: AssetImage(
-                      "assets/icons/store.png",
-                    ),
-                    fit: BoxFit.cover,
-                  ),
+                  // image: const DecorationImage(
+                  //   image: AssetImage(
+                  //     "assets/icons/store.png",
+                  //   ),
+                  //   fit: BoxFit.cover,
+                  // ),
                 ),
                 child: CachedNetworkImage(
                   imageUrl: order.client.image ?? "",
                   fit: BoxFit.cover,
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      const Center(
-                          child: CupertinoActivityIndicator(
-                    color: kRedColor,
-                  )),
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.error,
-                    color: kRedColor,
+                      Center(
+                    child: CupertinoActivityIndicator(color: kAccentColor),
                   ),
+                  errorWidget: (context, url, error) =>
+                      Icon(Icons.error, color: kAccentColor),
                 ),
               ),
               kHalfSizedBox,
@@ -92,61 +89,53 @@ class VendorsOrderContainer extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: media.width * 0.6 - 2,
+                width: media.width - 150,
                 // color: kAccentColor,
                 child: Wrap(
                   alignment: WrapAlignment.spaceBetween,
                   children: [
-                    const SizedBox(
-                      child: Text(
-                        "Hot Kitchen",
-                        maxLines: 2,
-                        overflow: TextOverflow.clip,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
+                    Text(
+                      UserController.instance.user.value.shopName,
+                      maxLines: 2,
+                      overflow: TextOverflow.clip,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    SizedBox(
-                      child: Text(
-                        order.created,
-                        overflow: TextOverflow.clip,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
+                    const SizedBox(width: 5),
+                    Text(
+                      order.created,
+                      overflow: TextOverflow.clip,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
                       ),
                     )
                   ],
                 ),
               ),
               kHalfSizedBox,
-              Container(
-                color: kTransparentColor,
-                width: 150,
-                child: const Text(
-                  'order id or name etc.',
+              SizedBox(
+                width: media.width - 200,
+                child: Text(
+                  order.deliveryStatus,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
               kHalfSizedBox,
-              Container(
-                width: 150,
-                color: kTransparentColor,
+              SizedBox(
+                width: media.width - 200,
                 child: Text.rich(
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: "x $qty",
+                        text: "x ${order.orderitems.length.toString()}",
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w400,
@@ -168,15 +157,12 @@ class VendorsOrderContainer extends StatelessWidget {
               ),
               kHalfSizedBox,
               Container(
-                color: kLightGreyColor,
-                height: 1,
-                width: media.width * 0.5,
-              ),
+                  color: kLightGreyColor, height: 2, width: media.width - 150),
               kHalfSizedBox,
               SizedBox(
-                width: media.width * 0.5,
+                width: media.width - 150,
                 child: Text(
-                  "${order.client.lastName} ${order.client.firstName}",
+                  "${order.client.firstName} ${order.client.lastName}",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: const TextStyle(
@@ -188,7 +174,7 @@ class VendorsOrderContainer extends StatelessWidget {
               SizedBox(
                 width: media.width * 0.5,
                 child: const Text(
-                  'address',
+                  'Client\'s address',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(

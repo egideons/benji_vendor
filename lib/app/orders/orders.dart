@@ -87,156 +87,157 @@ class _OrdersState extends State<Orders> {
         ),
         body: SafeArea(
           maintainBottomViewPadding: true,
-          child: ListView(
-            padding: const EdgeInsets.all(kDefaultPadding),
-            physics: const BouncingScrollPhysics(),
-            controller: scrollController,
-            children: [
-              GetBuilder<OrderController>(
-                builder: (controller) => SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: checkStatus(
-                                  controller.status.value, StatusType.delivered)
-                              ? kAccentColor
-                              : const Color(0xFFF2F2F2),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(16))),
-                        ),
-                        onPressed: clickDelivered,
-                        child: Text(
-                          'Delivered',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: checkStatus(controller.status.value,
+          child: Scrollbar(
+            child: ListView(
+              padding: const EdgeInsets.all(kDefaultPadding),
+              physics: const BouncingScrollPhysics(),
+              controller: scrollController,
+              children: [
+                GetBuilder<OrderController>(
+                  builder: (controller) => SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: checkStatus(
+                                    controller.status.value,
                                     StatusType.delivered)
-                                ? kPrimaryColor
-                                : kGreyColor2,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
+                                ? kAccentColor
+                                : const Color(0xFFF2F2F2),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16))),
+                          ),
+                          onPressed: clickDelivered,
+                          child: Text(
+                            'Delivered',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: checkStatus(controller.status.value,
+                                      StatusType.delivered)
+                                  ? kPrimaryColor
+                                  : kGreyColor2,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 15),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: checkStatus(
-                                  controller.status.value, StatusType.pending)
-                              ? kAccentColor
-                              : const Color(0xFFF2F2F2),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(16))),
-                        ),
-                        onPressed: clickPending,
-                        child: Text(
-                          'Pending',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: checkStatus(
+                        const SizedBox(width: 15),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: checkStatus(
                                     controller.status.value, StatusType.pending)
-                                ? kPrimaryColor
-                                : kGreyColor2,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
+                                ? kAccentColor
+                                : const Color(0xFFF2F2F2),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16))),
+                          ),
+                          onPressed: clickPending,
+                          child: Text(
+                            'Pending',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: checkStatus(controller.status.value,
+                                      StatusType.pending)
+                                  ? kPrimaryColor
+                                  : kGreyColor2,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
-                      ),
-                      // const SizedBox(width: 15),
-                      // ElevatedButton(
-                      //   style: ElevatedButton.styleFrom(
-                      //     backgroundColor: checkStatus(
-                      //             controller.status.value, StatusType.cancelled)
-                      //         ? kAccentColor
-                      //         : kDefaultCategoryBackgroundColor,
-                      //     shape: const RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.all(
-                      //         Radius.circular(16),
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   onPressed: clickCancelled,
-                      //   child: Text(
-                      //     'Cancelled',
-                      //     textAlign: TextAlign.center,
-                      //     style: TextStyle(
-                      //       color: checkStatus(controller.status.value,
-                      //               StatusType.cancelled)
-                      //           ? kPrimaryColor
-                      //           : kGreyColor2,
-                      //       fontSize: 14,
-                      //       fontWeight: FontWeight.w400,
-                      //     ),
-                      //   ),
-                      // ),
+                        // const SizedBox(width: 15),
+                        // ElevatedButton(
+                        //   style: ElevatedButton.styleFrom(
+                        //     backgroundColor: checkStatus(
+                        //             controller.status.value, StatusType.cancelled)
+                        //         ? kAccentColor
+                        //         : kDefaultCategoryBackgroundColor,
+                        //     shape: const RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.all(
+                        //         Radius.circular(16),
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   onPressed: clickCancelled,
+                        //   child: Text(
+                        //     'Cancelled',
+                        //     textAlign: TextAlign.center,
+                        //     style: TextStyle(
+                        //       color: checkStatus(controller.status.value,
+                        //               StatusType.cancelled)
+                        //           ? kPrimaryColor
+                        //           : kGreyColor2,
+                        //       fontSize: 14,
+                        //       fontWeight: FontWeight.w400,
+                        //     ),
+                        //   ),
+                        // ),
+                      ],
+                    ),
+                  ),
+                ),
+                kSizedBox,
+                GetBuilder<OrderController>(
+                  builder: (controller) => controller.isLoad.value &&
+                          controller.vendorsOrderList.isEmpty
+                      ? Center(
+                          child: CircularProgressIndicator(color: kAccentColor),
+                        )
+                      : controller.vendorsOrderList.isEmpty
+                          ? const EmptyCard()
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: controller.vendorsOrderList.length,
+                              physics: const BouncingScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                return InkWell(
+                                  onTap: orderDetails,
+                                  borderRadius: BorderRadius.circular(12),
+                                  mouseCursor: SystemMouseCursors.click,
+                                  child: VendorsOrderContainer(
+                                    order: controller.vendorsOrderList[index],
+                                  ),
+                                );
+                              },
+                            ),
+                ),
+                GetBuilder<OrderController>(
+                  builder: (controller) => Column(
+                    children: [
+                      controller.isLoadMore.value
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                  color: kAccentColor),
+                            )
+                          : const SizedBox(),
+                      controller.loadedAll.value &&
+                              controller.vendorsOrderList.isNotEmpty
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  alignment: Alignment.center,
+                                  margin: const EdgeInsets.only(
+                                      top: 20, bottom: 20),
+                                  height: 10,
+                                  width: 10,
+                                  decoration: ShapeDecoration(
+                                      shape: const CircleBorder(),
+                                      color: kPageSkeletonColor),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(),
                     ],
                   ),
                 ),
-              ),
-              kSizedBox,
-              GetBuilder<OrderController>(
-                initState: (state) async {
-                  await OrderController.instance.getOrdersByStatus();
-                },
-                init: OrderController(),
-                builder: (controller) => controller.isLoad.value &&
-                        controller.vendorsOrderList.isEmpty
-                    ? Center(
-                        child: CircularProgressIndicator(color: kAccentColor),
-                      )
-                    : controller.vendorsOrderList.isEmpty
-                        ? const EmptyCard()
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: controller.vendorsOrderList.length,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index) {
-                              return InkWell(
-                                onTap: orderDetails,
-                                child: VendorsOrderContainer(
-                                  order: controller.vendorsOrderList[index],
-                                ),
-                              );
-                            },
-                          ),
-              ),
-              GetBuilder<OrderController>(
-                builder: (controller) => Column(
-                  children: [
-                    controller.isLoadMore.value
-                        ? Center(
-                            child:
-                                CircularProgressIndicator(color: kAccentColor),
-                          )
-                        : const SizedBox(),
-                    controller.loadedAll.value &&
-                            controller.vendorsOrderList.isNotEmpty
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                margin:
-                                    const EdgeInsets.only(top: 20, bottom: 20),
-                                height: 10,
-                                width: 10,
-                                decoration: ShapeDecoration(
-                                    shape: const CircleBorder(),
-                                    color: kPageSkeletonColor),
-                              ),
-                            ],
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
