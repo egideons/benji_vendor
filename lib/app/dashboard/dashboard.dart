@@ -44,7 +44,6 @@ class _DashboardState extends State<Dashboard> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       NotificationController.instance.runTask();
       OrderController.instance.getTotal();
-      OrderController.instance.getOrdersByStatus();
       ProductController.instance.getProducts();
       ReviewsController.instance.getReviews();
       ReviewsController.instance.getAvgRating();
@@ -65,9 +64,6 @@ class _DashboardState extends State<Dashboard> {
       const Duration(milliseconds: 500),
       () {
         NotificationController.instance.runTask();
-        OrderController.instance.getTotal();
-        OrderController.instance.getOrdersByStatus();
-        ProductController.instance.getProducts();
         ReviewsController.instance.getReviews();
         ReviewsController.instance.getAvgRating();
       },
@@ -271,23 +267,21 @@ class _DashboardState extends State<Dashboard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             GetBuilder<OrderController>(
-                              init: OrderController(),
-                              initState: (controller) {},
                               builder: (controller) {
                                 return OrdersContainer(
                                   onTap: () => ordersPage(StatusType.delivered),
-                                  numberOfOrders: "",
+                                  numberOfOrders: formatNumber(
+                                      controller.vendorsOrderList.length),
                                   typeOfOrders: "Delivered",
                                 );
                               },
                             ),
                             GetBuilder<OrderController>(
-                              init: OrderController(),
-                              initState: (controller) {},
                               builder: (controller) {
                                 return OrdersContainer(
                                   onTap: () => ordersPage(StatusType.pending),
-                                  numberOfOrders: "",
+                                  numberOfOrders: formatNumber(
+                                      controller.vendorsOrderList.length),
                                   typeOfOrders: "Pending",
                                 );
                               },

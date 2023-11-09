@@ -170,7 +170,6 @@ class FormController extends GetxController {
     // } catch (e) {
     //   response = null;
     // }
-    ApiProcessorController.errorSnack(errorMsg);
 
     isLoad.value = false;
     update();
