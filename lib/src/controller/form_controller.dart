@@ -9,6 +9,8 @@ import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import 'user_controller.dart';
+
 class FormController extends GetxController {
   static FormController get instance {
     return Get.find<FormController>();
@@ -113,7 +115,8 @@ class FormController extends GetxController {
   Future postAuthstream(
       String url, Map data, Map<String, File?> files, String tag,
       [String errorMsg = "Error occurred",
-      String successMsg = "Submitted successfully"]) async {
+      String successMsg = "Submitted successfully",
+      String noInternetMsg = "Please connect to the internet"]) async {
     http.StreamedResponse? response;
 
     isLoad.value = true;
@@ -122,44 +125,53 @@ class FormController extends GetxController {
 
     var request = http.MultipartRequest("POST", Uri.parse(url));
     Map<String, String> headers = authHeader();
-
-    for (String key in files.keys) {
-      if (files[key] == null) {
-        continue;
+    consoleLog("This is the image: ${files.toString()}");
+    try {
+      for (String key in files.keys) {
+        if (files[key] == null) {
+          continue;
+        }
+        request.files
+            .add(await http.MultipartFile.fromPath(key, files[key]!.path));
       }
-      request.files
-          .add(await http.MultipartFile.fromPath(key, files[key]!.path));
-    }
-    consoleLog("${request.files}");
+      consoleLog("${request.files}");
 
-    request.headers.addAll(headers);
+      request.headers.addAll(headers);
 
-    data.forEach((key, value) {
-      request.fields[key] = value.toString();
-    });
-    consoleLog('request.fields ${request.fields}');
-    consoleLog('stream response emma $response');
-    // try {
-    response = await request.send();
-    consoleLog('pass 1 $response');
-    status.value = response.statusCode;
-    consoleLog('pass 2');
-    final normalResp = await http.Response.fromStream(response);
-    consoleLog('pass 3 ${response.statusCode}');
-    consoleLog('resp response $normalResp');
-    consoleLog('stream response ${normalResp.body}');
-    if (response.statusCode == 200) {
-      ApiProcessorController.successSnack(successMsg);
-      isLoad.value = false;
-      update();
-      update([tag]);
-      return;
+      data.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+      consoleLog('request.fields ${request.fields}');
+      consoleLog('stream response emma $response');
+      // try {
+      response = await request.send();
+      consoleLog('pass 1 $response');
+      status.value = response.statusCode;
+      consoleLog('pass 2');
+      final normalResp = await http.Response.fromStream(response);
+      consoleLog('pass 3 ${response.statusCode}');
+      consoleLog('resp response $normalResp');
+      consoleLog('stream response ${normalResp.body}');
+      if (response.statusCode == 200) {
+        UserController.instance.saveUser(
+            normalResp.body, UserController.instance.user.value.token);
+        // UserController.instance.saveVendor(
+        //     normalResp.body, UserController.instance.user.value.token);
+        ApiProcessorController.successSnack(successMsg);
+        isLoad.value = false;
+        update();
+        update([tag]);
+      }
+    } on SocketException {
+      ApiProcessorController.errorSnack(noInternetMsg);
+    } catch (e) {
+      ApiProcessorController.errorSnack(errorMsg);
     }
     // } catch (e) {
     //   response = null;
     // }
-
     ApiProcessorController.errorSnack(errorMsg);
+
     isLoad.value = false;
     update();
     update([tag]);
@@ -171,7 +183,7 @@ class FormController extends GetxController {
       [String errorMsg = "Error occurred",
       String successMsg = "Submitted successfully"]) async {
     http.StreamedResponse? response;
-    print('we in the in');
+    consoleLog('we in the in');
     isLoad.value = true;
     update();
     update([tag]);

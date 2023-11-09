@@ -19,6 +19,8 @@ class UserModel {
   String lastName;
   String gender;
   String address;
+  String longitude;
+  String latitude;
   bool isOnline;
   double averageRating;
   int numberOfClientsReactions;
@@ -26,6 +28,13 @@ class UserModel {
   String shopImage;
   String profileLogo;
   BusinessType shopType;
+  String weekOpeningHours;
+  String weekClosingHours;
+  String satOpeningHours;
+  String satClosingHours;
+  String sunWeekOpeningHours;
+  String sunWeekClosingHours;
+  // String businessBio;
 
   UserModel({
     required this.id,
@@ -38,6 +47,8 @@ class UserModel {
     required this.lastName,
     required this.gender,
     required this.address,
+    required this.longitude,
+    required this.latitude,
     required this.isOnline,
     required this.averageRating,
     required this.numberOfClientsReactions,
@@ -45,6 +56,13 @@ class UserModel {
     required this.shopImage,
     required this.profileLogo,
     required this.shopType,
+    required this.weekOpeningHours,
+    required this.weekClosingHours,
+    required this.satOpeningHours,
+    required this.satClosingHours,
+    required this.sunWeekOpeningHours,
+    required this.sunWeekClosingHours,
+    // required this.businessBio,
   });
 
   factory UserModel.fromJson(Map<String, dynamic>? json) {
@@ -60,6 +78,8 @@ class UserModel {
       lastName: json["last_name"] ?? notAvailable,
       gender: json["gender"] ?? notAvailable,
       address: json["address"] ?? notAvailable,
+      longitude: json["longitude"] ?? notAvailable,
+      latitude: json["latitude"] ?? notAvailable,
       isOnline: json["is_online"] ?? false,
       averageRating: ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
       numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
@@ -67,6 +87,12 @@ class UserModel {
       shopImage: json["shop_image"] ?? '',
       profileLogo: json["profileLogo"] ?? '',
       shopType: BusinessType.fromJson(json["shop_type"]),
+      weekOpeningHours: json["weekOpeningHours"] ?? notAvailable,
+      weekClosingHours: json["weekClosingHours"] ?? notAvailable,
+      satOpeningHours: json["satOpeningHours"] ?? notAvailable,
+      satClosingHours: json["satClosingHours"] ?? notAvailable,
+      sunWeekOpeningHours: json["sunWeekOpeningHours"] ?? notAvailable,
+      sunWeekClosingHours: json["sunWeekClosingHours"] ?? notAvailable,
     );
   }
 
@@ -88,5 +114,12 @@ class UserModel {
         "shop_image": shopImage,
         "profileLogo": profileLogo,
         "shop_type": shopType.toJson(),
+        "weekOpeningHours": weekOpeningHours,
+        "weekClosingHours": weekClosingHours,
+        "satOpeningHours": satOpeningHours,
+        "satClosingHours": satClosingHours,
+        "sunWeekOpeningHours": sunWeekOpeningHours,
+        "sunWeekClosingHours": sunWeekClosingHours
+        // "businessBio": businessBio,
       };
 }

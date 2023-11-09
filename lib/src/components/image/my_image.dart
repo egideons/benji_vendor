@@ -11,16 +11,12 @@ class MyImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: url == null ? '' : '$baseImage$url',
+      imageUrl: url == null ? '' : baseImage + url!,
       fit: BoxFit.cover,
-      progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-          child: CupertinoActivityIndicator(
-        color: kAccentColor,
-      )),
-      errorWidget: (context, url, error) => Icon(
-        Icons.error,
-        color: kAccentColor,
-      ),
+      progressIndicatorBuilder: (context, url, downloadProgress) =>
+          Center(child: CupertinoActivityIndicator(color: kAccentColor)),
+      errorWidget: (context, url, error) =>
+          Icon(Icons.error, color: kAccentColor),
     );
   }
 }

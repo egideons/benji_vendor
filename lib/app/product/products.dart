@@ -24,7 +24,7 @@ class _ProductsState extends State<Products> {
   @override
   void initState() {
     super.initState();
-    Get.put(ProductController());
+    ProductController.instance.getProducts();
     scrollController.addListener(
         () => ProductController.instance.scrollListener(scrollController));
   }

@@ -23,9 +23,9 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   void logOut() async {
-    await UserController.instance.deleteUser();
-    await ProductController.instance.deleteCachedProducts();
-    await OrderController.instance.deleteCachedOrders();
+    UserController.instance.deleteUser();
+    ProductController.instance.deleteCachedProducts();
+    OrderController.instance.deleteCachedOrders();
     Get.offAll(
       () => const Login(),
       duration: const Duration(milliseconds: 300),

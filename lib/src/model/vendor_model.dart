@@ -8,8 +8,11 @@ import 'package:benji_vendor/src/model/business_type_model.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:get/get.dart';
 
-List<VendorModel> vendorModelFromJson(String str) => List<VendorModel>.from(
-    json.decode(str).map((x) => VendorModel.fromJson(x)));
+// vendorModelFromJson(String str) => List<VendorModel>.from(
+//     json.decode(str).map((x) => VendorModel.fromJson(x)));
+
+VendorModel vendorModelFromJson(String str) =>
+    VendorModel.fromJson(json.decode(str));
 
 String vendorModelToJson(List<VendorModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
@@ -31,6 +34,13 @@ class VendorModel {
   String shopImage;
   String profileLogo;
   BusinessType shopType;
+  String weekOpeningHours;
+  String weekClosingHours;
+  String satOpeningHours;
+  String satClosingHours;
+  String sunWeekOpeningHours;
+  String sunWeekClosingHours;
+  // String businessBio;
 
   VendorModel({
     required this.id,
@@ -49,6 +59,13 @@ class VendorModel {
     required this.shopImage,
     required this.profileLogo,
     required this.shopType,
+    required this.weekOpeningHours,
+    required this.weekClosingHours,
+    required this.satOpeningHours,
+    required this.satClosingHours,
+    required this.sunWeekOpeningHours,
+    required this.sunWeekClosingHours,
+    // required this.businessBio,
   });
 
   factory VendorModel.fromJson(Map<String, dynamic>? json) {
@@ -70,6 +87,13 @@ class VendorModel {
       shopImage: json["shop_image"] ?? '',
       profileLogo: json["profileLogo"] ?? '',
       shopType: BusinessType.fromJson(json["shop_type"]),
+      weekOpeningHours: json["weekOpeningHours"] ?? notAvailable,
+      weekClosingHours: json["weekClosingHours"] ?? notAvailable,
+      satOpeningHours: json["satOpeningHours"] ?? notAvailable,
+      satClosingHours: json["satClosingHours"] ?? notAvailable,
+      sunWeekOpeningHours: json["sunWeekOpeningHours"] ?? notAvailable,
+      sunWeekClosingHours: json["sunWeekClosingHours"] ?? notAvailable,
+      // businessBio: json["businessBio"] ?? notAvailable,
     );
   }
 
@@ -90,5 +114,12 @@ class VendorModel {
         "shop_image": shopImage,
         "profileLogo": profileLogo,
         "shop_type": shopType.toJson(),
+        "weekOpeningHours": weekOpeningHours,
+        "weekClosingHours": weekClosingHours,
+        "satOpeningHours": satOpeningHours,
+        "satClosingHours": satClosingHours,
+        "sunWeekOpeningHours": sunWeekOpeningHours,
+        "sunWeekClosingHours": sunWeekClosingHours
+        // "businessBio": businessBio,
       };
 }

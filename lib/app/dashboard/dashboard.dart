@@ -15,6 +15,7 @@ import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
+import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -40,7 +41,14 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    Get.put(NotificationController());
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      NotificationController.instance.runTask();
+      OrderController.instance.getTotal();
+      OrderController.instance.getOrdersByStatus();
+      ProductController.instance.getProducts();
+      ReviewsController.instance.getReviews();
+      ReviewsController.instance.getAvgRating();
+    });
     numberOfNotifications = NotificationController.instance.notification.length;
   }
 
@@ -56,8 +64,11 @@ class _DashboardState extends State<Dashboard> {
     await Future.delayed(
       const Duration(milliseconds: 500),
       () {
-        ProductController.instance.getProducts();
+        NotificationController.instance.runTask();
+        OrderController.instance.getTotal();
         OrderController.instance.getOrdersByStatus();
+        ProductController.instance.getProducts();
+        ReviewsController.instance.getReviews();
         ReviewsController.instance.getAvgRating();
       },
     );
@@ -155,6 +166,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return MyResponsivePadding(
       child: MyLiquidRefresh(
         onRefresh: handleRefresh,
@@ -184,10 +196,14 @@ class _DashboardState extends State<Dashboard> {
                         maxRadius: 25,
                         minRadius: 20,
                         backgroundColor: kTransparentColor,
-                        backgroundImage: const AssetImage(
-                            'assets/images/profile/avatar-image.jpg'),
+                        backgroundImage:
+                            controller.user.value.profileLogo.isEmpty
+                                ? const AssetImage("")
+                                : const AssetImage(
+                                    'assets/images/profile/avatar-image.jpg'),
                         child: ClipOval(
-                          child: MyImage(url: controller.user.value.shopImage),
+                          child:
+                              MyImage(url: controller.user.value.profileLogo),
                         ),
                       ),
                     ),
@@ -254,19 +270,27 @@ class _DashboardState extends State<Dashboard> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            OrdersContainer(
-                              onTap: () => ordersPage(StatusType.delivered),
-                              numberOfOrders: OrderController
-                                  .instance.status.value.index
-                                  .toString(),
-                              typeOfOrders: "Delivered",
+                            GetBuilder<OrderController>(
+                              init: OrderController(),
+                              initState: (controller) {},
+                              builder: (controller) {
+                                return OrdersContainer(
+                                  onTap: () => ordersPage(StatusType.delivered),
+                                  numberOfOrders: "",
+                                  typeOfOrders: "Delivered",
+                                );
+                              },
                             ),
-                            OrdersContainer(
-                              onTap: () => ordersPage(StatusType.pending),
-                              numberOfOrders: OrderController
-                                  .instance.status.value.index
-                                  .toString(),
-                              typeOfOrders: "Pending",
+                            GetBuilder<OrderController>(
+                              init: OrderController(),
+                              initState: (controller) {},
+                              builder: (controller) {
+                                return OrdersContainer(
+                                  onTap: () => ordersPage(StatusType.pending),
+                                  numberOfOrders: "",
+                                  typeOfOrders: "Pending",
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -366,7 +390,7 @@ class _DashboardState extends State<Dashboard> {
                           ],
                         ),
                         SizedBox(
-                            height: 180,
+                            height: deviceType(media.width) >= 2 ? 260 : 200,
                             child: GetBuilder<ProductController>(
                                 initState: (state) async =>
                                     await ProductController.instance

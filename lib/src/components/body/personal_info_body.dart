@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, invalid_use_of_protected_member
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
@@ -10,7 +11,6 @@ import 'package:benji_vendor/src/components/input/name_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
 import 'package:benji_vendor/src/components/section/my_floating_snackbar.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
-import 'package:benji_vendor/src/controller/profile_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
@@ -22,10 +22,16 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
+import 'package:group_radio_button/group_radio_button.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../theme/colors.dart';
+import '../../controller/error_controller.dart';
+import '../../controller/form_controller.dart';
+import '../../providers/api_url.dart';
 import '../../providers/constants.dart';
+import '../image/my_image.dart';
 
 class PersonalInfoBody extends StatefulWidget {
   const PersonalInfoBody({Key? key}) : super(key: key);
@@ -44,8 +50,11 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
     lastNameEC.text = UserController.instance.user.value.lastName;
     mapsLocationEC.text = UserController.instance.user.value.address;
     userPhoneNumberEC.text = UserController.instance.user.value.phone;
-    latitude = latitude;
-    longitude = longitude;
+    latitude = UserController.instance.user.value.latitude;
+    longitude = UserController.instance.user.value.longitude;
+    horizontalGroupValue = UserController.instance.user.value.gender;
+    profileLogo = UserController.instance.user.value.profileLogo;
+    consoleLog("This is the profile logo url: $profileLogo");
   }
 
   @override
@@ -64,6 +73,9 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   String? longitude;
   List<AutocompletePrediction> placePredictions = [];
   final selectedLocation = ValueNotifier<String?>(null);
+  final genders = ["Male", "Female"];
+  String? horizontalGroupValue;
+  String? profileLogo;
 
   //=========================== BOOL VALUES ====================================\\
 
@@ -88,6 +100,23 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   final firstNameFN = FocusNode();
   final lastNameFN = FocusNode();
   final mapsLocationFN = FocusNode();
+
+//=========================== IMAGE PICKER ====================================\\
+
+  final ImagePicker _picker = ImagePicker();
+  File? selectedLogoImage;
+  //================================== function ====================================\\
+
+  pickLogoImage(ImageSource source) async {
+    final XFile? image = await _picker.pickImage(
+      source: source,
+    );
+    if (image != null) {
+      selectedLogoImage = File(image.path);
+      Get.back();
+      setState(() {});
+    }
+  }
 
   //========================================================================\\
   //=========================== FUNCTIONS ====================================\\
@@ -146,14 +175,29 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   }
 
   Future<void> updateData() async {
-    await ProfileController.instance.updateProfile(
-      firstName: firstNameEC.text,
-      lastName: lastNameEC.text,
-      address: mapsLocationEC.text,
-      phone: countryDialCode + userPhoneNumberEC.text,
-      latitude: latitude,
-      longitude: longitude,
-    );
+    if (selectedLogoImage == null && profileLogo!.isEmpty) {
+      ApiProcessorController.errorSnack("Please select a logo image");
+    } else {
+      Map data = {
+        'first_name': firstNameEC.text,
+        'last_name': lastNameEC.text,
+        'address': mapsLocationEC.text,
+        'gender': horizontalGroupValue,
+        'phone': userPhoneNumberEC.text,
+        'latitude': latitude,
+        'longitude': longitude,
+      };
+      consoleLog("This is the data: $data");
+      consoleLog(
+          Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString());
+      consoleLog("profile logo: $selectedLogoImage");
+      await FormController.instance.postAuthstream(
+          Api.baseUrl + Api.changeVendorPersonalProfile + vendorId.toString(),
+          data,
+          {'profileLogo': selectedLogoImage},
+          "changeVendorPersonalProfile");
+      if (FormController.instance.status.toString().startsWith('2')) {}
+    }
   }
 
   //===================== COPY TO CLIPBOARD =======================\\
@@ -173,6 +217,96 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
     );
   }
 
+  Widget uploadLogoImage() => Container(
+        height: 140,
+        width: MediaQuery.of(context).size.width,
+        margin: const EdgeInsets.only(
+          left: kDefaultPadding,
+          right: kDefaultPadding,
+          bottom: kDefaultPadding,
+        ),
+        child: Column(
+          children: <Widget>[
+            const Text(
+              "Upload Logo Image",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            kSizedBox,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        pickLogoImage(ImageSource.camera);
+                      },
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                            side: BorderSide(
+                              width: 0.5,
+                              color: kLightGreyColor,
+                            ),
+                          ),
+                        ),
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.camera,
+                            color: kAccentColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    kHalfSizedBox,
+                    const Text("Camera"),
+                  ],
+                ),
+                kWidthSizedBox,
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        pickLogoImage(ImageSource.gallery);
+                      },
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                            side: BorderSide(
+                              width: 0.5,
+                              color: kLightGreyColor,
+                            ),
+                          ),
+                        ),
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.images,
+                            color: kAccentColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    kHalfSizedBox,
+                    const Text("Gallery"),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -182,7 +316,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
         controller: scrollController,
         child: ListView(
           controller: scrollController,
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(kDefaultPadding),
           physics: const BouncingScrollPhysics(),
           children: [
             GetBuilder<UserController>(
@@ -263,6 +397,107 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
               },
             ),
             kSizedBox,
+            const Divider(thickness: 4),
+            kSizedBox,
+            Text(
+              "Edit your Business Logo".toUpperCase(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: kTextBlackColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Text(
+              "This is visible to users",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: kAccentColor,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            kSizedBox,
+            Column(
+              children: [
+                selectedLogoImage == null
+                    ? Container(
+                        width: media.width,
+                        height: 144,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                              width: 0.50,
+                              color: Color(0xFFE6E6E6),
+                            ),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Center(
+                          child: MyImage(url: profileLogo!),
+
+                          //           CachedNetworkImage(
+                          //     imageUrl: profileLogo!,
+                          //     fit: BoxFit.cover,
+                          //     progressIndicatorBuilder:
+                          //         (context, url, downloadProgress) => Center(
+                          //             child: CupertinoActivityIndicator(
+                          //                 color: kAccentColor)),
+                          //     errorWidget: (context, url, error) =>
+                          //         Icon(Icons.error, color: kAccentColor),
+                          // ),
+                        ),
+                      )
+                    : Container(
+                        height: 200,
+                        width: 200,
+                        decoration: ShapeDecoration(
+                          shape: const OvalBorder(),
+                          image: DecorationImage(
+                            image: FileImage(selectedLogoImage!),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                kHalfSizedBox,
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      elevation: 20,
+                      barrierColor: kBlackColor.withOpacity(0.8),
+                      showDragHandle: true,
+                      useSafeArea: true,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(kDefaultPadding),
+                        ),
+                      ),
+                      enableDrag: true,
+                      builder: ((builder) => uploadLogoImage()),
+                    );
+                  },
+                  splashColor: kAccentColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      'Upload business logo',
+                      style: TextStyle(
+                        color: kAccentColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            kSizedBox,
+            const Divider(thickness: 4),
+            kSizedBox,
             Text(
               "Edit your personal profile".toUpperCase(),
               textAlign: TextAlign.center,
@@ -272,11 +507,11 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            const Text(
+            Text(
               "Your personal profile is not visible to users",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: kTextBlackColor,
+                color: kAccentColor,
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
               ),
@@ -349,6 +584,25 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                           onSaved: (value) {
                             lastNameEC.text = value;
                           },
+                        ),
+                        kSizedBox,
+                        Text(
+                          "Gender".toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        RadioGroup<String>.builder(
+                          groupValue: horizontalGroupValue!,
+                          direction: Axis.horizontal,
+                          activeColor: kAccentColor,
+                          onChanged: (value) => setState(() {
+                            horizontalGroupValue = value!;
+                          }),
+                          items: genders,
+                          itemBuilder: (item) => RadioButtonBuilder(item),
                         ),
                         kSizedBox,
                         Text(
@@ -507,8 +761,8 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
             ),
             Padding(
               padding: const EdgeInsets.all(kDefaultPadding),
-              child: GetBuilder<ProfileController>(
-                init: ProfileController(),
+              child: GetBuilder<FormController>(
+                init: FormController(),
                 builder: (saving) {
                   return MyElevatedButton(
                     onPressed: (() async {

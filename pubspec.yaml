@@ -44,6 +44,7 @@ dependencies:
   flutter_squad:
   flutter_carousel_widget:
   readmore:
+  group_radio_button:
 
 dev_dependencies:
   flutter_test:
