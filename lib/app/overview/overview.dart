@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
+import '../../src/controller/category_controller.dart';
+import '../../src/controller/latlng_detail_controller.dart';
+import '../../src/controller/notification_controller.dart';
+import '../../src/controller/order_controller.dart';
+import '../../src/controller/profile_controller.dart';
+import '../../src/controller/user_controller.dart';
 import '../../theme/colors.dart';
 import '../dashboard/dashboard.dart';
 import '../orders/orders.dart';
@@ -8,8 +15,15 @@ import '../product/products.dart';
 import '../profile/profile.dart';
 
 class OverView extends StatefulWidget {
+  final user = Get.put(UserController());
+  final userProfile = Get.put(ProfileController());
+  final notiication = Get.put(NotificationController());
+  final order = Get.put(OrderController());
+  final category = Get.put(CategoryController());
+  final location = Get.put(LatLngDetailController());
+
   final int currentIndex;
-  const OverView({super.key, this.currentIndex = 0});
+  OverView({super.key, this.currentIndex = 0});
 
   @override
   State<OverView> createState() => _OverViewState();

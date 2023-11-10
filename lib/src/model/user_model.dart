@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:benji_vendor/src/model/business_type_model.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:get/get.dart';
+
+import '../providers/constants.dart';
 
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
@@ -34,7 +35,7 @@ class UserModel {
   String satClosingHours;
   String sunWeekOpeningHours;
   String sunWeekClosingHours;
-  // String businessBio;
+  String businessBio;
 
   UserModel({
     required this.id,
@@ -62,7 +63,7 @@ class UserModel {
     required this.satClosingHours,
     required this.sunWeekOpeningHours,
     required this.sunWeekClosingHours,
-    // required this.businessBio,
+    required this.businessBio,
   });
 
   factory UserModel.fromJson(Map<String, dynamic>? json) {
@@ -93,6 +94,7 @@ class UserModel {
       satClosingHours: json["satClosingHours"] ?? notAvailable,
       sunWeekOpeningHours: json["sunWeekOpeningHours"] ?? notAvailable,
       sunWeekClosingHours: json["sunWeekClosingHours"] ?? notAvailable,
+      businessBio: json["description"] ?? notAvailable,
     );
   }
 
@@ -119,7 +121,7 @@ class UserModel {
         "satOpeningHours": satOpeningHours,
         "satClosingHours": satClosingHours,
         "sunWeekOpeningHours": sunWeekOpeningHours,
-        "sunWeekClosingHours": sunWeekClosingHours
-        // "businessBio": businessBio,
+        "sunWeekClosingHours": sunWeekClosingHours,
+        "description": businessBio,
       };
 }

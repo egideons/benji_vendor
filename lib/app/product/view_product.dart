@@ -150,7 +150,7 @@ class _ViewProductState extends State<ViewProduct> {
     }
     ProductController.instance.reset();
     Get.offAll(
-      () => const OverView(currentIndex: 2),
+      () => OverView(currentIndex: 2),
       routeName: 'OverView',
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,

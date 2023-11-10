@@ -6,11 +6,11 @@ import 'package:benji_vendor/app/auth/login.dart';
 import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/main.dart';
 import 'package:benji_vendor/src/model/user_model.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../model/vendor_model.dart';
+import '../providers/helper.dart';
 
 class UserController extends GetxController {
   static UserController get instance {
@@ -30,7 +30,7 @@ class UserController extends GetxController {
   Future checkAuth() async {
     if (await isAuthorized()) {
       Get.offAll(
-        () => const OverView(),
+        () => OverView(),
         fullscreenDialog: true,
         curve: Curves.easeIn,
         routeName: "OverView",

@@ -2,9 +2,10 @@
 
 import 'package:benji_vendor/app/auth/login.dart';
 import 'package:benji_vendor/app/overview/overview.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../providers/helper.dart';
 
 class AuthController extends GetxController {
   static AuthController get instance {
@@ -20,7 +21,7 @@ class AuthController extends GetxController {
   Future checkAuth() async {
     if (await isAuthorized()) {
       Get.offAll(
-        () => const OverView(),
+        () => OverView(),
         fullscreenDialog: true,
         curve: Curves.easeIn,
         routeName: "OverView",

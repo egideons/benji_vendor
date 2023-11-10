@@ -2,7 +2,8 @@
 import 'package:benji_vendor/src/model/address_model.dart';
 import 'package:benji_vendor/src/model/client_model.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
+
+import '../providers/constants.dart';
 
 class OrderModel {
   String id;

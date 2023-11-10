@@ -112,7 +112,7 @@ class _AddProductState extends State<AddProduct> {
     if (FormController.instance.status.toString().startsWith('2')) {
       ProductController.instance.reset();
       Get.offAll(
-        () => const OverView(currentIndex: 2),
+        () => OverView(currentIndex: 2),
         routeName: 'OverView',
         duration: const Duration(milliseconds: 300),
         fullscreenDialog: true,
