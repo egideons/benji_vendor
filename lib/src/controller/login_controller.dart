@@ -76,7 +76,7 @@ class LoginController extends GetxController {
         update();
         ApiProcessorController.successSnack("Login Successful");
         Get.offAll(
-          () => OverView(),
+          () => const OverView(),
           fullscreenDialog: true,
           curve: Curves.easeIn,
           routeName: "OverView",

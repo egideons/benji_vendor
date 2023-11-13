@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
@@ -101,18 +102,25 @@ class _EditProductState extends State<EditProduct> {
     if (subCategoryEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please select a category");
     }
-    Map data = {
+    Map<String, dynamic> data = {
       'name': productNameEC.text,
       'description': productDescriptionEC.text,
       'price': productPriceEC.text,
       'quantity_available': productQuantityEC.text,
       'sub_category_id': subCategoryEC.text,
     };
-    Map<dynamic, dynamic> dataBody = {'data': data};
+
     consoleLog("This is the data : $data");
+    // await FormController.instance.postAuthstream(
+    //   Api.baseUrl + Api.changeProduct + widget.product.id,
+    //   data,
+    //   {'product_image': selectedImages},
+    //   'editProduct',
+    // );
+
     await FormController.instance.postAuthstream(
       Api.baseUrl + Api.changeProduct + widget.product.id,
-      dataBody,
+      {'data': jsonEncode(data)}, // Wrap 'data' in a Map
       {'product_image': selectedImages},
       'editProduct',
     );

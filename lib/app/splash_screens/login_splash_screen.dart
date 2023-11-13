@@ -11,7 +11,7 @@ class LoginSplashScreen extends StatelessWidget {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => OverView(),
+          builder: (context) => const OverView(),
         ),
       );
     });

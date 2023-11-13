@@ -114,7 +114,7 @@ class _DashboardState extends State<Dashboard> {
 
   profilePage() {
     Get.to(
-      () => OverView(currentIndex: 3),
+      () => const OverView(currentIndex: 3),
       routeName: 'OverView',
       duration: const Duration(milliseconds: 0),
       fullscreenDialog: true,
@@ -126,7 +126,7 @@ class _DashboardState extends State<Dashboard> {
 
   productsPage() {
     Get.to(
-      () => OverView(currentIndex: 2),
+      () => const OverView(currentIndex: 2),
       routeName: 'OverView',
       duration: const Duration(milliseconds: 0),
       fullscreenDialog: true,
@@ -139,7 +139,7 @@ class _DashboardState extends State<Dashboard> {
   ordersPage(StatusType status) {
     OrderController.instance.setStatus(status);
     Get.to(
-      () => OverView(currentIndex: 1),
+      () => const OverView(currentIndex: 1),
       routeName: 'OverView',
       duration: const Duration(milliseconds: 0),
       fullscreenDialog: true,
@@ -337,9 +337,7 @@ class _DashboardState extends State<Dashboard> {
                                     ),
                                     kHalfWidthSizedBox,
                                     Text(
-                                      controller.avgRating.value
-                                          .toPrecision(1)
-                                          .toString(),
+                                      "${controller.avgRating.value.toPrecision(1)}",
                                       style: TextStyle(
                                         color: kStarColor,
                                         fontSize: 20,
