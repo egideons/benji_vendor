@@ -83,7 +83,7 @@ class OrderController extends GetxController {
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?status=${statusTypeConverter(status.value)}&start=0&end=100";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?status=${statusTypeConverter(status.value)}&start=${loadNum.value - 10}&end=${loadNum.value}";
     consoleLog(url);
     loadNum.value += 10;
     token = UserController.instance.user.value.token;

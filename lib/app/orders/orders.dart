@@ -24,6 +24,7 @@ class _OrdersState extends State<Orders> {
   @override
   void initState() {
     super.initState();
+    // AuthController.instance.checkIfAuthorized();
     scrollController.addListener(
         () => OrderController.instance.scrollListener(scrollController));
   }
@@ -49,19 +50,6 @@ class _OrdersState extends State<Orders> {
 
   bool checkStatus(StatusType? theStatus, StatusType currentStatus) =>
       theStatus == currentStatus;
-
-  orderDetails() {
-    Get.to(
-      () => const OrderDetails(),
-      routeName: 'OrderDetails',
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      preventDuplicates: true,
-      popGesture: true,
-      transition: Transition.rightToLeft,
-    );
-  }
 
   //========= variables ==========//
   final ScrollController scrollController = ScrollController();
@@ -196,7 +184,22 @@ class _OrdersState extends State<Orders> {
                               physics: const BouncingScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) {
                                 return InkWell(
-                                  onTap: orderDetails,
+                                  onTap: () {
+                                    Get.to(
+                                      () => OrderDetails(
+                                        order:
+                                            controller.vendorsOrderList[index],
+                                      ),
+                                      routeName: 'OrderDetails',
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      fullscreenDialog: true,
+                                      curve: Curves.easeIn,
+                                      preventDuplicates: true,
+                                      popGesture: true,
+                                      transition: Transition.rightToLeft,
+                                    );
+                                  },
                                   borderRadius: BorderRadius.circular(12),
                                   mouseCursor: SystemMouseCursors.click,
                                   child: VendorsOrderContainer(

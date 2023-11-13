@@ -76,6 +76,7 @@ class ProductController extends GetxController {
       data = (jsonDecode(responseData)['items'] as List)
           .map((e) => ProductModel.fromJson(e))
           .toList();
+      consoleLog(data.toString());
       products.value += data;
     } catch (e) {
       consoleLog(e.toString());

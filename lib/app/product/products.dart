@@ -5,11 +5,14 @@ import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../src/components/button/my outlined elevatedButton.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 import 'add_new_product.dart';
 
@@ -25,8 +28,10 @@ class _ProductsState extends State<Products> {
   void initState() {
     super.initState();
     ProductController.instance.getProducts();
-    scrollController.addListener(
-        () => ProductController.instance.scrollListener(scrollController));
+    scrollController.addListener(() {
+      ProductController.instance.scrollListener(scrollController);
+      scrollController.addListener(_scrollListener);
+    });
   }
 
   @override
@@ -40,11 +45,39 @@ class _ProductsState extends State<Products> {
 
   //============================= ALL BOOL VALUES =====================================\\
   bool refreshing = false;
+  bool isScrollToTopBtnVisible = false;
 
   //===================== TEXTEDITING CONTROLLER =======================\\
   TextEditingController searchController = TextEditingController();
 
   //===================== Fucntions =======================\\
+
+  //===================== Scroll to Top ==========================\\
+  Future<void> _scrollToTop() async {
+    await scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    setState(() {
+      isScrollToTopBtnVisible = false;
+    });
+  }
+
+  Future<void> _scrollListener() async {
+    if (scrollController.position.pixels >= 100 &&
+        isScrollToTopBtnVisible != true) {
+      setState(() {
+        isScrollToTopBtnVisible = true;
+      });
+    }
+    if (scrollController.position.pixels < 100 &&
+        isScrollToTopBtnVisible == true) {
+      setState(() {
+        isScrollToTopBtnVisible = false;
+      });
+    }
+  }
 
   Future<void> handleRefresh() async {
     setState(() {
@@ -85,7 +118,7 @@ class _ProductsState extends State<Products> {
 
   @override
   Widget build(BuildContext context) {
-    // final media = MediaQuery.of(context).size;
+    final media = MediaQuery.of(context).size;
     return MyResponsivePadding(
       child: GestureDetector(
         onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
@@ -122,6 +155,19 @@ class _ProductsState extends State<Products> {
                 )
               ],
             ),
+            floatingActionButton: isScrollToTopBtnVisible
+                ? FloatingActionButton(
+                    onPressed: _scrollToTop,
+                    mini: deviceType(media.width) > 2 ? false : true,
+                    backgroundColor: kAccentColor,
+                    enableFeedback: true,
+                    mouseCursor: SystemMouseCursors.click,
+                    tooltip: "Scroll to top",
+                    hoverColor: kAccentColor,
+                    hoverElevation: 50.0,
+                    child: const FaIcon(FontAwesomeIcons.chevronUp, size: 18),
+                  )
+                : const SizedBox(),
             body: SafeArea(
               maintainBottomViewPadding: true,
               child: Scrollbar(
@@ -153,10 +199,18 @@ class _ProductsState extends State<Products> {
                                       )
                                     : ListView.builder(
                                         shrinkWrap: true,
+                                        reverse: true,
                                         itemCount: controller.products.length,
                                         physics: const BouncingScrollPhysics(),
+                                        addSemanticIndexes: true,
+                                        dragStartBehavior:
+                                            DragStartBehavior.start,
                                         itemBuilder:
                                             (BuildContext context, int index) {
+                                          // int reversedIndex =
+                                          // controller.products.length -
+                                          //     1 -
+                                          //     index;
                                           return VendorsProductContainer(
                                             onTap: () => viewProduct(
                                                 controller.products[index]),

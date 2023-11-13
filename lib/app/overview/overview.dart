@@ -19,7 +19,6 @@ class _OverViewState extends State<OverView> {
   @override
   void initState() {
     currentIndex = widget.currentIndex;
-
     super.initState();
   }
 

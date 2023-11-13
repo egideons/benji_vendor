@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:benji_vendor/src/model/business_type_model.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
-import 'package:get/get.dart';
+
+import '../providers/api_url.dart';
+import '../providers/constants.dart';
 
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
@@ -34,7 +35,7 @@ class UserModel {
   String satClosingHours;
   String sunWeekOpeningHours;
   String sunWeekClosingHours;
-  // String businessBio;
+  String businessBio;
 
   UserModel({
     required this.id,
@@ -62,38 +63,51 @@ class UserModel {
     required this.satClosingHours,
     required this.sunWeekOpeningHours,
     required this.sunWeekClosingHours,
-    // required this.businessBio,
+    required this.businessBio,
   });
 
   factory UserModel.fromJson(Map<String, dynamic>? json) {
     json ??= {};
-    return UserModel(
-      id: json["id"] ?? 0,
-      token: json["token"] ?? '',
-      email: json["email"] ?? notAvailable,
-      phone: json["phone"] ?? notAvailable,
-      username: json["username"] ?? notAvailable,
-      code: json["code"] ?? notAvailable,
-      firstName: json["first_name"] ?? notAvailable,
-      lastName: json["last_name"] ?? notAvailable,
-      gender: json["gender"] ?? notAvailable,
-      address: json["address"] ?? notAvailable,
-      longitude: json["longitude"] ?? notAvailable,
-      latitude: json["latitude"] ?? notAvailable,
-      isOnline: json["is_online"] ?? false,
-      averageRating: ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
-      numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
-      shopName: json["shop_name"] ?? notAvailable,
-      shopImage: json["shop_image"] ?? '',
-      profileLogo: json["profileLogo"] ?? '',
-      shopType: BusinessType.fromJson(json["shop_type"]),
-      weekOpeningHours: json["weekOpeningHours"] ?? notAvailable,
-      weekClosingHours: json["weekClosingHours"] ?? notAvailable,
-      satOpeningHours: json["satOpeningHours"] ?? notAvailable,
-      satClosingHours: json["satClosingHours"] ?? notAvailable,
-      sunWeekOpeningHours: json["sunWeekOpeningHours"] ?? notAvailable,
-      sunWeekClosingHours: json["sunWeekClosingHours"] ?? notAvailable,
-    );
+    consoleLog("JSON data: $json");
+    try {
+      return UserModel(
+        id: json["id"] ?? 0,
+        token: json["token"] ?? '',
+        email: json["email"] ?? notAvailable,
+        phone: json["phone"] ?? notAvailable,
+        username: json["username"] ?? notAvailable,
+        code: json["code"] ?? notAvailable,
+        firstName: json["first_name"] ?? notAvailable,
+        lastName: json["last_name"] ?? notAvailable,
+        gender: json["gender"] ?? notAvailable,
+        address: json["address"] ?? notAvailable,
+        longitude: json["longitude"] ?? notAvailable,
+        latitude: json["latitude"] ?? notAvailable,
+        isOnline: json["is_online"] ?? false,
+        // averageRating: ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
+        averageRating: json["average_rating"] != null
+            ? (json["average_rating"] is double
+                ? json["average_rating"]
+                : double.tryParse(json["average_rating"].toString()) ?? 0.0)
+            : 0.0,
+        numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
+        shopName: json["shop_name"] ?? notAvailable,
+        shopImage: json["shop_image"] ?? '',
+        profileLogo: json["profileLogo"] ?? '',
+        shopType: BusinessType.fromJson(json["shop_type"]),
+        weekOpeningHours: json["weekOpeningHours"] ?? notAvailable,
+        weekClosingHours: json["weekClosingHours"] ?? notAvailable,
+        satOpeningHours: json["satOpeningHours"] ?? notAvailable,
+        satClosingHours: json["satClosingHours"] ?? notAvailable,
+        sunWeekOpeningHours: json["sunWeekOpeningHours"] ?? notAvailable,
+        sunWeekClosingHours: json["sunWeekClosingHours"] ?? notAvailable,
+        businessBio: json["description"] ?? notAvailable,
+      );
+    } catch (e) {
+      consoleLog("Error parsing average_rating: $e");
+      return UserModel.fromJson(null);
+      //  return UserModel.defaults();
+    }
   }
 
   Map<String, dynamic> toJson() => {
@@ -119,7 +133,7 @@ class UserModel {
         "satOpeningHours": satOpeningHours,
         "satClosingHours": satClosingHours,
         "sunWeekOpeningHours": sunWeekOpeningHours,
-        "sunWeekClosingHours": sunWeekClosingHours
-        // "businessBio": businessBio,
+        "sunWeekClosingHours": sunWeekClosingHours,
+        "description": businessBio,
       };
 }

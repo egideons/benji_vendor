@@ -5,8 +5,10 @@ import 'package:benji_vendor/src/model/package/item_category.dart';
 import 'package:benji_vendor/src/model/package/item_weight.dart';
 import 'package:benji_vendor/src/model/user_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:http/http.dart' as http;
+
+import '../../providers/constants.dart';
+import '../../providers/helper.dart';
 
 class DeliveryItem {
   final String id;

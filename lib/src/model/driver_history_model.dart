@@ -1,6 +1,7 @@
 import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:benji_vendor/src/model/rider_model.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
+
+import '../providers/constants.dart';
 
 class RiderHistory {
   String id;

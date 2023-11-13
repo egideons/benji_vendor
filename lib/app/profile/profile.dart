@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../auth/login.dart';
+import '../package/packages.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -42,6 +43,19 @@ class _ProfileState extends State<Profile> {
     Get.to(
       () => const ReviewsPage(),
       routeName: 'ReviewsPage',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  sendPackage() {
+    Get.to(
+      () => const Packages(),
+      routeName: 'Packages',
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
@@ -90,10 +104,10 @@ class _ProfileState extends State<Profile> {
         appBar: AppBar(
           backgroundColor: kAccentColor,
           elevation: 0,
-          title: const Text(
+          title: Text(
             'My Profile',
             style: TextStyle(
-              color: Colors.white,
+              color: kPrimaryColor,
               fontSize: 20,
               fontWeight: FontWeight.w700,
             ),
@@ -176,7 +190,7 @@ class _ProfileState extends State<Profile> {
               Container(
                 padding: const EdgeInsets.all(kDefaultPadding),
                 decoration: ShapeDecoration(
-                  color: Colors.white,
+                  color: kPrimaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -191,6 +205,22 @@ class _ProfileState extends State<Profile> {
                 ),
                 child: Column(
                   children: [
+                    ListTile(
+                      onTap: sendPackage,
+                      leading: FaIcon(
+                        FontAwesomeIcons.bicycle,
+                        color: kAccentColor,
+                      ),
+                      title: const Text(
+                        'Package delivery',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                    ),
                     ListTile(
                       onTap: reviewsPage,
                       leading: FaIcon(

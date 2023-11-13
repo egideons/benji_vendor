@@ -6,11 +6,10 @@ import 'package:benji_vendor/app/auth/login.dart';
 import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/main.dart';
 import 'package:benji_vendor/src/model/user_model.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../model/vendor_model.dart';
+import '../providers/helper.dart';
 
 class UserController extends GetxController {
   static UserController get instance {
@@ -19,7 +18,6 @@ class UserController extends GetxController {
 
   var isLoading = false.obs;
   var user = UserModel.fromJson(null).obs;
-  var vendor = VendorModel.fromJson(null).obs;
 
   @override
   void onInit() {

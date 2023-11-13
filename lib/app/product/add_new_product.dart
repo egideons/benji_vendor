@@ -35,6 +35,7 @@ class _AddProductState extends State<AddProduct> {
   void initState() {
     super.initState();
     isToggled = true;
+
     getSubCategories().then((value) {
       subCategoryEC = value;
       setState(() {});
@@ -88,12 +89,15 @@ class _AddProductState extends State<AddProduct> {
   submit() async {
     if (selectedImages == null) {
       ApiProcessorController.errorSnack("Please select product images");
+      return;
     }
     if (productType == null || productTypeEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please select a product type");
+      return;
     }
     if (subCategoryEC == null || productSubCategoryEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please select a category");
+      return;
     }
     Map data = {
       'name': productNameEC.text,
@@ -214,9 +218,7 @@ class _AddProductState extends State<AddProduct> {
                     ),
                   ),
                   kHalfSizedBox,
-                  const Text(
-                    "Gallery",
-                  ),
+                  const Text("Gallery"),
                 ],
               ),
             ],
