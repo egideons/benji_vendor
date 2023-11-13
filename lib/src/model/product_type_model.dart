@@ -35,6 +35,7 @@ Future<List<ProductTypeModel>> getProductType(
       headers: authHeader());
 
   if (response.statusCode == 200) {
+    consoleLog("This is the response body for product types: ${response.body}");
     return (jsonDecode(response.body)['items'] as List)
         .map((item) => ProductTypeModel.fromJson(item))
         .toList();

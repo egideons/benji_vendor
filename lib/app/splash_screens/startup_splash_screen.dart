@@ -21,6 +21,7 @@ class SplashScreen extends StatelessWidget {
   final user = Get.put(UserController());
   final category = Get.put(CategoryController());
   final login = Get.put(LoginController());
+  final auth = Get.put(AuthController());
   final product = Get.put(ProductController());
   final order = Get.put(OrderController());
   final form = Get.put(FormController());

@@ -7,6 +7,7 @@ import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/app/product/view_product.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
+import 'package:benji_vendor/src/components/container/dashboard_product_container.dart';
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
@@ -15,6 +16,7 @@ import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
+import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -41,14 +43,10 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      NotificationController.instance.runTask();
-      OrderController.instance.getTotal();
-      ProductController.instance.getProducts();
-      ReviewsController.instance.getReviews();
-      ReviewsController.instance.getAvgRating();
-    });
+
     numberOfNotifications = NotificationController.instance.notification.length;
+    consoleLog(
+        "This is the profile logo: ${UserController.instance.user.value.profileLogo}");
   }
 
 //=================================== ALL VARIABLES =====================================\\
@@ -194,14 +192,12 @@ class _DashboardState extends State<Dashboard> {
                           maxRadius: 25,
                           minRadius: 20,
                           backgroundColor: kTransparentColor,
-                          backgroundImage:
-                              controller.user.value.profileLogo.isEmpty
-                                  ? const AssetImage("")
-                                  : const AssetImage(
-                                      'assets/images/profile/avatar-image.jpg'),
                           child: ClipOval(
-                            child:
-                                MyImage(url: controller.user.value.profileLogo),
+                            child: controller.user.value.profileLogo.isEmpty
+                                ? Image.asset(
+                                    'assets/images/profile/avatar-image.jpg')
+                                : MyImage(
+                                    url: controller.user.value.profileLogo),
                           ),
                         ),
                       ),
@@ -269,6 +265,11 @@ class _DashboardState extends State<Dashboard> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GetBuilder<OrderController>(
+                                init: OrderController(),
+                                initState: (state) async {
+                                  await OrderController.instance
+                                      .setStatus(StatusType.delivered);
+                                },
                                 builder: (controller) {
                                   return OrdersContainer(
                                     onTap: () =>
@@ -280,6 +281,11 @@ class _DashboardState extends State<Dashboard> {
                                 },
                               ),
                               GetBuilder<OrderController>(
+                                init: OrderController(),
+                                initState: (state) async {
+                                  await OrderController.instance
+                                      .setStatus(StatusType.pending);
+                                },
                                 builder: (controller) {
                                   return OrdersContainer(
                                     onTap: () => ordersPage(StatusType.pending),
@@ -401,53 +407,25 @@ class _DashboardState extends State<Dashboard> {
                                           )
                                         : controller.products.isEmpty
                                             ? const EmptyCard()
-                                            : ListView.builder(
+                                            : ListView.separated(
                                                 physics:
                                                     const BouncingScrollPhysics(),
+                                                separatorBuilder:
+                                                    (context, index) =>
+                                                        kWidthSizedBox,
                                                 scrollDirection:
                                                     Axis.horizontal,
+                                                reverse: true,
+                                                shrinkWrap: true,
                                                 itemCount: min(
                                                     controller.products.length,
-                                                    5),
+                                                    10),
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {
-                                                  return Container(
-                                                    margin:
-                                                        const EdgeInsets.only(
-                                                      right: kDefaultPadding,
-                                                      bottom:
-                                                          kDefaultPadding / 1.5,
-                                                    ),
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.41,
-                                                    decoration: ShapeDecoration(
-                                                      color: kGreyColor1,
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                          kDefaultPadding,
-                                                        ),
-                                                      ),
-                                                      shadows: const [
-                                                        BoxShadow(
-                                                          color: Color(
-                                                            0x0F000000,
-                                                          ),
-                                                          blurRadius: 24,
-                                                          offset: Offset(
-                                                            0,
-                                                            4,
-                                                          ),
-                                                          spreadRadius: 4,
-                                                        )
-                                                      ],
-                                                    ),
+                                                  return DashboardProductContainer(
+                                                    productName: controller
+                                                        .products[index].name,
                                                     child: InkWell(
                                                       onTap: () =>
                                                           productDetail(
@@ -455,9 +433,11 @@ class _DashboardState extends State<Dashboard> {
                                                                       .products[
                                                                   index]),
                                                       child: MyImage(
-                                                          url: controller
-                                                              .products[index]
-                                                              .productImage),
+                                                        url: controller
+                                                            .products[index]
+                                                            .productImage,
+                                                        imageHeight: 150,
+                                                      ),
                                                     ),
                                                   );
                                                 },

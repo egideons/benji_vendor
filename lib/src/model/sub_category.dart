@@ -49,6 +49,8 @@ Future<List<SubCategory>> getSubCategories(
       headers: authHeader());
 
   if (response.statusCode == 200) {
+    consoleLog(
+        "This is the response body for sub categories: ${response.body}");
     return (jsonDecode(response.body)['items'] as List)
         .map((item) => SubCategory.fromJson(item))
         .toList();
