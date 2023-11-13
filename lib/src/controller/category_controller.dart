@@ -26,6 +26,7 @@ class CategoryController extends GetxController {
     token = UserController.instance.user.value.token;
     try {
       http.Response? response = await HandleData.getApi(url, token);
+      consoleLog(response.toString());
       var responseData = ApiProcessorController.errorState(response);
       category.value = (jsonDecode(response!.body)['items'] as List)
           .map((e) => BusinessType.fromJson(e))
