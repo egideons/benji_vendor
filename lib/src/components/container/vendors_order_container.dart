@@ -52,12 +52,6 @@ class VendorsOrderContainer extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: kLightGreyColor,
                   borderRadius: BorderRadius.circular(16),
-                  // image: const DecorationImage(
-                  //   image: AssetImage(
-                  //     "assets/icons/store.png",
-                  //   ),
-                  //   fit: BoxFit.cover,
-                  // ),
                 ),
                 child: CachedNetworkImage(
                   imageUrl: order.client.image ?? "",
@@ -119,10 +113,16 @@ class VendorsOrderContainer extends StatelessWidget {
               SizedBox(
                 width: media.width - 200,
                 child: Text(
-                  order.deliveryStatus,
+                  order.deliveryStatus == "CANC"
+                      ? "Cancelled"
+                      : order.deliveryStatus == "PEND"
+                          ? "Pending"
+                          : "Completed",
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: const TextStyle(
+                  style: TextStyle(
+                    color: order.deliveryStatus == "PEND"
+                        ? kSecondaryColor
+                        : kSuccessColor,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
@@ -168,18 +168,6 @@ class VendorsOrderContainer extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: media.width * 0.5,
-                child: const Text(
-                  'Client\'s address',
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),

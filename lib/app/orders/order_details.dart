@@ -2,14 +2,19 @@
 
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/components/section/order_item_section.dart';
 import 'package:flutter/material.dart';
 
 import '../../src/components/appbar/my appbar.dart';
+import '../../src/model/order_model.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 
 class OrderDetails extends StatefulWidget {
-  const OrderDetails({super.key});
+  final OrderModel order;
+
+  const OrderDetails({super.key, required this.order});
 
   @override
   State<OrderDetails> createState() => _OrderDetailsState();
@@ -58,16 +63,17 @@ class _OrderDetailsState extends State<OrderDetails> {
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return MyResponsivePadding(
       child: Scaffold(
         appBar: MyAppBar(
           title: "Order Details",
-          elevation: 0.0,
+          elevation: 0,
           actions: const [],
           backgroundColor: kPrimaryColor,
         ),
         body: Container(
-          width: MediaQuery.of(context).size.width,
+          width: media.width,
           padding: const EdgeInsets.all(
             kDefaultPadding,
           ),
@@ -76,10 +82,10 @@ class _OrderDetailsState extends State<OrderDetails> {
             scrollDirection: Axis.vertical,
             children: <Widget>[
               Container(
-                width: MediaQuery.of(context).size.width,
+                width: media.width,
                 padding: const EdgeInsets.all(kDefaultPadding / 2),
                 decoration: ShapeDecoration(
-                  color: Colors.white,
+                  color: kPrimaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14.30),
                   ),
@@ -93,28 +99,28 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ],
                 ),
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
+                  width: media.width,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Oder ID',
                             style: TextStyle(
-                              color: Color(0xFF808080),
+                              color: kTextGreyColor,
                               fontSize: 11.62,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
                           Text(
-                            'Today, 12:30pm',
+                            widget.order.created,
                             textAlign: TextAlign.right,
-                            style: TextStyle(
-                              color: Color(0xFF222222),
-                              fontSize: 12.52,
+                            style: const TextStyle(
+                              color: kTextBlackColor,
+                              fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -124,17 +130,17 @@ class _OrderDetailsState extends State<OrderDetails> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            '#00977',
+                          Text(
+                            widget.order.code,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Color(0xFF222222),
+                            style: const TextStyle(
+                              color: kTextBlackColor,
                               fontSize: 16.09,
                               fontWeight: FontWeight.w700,
                               letterSpacing: -0.32,
                             ),
                           ),
-                          isOrderCanceled
+                          widget.order.deliveryStatus == "CANC"
                               ? Text(
                                   'Canceled',
                                   textAlign: TextAlign.right,
@@ -145,9 +151,19 @@ class _OrderDetailsState extends State<OrderDetails> {
                                     letterSpacing: -0.32,
                                   ),
                                 )
-                              : isOrderAccepted
-                                  ? const Text(
-                                      'Accepted',
+                              : widget.order.deliveryStatus == "PEND"
+                                  ? Text(
+                                      'Pending',
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        color: kSecondaryColor,
+                                        fontSize: 16.09,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: -0.32,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'Delivered',
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
                                         color: kSuccessColor,
@@ -155,28 +171,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                                         fontWeight: FontWeight.w700,
                                         letterSpacing: -0.32,
                                       ),
-                                    )
-                                  : isOrderProcessing
-                                      ? Text(
-                                          'Processing',
-                                          textAlign: TextAlign.right,
-                                          style: TextStyle(
-                                            color: kLoadingColor,
-                                            fontSize: 16.09,
-                                            fontWeight: FontWeight.w700,
-                                            letterSpacing: -0.32,
-                                          ),
-                                        )
-                                      : Text(
-                                          'Pending',
-                                          textAlign: TextAlign.right,
-                                          style: TextStyle(
-                                            color: kSecondaryColor,
-                                            fontSize: 16.09,
-                                            fontWeight: FontWeight.w700,
-                                            letterSpacing: -0.32,
-                                          ),
-                                        ),
+                                    ),
                         ],
                       ),
                     ],
@@ -185,10 +180,10 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
               kSizedBox,
               Container(
-                width: MediaQuery.of(context).size.width,
+                width: media.width,
                 padding: const EdgeInsets.all(kDefaultPadding / 2),
                 decoration: ShapeDecoration(
-                  color: Colors.white,
+                  color: kPrimaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14.30),
                   ),
@@ -208,105 +203,30 @@ class _OrderDetailsState extends State<OrderDetails> {
                       'Items ordered',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: kTextBlackColor,
                         fontSize: 16.09,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.32,
                       ),
                     ),
                     kHalfSizedBox,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 56,
-                          height: 56,
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                          ),
-                          child: const MyImage(url: ''),
+                    Column(
+                      children: List.generate(
+                        widget.order.orderitems.length,
+                        (index) => OrderItemSection(
+                          order: widget.order,
                         ),
-                        const SizedBox(
-                          child: Text.rich(
-                            maxLines: 3,
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "Jollof Rice and Chicken",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12.52,
-                                    overflow: TextOverflow.ellipsis,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: " ",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12.52,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: "x 1",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12.52,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '₦',
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 9.83,
-                                  fontFamily: 'Sen',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              TextSpan(
-                                text: ' ',
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 12.52,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '5,000',
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 14.30,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
-                    ),
+                      ),
+                    )
                   ],
                 ),
               ),
               kSizedBox,
               Container(
-                width: MediaQuery.of(context).size.width,
+                width: media.width,
                 padding: const EdgeInsets.all(kDefaultPadding / 2),
                 decoration: ShapeDecoration(
-                  color: Colors.white,
+                  color: kPrimaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14.30),
                   ),
@@ -327,7 +247,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       "Customer's Detail",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: kTextBlackColor,
                         fontSize: 16.09,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.32,
@@ -339,60 +259,35 @@ class _OrderDetailsState extends State<OrderDetails> {
                         Container(
                           margin:
                               const EdgeInsets.only(right: kDefaultPadding * 2),
-                          child: const CircleAvatar(
-                            radius: 30,
+                          child: CircleAvatar(
+                            radius: deviceType(media.width) >= 2 ? 60 : 30,
                             child: ClipOval(
-                              child: MyImage(
-                                url: '',
-                              ),
+                              child: MyImage(url: widget.order.client.image),
                             ),
                           ),
                         ),
-                        const Column(
+                        Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Blessing Elechi',
+                              "${widget.order.client.firstName}  ${widget.order.client.lastName}",
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12.52,
+                              style: const TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                             kHalfSizedBox,
                             Text(
-                              '09023348400',
+                              widget.order.client.phone,
                               style: TextStyle(
-                                color: Color(0xFF979797),
-                                fontSize: 11.62,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            kSizedBox,
-                            Text(
-                              'Delivery address',
-                              style: TextStyle(
-                                color: Color(0xFF979797),
-                                fontSize: 10.73,
+                                color: kTextGreyColor,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
                             kHalfSizedBox,
-                            SizedBox(
-                              width: 155,
-                              child: Text(
-                                '21 Kanna Street, GRA, Enugu',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  overflow: TextOverflow.ellipsis,
-                                  fontSize: 12.52,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ],
@@ -402,10 +297,10 @@ class _OrderDetailsState extends State<OrderDetails> {
               ),
               kSizedBox,
               Container(
-                width: MediaQuery.of(context).size.width,
+                width: media.width,
                 padding: const EdgeInsets.all(kDefaultPadding / 2),
                 decoration: ShapeDecoration(
-                  color: Colors.white,
+                  color: kPrimaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14.30),
                   ),
@@ -425,7 +320,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       'Order Summary',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: Colors.black,
+                        color: kTextBlackColor,
                         fontSize: 16.09,
                         fontWeight: FontWeight.w700,
                         letterSpacing: -0.32,
@@ -436,55 +331,9 @@ class _OrderDetailsState extends State<OrderDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Item',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 12.52,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "₦",
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 9.83,
-                                  fontFamily: 'Sen',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              TextSpan(
-                                text: ' ',
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 12.52,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '5,000',
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 14.30,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ],
-                    ),
-                    kHalfSizedBox,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
                           'Total',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: kTextBlackColor,
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                           ),
@@ -495,28 +344,28 @@ class _OrderDetailsState extends State<OrderDetails> {
                               TextSpan(
                                 text: "₦",
                                 style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 9.83,
+                                  color: kTextBlackColor,
+                                  fontSize: 14,
                                   fontFamily: 'Sen',
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                               TextSpan(
                                 text: ' ',
                                 style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 12.52,
+                                  color: kTextBlackColor,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              TextSpan(
-                                text: '5,300',
-                                style: TextStyle(
-                                  color: Color(0xFF222222),
-                                  fontSize: 14.30,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                              // TextSpan(
+                              //   text: widget.order.orderitems.totalAmount,
+                              //   style: TextStyle(
+                              //     color: kTextBlackColor,
+                              //     fontSize: 14.30,
+                              //     fontWeight: FontWeight.w400,
+                              //   ),
+                              // ),
                             ],
                           ),
                           textAlign: TextAlign.right,
@@ -527,7 +376,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ],
                 ),
               ),
-              kSizedBox,
             ],
           ),
         ),
