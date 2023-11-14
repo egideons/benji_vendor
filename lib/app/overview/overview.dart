@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../src/controller/auth_controller.dart';
 import '../../theme/colors.dart';
 import '../dashboard/dashboard.dart';
 import '../orders/orders.dart';
@@ -21,7 +20,6 @@ class _OverViewState extends State<OverView> {
   void initState() {
     currentIndex = widget.currentIndex;
     super.initState();
-    AuthController.instance.checkIfAuthorized();
   }
 
 //======== variables =========//

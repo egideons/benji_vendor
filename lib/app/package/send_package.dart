@@ -237,6 +237,48 @@ class _SendPackageState extends State<SendPackage> {
   }
 
   Future<void> submitForm() async {
+    if (pickupEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in a pickup address");
+      return;
+    }
+    if (senderNameEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in your name");
+      return;
+    }
+    if (senderPhoneEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in your phone number");
+      return;
+    }
+    if (dropOffEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please select a drop-off location");
+      return;
+    }
+    if (receiverNameEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in the receiver's name");
+      return;
+    }
+    if (receiverPhoneEC.text.isEmpty) {
+      ApiProcessorController.errorSnack(
+          "Please fill in the receiver's phone number");
+      return;
+    }
+    if (itemNameEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in the item's name");
+      return;
+    }
+    if (itemCategoryEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please select the item category");
+      return;
+    }
+    if (itemWeightEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please select the item weight");
+      return;
+    }
+    if (itemQuantityEC.text.isEmpty) {
+      ApiProcessorController.errorSnack(
+          "Please fill in the quantity of the item");
+      return;
+    }
     if (selectedImage == null) {
       ApiProcessorController.errorSnack("Please select an image");
       return;
