@@ -25,31 +25,31 @@ class _PackagesState extends State<Packages>
   @override
   void initState() {
     super.initState();
-    _pending = _getDataPending();
-    _completed = _getDataCompleted();
-    _tabBarController = TabController(length: 2, vsync: this);
+    pending = getDataPending();
+    completed = getDataCompleted();
+    tabBarController = TabController(length: 2, vsync: this);
   }
 
-  late Future<List<DeliveryItem>> _pending;
-  late Future<List<DeliveryItem>> _completed;
+  late Future<List<DeliveryItem>> pending;
+  late Future<List<DeliveryItem>> completed;
   @override
   void dispose() {
-    _tabBarController.dispose();
+    tabBarController.dispose();
     super.dispose();
   }
 
 //================================================= CONTROLLERS ===================================================\\
-  late TabController _tabBarController;
-  final _scrollController = ScrollController();
+  late TabController tabBarController;
+  final scrollController = ScrollController();
 //================================================= FUNCTIONS ===================================================\\
 
-  Future<List<DeliveryItem>> _getDataPending() async {
+  Future<List<DeliveryItem>> getDataPending() async {
     List<DeliveryItem> pending =
         await getDeliveryItemsByClientAndStatus('pending');
     return pending;
   }
 
-  Future<List<DeliveryItem>> _getDataCompleted() async {
+  Future<List<DeliveryItem>> getDataCompleted() async {
     List<DeliveryItem> completed =
         await getDeliveryItemsByClientAndStatus('completed');
     return completed;
@@ -57,21 +57,21 @@ class _PackagesState extends State<Packages>
 
   Future<void> _handleRefresh() async {
     setState(() {
-      _pending = _getDataPending();
-      _completed = _getDataCompleted();
+      pending = getDataPending();
+      completed = getDataCompleted();
     });
   }
 
-  int _selectedtabbar = 0;
+  int selectedtabbar = 0;
   void _clickOnTabBarOption(value) async {
     setState(() {
-      _selectedtabbar = value;
+      selectedtabbar = value;
     });
   }
 
 //================================================= Navigation ===================================================\\
 
-  void _toSendPackageScreen() => Get.to(
+  void toSendPackageScreen() => Get.to(
         () => const SendPackage(),
         routeName: 'SendPackage',
         duration: const Duration(milliseconds: 300),
@@ -82,7 +82,7 @@ class _PackagesState extends State<Packages>
         transition: Transition.rightToLeft,
       );
 
-  void _viewPendingPackage(deliveryItem) => Get.to(
+  void viewPendingPackage(deliveryItem) => Get.to(
         () => ViewPackage(deliveryItem: deliveryItem),
         routeName: 'ViewPackage',
         duration: const Duration(milliseconds: 300),
@@ -93,7 +93,7 @@ class _PackagesState extends State<Packages>
         transition: Transition.size,
       );
 
-  void _viewDeliveredPackage(deliveryItem) => Get.to(
+  void viewDeliveredPackage(deliveryItem) => Get.to(
         () => ViewPackage(deliveryItem: deliveryItem),
         routeName: 'ViewPackage',
         duration: const Duration(milliseconds: 300),
@@ -119,7 +119,7 @@ class _PackagesState extends State<Packages>
             Container(
               padding: const EdgeInsets.all(10),
               child: OutlinedButton(
-                onPressed: _toSendPackageScreen,
+                onPressed: toSendPackageScreen,
                 style: OutlinedButton.styleFrom(
                   // padding: const EdgeInsets.all(10),
                   disabledForegroundColor: kGreyColor2,
@@ -132,7 +132,7 @@ class _PackagesState extends State<Packages>
                   side: BorderSide(color: kAccentColor),
                 ),
                 child: const Text(
-                  "Send Package",
+                  "Send a Package",
                   style: TextStyle(
                     color: kTextBlackColor,
                     fontSize: 16,
@@ -149,16 +149,15 @@ class _PackagesState extends State<Packages>
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: Scrollbar(
-            controller: _scrollController,
+            controller: scrollController,
             child: ListView(
-              controller: _scrollController,
+              controller: scrollController,
               padding: const EdgeInsets.all(kDefaultPadding),
               physics: const BouncingScrollPhysics(),
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: kDefaultPadding,
-                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                   child: Container(
                     width: media.width,
                     decoration: BoxDecoration(
@@ -175,7 +174,7 @@ class _PackagesState extends State<Packages>
                         Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: TabBar(
-                            controller: _tabBarController,
+                            controller: tabBarController,
                             onTap: (value) => _clickOnTabBarOption(value),
                             enableFeedback: true,
                             dragStartBehavior: DragStartBehavior.start,
@@ -205,9 +204,9 @@ class _PackagesState extends State<Packages>
                 kSizedBox,
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: _selectedtabbar == 0
+                  child: selectedtabbar == 0
                       ? FutureBuilder(
-                          future: _pending,
+                          future: pending,
                           builder: (context, snapshot) {
                             if (snapshot.data != null) {
                               return SizedBox(
@@ -226,7 +225,7 @@ class _PackagesState extends State<Packages>
                                                 const BouncingScrollPhysics(),
                                             itemBuilder: (context, index) =>
                                                 ListTile(
-                                              onTap: () => _viewPendingPackage(
+                                              onTap: () => viewPendingPackage(
                                                   snapshot.data![index]),
                                               contentPadding:
                                                   const EdgeInsets.all(0),
@@ -283,7 +282,7 @@ class _PackagesState extends State<Packages>
                           },
                         )
                       : FutureBuilder(
-                          future: _completed,
+                          future: completed,
                           builder: (context, snapshot) {
                             if (snapshot.data != null) {
                               return SizedBox(
@@ -302,9 +301,8 @@ class _PackagesState extends State<Packages>
                                                 const BouncingScrollPhysics(),
                                             itemBuilder: (context, index) =>
                                                 ListTile(
-                                              onTap: () =>
-                                                  _viewDeliveredPackage(
-                                                      (snapshot.data![index])),
+                                              onTap: () => viewDeliveredPackage(
+                                                  (snapshot.data![index])),
                                               contentPadding:
                                                   const EdgeInsets.all(0),
                                               enableFeedback: true,

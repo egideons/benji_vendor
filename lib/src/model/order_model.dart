@@ -15,6 +15,10 @@ class OrderModel {
   Client client;
   List<Orderitem> orderitems;
   String created;
+  double preTotal;
+  String deliveryAddress;
+  String latitude;
+  String longitude;
 
   OrderModel({
     required this.id,
@@ -26,6 +30,10 @@ class OrderModel {
     required this.client,
     required this.orderitems,
     required this.created,
+    required this.preTotal,
+    required this.deliveryAddress,
+    required this.latitude,
+    required this.longitude,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic>? json) {
@@ -44,6 +52,10 @@ class OrderModel {
               .map((item) => Orderitem.fromJson(item))
               .toList(),
       created: json["created"] ?? notAvailable,
+      preTotal: json["pre_total"] ?? notAvailable,
+      deliveryAddress: json["delivery_address"] ?? notAvailable,
+      latitude: json["latitude"] ?? notAvailable,
+      longitude: json["longitude"] ?? notAvailable,
     );
   }
   Map<String, dynamic> toJson() => {
@@ -56,6 +68,10 @@ class OrderModel {
         "client": client.toJson(),
         "orderitems": orderitems.map((item) => (item).toJson()).toList(),
         "created": created,
+        "pre_total": preTotal,
+        "delivery_address": deliveryAddress,
+        "latitude": latitude,
+        "longitude": longitude,
       };
 }
 

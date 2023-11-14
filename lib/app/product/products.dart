@@ -11,6 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../src/components/button/my outlined elevatedButton.dart';
+import '../../src/controller/auth_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
@@ -27,11 +28,12 @@ class _ProductsState extends State<Products> {
   @override
   void initState() {
     super.initState();
+    AuthController.instance.checkIfAuthorized();
     ProductController.instance.getProducts();
     scrollController.addListener(() {
       ProductController.instance.scrollListener(scrollController);
-      scrollController.addListener(_scrollListener);
     });
+    scrollController.addListener(_scrollListener);
   }
 
   @override
