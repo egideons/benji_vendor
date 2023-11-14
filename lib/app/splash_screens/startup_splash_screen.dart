@@ -29,6 +29,7 @@ class SplashScreen extends StatelessWidget {
   final latLngDetail = Get.put(LatLngDetailController());
   final profile = Get.put(ProfileController());
   final notify = Get.put(NotificationController());
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

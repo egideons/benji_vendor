@@ -2,7 +2,6 @@
 
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,17 +16,8 @@ class VendorsOrderContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
     return Container(
-      margin: const EdgeInsets.symmetric(
-        vertical: kDefaultPadding / 2,
-      ),
-      padding: const EdgeInsets.only(
-        top: kDefaultPadding / 2,
-        bottom: kDefaultPadding / 2,
-        left: kDefaultPadding / 2,
-        right: kDefaultPadding / 2,
-      ),
-      width: media.width / 1.1,
-      // height: 150,
+      padding: const EdgeInsets.all(kDefaultPadding / 2),
+      width: media.width,
       decoration: ShapeDecoration(
         color: kPrimaryColor,
         shape: RoundedRectangleBorder(
@@ -52,17 +42,22 @@ class VendorsOrderContainer extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: kLightGreyColor,
                   borderRadius: BorderRadius.circular(16),
-                ),
-                child: CachedNetworkImage(
-                  imageUrl: order.client.image ?? "",
-                  fit: BoxFit.cover,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(
-                    child: CupertinoActivityIndicator(color: kAccentColor),
+                  image: const DecorationImage(
+                    image: AssetImage("assets/images/profile/avatar-image.jpg"),
                   ),
-                  errorWidget: (context, url, error) =>
-                      Icon(Icons.error, color: kAccentColor),
                 ),
+                // child:
+
+                //  CachedNetworkImage(
+                //   imageUrl: order.client.image ?? "",
+                //   fit: BoxFit.cover,
+                //   progressIndicatorBuilder: (context, url, downloadProgress) =>
+                //       Center(
+                //     child: CupertinoActivityIndicator(color: kAccentColor),
+                //   ),
+                //   errorWidget: (context, url, error) =>
+                //       Icon(Icons.error, color: kAccentColor),
+                // ),
               ),
               kHalfSizedBox,
               SizedBox(
@@ -134,14 +129,6 @@ class VendorsOrderContainer extends StatelessWidget {
                 child: Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(
-                        text: "x ${order.orderitems.length.toString()}",
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      const TextSpan(text: "  "),
                       TextSpan(
                         text:
                             "₦ ${convertToCurrency(order.totalPrice.toString())}",

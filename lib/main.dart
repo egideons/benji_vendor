@@ -26,15 +26,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: "Benji Vendor",
-      color: kPrimaryColor,
       debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.rightToLeft,
-      themeMode: ThemeMode.light,
-      darkTheme: AppTheme.darkTheme,
-      theme: AppTheme.lightTheme,
-      home: SplashScreen(),
+      color: kPrimaryColor,
+      builder: (context, child) {
+        return GetMaterialApp(
+          navigatorKey: Get.key,
+          debugShowCheckedModeBanner: false,
+          title: "Benji Vendor",
+          themeMode: ThemeMode.light,
+          darkTheme: AppTheme.darkTheme,
+          theme: AppTheme.lightTheme,
+          defaultTransition: Transition.rightToLeft,
+          home: SplashScreen(),
+        );
+      },
     );
   }
 }

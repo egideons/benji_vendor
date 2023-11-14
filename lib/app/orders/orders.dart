@@ -178,11 +178,12 @@ class _OrdersState extends State<Orders> {
                         )
                       : controller.vendorsOrderList.isEmpty
                           ? const EmptyCard()
-                          : ListView.builder(
+                          : ListView.separated(
                               shrinkWrap: true,
                               itemCount: controller.vendorsOrderList.length,
                               physics: const BouncingScrollPhysics(),
-                              itemBuilder: (BuildContext context, int index) {
+                              separatorBuilder: (context, index) => kSizedBox,
+                              itemBuilder: (context, index) {
                                 return InkWell(
                                   onTap: () {
                                     Get.to(
@@ -209,6 +210,7 @@ class _OrdersState extends State<Orders> {
                               },
                             ),
                 ),
+                kSizedBox,
                 GetBuilder<OrderController>(
                   builder: (controller) => Column(
                     children: [

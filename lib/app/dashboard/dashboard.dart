@@ -25,6 +25,7 @@ import 'package:get/get.dart';
 import '../../src/components/appbar/home appBar vendor name.dart';
 import '../../src/components/container/home orders container.dart';
 import '../../src/controller/notification_controller.dart';
+import '../../src/model/order_model.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
@@ -48,6 +49,23 @@ class _DashboardState extends State<Dashboard> {
     consoleLog(
         "This is the profile logo: ${UserController.instance.user.value.profileLogo}");
   }
+
+  void printOrderCounts() {
+    consoleLog('Pending Orders Count: $pendingOrdersCount');
+    consoleLog('Delivered Orders Count: $deliveredOrdersCount');
+  }
+
+  List<OrderModel> get pendingOrders =>
+      OrderController.instance.vendorsOrderList
+          .where((order) => order.assignedStatus == "PEND")
+          .toList();
+
+  List<OrderModel> get deliveredOrders =>
+      OrderController.instance.vendorsOrderList
+          .where((order) => order.assignedStatus == "COMP")
+          .toList();
+  int get pendingOrdersCount => pendingOrders.length;
+  int get deliveredOrdersCount => deliveredOrders.length;
 
 //=================================== ALL VARIABLES =====================================\\
   int? numberOfNotifications;
@@ -161,6 +179,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
+    printOrderCounts();
     return MyResponsivePadding(
       child: MyLiquidRefresh(
         onRefresh: handleRefresh,
@@ -193,12 +212,13 @@ class _DashboardState extends State<Dashboard> {
                           minRadius: 20,
                           backgroundColor: kTransparentColor,
                           child: ClipOval(
-                            child: controller.user.value.profileLogo.isEmpty
-                                ? Image.asset(
-                                    'assets/images/profile/avatar-image.jpg')
-                                : MyImage(
-                                    url: controller.user.value.profileLogo),
-                          ),
+                              child:
+                                  //  controller.user.value.profileLogo.isEmpty
+                                  //     ?
+                                  Image.asset('assets/icons/store.png')
+                              // : MyImage(
+                              //     url: controller.user.value.profileLogo),
+                              ),
                         ),
                       ),
                     ),
@@ -274,8 +294,8 @@ class _DashboardState extends State<Dashboard> {
                                   return OrdersContainer(
                                     onTap: () =>
                                         ordersPage(StatusType.delivered),
-                                    numberOfOrders: formatNumber(
-                                        controller.vendorsOrderList.length),
+                                    numberOfOrders:
+                                        formatNumber(deliveredOrdersCount),
                                     typeOfOrders: "Delivered",
                                   );
                                 },
@@ -289,8 +309,8 @@ class _DashboardState extends State<Dashboard> {
                                 builder: (controller) {
                                   return OrdersContainer(
                                     onTap: () => ordersPage(StatusType.pending),
-                                    numberOfOrders: formatNumber(
-                                        controller.vendorsOrderList.length),
+                                    numberOfOrders:
+                                        formatNumber(pendingOrdersCount),
                                     typeOfOrders: "Pending",
                                   );
                                 },
