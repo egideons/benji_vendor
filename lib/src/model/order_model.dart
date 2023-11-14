@@ -16,6 +16,7 @@ class OrderModel {
   List<Orderitem> orderitems;
   String created;
   double preTotal;
+  String deliveryAddress;
   String latitude;
   String longitude;
 
@@ -30,6 +31,7 @@ class OrderModel {
     required this.orderitems,
     required this.created,
     required this.preTotal,
+    required this.deliveryAddress,
     required this.latitude,
     required this.longitude,
   });
@@ -51,6 +53,7 @@ class OrderModel {
               .toList(),
       created: json["created"] ?? notAvailable,
       preTotal: json["pre_total"] ?? notAvailable,
+      deliveryAddress: json["delivery_address"] ?? notAvailable,
       latitude: json["latitude"] ?? notAvailable,
       longitude: json["longitude"] ?? notAvailable,
     );
@@ -66,6 +69,7 @@ class OrderModel {
         "orderitems": orderitems.map((item) => (item).toJson()).toList(),
         "created": created,
         "pre_total": preTotal,
+        "delivery_address": deliveryAddress,
         "latitude": latitude,
         "longitude": longitude,
       };

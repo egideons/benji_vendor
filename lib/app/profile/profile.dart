@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../src/model/order_model.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../auth/login.dart';
@@ -23,6 +24,22 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  List<OrderModel> get pendingOrders =>
+      OrderController.instance.vendorsOrderList
+          .where((order) => order.assignedStatus == "PEND")
+          .toList();
+
+  List<OrderModel> get deliveredOrders =>
+      OrderController.instance.vendorsOrderList
+          .where((order) => order.assignedStatus == "COMP")
+          .toList();
+  int get pendingOrdersCount => pendingOrders.length;
+  int get deliveredOrdersCount => deliveredOrders.length;
+
+  totalNumberOfOrders() {
+    return pendingOrdersCount + deliveredOrdersCount;
+  }
+
   void logOut() async {
     UserController.instance.deleteUser();
     ProductController.instance.deleteCachedProducts();
@@ -254,7 +271,7 @@ class _ProfileState extends State<Profile> {
                         initState: (state) async =>
                             await OrderController.instance.getTotal(),
                         builder: (controller) => Text(
-                          formatNumber(controller.total.value),
+                          formatNumber(totalNumberOfOrders()),
                           textAlign: TextAlign.right,
                           style: const TextStyle(
                             color: Color(0xFF9B9BA5),

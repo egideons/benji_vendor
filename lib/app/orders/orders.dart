@@ -4,9 +4,12 @@ import 'package:benji_vendor/src/components/container/vendors_order_container.da
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../src/controller/auth_controller.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 
 enum StatusType { delivered, pending, cancelled }
@@ -24,9 +27,10 @@ class _OrdersState extends State<Orders> {
   @override
   void initState() {
     super.initState();
-    // AuthController.instance.checkIfAuthorized();
+    AuthController.instance.checkIfAuthorized();
     scrollController.addListener(
         () => OrderController.instance.scrollListener(scrollController));
+    scrollController.addListener(_scrollListener);
   }
 
   @override
@@ -52,10 +56,40 @@ class _OrdersState extends State<Orders> {
       theStatus == currentStatus;
 
   //========= variables ==========//
+  bool isScrollToTopBtnVisible = false;
+
   final ScrollController scrollController = ScrollController();
+
+  //===================== Scroll to Top ==========================\\
+  Future<void> _scrollToTop() async {
+    await scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    setState(() {
+      isScrollToTopBtnVisible = false;
+    });
+  }
+
+  Future<void> _scrollListener() async {
+    if (scrollController.position.pixels >= 100 &&
+        isScrollToTopBtnVisible != true) {
+      setState(() {
+        isScrollToTopBtnVisible = true;
+      });
+    }
+    if (scrollController.position.pixels < 100 &&
+        isScrollToTopBtnVisible == true) {
+      setState(() {
+        isScrollToTopBtnVisible = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return MyResponsivePadding(
       child: Scaffold(
         appBar: AppBar(
@@ -73,6 +107,19 @@ class _OrdersState extends State<Orders> {
           ),
           actions: const [],
         ),
+        floatingActionButton: isScrollToTopBtnVisible
+            ? FloatingActionButton(
+                onPressed: _scrollToTop,
+                mini: deviceType(media.width) > 2 ? false : true,
+                backgroundColor: kAccentColor,
+                enableFeedback: true,
+                mouseCursor: SystemMouseCursors.click,
+                tooltip: "Scroll to top",
+                hoverColor: kAccentColor,
+                hoverElevation: 50.0,
+                child: const FaIcon(FontAwesomeIcons.chevronUp, size: 18),
+              )
+            : const SizedBox(),
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: Scrollbar(

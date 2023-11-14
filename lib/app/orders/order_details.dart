@@ -158,10 +158,10 @@ class _OrderDetailsState extends State<OrderDetails> {
                   )
                 ],
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Items ordered',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -171,13 +171,34 @@ class _OrderDetailsState extends State<OrderDetails> {
                       letterSpacing: -0.32,
                     ),
                   ),
-                  kHalfSizedBox,
-                  // Column(
-                  //   children: List.generate(
-                  //     widget.order.orderitems.length,
-                  //     (index) => OrderItemSection(order: widget.order),
-                  //   ),
-                  // )
+                  ListView.builder(
+                    itemCount: widget.order.orderitems.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      var adjustedIndex = index + 1;
+                      var order = widget.order.orderitems[index];
+                      return ListTile(
+                        titleAlignment: ListTileTitleAlignment.center,
+                        horizontalTitleGap: 0,
+                        leading: Text(
+                          "$adjustedIndex.",
+                          style: const TextStyle(
+                            color: kTextBlackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        title: Text(
+                          '${order.product.name} x ${order.quantity.toString()}',
+                          style: const TextStyle(
+                            color: kTextBlackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      );
+                    },
+                  )
                 ],
               ),
             ),
@@ -188,7 +209,7 @@ class _OrderDetailsState extends State<OrderDetails> {
               decoration: ShapeDecoration(
                 color: kPrimaryColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14.30),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 shadows: const [
                   BoxShadow(
@@ -257,7 +278,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                           ),
                           kHalfSizedBox,
                           // Text(
-                          //   deliveryAddress,
+                          //   widget.order.deliveryAddress,
                           //   style: TextStyle(
                           //     color: kTextGreyColor,
                           //     fontSize: 12,
@@ -295,7 +316,6 @@ class _OrderDetailsState extends State<OrderDetails> {
                 children: [
                   const Text(
                     'Order Summary',
-                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: kTextBlackColor,
                       fontSize: 16,

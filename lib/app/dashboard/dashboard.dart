@@ -24,6 +24,7 @@ import 'package:get/get.dart';
 
 import '../../src/components/appbar/home appBar vendor name.dart';
 import '../../src/components/container/home orders container.dart';
+import '../../src/controller/auth_controller.dart';
 import '../../src/controller/notification_controller.dart';
 import '../../src/model/order_model.dart';
 import '../../src/providers/constants.dart';
@@ -44,6 +45,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
+    AuthController.instance.checkIfAuthorized();
 
     numberOfNotifications = NotificationController.instance.notification.length;
     consoleLog(

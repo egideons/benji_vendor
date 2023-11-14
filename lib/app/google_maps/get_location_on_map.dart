@@ -34,9 +34,9 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
   void initState() {
     super.initState();
     pinnedLocation = "";
-    _markerTitle = <String>["Me"];
-    _markerSnippet = <String>["My Location"];
-    _loadMapData();
+    markerTitle = <String>["Me"];
+    markerSnippet = <String>["My Location"];
+    loadMapData();
   }
 
   @override
@@ -61,8 +61,8 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
   final List<MarkerId> _markerId = <MarkerId>[
     const MarkerId("0"),
   ];
-  List<String>? _markerTitle;
-  List<String>? _markerSnippet;
+  List<String>? markerTitle;
+  List<String>? markerSnippet;
   final List<String> _customMarkers = <String>[
     "assets/icons/person_location.png",
   ];
@@ -78,7 +78,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
   //======================================= Google Maps ================================================\\
 
   /// When the location services are not enabled or permissions are denied the `Future` will return an error.
-  Future<void> _loadMapData() async {
+  Future<void> loadMapData() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -110,13 +110,13 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
         'Location permissions are permanently denied, we cannot request permissions.',
       );
     }
-    await _getAndGoToUserCurrentLocation();
-    await _loadCustomMarkers();
+    await getAndGoToUserCurrentLocation();
+    await loadCustomMarkers();
   }
 
 //============================================== Get Current Location ==================================================\\
 
-  Future<Position> _getAndGoToUserCurrentLocation() async {
+  Future<Position> getAndGoToUserCurrentLocation() async {
     Position userLocation = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     ).then(
@@ -153,7 +153,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
 
   //====================================== Get Location Markers =========================================\\
 
-  _loadCustomMarkers() async {
+  loadCustomMarkers() async {
     Position userLocation = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     ).then(
@@ -172,8 +172,8 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
           icon: BitmapDescriptor.fromBytes(markerIcon),
           position: latLng[i],
           infoWindow: InfoWindow(
-            title: _markerTitle![i],
-            snippet: _markerSnippet![i],
+            title: markerTitle![i],
+            snippet: markerSnippet![i],
           ),
         ),
       );
@@ -218,12 +218,12 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
       target: position,
       zoom: zoom,
     )));
-    await _getPlaceMark(position);
+    await getPlaceMark(position);
   }
 
 //========================================================== Get PlaceMark Address and LatLng =============================================================\\
 
-  Future _getPlaceMark(LatLng position) async {
+  Future getPlaceMark(LatLng position) async {
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark address = placemarks[0];
@@ -239,7 +239,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
 
 //==================== Select Location using ===============\\
   void _selectLocation() async {
-    _getPlaceMark(draggedLatLng);
+    getPlaceMark(draggedLatLng);
   }
 
 //============================================== Create Google Maps ==================================================\\
@@ -250,8 +250,8 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
   }
 
 //========================================================== Save Function =============================================================\\
-  _saveFunc() async {
-    _getPlaceMark(draggedLatLng);
+  saveFunc() async {
+    getPlaceMark(draggedLatLng);
     if (kDebugMode) {
       print("draggedLatLng: $draggedLatLng");
       print("PinnedLocation: $pinnedLocation");
@@ -261,7 +261,11 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
     latLngDetailController
         .setLatLngdetail([latitude, longitude, pinnedLocation]);
 
-    Get.back();
+    Get.back(result: {
+      'pinnedLocation': pinnedLocation,
+      'latitude': latitude,
+      'longitude': longitude,
+    });
   }
 
   @override
@@ -306,7 +310,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                 TextSpan(text: pinnedLocation!),
               ])),
               kHalfSizedBox,
-              MyElevatedButton(title: "Save", onPressed: _saveFunc),
+              MyElevatedButton(title: "Save", onPressed: saveFunc),
             ],
           ),
         ),
@@ -367,7 +371,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                               setState(() {
                                 locationPinIsVisible = true;
                               });
-                              _getPlaceMark(draggedLatLng);
+                              getPlaceMark(draggedLatLng);
                             },
                             onCameraMove: (cameraPosition) {
                               setState(() {
