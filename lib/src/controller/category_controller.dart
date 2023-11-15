@@ -21,6 +21,7 @@ class CategoryController extends GetxController {
 
   Future getCategory() async {
     isLoad.value = true;
+    update();
     late String token;
     var url = "${Api.baseUrl}${Api.category}?start=0&end=100";
     token = UserController.instance.user.value.token;
