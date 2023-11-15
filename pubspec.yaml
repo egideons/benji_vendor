@@ -45,6 +45,11 @@ dependencies:
   flutter_carousel_widget:
   readmore:
   group_radio_button:
+  firebase_messaging:
+  firebase_core:
+  awesome_notifications:
+  awesome_notifications_core:
+  awesome_notifications_fcm:
 
 dev_dependencies:
   flutter_test:
