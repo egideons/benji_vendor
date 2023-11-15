@@ -86,7 +86,7 @@ class _AddProductState extends State<AddProduct> {
   File? selectedImages;
 
   //================================== FUNCTIONS ====================================\\
-  submit() async {
+  Future<void> submit() async {
     if (selectedImages == null) {
       ApiProcessorController.errorSnack("Please select product images");
       return;

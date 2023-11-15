@@ -9,9 +9,7 @@ import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/components/number_textformfield.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
-import 'package:benji_vendor/src/model/package/item_category.dart';
-import 'package:benji_vendor/src/model/package/item_weight.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,11 +18,12 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-import '../../src/controller/error_controller.dart';
+import '../../src/components/input/item_category_dropdown_menu.dart';
+import '../../src/controller/send_package_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
-import 'item_category_dropdown_menu.dart';
+import 'pay_for_delivery.dart';
 
 class SendPackage extends StatefulWidget {
   const SendPackage({super.key});
@@ -59,6 +58,8 @@ class _SendPackageState extends State<SendPackage> {
   String? longitudePick;
   String? latitudeDrop;
   String? longitudeDrop;
+  String? itemCategoryId;
+  String? itemWeightId;
   //=============================== CONTROLLERS ==================================\\
 
   final _formKey = GlobalKey<FormState>();
@@ -75,9 +76,8 @@ class _SendPackageState extends State<SendPackage> {
   final itemCategoryEC = TextEditingController();
   final itemWeightEC = TextEditingController();
   final itemQuantityEC = TextEditingController();
-  // var _AddressesState = TextEditingController();
 
-  late final TextEditingController _itemValueEC = TextEditingController();
+  final itemValueEC = TextEditingController();
 
   final LatLngDetailController latLngDetailController =
       LatLngDetailController.instance;
@@ -93,19 +93,6 @@ class _SendPackageState extends State<SendPackage> {
   var itemValueFN = FocusNode();
 
   //=============================== FUNCTIONS ==================================\\
-
-  List<ItemCategory> category = [];
-  List<ItemWeight> weight = [];
-
-  getData() async {
-    List<ItemCategory> category = await getPackageCategory();
-    List<ItemWeight> weight = await getPackageWeight();
-
-    setState(() {
-      category = category;
-      weight = weight;
-    });
-  }
 
   continueStep() {
     if (currentStep < 2) {
@@ -237,52 +224,89 @@ class _SendPackageState extends State<SendPackage> {
   }
 
   Future<void> submitForm() async {
-    if (pickupEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please fill in a pickup address");
-      return;
-    }
-    if (senderNameEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please fill in your name");
-      return;
-    }
-    if (senderPhoneEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please fill in your phone number");
-      return;
-    }
-    if (dropOffEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please select a drop-off location");
-      return;
-    }
-    if (receiverNameEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please fill in the receiver's name");
-      return;
-    }
-    if (receiverPhoneEC.text.isEmpty) {
-      ApiProcessorController.errorSnack(
-          "Please fill in the receiver's phone number");
-      return;
-    }
-    if (itemNameEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please fill in the item's name");
-      return;
-    }
-    if (itemCategoryEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please select the item category");
-      return;
-    }
-    if (itemWeightEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please select the item weight");
-      return;
-    }
-    if (itemQuantityEC.text.isEmpty) {
-      ApiProcessorController.errorSnack(
-          "Please fill in the quantity of the item");
-      return;
-    }
-    if (selectedImage == null) {
-      ApiProcessorController.errorSnack("Please select an image");
-      return;
-    }
+    // if (pickupEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please fill in a pickup address");
+    //   return;
+    // }
+    // if (senderNameEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please fill in your name");
+    //   return;
+    // }
+    // if (senderPhoneEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please fill in your phone number");
+    //   return;
+    // }
+    // if (dropOffEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please select a drop-off location");
+    //   return;
+    // }
+    // if (receiverNameEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please fill in the receiver's name");
+    //   return;
+    // }
+    // if (receiverPhoneEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack(
+    //       "Please fill in the receiver's phone number");
+    //   return;
+    // }
+    // if (itemNameEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please fill in the item's name");
+    //   return;
+    // }
+    // if (itemCategoryEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please select the item category");
+    //   return;
+    // }
+    // if (itemWeightEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please select the item weight");
+    //   return;
+    // }
+    // if (itemQuantityEC.text.isEmpty) {
+    //   ApiProcessorController.errorSnack(
+    //       "Please fill in the quantity of the item");
+    //   return;
+    // }
+    //   if (selectedImage == null) {
+    //     ApiProcessorController.errorSnack("Please select an image");
+    //     return;
+    //   }
+    // Map data = {
+    //   'client_id': UserController.instance.user.value.id,
+    //   'pickUpAddress': pickupEC.text,
+    //   'senderName': senderNameEC.text,
+    //   'senderPhoneNumber': senderPhoneEC.text,
+    //   'dropOffAddress': dropOffEC.text,
+    //   'receiverName': receiverNameEC.text,
+    //   'receiverPhoneNumber': receiverPhoneEC.text,
+    //   'itemName': itemNameEC.text,
+    //   'itemCategory_id': itemCategoryEC.text,
+    //   'itemWeight_id': itemWeightEC.text,
+    //   'itemQuantity': itemQuantityEC.text,
+    //   'itemValue': itemValueEC.text,
+    // };
+    // await FormController.instance
+    //     .postAuth(Api.baseUrl + Api.createItemPackage, data, 'createPackage');
+    // if (FormController.instance.status.toString().startsWith('2')) {}
+    Get.to(
+      () => PayForDelivery(
+          senderName: senderNameEC.text,
+          senderPhoneNumber: senderPhoneEC.text,
+          receiverName: receiverNameEC.text,
+          receiverPhoneNumber: receiverPhoneEC.text,
+          receiverLocation: dropOffEC.text,
+          itemName: itemNameEC.text,
+          itemQuantity: itemQuantityEC.text,
+          itemWeight: itemWeightEC.text,
+          itemValue: itemValueEC.text,
+          itemCategoryId: itemCategoryEC.text),
+      routeName: 'PayForDelivery',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
   }
 
   //=============================== WIDGETS ==================================\\
@@ -737,17 +761,35 @@ class _SendPackageState extends State<SendPackage> {
                 ),
               ),
               kHalfSizedBox,
-              ItemDropDownMenu(
-                itemEC: itemCategoryEC,
-                mediaWidth: media.width - 70,
-                hintText: "Choose category",
-                dropdownMenuEntries2: category
-                    .map(
-                      (item) =>
-                          DropdownMenuEntry(value: item.id, label: item.name),
-                    )
-                    .toList(),
+              GetBuilder<SendPackageController>(
+                init: SendPackageController(),
+                initState: (controller) async {
+                  await SendPackageController.instance.getPackageCategory();
+                },
+                builder: (controller) {
+                  return controller.isLoad.value
+                      ? Center(
+                          child: CircularProgressIndicator(color: kAccentColor),
+                        )
+                      : ItemDropDownMenu(
+                          itemEC: itemCategoryEC,
+                          mediaWidth: media.width - 70,
+                          hintText: "Choose category",
+                          onSelected: (value) {
+                            itemCategoryEC.text = value!;
+                            consoleLog(
+                                "This is the item category ID: ${itemCategoryEC.text}");
+                          },
+                          dropdownMenuEntries2: controller.packageCategory
+                              .map((category) => DropdownMenuEntry(
+                                    value: category.id,
+                                    label: category.name,
+                                  ))
+                              .toList(),
+                        );
+                },
               ),
+
               kSizedBox,
               const Text(
                 "Item Weight",
@@ -757,17 +799,33 @@ class _SendPackageState extends State<SendPackage> {
                 ),
               ),
               kHalfSizedBox,
-              ItemDropDownMenu(
-                itemEC: itemWeightEC,
-                mediaWidth: media.width - 70,
-                hintText: "Choose weight",
-                dropdownMenuEntries2: weight
-                    .map(
-                      (item) => DropdownMenuEntry(
-                          value: item.id,
-                          label: '${item.start}KG - ${item.end}KG'),
-                    )
-                    .toList(),
+              GetBuilder<SendPackageController>(
+                init: SendPackageController(),
+                initState: (controller) async {
+                  await SendPackageController.instance.getPackageWeight();
+                },
+                builder: (controller) {
+                  return controller.isLoad.value
+                      ? Center(
+                          child: CircularProgressIndicator(color: kAccentColor),
+                        )
+                      : ItemDropDownMenu(
+                          itemEC: itemWeightEC,
+                          mediaWidth: media.width - 70,
+                          hintText: "Choose weight",
+                          onSelected: (value) {
+                            itemWeightEC.text = value!;
+                            consoleLog(
+                                "This is the item weight ID: ${itemWeightEC.text}");
+                          },
+                          dropdownMenuEntries2: controller.packageWeight
+                              .map((category) => DropdownMenuEntry(
+                                    value: category.id,
+                                    label: category.title,
+                                  ))
+                              .toList(),
+                        );
+                },
               ),
               kSizedBox,
               const Text(
@@ -805,7 +863,7 @@ class _SendPackageState extends State<SendPackage> {
               ),
               kHalfSizedBox,
               MyTextFormField(
-                controller: _itemValueEC,
+                controller: itemValueEC,
                 validator: (value) {
                   if (value == null || value!.isEmpty) {
                     itemValueFN.requestFocus();
@@ -814,7 +872,7 @@ class _SendPackageState extends State<SendPackage> {
                   return null;
                 },
                 onSaved: (value) {
-                  _itemValueEC.text = value;
+                  itemValueEC.text = value;
                 },
                 textInputAction: TextInputAction.done,
                 textCapitalization: TextCapitalization.sentences,
@@ -823,86 +881,86 @@ class _SendPackageState extends State<SendPackage> {
                 textInputType: TextInputType.number,
               ),
               kSizedBox,
-              DottedBorder(
-                color: kLightGreyColor,
-                borderPadding: const EdgeInsets.all(3),
-                padding: const EdgeInsets.all(kDefaultPadding / 2),
-                borderType: BorderType.RRect,
-                radius: const Radius.circular(20),
-                child: Column(
-                  children: [
-                    selectedImage == null
-                        ? Container(
-                            width: media.width,
-                            height: 144,
-                            decoration: ShapeDecoration(
-                              image: const DecorationImage(
-                                  image: AssetImage(
-                                      "assets/icons/image-upload.png")),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE6E6E6),
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          )
-                        : Container(
-                            width: media.width,
-                            height: deviceType(media.width) >= 2 ? 280 : 200,
-                            decoration: ShapeDecoration(
-                              image: DecorationImage(
-                                image: FileImage(selectedImage!),
-                                fit: BoxFit.contain,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE6E6E6),
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          elevation: 20,
-                          barrierColor: kBlackColor.withOpacity(0.8),
-                          showDragHandle: true,
-                          useSafeArea: true,
-                          isDismissible: true,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(kDefaultPadding),
-                            ),
-                          ),
-                          enableDrag: true,
-                          builder: ((builder) => uploadCoverImage()),
-                        );
-                      },
-                      splashColor: kAccentColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          'Upload item image',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              kSizedBox,
+              // DottedBorder(
+              //   color: kLightGreyColor,
+              //   borderPadding: const EdgeInsets.all(3),
+              //   padding: const EdgeInsets.all(kDefaultPadding / 2),
+              //   borderType: BorderType.RRect,
+              //   radius: const Radius.circular(20),
+              //   child: Column(
+              //     children: [
+              //       selectedImage == null
+              //           ? Container(
+              //               width: media.width,
+              //               height: 144,
+              //               decoration: ShapeDecoration(
+              //                 image: const DecorationImage(
+              //                     image: AssetImage(
+              //                         "assets/icons/image-upload.png")),
+              //                 shape: RoundedRectangleBorder(
+              //                   side: const BorderSide(
+              //                     width: 0.50,
+              //                     color: Color(0xFFE6E6E6),
+              //                   ),
+              //                   borderRadius: BorderRadius.circular(20),
+              //                 ),
+              //               ),
+              //             )
+              //           : Container(
+              //               width: media.width,
+              //               height: deviceType(media.width) >= 2 ? 280 : 200,
+              //               decoration: ShapeDecoration(
+              //                 image: DecorationImage(
+              //                   image: FileImage(selectedImage!),
+              //                   fit: BoxFit.contain,
+              //                 ),
+              //                 shape: RoundedRectangleBorder(
+              //                   side: const BorderSide(
+              //                     width: 0.50,
+              //                     color: Color(0xFFE6E6E6),
+              //                   ),
+              //                   borderRadius: BorderRadius.circular(20),
+              //                 ),
+              //               ),
+              //             ),
+              //       InkWell(
+              //         onTap: () {
+              //           showModalBottomSheet(
+              //             context: context,
+              //             elevation: 20,
+              //             barrierColor: kBlackColor.withOpacity(0.8),
+              //             showDragHandle: true,
+              //             useSafeArea: true,
+              //             isDismissible: true,
+              //             isScrollControlled: true,
+              //             shape: const RoundedRectangleBorder(
+              //               borderRadius: BorderRadius.vertical(
+              //                 top: Radius.circular(kDefaultPadding),
+              //               ),
+              //             ),
+              //             enableDrag: true,
+              //             builder: ((builder) => uploadCoverImage()),
+              //           );
+              //         },
+              //         splashColor: kAccentColor.withOpacity(0.1),
+              //         borderRadius: BorderRadius.circular(10),
+              //         child: Container(
+              //           padding: const EdgeInsets.all(10),
+              //           child: Text(
+              //             'Upload item image',
+              //             textAlign: TextAlign.center,
+              //             style: TextStyle(
+              //               color: kAccentColor,
+              //               fontSize: 16,
+              //               fontWeight: FontWeight.w400,
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // kSizedBox,
             ],
           ),
         ),

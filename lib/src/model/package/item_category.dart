@@ -1,10 +1,4 @@
-import 'dart:convert';
-
-import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:http/http.dart' as http;
-
 import '../../providers/constants.dart';
-import '../../providers/helper.dart';
 
 class ItemCategory {
   final String id;
@@ -21,19 +15,5 @@ class ItemCategory {
       id: json['id'] ?? notAvailable,
       name: json['name'] ?? notAvailable,
     );
-  }
-}
-
-Future<List<ItemCategory>> getPackageCategory() async {
-  final response = await http.get(
-      Uri.parse('$baseURL/sendPackage/getPackageCategory/'),
-      headers: authHeader());
-
-  if (response.statusCode == 200) {
-    return (jsonDecode(response.body) as List)
-        .map((item) => ItemCategory.fromJson(item))
-        .toList();
-  } else {
-    return [];
   }
 }

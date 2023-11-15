@@ -310,7 +310,9 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                 TextSpan(text: pinnedLocation!),
               ])),
               kHalfSizedBox,
-              MyElevatedButton(title: "Save", onPressed: saveFunc),
+              MyElevatedButton(
+                  title: "Save",
+                  onPressed: _userPosition == null ? () {} : saveFunc),
             ],
           ),
         ),

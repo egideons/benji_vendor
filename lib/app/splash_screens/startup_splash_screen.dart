@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
+import '../../src/controller/send_package_controller.dart';
 import '../../src/providers/constants.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -29,6 +30,7 @@ class SplashScreen extends StatelessWidget {
   final latLngDetail = Get.put(LatLngDetailController());
   final profile = Get.put(ProfileController());
   final notify = Get.put(NotificationController());
+  final package = Get.put(SendPackageController());
 
   @override
   Widget build(BuildContext context) {
