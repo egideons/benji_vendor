@@ -1,13 +1,10 @@
 import 'package:benji_vendor/app/splash_screens/startup_splash_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'src/controller/fcm_messaging_controller.dart';
 import 'src/controller/push_notifications_controller.dart';
 import 'theme/app_theme.dart';
 import 'theme/colors.dart';
@@ -22,11 +19,11 @@ void main() async {
   prefs = await SharedPreferences.getInstance();
 
   if (!kIsWeb) {
-    await Firebase.initializeApp();
-    await FirebaseMessaging.instance.setAutoInitEnabled(true);
+    // await Firebase.initializeApp();
+    // await FirebaseMessaging.instance.setAutoInitEnabled(true);
     await PushNotificationController.initializeNotification();
 
-    await FcmMessagingController.instance.handleFCM();
+    // await FcmMessagingController.instance.handleFCM();
   }
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -40,23 +37,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: "Benji Vendor",
       debugShowCheckedModeBanner: false,
       color: kPrimaryColor,
       navigatorKey: navigatorKey,
-      builder: (context, child) {
-        return GetMaterialApp(
-          navigatorKey: Get.key,
-          debugShowCheckedModeBanner: false,
-          title: "Benji Vendor",
-          themeMode: ThemeMode.light,
-          darkTheme: AppTheme.darkTheme,
-          theme: AppTheme.lightTheme,
-          defaultTransition: Transition.rightToLeft,
-          home: SplashScreen(),
-        );
-      },
+      themeMode: ThemeMode.light,
+      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
+      defaultTransition: Transition.rightToLeft,
+      home: SplashScreen(),
     );
   }
 }

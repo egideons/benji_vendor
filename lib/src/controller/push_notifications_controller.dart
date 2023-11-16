@@ -1,8 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:benji_vendor/app/splash_screens/startup_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../app/overview/overview.dart';
 import '../../main.dart';
 import '../../theme/colors.dart';
 import '../providers/constants.dart';
@@ -74,7 +74,7 @@ class PushNotificationController extends GetxController {
       ReceivedAction receivedAction) async {
     MyApp.navigatorKey.currentState?.push(
       MaterialPageRoute(
-        builder: (_) => const OverView(currentIndex: 0),
+        builder: (_) => SplashScreen(),
       ),
     );
     debugPrint("onActionReceiveMethod");
@@ -82,7 +82,7 @@ class PushNotificationController extends GetxController {
     if (payload["navigate"] == "true") {
       MyApp.navigatorKey.currentState?.push(
         MaterialPageRoute(
-          builder: (_) => const OverView(currentIndex: 0),
+          builder: (_) => SplashScreen(),
         ),
       );
     }

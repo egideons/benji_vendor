@@ -50,24 +50,26 @@ class _DashboardState extends State<Dashboard> {
     numberOfNotifications = NotificationController.instance.notification.length;
     consoleLog(
         "This is the profile logo: ${UserController.instance.user.value.profileLogo}");
+    OrderController.instance.getOrdersByPendingStatus();
+    OrderController.instance.getOrdersByCompletedStatus();
   }
+
+  List<OrderModel> get pendingOrders =>
+      OrderController.instance.vendorPendingOrders
+          .where((order) => order.assignedStatus == "PEND")
+          .toList();
+
+  List<OrderModel> get deliveredOrders =>
+      OrderController.instance.vendorCompletedOrders
+          .where((order) => order.assignedStatus == "COMP")
+          .toList();
+  int get pendingOrdersCount => pendingOrders.length;
+  int get deliveredOrdersCount => deliveredOrders.length;
 
   void printOrderCounts() {
     consoleLog('Pending Orders Count: $pendingOrdersCount');
     consoleLog('Delivered Orders Count: $deliveredOrdersCount');
   }
-
-  List<OrderModel> get pendingOrders =>
-      OrderController.instance.vendorsOrderList
-          .where((order) => order.assignedStatus == "PEND")
-          .toList();
-
-  List<OrderModel> get deliveredOrders =>
-      OrderController.instance.vendorsOrderList
-          .where((order) => order.assignedStatus == "COMP")
-          .toList();
-  int get pendingOrdersCount => pendingOrders.length;
-  int get deliveredOrdersCount => deliveredOrders.length;
 
 //=================================== ALL VARIABLES =====================================\\
   int? numberOfNotifications;
@@ -287,11 +289,6 @@ class _DashboardState extends State<Dashboard> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GetBuilder<OrderController>(
-                                init: OrderController(),
-                                initState: (state) async {
-                                  await OrderController.instance
-                                      .setStatus(StatusType.delivered);
-                                },
                                 builder: (controller) {
                                   return OrdersContainer(
                                     onTap: () =>
@@ -303,11 +300,6 @@ class _DashboardState extends State<Dashboard> {
                                 },
                               ),
                               GetBuilder<OrderController>(
-                                init: OrderController(),
-                                initState: (state) async {
-                                  await OrderController.instance
-                                      .setStatus(StatusType.pending);
-                                },
                                 builder: (controller) {
                                   return OrdersContainer(
                                     onTap: () => ordersPage(StatusType.pending),

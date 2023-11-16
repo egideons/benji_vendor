@@ -24,13 +24,20 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  @override
+  void initState() {
+    super.initState();
+    OrderController.instance.getOrdersByPendingStatus();
+    OrderController.instance.getOrdersByCompletedStatus();
+  }
+
   List<OrderModel> get pendingOrders =>
-      OrderController.instance.vendorsOrderList
+      OrderController.instance.vendorPendingOrders
           .where((order) => order.assignedStatus == "PEND")
           .toList();
 
   List<OrderModel> get deliveredOrders =>
-      OrderController.instance.vendorsOrderList
+      OrderController.instance.vendorCompletedOrders
           .where((order) => order.assignedStatus == "COMP")
           .toList();
   int get pendingOrdersCount => pendingOrders.length;
@@ -267,17 +274,13 @@ class _ProfileState extends State<Profile> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      trailing: GetBuilder<OrderController>(
-                        initState: (state) async =>
-                            await OrderController.instance.getTotal(),
-                        builder: (controller) => Text(
-                          formatNumber(totalNumberOfOrders()),
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                            color: Color(0xFF9B9BA5),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      trailing: Text(
+                        formatNumber(totalNumberOfOrders()),
+                        textAlign: TextAlign.right,
+                        style: const TextStyle(
+                          color: Color(0xFF9B9BA5),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),

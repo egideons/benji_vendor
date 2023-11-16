@@ -49,7 +49,7 @@ class ProductController extends GetxController {
     update();
   }
 
-  Future getProducts() async {
+  Future<void> getProducts() async {
     if (loadedAll.value) {
       return;
     }

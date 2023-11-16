@@ -22,6 +22,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../src/components/input/my_message_textformfield.dart';
 import '../../src/controller/error_controller.dart';
 import '../../src/controller/product_controller.dart';
+import '../../src/controller/push_notifications_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../overview/overview.dart';
@@ -128,6 +129,10 @@ class _EditProductState extends State<EditProduct> {
     );
     if (FormController.instance.status.toString().startsWith('2')) {
       ProductController.instance.reset();
+      await PushNotificationController.showNotification(
+        title: "Success.",
+        body: "${productNameEC.text} has been been successfully updated.",
+      );
       Get.offAll(
         () => const OverView(currentIndex: 2),
         routeName: 'OverView',

@@ -19,7 +19,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../src/components/input/item_category_dropdown_menu.dart';
+import '../../src/controller/error_controller.dart';
+import '../../src/controller/form_controller.dart';
 import '../../src/controller/send_package_controller.dart';
+import '../../src/controller/user_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
@@ -52,7 +55,7 @@ class _SendPackageState extends State<SendPackage> {
   int currentStep = 0;
   bool nextPage = false;
   bool continuePage = false;
-  final bool processingRequest = false;
+  bool submittingForm = false;
   get media => MediaQuery.of(context).size;
   String? latitudePick;
   String? longitudePick;
@@ -223,90 +226,97 @@ class _SendPackageState extends State<SendPackage> {
     }
   }
 
-  Future<void> submitForm() async {
-    // if (pickupEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please fill in a pickup address");
+  submitForm() async {
+    if (pickupEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in a pickup address");
+      return;
+    }
+    if (senderNameEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in your name");
+      return;
+    }
+    if (senderPhoneEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in your phone number");
+      return;
+    }
+    if (dropOffEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please select a drop-off location");
+      return;
+    }
+    if (receiverNameEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in the receiver's name");
+      return;
+    }
+    if (receiverPhoneEC.text.isEmpty) {
+      ApiProcessorController.errorSnack(
+          "Please fill in the receiver's phone number");
+      return;
+    }
+    if (itemNameEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please fill in the item's name");
+      return;
+    }
+    if (itemCategoryEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please select the item category");
+      return;
+    }
+    if (itemWeightEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please select the item weight");
+      return;
+    }
+    if (itemQuantityEC.text.isEmpty) {
+      ApiProcessorController.errorSnack(
+          "Please fill in the quantity of the item");
+      return;
+    }
+    // if (selectedImage == null) {
+    //   ApiProcessorController.errorSnack("Please select an image");
     //   return;
     // }
-    // if (senderNameEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please fill in your name");
-    //   return;
-    // }
-    // if (senderPhoneEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please fill in your phone number");
-    //   return;
-    // }
-    // if (dropOffEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please select a drop-off location");
-    //   return;
-    // }
-    // if (receiverNameEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please fill in the receiver's name");
-    //   return;
-    // }
-    // if (receiverPhoneEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack(
-    //       "Please fill in the receiver's phone number");
-    //   return;
-    // }
-    // if (itemNameEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please fill in the item's name");
-    //   return;
-    // }
-    // if (itemCategoryEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please select the item category");
-    //   return;
-    // }
-    // if (itemWeightEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please select the item weight");
-    //   return;
-    // }
-    // if (itemQuantityEC.text.isEmpty) {
-    //   ApiProcessorController.errorSnack(
-    //       "Please fill in the quantity of the item");
-    //   return;
-    // }
-    //   if (selectedImage == null) {
-    //     ApiProcessorController.errorSnack("Please select an image");
-    //     return;
-    //   }
-    // Map data = {
-    //   'client_id': UserController.instance.user.value.id,
-    //   'pickUpAddress': pickupEC.text,
-    //   'senderName': senderNameEC.text,
-    //   'senderPhoneNumber': senderPhoneEC.text,
-    //   'dropOffAddress': dropOffEC.text,
-    //   'receiverName': receiverNameEC.text,
-    //   'receiverPhoneNumber': receiverPhoneEC.text,
-    //   'itemName': itemNameEC.text,
-    //   'itemCategory_id': itemCategoryEC.text,
-    //   'itemWeight_id': itemWeightEC.text,
-    //   'itemQuantity': itemQuantityEC.text,
-    //   'itemValue': itemValueEC.text,
-    // };
-    // await FormController.instance
-    //     .postAuth(Api.baseUrl + Api.createItemPackage, data, 'createPackage');
-    // if (FormController.instance.status.toString().startsWith('2')) {}
-    Get.to(
-      () => PayForDelivery(
-          senderName: senderNameEC.text,
-          senderPhoneNumber: senderPhoneEC.text,
-          receiverName: receiverNameEC.text,
-          receiverPhoneNumber: receiverPhoneEC.text,
-          receiverLocation: dropOffEC.text,
-          itemName: itemNameEC.text,
-          itemQuantity: itemQuantityEC.text,
-          itemWeight: itemWeightEC.text,
-          itemValue: itemValueEC.text,
-          itemCategoryId: itemCategoryEC.text),
-      routeName: 'PayForDelivery',
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      preventDuplicates: true,
-      popGesture: true,
-      transition: Transition.rightToLeft,
-    );
+    Map data = {
+      'client_id': UserController.instance.user.value.id.toString(),
+      'pickUpAddress': pickupEC.text,
+      'senderName': senderNameEC.text,
+      'senderPhoneNumber': senderPhoneEC.text,
+      'dropOffAddress': dropOffEC.text,
+      'receiverName': receiverNameEC.text,
+      'receiverPhoneNumber': receiverPhoneEC.text,
+      'itemName': itemNameEC.text,
+      'itemCategory_id': itemCategoryEC.text,
+      'itemWeight_id': itemWeightEC.text,
+      'itemQuantity': itemQuantityEC.text,
+      'itemValue': itemValueEC.text,
+    };
+    setState(() {
+      submittingForm = true;
+    });
+    await FormController.instance
+        .postAuth(Api.baseUrl + Api.createItemPackage, data, 'createPackage');
+    setState(() {
+      submittingForm = true;
+    });
+    if (FormController.instance.status.toString().startsWith('2')) {
+      Get.to(
+        () => PayForDelivery(
+            senderName: senderNameEC.text,
+            senderPhoneNumber: senderPhoneEC.text,
+            receiverName: receiverNameEC.text,
+            receiverPhoneNumber: receiverPhoneEC.text,
+            receiverLocation: dropOffEC.text,
+            itemName: itemNameEC.text,
+            itemQuantity: itemQuantityEC.text,
+            itemWeight: itemWeightEC.text,
+            itemValue: itemValueEC.text,
+            itemCategoryId: itemCategoryEC.text),
+        routeName: 'PayForDelivery',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.rightToLeft,
+      );
+    }
   }
 
   //=============================== WIDGETS ==================================\\
@@ -335,16 +345,13 @@ class _SendPackageState extends State<SendPackage> {
             child: const Text("Next"),
           )
         : continuePage == true
-            ? processingRequest
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: kAccentColor,
-                    ),
-                  )
-                : Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: submitForm,
+            ? Row(
+                children: [
+                  GetBuilder<FormController>(
+                    builder: (controller) {
+                      submittingForm = controller.isLoad.value;
+                      return ElevatedButton(
+                        onPressed: controller.isLoad.value ? null : submitForm,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: kAccentColor,
                           elevation: 20.0,
@@ -353,27 +360,31 @@ class _SendPackageState extends State<SendPackage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: const Text("Continue"),
+                        child: controller.isLoad.value
+                            ? CircularProgressIndicator(color: kPrimaryColor)
+                            : const Text("Submit"),
+                      );
+                    },
+                  ),
+                  kWidthSizedBox,
+                  OutlinedButton(
+                    onPressed: submittingForm ? null : details.onStepCancel,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kPrimaryColor,
+                      elevation: 20.0,
+                      side: BorderSide(color: kAccentColor, width: 1.2),
+                      fixedSize: Size((media.size.width * 0.40) - 45, 60),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      kWidthSizedBox,
-                      OutlinedButton(
-                        onPressed: details.onStepCancel,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: kPrimaryColor,
-                          elevation: 20.0,
-                          side: BorderSide(color: kAccentColor, width: 1.2),
-                          fixedSize: Size((media.size.width * 0.40) - 45, 60),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Text(
-                          "Back",
-                          style: TextStyle(color: kAccentColor),
-                        ),
-                      )
-                    ],
+                    ),
+                    child: Text(
+                      "Back",
+                      style: TextStyle(color: kAccentColor),
+                    ),
                   )
+                ],
+              )
             : Row(
                 children: [
                   ElevatedButton(
@@ -450,7 +461,7 @@ class _SendPackageState extends State<SendPackage> {
                 onSaved: (value) {
                   pickupEC.text = value;
                 },
-                textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.next,
                 focusNode: pickupFN,
                 hintText: "Pick location",
                 textInputType: TextInputType.text,
@@ -514,7 +525,7 @@ class _SendPackageState extends State<SendPackage> {
                 onSaved: (value) {
                   senderNameEC.text = value;
                 },
-                textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.sentences,
                 focusNode: senderNameFN,
                 hintText: "Enter your name",
@@ -597,7 +608,7 @@ class _SendPackageState extends State<SendPackage> {
                 onSaved: (value) {
                   dropOffEC.text = value;
                 },
-                textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.next,
                 focusNode: dropOffFN,
                 hintText: "Drop off location",
                 textInputType: TextInputType.text,
@@ -661,7 +672,7 @@ class _SendPackageState extends State<SendPackage> {
                 onSaved: (value) {
                   receiverNameEC.text = value;
                 },
-                textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.sentences,
                 focusNode: receiverNameFN,
                 hintText: "Enter receiver's name",
@@ -747,7 +758,7 @@ class _SendPackageState extends State<SendPackage> {
                   itemNameEC.text = value;
                 },
                 textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.sentences,
+                textCapitalization: TextCapitalization.words,
                 focusNode: itemNameFN,
                 hintText: "Enter the name of the item",
                 textInputType: TextInputType.name,
@@ -776,7 +787,7 @@ class _SendPackageState extends State<SendPackage> {
                           mediaWidth: media.width - 70,
                           hintText: "Choose category",
                           onSelected: (value) {
-                            itemCategoryEC.text = value!;
+                            itemCategoryEC.text = value.toString();
                             consoleLog(
                                 "This is the item category ID: ${itemCategoryEC.text}");
                           },
@@ -814,7 +825,7 @@ class _SendPackageState extends State<SendPackage> {
                           mediaWidth: media.width - 70,
                           hintText: "Choose weight",
                           onSelected: (value) {
-                            itemWeightEC.text = value!;
+                            itemWeightEC.text = value.toString();
                             consoleLog(
                                 "This is the item weight ID: ${itemWeightEC.text}");
                           },
