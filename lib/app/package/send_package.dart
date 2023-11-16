@@ -21,6 +21,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import '../../src/components/input/item_category_dropdown_menu.dart';
 import '../../src/controller/error_controller.dart';
 import '../../src/controller/form_controller.dart';
+import '../../src/controller/push_notifications_controller.dart';
 import '../../src/controller/send_package_controller.dart';
 import '../../src/controller/user_controller.dart';
 import '../../src/providers/constants.dart';
@@ -61,8 +62,8 @@ class _SendPackageState extends State<SendPackage> {
   String? longitudePick;
   String? latitudeDrop;
   String? longitudeDrop;
-  String? itemCategoryId;
-  String? itemWeightId;
+  String itemCategory = "";
+  String itemWeight = "";
   //=============================== CONTROLLERS ==================================\\
 
   final _formKey = GlobalKey<FormState>();
@@ -82,8 +83,7 @@ class _SendPackageState extends State<SendPackage> {
 
   final itemValueEC = TextEditingController();
 
-  final LatLngDetailController latLngDetailController =
-      LatLngDetailController.instance;
+  final latLngDetailController = LatLngDetailController.instance;
   //=============================== FOCUS NODES ==================================\\
   final pickupFN = FocusNode();
   final senderNameFN = FocusNode();
@@ -296,18 +296,25 @@ class _SendPackageState extends State<SendPackage> {
       submittingForm = true;
     });
     if (FormController.instance.status.toString().startsWith('2')) {
+      await PushNotificationController.showNotification(
+        title: "Success",
+        body: "Your package form has been successfully submitted.",
+        summary: "Package Delivery",
+        largeIcon: "asset://assets/icons/package.png",
+      );
       Get.to(
         () => PayForDelivery(
-            senderName: senderNameEC.text,
-            senderPhoneNumber: senderPhoneEC.text,
-            receiverName: receiverNameEC.text,
-            receiverPhoneNumber: receiverPhoneEC.text,
-            receiverLocation: dropOffEC.text,
-            itemName: itemNameEC.text,
-            itemQuantity: itemQuantityEC.text,
-            itemWeight: itemWeightEC.text,
-            itemValue: itemValueEC.text,
-            itemCategoryId: itemCategoryEC.text),
+          senderName: senderNameEC.text,
+          senderPhoneNumber: senderPhoneEC.text,
+          receiverName: receiverNameEC.text,
+          receiverPhoneNumber: receiverPhoneEC.text,
+          receiverLocation: dropOffEC.text,
+          itemName: itemNameEC.text,
+          itemQuantity: itemQuantityEC.text,
+          itemWeight: itemWeight,
+          itemValue: itemValueEC.text,
+          itemCategory: itemCategory,
+        ),
         routeName: 'PayForDelivery',
         duration: const Duration(milliseconds: 300),
         fullscreenDialog: true,
@@ -370,9 +377,12 @@ class _SendPackageState extends State<SendPackage> {
                   OutlinedButton(
                     onPressed: submittingForm ? null : details.onStepCancel,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: kPrimaryColor,
+                      backgroundColor:
+                          submittingForm ? kLightGreyColor : kPrimaryColor,
                       elevation: 20.0,
-                      side: BorderSide(color: kAccentColor, width: 1.2),
+                      side: submittingForm
+                          ? BorderSide(color: kLightGreyColor, width: 1.2)
+                          : BorderSide(color: kAccentColor, width: 1.2),
                       fixedSize: Size((media.size.width * 0.40) - 45, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -380,7 +390,9 @@ class _SendPackageState extends State<SendPackage> {
                     ),
                     child: Text(
                       "Back",
-                      style: TextStyle(color: kAccentColor),
+                      style: TextStyle(
+                          color:
+                              submittingForm ? kTextGreyColor : kAccentColor),
                     ),
                   )
                 ],
@@ -787,7 +799,18 @@ class _SendPackageState extends State<SendPackage> {
                           mediaWidth: media.width - 70,
                           hintText: "Choose category",
                           onSelected: (value) {
+                            final selectedCategory =
+                                controller.packageCategory.firstWhere(
+                              (category) => category.id == value,
+                            );
+                            // Set the category id to itemWeightEC
                             itemCategoryEC.text = value.toString();
+                            // Set the category title to itemWeight
+                            itemCategory = selectedCategory.name;
+
+                            consoleLog(
+                              "This is the item category title: $itemCategory",
+                            );
                             consoleLog(
                                 "This is the item category ID: ${itemCategoryEC.text}");
                           },
@@ -825,9 +848,21 @@ class _SendPackageState extends State<SendPackage> {
                           mediaWidth: media.width - 70,
                           hintText: "Choose weight",
                           onSelected: (value) {
+                            final selectedWeight =
+                                controller.packageWeight.firstWhere(
+                              (category) => category.id == value,
+                            );
+                            // Set the weight id to itemWeightEC
                             itemWeightEC.text = value.toString();
+                            // Set the weight title to itemWeight
+                            itemWeight = selectedWeight.title;
+
                             consoleLog(
-                                "This is the item weight ID: ${itemWeightEC.text}");
+                              "This is the item weight title: $itemWeight",
+                            );
+                            consoleLog(
+                              "This is the item weight ID: ${itemWeightEC.text}",
+                            );
                           },
                           dropdownMenuEntries2: controller.packageWeight
                               .map((category) => DropdownMenuEntry(
