@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
 
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import 'view_package.dart';
 
 class Packages extends StatefulWidget {
@@ -28,15 +29,19 @@ class _PackagesState extends State<Packages>
     pending = getDataPending();
     completed = getDataCompleted();
     tabBarController = TabController(length: 2, vsync: this);
+    scrollController.addListener(_scrollListener);
   }
 
   late Future<List<DeliveryItem>> pending;
   late Future<List<DeliveryItem>> completed;
   @override
   void dispose() {
+    scrollController.dispose();
     tabBarController.dispose();
     super.dispose();
   }
+
+  bool isScrollToTopBtnVisible = false;
 
 //================================================= CONTROLLERS ===================================================\\
   late TabController tabBarController;
@@ -55,7 +60,7 @@ class _PackagesState extends State<Packages>
     return completed;
   }
 
-  Future<void> _handleRefresh() async {
+  Future<void> handleRefresh() async {
     setState(() {
       pending = getDataPending();
       completed = getDataCompleted();
@@ -63,10 +68,37 @@ class _PackagesState extends State<Packages>
   }
 
   int selectedtabbar = 0;
-  void _clickOnTabBarOption(value) async {
+  void clickOnTabBarOption(value) async {
     setState(() {
       selectedtabbar = value;
     });
+  }
+
+  //===================== Scroll to Top ==========================\\
+  Future<void> scrollToTop() async {
+    await scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    setState(() {
+      isScrollToTopBtnVisible = false;
+    });
+  }
+
+  Future<void> _scrollListener() async {
+    if (scrollController.position.pixels >= 100 &&
+        isScrollToTopBtnVisible != true) {
+      setState(() {
+        isScrollToTopBtnVisible = true;
+      });
+    }
+    if (scrollController.position.pixels < 100 &&
+        isScrollToTopBtnVisible == true) {
+      setState(() {
+        isScrollToTopBtnVisible = false;
+      });
+    }
   }
 
 //================================================= Navigation ===================================================\\
@@ -110,7 +142,7 @@ class _PackagesState extends State<Packages>
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
     return MyLiquidRefresh(
-      onRefresh: _handleRefresh,
+      onRefresh: handleRefresh,
       child: Scaffold(
         appBar: MyAppBar(
           title: "My Packages",
@@ -144,8 +176,19 @@ class _PackagesState extends State<Packages>
           ],
           backgroundColor: kPrimaryColor,
         ),
-        extendBody: true,
-        extendBodyBehindAppBar: true,
+        floatingActionButton: isScrollToTopBtnVisible
+            ? FloatingActionButton(
+                onPressed: scrollToTop,
+                mini: deviceType(media.width) > 2 ? false : true,
+                backgroundColor: kAccentColor,
+                enableFeedback: true,
+                mouseCursor: SystemMouseCursors.click,
+                tooltip: "Scroll to top",
+                hoverColor: kAccentColor,
+                hoverElevation: 50.0,
+                child: const FaIcon(FontAwesomeIcons.chevronUp, size: 18),
+              )
+            : const SizedBox(),
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: Scrollbar(
@@ -175,7 +218,7 @@ class _PackagesState extends State<Packages>
                           padding: const EdgeInsets.all(5.0),
                           child: TabBar(
                             controller: tabBarController,
-                            onTap: (value) => _clickOnTabBarOption(value),
+                            onTap: (value) => clickOnTabBarOption(value),
                             enableFeedback: true,
                             dragStartBehavior: DragStartBehavior.start,
                             mouseCursor: SystemMouseCursors.click,
@@ -216,6 +259,7 @@ class _PackagesState extends State<Packages>
                                     snapshot.data!.isEmpty
                                         ? const EmptyCard()
                                         : ListView.separated(
+                                            reverse: true,
                                             separatorBuilder:
                                                 (context, index) =>
                                                     Divider(color: kGreyColor2),

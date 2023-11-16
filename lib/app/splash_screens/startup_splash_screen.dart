@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
+import '../../src/controller/payment_controller.dart';
 import '../../src/controller/send_package_controller.dart';
 import '../../src/providers/constants.dart';
 
@@ -31,6 +32,7 @@ class SplashScreen extends StatelessWidget {
   final profile = Get.put(ProfileController());
   final notify = Get.put(NotificationController());
   final package = Get.put(SendPackageController());
+  final deliveryFee = Get.put(PaymentController());
 
   @override
   Widget build(BuildContext context) {

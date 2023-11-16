@@ -2,7 +2,6 @@
 
 import 'dart:math';
 
-import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_squad/flutter_squad.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,13 +11,15 @@ import 'package:lottie/lottie.dart';
 import '../../src/components/appbar/my appbar.dart';
 import '../../src/components/button/my elevatedButton.dart';
 import '../../src/controller/auth_controller.dart';
+import '../../src/controller/payment_controller.dart';
 import '../../src/controller/push_notifications_controller.dart';
 import '../../src/controller/user_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
 class PayForDelivery extends StatefulWidget {
-  final String senderName,
+  final String packageId,
+      senderName,
       senderPhoneNumber,
       receiverName,
       receiverPhoneNumber,
@@ -31,6 +32,7 @@ class PayForDelivery extends StatefulWidget {
 
   const PayForDelivery({
     super.key,
+    required this.packageId,
     required this.senderName,
     required this.senderPhoneNumber,
     required this.receiverName,
@@ -54,6 +56,9 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     super.initState();
     getUserData();
     getTotalPrice();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      callGetDeliveryFee();
+    });
     packageData = <String>[
       widget.senderName,
       "$countryDialCode ${widget.senderPhoneNumber}",
@@ -79,7 +84,10 @@ class _PayForDeliveryState extends State<PayForDelivery> {
   String countryDialCode = '+234';
   final double subTotal = 0;
   double totalPrice = 0;
-  double deliveryFee = 700;
+  int deliveryFee =
+      PaymentController.instance.responseObject.containsKey('delivery_fee')
+          ? PaymentController.instance.responseObject['delivery_fee']
+          : null;
   double serviceFee = 0;
   String? userFirstName;
   String? userLastName;
@@ -119,6 +127,10 @@ class _PayForDeliveryState extends State<PayForDelivery> {
 
   //===================== FUNCTIONS =======================\\
 
+  Future<void> callGetDeliveryFee() async {
+    await PaymentController.instance.getDeliveryFee(widget.packageId);
+  }
+
 //======== Place Order =======\\
   Future<void> placeOrder() async {
     SquadTransactionResponse? response = await Squad.checkout(
@@ -134,21 +146,12 @@ class _PayForDeliveryState extends State<PayForDelivery> {
 
     if (response != null && response.status.toString().startsWith("2")) {
       await PushNotificationController.showNotification(
-        title: "Payment Successful",
+        title: "Payment Successful ✅",
         body: "You have successfully paid for the delivery.",
         summary: "Package Delivery",
         largeIcon: "asset://assets/icons/package-success.png",
       );
-      Get.off(
-        () => const OverView(currentIndex: 3),
-        routeName: 'Profile',
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        preventDuplicates: true,
-        popGesture: false,
-        transition: Transition.rightToLeft,
-      );
+      Get.close(2);
     }
     debugPrint(
       "Squad transaction completed======>${response?.toJson().toString()}",
@@ -366,7 +369,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                                 ),
                               ),
                               Text(
-                                '₦${doubleFormattedText(deliveryFee)}',
+                                '₦${intFormattedText(deliveryFee)}',
                                 style: TextStyle(
                                   color: kTextGreyColor,
                                   fontSize: 16,

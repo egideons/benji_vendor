@@ -1,14 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/route_manager.dart';
 
 import '../../../src/providers/constants.dart';
 import '../../src/components/appbar/my appbar.dart';
 import '../../src/components/button/my elevatedButton.dart';
 import '../../src/components/input/my_message_textformfield.dart';
-import '../../src/components/section/my_floating_snackbar.dart';
 import '../../theme/colors.dart';
 
 class ReportPackage extends StatefulWidget {
@@ -24,86 +22,29 @@ class _ReportPackageState extends State<ReportPackage> {
   //============================================ ALL VARIABLES ===========================================\\
 
   //============================================ BOOL VALUES ===========================================\\
-  bool _submittingReport = false;
+  bool submittingReport = false;
 
   //============================================ CONTROLLERS ===========================================\\
-  final TextEditingController _messageEC = TextEditingController();
+  final messageEC = TextEditingController();
 
   //============================================ FOCUS NODES ===========================================\\
-  final FocusNode _messageFN = FocusNode();
+  final messageFN = FocusNode();
 
   //============================================ KEYS ===========================================\\
-  final GlobalKey<FormState> _formKey = GlobalKey();
+  final formKey = GlobalKey<FormState>();
 
   //============================================ FUNCTIONS ===========================================\\
-  // Future<bool> report() async {
-  //   try {
-  //     User? user = await getUser();
-  //     final url = Uri.parse(
-  //         '$baseFrontendUrl/clients/clientReportVendor/${user!.id}/${widget.vendor.id}?message=${_messageEC.text}');
 
-  //     Map body = {};
-
-  //     final response =
-  //         await http.post(url, body: body, headers: await authHeader());
-
-  //     bool res = response.statusCode == 200 &&
-  //         response.body == '"Report made successfully"';
-  //     return res;
-  //   } catch (e) {
-  //     return false;
-  //   }
-  // }
-
-  Future<void> _submitReport() async {
+  Future<void> submitReport() async {
     setState(() {
-      _submittingReport = true;
+      submittingReport = true;
     });
 
     setState(() {
-      _submittingReport = false;
+      submittingReport = false;
     });
-
-    mySnackBar(
-      context,
-      kSuccessColor,
-      "Success",
-      "Report submitted successfully",
-      const Duration(seconds: 1),
-    );
 
     Get.back();
-
-    // bool res = await report();
-
-    // if (res) {
-    //   //Display snackBar
-    //   mySnackBar(
-    //     context,
-    //     kSuccessColor,
-    //     "Success",
-    //     "Your report has been submitted successfully",
-    //     const Duration(seconds: 1),
-    //   );
-
-    //   setState(() {
-    //     _submittingReport = false;
-    //   });
-
-    //   //Go back;
-    //   Get.back();
-    // } else {
-    //   setState(() {
-    //     _submittingReport = false;
-    //   });
-    //   mySnackBar(
-    //     context,
-    //     kAccentColor,
-    //     "Failed",
-    //     "Something went wrong",
-    //     const Duration(seconds: 1),
-    //   );
-    // }
   }
 
   @override
@@ -120,109 +61,68 @@ class _ReportPackageState extends State<ReportPackage> {
           actions: const [],
           backgroundColor: kPrimaryColor,
         ),
-        bottomSheet: _submittingReport
-            ? SizedBox(
-                height: 100,
-                child: CircularProgressIndicator(color: kAccentColor),
-              )
-            : AnimatedContainer(
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                color: kPrimaryColor,
-                padding: const EdgeInsets.only(
-                  top: kDefaultPadding,
-                  left: kDefaultPadding,
-                  right: kDefaultPadding,
-                  bottom: kDefaultPadding,
-                ),
-                child: MyElevatedButton(
-                  onPressed: (() async {
-                    if (_formKey.currentState!.validate()) {
-                      _submitReport();
-                    }
-                  }),
-                  title: "Submit",
+        bottomSheet: Container(
+          decoration: BoxDecoration(color: kPrimaryColor),
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: MyElevatedButton(
+            onPressed: (() async {
+              if (formKey.currentState!.validate()) {
+                formKey.currentState!.save();
+                submitReport();
+              }
+            }),
+            title: "Submit",
+          ),
+        ),
+        body: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.all(kDefaultPadding),
+            physics: const BouncingScrollPhysics(),
+            children: [
+              const Text(
+                'We will like to hear from you',
+                style: TextStyle(
+                  color: kTextBlackColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-        body: SafeArea(
-          child: FutureBuilder(
-            future: null,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                Center(child: SpinKitDoubleBounce(color: kAccentColor));
-              }
-              if (snapshot.connectionState == ConnectionState.none) {
-                const Center(
-                  child: Text("Please connect to the internet"),
-                );
-              }
-              // if (snapshot.connectionState == snapshot.requireData) {
-              //   SpinKitDoubleBounce(color: kAccentColor);
-              // }
-              if (snapshot.connectionState == snapshot.error) {
-                const Center(
-                  child: Text("Error, Please try again later"),
-                );
-              }
-              return ListView(
-                padding: const EdgeInsets.all(kDefaultPadding),
-                physics: const BouncingScrollPhysics(),
-                children: [
-                  const SizedBox(
-                    width: 292,
-                    child: Text(
-                      'We will like to hear from you',
-                      style: TextStyle(
-                        color: kTextBlackColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  kHalfSizedBox,
-                  SizedBox(
-                    width: 332,
-                    child: Text(
-                      "What went wrong with this package delivery?",
-                      style: TextStyle(
-                        color: kTextGreyColor,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: kDefaultPadding * 2),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        MyMessageTextFormField(
-                          controller: _messageEC,
-                          textInputAction: TextInputAction.done,
-                          focusNode: _messageFN,
-                          hintText: "Enter your message here",
-                          maxLines: 10,
-                          keyboardType: TextInputType.text,
-                          maxLength: 1000,
-                          validator: (value) {
-                            if (value == null || value!.isEmpty) {
-                              _messageFN.requestFocus();
-                              return "Field cannot be left empty";
-                            }
+              kHalfSizedBox,
+              Text(
+                "What went wrong with this package delivery?",
+                style: TextStyle(
+                  color: kTextGreyColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(height: kDefaultPadding * 2),
+              Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MyMessageTextFormField(
+                      controller: messageEC,
+                      textInputAction: TextInputAction.done,
+                      focusNode: messageFN,
+                      hintText: "Enter your message here",
+                      maxLines: 10,
+                      keyboardType: TextInputType.text,
+                      maxLength: 1000,
+                      validator: (value) {
+                        if (value == null || value!.isEmpty) {
+                          messageFN.requestFocus();
+                          return "Field cannot be left empty";
+                        }
 
-                            return null;
-                          },
-                        ),
-                      ],
+                        return null;
+                      },
                     ),
-                  ),
-                  const SizedBox(
-                    height: 100,
-                  ),
-                ],
-              );
-            },
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
