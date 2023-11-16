@@ -26,6 +26,9 @@ class OrderController extends GetxController {
   var total = 0.obs;
   var status = StatusType.delivered.obs;
 
+  var vendorPendingOrders = <OrderModel>[].obs;
+  var vendorCompletedOrders = <OrderModel>[].obs;
+
   deleteCachedOrders() {
     vendorsOrderList.value = <OrderModel>[];
     loadedAll.value = false;
@@ -105,6 +108,84 @@ class OrderController extends GetxController {
           .toList();
       consoleLog(data.toString());
       vendorsOrderList.value += data;
+    } catch (e) {
+      consoleLog(e.toString());
+    }
+    loadedAll.value = data.isEmpty;
+    isLoad.value = false;
+    isLoadMore.value = false;
+    update();
+  }
+
+  Future getOrdersByPendingStatus() async {
+    if (loadedAll.value) {
+      return;
+    }
+    isLoad.value = true;
+    late String token;
+    String id = UserController.instance.user.value.id.toString();
+    var url =
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?status=PEND&start=${loadNum.value - 10}&end=${loadNum.value}";
+    consoleLog(url);
+    loadNum.value += 10;
+    token = UserController.instance.user.value.token;
+    http.Response? response = await HandleData.getApi(url, token);
+    var responseData = await ApiProcessorController.errorState(response);
+    consoleLog(response!.body);
+    if (responseData == null) {
+      isLoad.value = false;
+      loadedAll.value = true;
+      isLoadMore.value = false;
+      update();
+      return;
+    }
+    List<OrderModel> data = [];
+    try {
+      data = (jsonDecode(responseData)['items'] as List)
+          // data = (jsonDecode(responseData) as List)
+          .map((e) => OrderModel.fromJson(e))
+          .toList();
+      consoleLog(data.toString());
+      vendorPendingOrders.value += data;
+    } catch (e) {
+      consoleLog(e.toString());
+    }
+    loadedAll.value = data.isEmpty;
+    isLoad.value = false;
+    isLoadMore.value = false;
+    update();
+  }
+
+  Future getOrdersByCompletedStatus() async {
+    if (loadedAll.value) {
+      return;
+    }
+    isLoad.value = true;
+    late String token;
+    String id = UserController.instance.user.value.id.toString();
+    var url =
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?status=COMP&start=${loadNum.value - 10}&end=${loadNum.value}";
+    consoleLog(url);
+    loadNum.value += 10;
+    token = UserController.instance.user.value.token;
+    http.Response? response = await HandleData.getApi(url, token);
+    var responseData = await ApiProcessorController.errorState(response);
+    consoleLog(response!.body);
+    if (responseData == null) {
+      isLoad.value = false;
+      loadedAll.value = true;
+      isLoadMore.value = false;
+      update();
+      return;
+    }
+    List<OrderModel> data = [];
+    try {
+      data = (jsonDecode(responseData)['items'] as List)
+          // data = (jsonDecode(responseData) as List)
+          .map((e) => OrderModel.fromJson(e))
+          .toList();
+      consoleLog(data.toString());
+      vendorCompletedOrders.value += data;
     } catch (e) {
       consoleLog(e.toString());
     }

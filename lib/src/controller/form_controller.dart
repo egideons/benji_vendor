@@ -37,6 +37,7 @@ class FormController extends GetxController {
       return;
     }
 
+    consoleLog(jsonDecode(response.body));
     responseObject.value = (jsonDecode(response.body) as Map);
     isLoad.value = false;
     update([tag]);

@@ -19,6 +19,8 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../src/components/input/my_message_textformfield.dart';
+import '../../src/controller/push_notifications_controller.dart';
+import '../../src/model/product_model.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../overview/overview.dart';
@@ -71,6 +73,7 @@ class _AddProductState extends State<AddProduct> {
 
   List<SubCategory>? subCategoryEC;
   List<ProductTypeModel>? productType;
+  var product = ProductModel;
 
   bool isChecked = false;
   bool isChecked2 = false;
@@ -111,10 +114,18 @@ class _AddProductState extends State<AddProduct> {
       'is_recommended': true,
       'is_trending': true,
     };
-    await FormController.instance.postAuthstream(Api.baseUrl + Api.addProduct,
-        data, {'product_image': selectedImages}, 'addProduct');
+    await FormController.instance.postAuthstream(
+      Api.baseUrl + Api.addProduct,
+      data,
+      {'product_image': selectedImages},
+      'addProduct',
+    );
     if (FormController.instance.status.toString().startsWith('2')) {
-      ProductController.instance.reset();
+      await ProductController.instance.reset();
+      await PushNotificationController.showNotification(
+        title: "Success",
+        body: "${productNameEC.text} has been added to your products",
+      );
       Get.offAll(
         () => const OverView(currentIndex: 2),
         routeName: 'OverView',
@@ -472,7 +483,7 @@ class _AddProductState extends State<AddProduct> {
                         controller: productQuantityEC,
                         focusNode: productQuantityFN,
                         hintText: "Enter the quantity here",
-                        textInputAction: TextInputAction.done,
+                        textInputAction: TextInputAction.next,
                         textInputType: TextInputType.number,
                         textCapitalization: TextCapitalization.sentences,
                         validator: (value) {
@@ -506,7 +517,7 @@ class _AddProductState extends State<AddProduct> {
                         controller: productDescriptionEC,
                         focusNode: productDescriptionFN,
                         hintText: "Enter the description here",
-                        textInputAction: TextInputAction.next,
+                        textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.text,
                         maxLines: 10,
                         maxLength: 1000,

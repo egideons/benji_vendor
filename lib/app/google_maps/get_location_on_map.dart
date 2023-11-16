@@ -52,7 +52,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
 
   //====================================== Setting Google Map Consts =========================================\\
 
-  Position? _userPosition;
+  Position? userPosition;
   CameraPosition? _cameraPosition;
 
   Uint8List? _markerImage;
@@ -120,7 +120,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
     Position userLocation = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     ).then(
-      (location) => _userPosition = location,
+      (location) => userPosition = location,
     );
 
     LatLng latLngPosition =
@@ -157,7 +157,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
     Position userLocation = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     ).then(
-      (location) => _userPosition = location,
+      (location) => userPosition = location,
     );
     List<LatLng> latLng = <LatLng>[
       LatLng(userLocation.latitude, userLocation.longitude),
@@ -311,14 +311,15 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
               ])),
               kHalfSizedBox,
               MyElevatedButton(
-                  title: "Save",
-                  onPressed: _userPosition == null ? () {} : saveFunc),
+                title: "Save",
+                onPressed: userPosition == null ? () {} : saveFunc,
+              ),
             ],
           ),
         ),
         body: SafeArea(
           maintainBottomViewPadding: true,
-          child: _userPosition == null
+          child: userPosition == null
               ? Center(
                   child: CircularProgressIndicator(
                     color: kAccentColor,
@@ -364,8 +365,8 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                             onMapCreated: _onMapCreated,
                             initialCameraPosition: CameraPosition(
                               target: LatLng(
-                                _userPosition!.latitude,
-                                _userPosition!.longitude,
+                                userPosition!.latitude,
+                                userPosition!.longitude,
                               ),
                               zoom: 20,
                             ),

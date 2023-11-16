@@ -2,14 +2,17 @@
 
 import 'dart:math';
 
+import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_squad/flutter_squad.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../src/components/appbar/my appbar.dart';
 import '../../src/components/button/my elevatedButton.dart';
 import '../../src/controller/auth_controller.dart';
+import '../../src/controller/push_notifications_controller.dart';
 import '../../src/controller/user_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
@@ -21,23 +24,24 @@ class PayForDelivery extends StatefulWidget {
       receiverPhoneNumber,
       receiverLocation,
       itemName,
-      itemCategoryId,
       itemQuantity,
       itemWeight,
+      itemCategory,
       itemValue;
 
-  const PayForDelivery(
-      {super.key,
-      required this.senderName,
-      required this.senderPhoneNumber,
-      required this.receiverName,
-      required this.receiverPhoneNumber,
-      required this.receiverLocation,
-      required this.itemName,
-      required this.itemQuantity,
-      required this.itemWeight,
-      required this.itemValue,
-      required this.itemCategoryId});
+  const PayForDelivery({
+    super.key,
+    required this.senderName,
+    required this.senderPhoneNumber,
+    required this.receiverName,
+    required this.receiverPhoneNumber,
+    required this.receiverLocation,
+    required this.itemName,
+    required this.itemQuantity,
+    required this.itemWeight,
+    required this.itemValue,
+    required this.itemCategory,
+  });
 
   @override
   State<PayForDelivery> createState() => _PayForDeliveryState();
@@ -57,8 +61,9 @@ class _PayForDeliveryState extends State<PayForDelivery> {
       "$countryDialCode ${widget.receiverPhoneNumber}",
       widget.receiverLocation,
       widget.itemName,
-      widget.itemQuantity,
       widget.itemWeight,
+      widget.itemCategory,
+      widget.itemQuantity,
       "₦ ${widget.itemValue}"
     ];
   }
@@ -95,8 +100,9 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     "Receiver's phone number",
     "Receiver's location",
     "Item name",
-    "Item quantity",
     "Item weight",
+    "Item category",
+    "Item quantity",
     "Item value",
   ];
   List<String>? packageData;
@@ -115,10 +121,6 @@ class _PayForDeliveryState extends State<PayForDelivery> {
 
 //======== Place Order =======\\
   Future<void> placeOrder() async {
-    // User? user = await getUser();
-    // DateTime now = DateTime.now();
-    // String formattedDateAndTime = formatDateAndTime(now);
-
     SquadTransactionResponse? response = await Squad.checkout(
       context,
       charge(),
@@ -129,6 +131,25 @@ class _PayForDeliveryState extends State<PayForDelivery> {
         leadingIcon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
       ),
     );
+
+    if (response != null && response.status.toString().startsWith("2")) {
+      await PushNotificationController.showNotification(
+        title: "Payment Successful",
+        body: "You have successfully paid for the delivery.",
+        summary: "Package Delivery",
+        largeIcon: "asset://assets/icons/package-success.png",
+      );
+      Get.off(
+        () => const OverView(currentIndex: 3),
+        routeName: 'Profile',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        preventDuplicates: true,
+        popGesture: false,
+        transition: Transition.rightToLeft,
+      );
+    }
     debugPrint(
       "Squad transaction completed======>${response?.toJson().toString()}",
     );

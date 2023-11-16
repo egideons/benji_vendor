@@ -54,7 +54,7 @@ String statusTypeConverter(StatusType statusType) {
   if (statusType == StatusType.cancelled) {
     return "CANC";
   }
-  return "COMP";
+  return "PEND";
 }
 
 class UppercaseTextInputFormatter extends TextInputFormatter {

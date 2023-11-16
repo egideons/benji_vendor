@@ -1,9 +1,11 @@
 import 'package:benji_vendor/app/splash_screens/startup_splash_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'src/controller/push_notifications_controller.dart';
 import 'theme/app_theme.dart';
 import 'theme/colors.dart';
 
@@ -16,32 +18,35 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
 
+  if (!kIsWeb) {
+    // await Firebase.initializeApp();
+    // await FirebaseMessaging.instance.setAutoInitEnabled(true);
+    await PushNotificationController.initializeNotification();
+
+    // await FcmMessagingController.instance.handleFCM();
+  }
+
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  static final navigatorKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: "Benji Vendor",
       debugShowCheckedModeBanner: false,
       color: kPrimaryColor,
-      builder: (context, child) {
-        return GetMaterialApp(
-          navigatorKey: Get.key,
-          debugShowCheckedModeBanner: false,
-          title: "Benji Vendor",
-          themeMode: ThemeMode.light,
-          darkTheme: AppTheme.darkTheme,
-          theme: AppTheme.lightTheme,
-          defaultTransition: Transition.rightToLeft,
-          home: SplashScreen(),
-        );
-      },
+      navigatorKey: navigatorKey,
+      themeMode: ThemeMode.light,
+      darkTheme: AppTheme.darkTheme,
+      theme: AppTheme.lightTheme,
+      defaultTransition: Transition.rightToLeft,
+      home: SplashScreen(),
     );
   }
 }
