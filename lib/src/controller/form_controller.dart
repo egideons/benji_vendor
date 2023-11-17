@@ -77,6 +77,8 @@ class FormController extends GetxController {
       body: data,
     );
     status.value = response.statusCode;
+    consoleLog(response.body);
+    responseObject.value = (jsonDecode(response.body) as Map);
     if (response.statusCode != 200) {
       ApiProcessorController.errorSnack(errorMsg);
       isLoad.value = false;

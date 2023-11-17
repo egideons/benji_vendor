@@ -66,7 +66,7 @@ class _SendPackageState extends State<SendPackage> {
   String itemWeight = "";
   //=============================== CONTROLLERS ==================================\\
 
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   //=============================== CONTROLLERS ==================================\\
   final scrollController = ScrollController();
@@ -200,7 +200,7 @@ class _SendPackageState extends State<SendPackage> {
   }
 
   //===================== Scroll to Top ==========================\\
-  Future<void> _scrollToTop() async {
+  Future<void> scrollToTop() async {
     await scrollController.animateTo(
       0.0,
       duration: const Duration(milliseconds: 500),
@@ -276,9 +276,13 @@ class _SendPackageState extends State<SendPackage> {
     Map data = {
       'client_id': UserController.instance.user.value.id.toString(),
       'pickUpAddress': pickupEC.text,
+      'pickUpAddress_latitude': latitudePick,
+      'pickUpAddress_longitude': longitudePick,
       'senderName': senderNameEC.text,
       'senderPhoneNumber': senderPhoneEC.text,
       'dropOffAddress': dropOffEC.text,
+      'dropOffAddress_latitude': latitudeDrop,
+      'dropOffAddress_longitude': longitudeDrop,
       'receiverName': receiverNameEC.text,
       'receiverPhoneNumber': receiverPhoneEC.text,
       'itemName': itemNameEC.text,
@@ -287,6 +291,7 @@ class _SendPackageState extends State<SendPackage> {
       'itemQuantity': itemQuantityEC.text,
       'itemValue': itemValueEC.text,
     };
+    consoleLog(data.toString());
     setState(() {
       submittingForm = true;
     });
@@ -296,6 +301,11 @@ class _SendPackageState extends State<SendPackage> {
       submittingForm = true;
     });
     if (FormController.instance.status.toString().startsWith('2')) {
+      var packageId =
+          FormController.instance.responseObject.containsKey('package_id')
+              ? FormController.instance.responseObject['package_id']
+              : null; // or provide a default value if needed
+      consoleLog("This is the package ID: $packageId");
       await PushNotificationController.showNotification(
         title: "Success",
         body: "Your package form has been successfully submitted.",
@@ -304,6 +314,7 @@ class _SendPackageState extends State<SendPackage> {
       );
       Get.to(
         () => PayForDelivery(
+          packageId: packageId,
           senderName: senderNameEC.text,
           senderPhoneNumber: senderPhoneEC.text,
           receiverName: receiverNameEC.text,
@@ -855,7 +866,8 @@ class _SendPackageState extends State<SendPackage> {
                             // Set the weight id to itemWeightEC
                             itemWeightEC.text = value.toString();
                             // Set the weight title to itemWeight
-                            itemWeight = selectedWeight.title;
+                            itemWeight =
+                                "${selectedWeight.start}KG - ${selectedWeight.end}KG";
 
                             consoleLog(
                               "This is the item weight title: $itemWeight",
@@ -867,7 +879,8 @@ class _SendPackageState extends State<SendPackage> {
                           dropdownMenuEntries2: controller.packageWeight
                               .map((category) => DropdownMenuEntry(
                                     value: category.id,
-                                    label: category.title,
+                                    label:
+                                        "${category.start}KG - ${category.end}KG ",
                                   ))
                               .toList(),
                         );
@@ -1136,7 +1149,7 @@ class _SendPackageState extends State<SendPackage> {
         ),
         floatingActionButton: isScrollToTopBtnVisible
             ? FloatingActionButton(
-                onPressed: _scrollToTop,
+                onPressed: scrollToTop,
                 mini: deviceType(media.width) > 2 ? false : true,
                 backgroundColor: kAccentColor,
                 enableFeedback: true,
@@ -1152,7 +1165,7 @@ class _SendPackageState extends State<SendPackage> {
           child: Container(
             padding: const EdgeInsets.all(kDefaultPadding / 2),
             child: Form(
-              key: _formKey,
+              key: formKey,
               child: Scrollbar(
                 child: Stepper(
                   physics: const BouncingScrollPhysics(),
