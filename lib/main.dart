@@ -1,10 +1,14 @@
 import 'package:benji_vendor/app/splash_screens/startup_splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
 
+import 'src/controller/fcm_messaging_controller.dart';
 import 'src/controller/push_notifications_controller.dart';
 import 'theme/app_theme.dart';
 import 'theme/colors.dart';
@@ -19,11 +23,13 @@ void main() async {
   prefs = await SharedPreferences.getInstance();
 
   if (!kIsWeb) {
-    // await Firebase.initializeApp();
-    // await FirebaseMessaging.instance.setAutoInitEnabled(true);
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    await FirebaseMessaging.instance.setAutoInitEnabled(true);
     await PushNotificationController.initializeNotification();
 
-    // await FcmMessagingController.instance.handleFCM();
+    await FcmMessagingController.instance.handleFCM();
   }
 
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
