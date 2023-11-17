@@ -38,6 +38,9 @@ class Api {
   static const getPackageWeight = "/sendPackage/getPackageWeight/";
   static const createItemPackage = "/sendPackage/createItemPackage/";
 
+//Payments
+  static const getDeliveryFee = "/payments/getdeliveryfee/";
+
   //BusinessTypes
   static const businessType = "/categories/list";
 }

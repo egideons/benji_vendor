@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
@@ -13,6 +14,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import 'report_package.dart';
 
 class ViewPackage extends StatefulWidget {
@@ -31,7 +33,7 @@ class _ViewPackageState extends State<ViewPackage> {
   @override
   void initState() {
     super.initState();
-    _packageData = <String>[
+    packageData = <String>[
       widget.deliveryItem.status[0].toUpperCase() +
           widget.deliveryItem.status.substring(1).toLowerCase(),
       widget.deliveryItem.senderName,
@@ -42,14 +44,15 @@ class _ViewPackageState extends State<ViewPackage> {
       widget.deliveryItem.itemName,
       (doubleFormattedText(widget.deliveryItem.itemQuantity.toDouble())),
       "${widget.deliveryItem.itemWeight.start} KG - ${widget.deliveryItem.itemWeight.end} KG",
+      widget.deliveryItem.itemCategory.name,
       "₦ ${doubleFormattedText(widget.deliveryItem.itemValue.toDouble())}",
-      "₦ ${doubleFormattedText(widget.deliveryItem.prices)}",
+      // "₦ ${doubleFormattedText(widget.deliveryItem.prices)}",
     ];
   }
 
   //================================================= ALL VARIABLES =====================================================\\
   DateTime now = DateTime.now();
-  final List<String> _titles = <String>[
+  final List<String> titles = <String>[
     "Status",
     "Sender's name",
     "Sender's phone number",
@@ -59,17 +62,18 @@ class _ViewPackageState extends State<ViewPackage> {
     "Item name",
     "Item quantity",
     "Item weight",
+    "item category",
     "Item value",
-    "Price",
+    // "Price",
   ];
 
-  List<String>? _packageData;
+  List<String>? packageData;
   //=================================================  CONTROLLERS =====================================================\\
-  final _scrollController = ScrollController();
-  final _screenshotController = ScreenshotController();
+  final scrollController = ScrollController();
+  final screenshotController = ScreenshotController();
 
   //=================================================  Navigation =====================================================\\
-  void _toReportPackage() => Get.to(
+  void toReportPackage() => Get.to(
         () => const ReportPackage(),
         routeName: 'ReportPackage',
         duration: const Duration(milliseconds: 300),
@@ -80,7 +84,7 @@ class _ViewPackageState extends State<ViewPackage> {
         transition: Transition.rightToLeft,
       );
 
-  void _sharePackage() {
+  void sharePackage() {
     showModalBottomSheet(
       context: context,
       elevation: 20,
@@ -89,6 +93,7 @@ class _ViewPackageState extends State<ViewPackage> {
       useSafeArea: true,
       isDismissible: true,
       isScrollControlled: true,
+      constraints: BoxConstraints(maxHeight: min(520, 220)),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(kDefaultPadding),
@@ -99,12 +104,12 @@ class _ViewPackageState extends State<ViewPackage> {
     );
   }
 
-  Future<Uint8List> _generatePdf() async {
+  Future<Uint8List> generatePdf() async {
     // Create a PDF document
     final pdf = pw.Document();
 
     // Capture the screenshot
-    final imageFile = await _screenshotController.capture();
+    final imageFile = await screenshotController.capture();
 
     // Convert the image data to bytes
     final imgData = Uint8List.fromList(imageFile!);
@@ -140,9 +145,8 @@ class _ViewPackageState extends State<ViewPackage> {
     return pdfBytes;
   }
 
-  Future<void> _sharePDF() async {
-    final pdfBytes = await _generatePdf();
-
+  Future<void> sharePDF() async {
+    final pdfBytes = await generatePdf();
     final appDir = await getTemporaryDirectory();
     final pdfName = "Benji Delivery ${formatDateAndTime(now)}";
     final pdfPath = '${appDir.path}/$pdfName.pdf';
@@ -152,8 +156,8 @@ class _ViewPackageState extends State<ViewPackage> {
     await Share.shareXFiles([XFile(pdfPath)]);
   }
 
-  _shareImage() async {
-    final imageFile = await _screenshotController.capture();
+  shareImage() async {
+    final imageFile = await screenshotController.capture();
 
     if (imageFile != null) {
       final appDir = await getTemporaryDirectory();
@@ -171,19 +175,14 @@ class _ViewPackageState extends State<ViewPackage> {
   //=================================================  Widgets =====================================================\\
   Widget shareBottomSheet() {
     return Container(
-      height: 140,
       width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.only(
-        left: kDefaultPadding,
-        right: kDefaultPadding,
-        bottom: kDefaultPadding,
-      ),
+      padding: const EdgeInsets.all(kDefaultPadding / 2),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ListTile(
-              onTap: _sharePDF,
+              onTap: sharePDF,
               title: Text(
                 "Share PDF",
                 textAlign: TextAlign.center,
@@ -196,7 +195,7 @@ class _ViewPackageState extends State<ViewPackage> {
             ),
             Divider(height: 1, color: kGreyColor2),
             ListTile(
-              onTap: _shareImage,
+              onTap: shareImage,
               title: Text(
                 "Share Image",
                 textAlign: TextAlign.center,
@@ -215,7 +214,7 @@ class _ViewPackageState extends State<ViewPackage> {
 
   @override
   Widget build(BuildContext context) {
-    double mediaWidth = MediaQuery.of(context).size.width;
+    var media = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kPrimaryColor,
       appBar: MyAppBar(
@@ -229,15 +228,14 @@ class _ViewPackageState extends State<ViewPackage> {
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: Scrollbar(
-          controller: _scrollController,
           child: ListView(
-            controller: _scrollController,
+            controller: scrollController,
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(10),
             children: [
               Center(
                 child: Container(
-                  height: 100,
+                  height: deviceType(media.width) >= 2 ? 200 : 100,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
@@ -249,7 +247,7 @@ class _ViewPackageState extends State<ViewPackage> {
               ),
               kHalfSizedBox,
               Screenshot(
-                controller: _screenshotController,
+                controller: screenshotController,
                 child: Card(
                   borderOnForeground: true,
                   elevation: 20,
@@ -268,7 +266,7 @@ class _ViewPackageState extends State<ViewPackage> {
                         children: [
                           const SizedBox(height: 50),
                           Container(
-                            height: 40,
+                            height: deviceType(media.width) >= 2 ? 60 : 40,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               color: kPrimaryColor,
@@ -283,7 +281,7 @@ class _ViewPackageState extends State<ViewPackage> {
                           const SizedBox(height: 50),
                           Divider(color: kGreyColor2, height: 0),
                           ListView.separated(
-                            itemCount: _titles.length,
+                            itemCount: titles.length,
                             shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
                             separatorBuilder:
@@ -295,13 +293,14 @@ class _ViewPackageState extends State<ViewPackage> {
                                 ListTile(
                               contentPadding: EdgeInsets.zero,
                               leading: Container(
-                                height: 100,
-                                width: mediaWidth / 3,
+                                height:
+                                    deviceType(media.width) >= 2 ? 200 : 100,
+                                width: media.width / 3,
                                 padding: const EdgeInsets.all(10),
                                 decoration:
                                     BoxDecoration(color: kLightGreyColor),
                                 child: Text(
-                                  _titles[index],
+                                  titles[index],
                                   textAlign: TextAlign.start,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
@@ -313,10 +312,10 @@ class _ViewPackageState extends State<ViewPackage> {
                                 ),
                               ),
                               trailing: Container(
-                                width: mediaWidth / 2,
+                                width: media.width / 2,
                                 padding: const EdgeInsets.all(10),
                                 child: Text(
-                                  _packageData![index],
+                                  packageData![index],
                                   textAlign: TextAlign.end,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
@@ -390,9 +389,9 @@ class _ViewPackageState extends State<ViewPackage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   OutlinedButton(
-                    onPressed: _toReportPackage,
+                    onPressed: toReportPackage,
                     style: OutlinedButton.styleFrom(
-                      elevation: 20,
+                      elevation: 10,
                       enableFeedback: true,
                       backgroundColor: kPrimaryColor,
                       padding: const EdgeInsets.all(kDefaultPadding),
@@ -403,7 +402,7 @@ class _ViewPackageState extends State<ViewPackage> {
                         FaIcon(
                           FontAwesomeIcons.solidFlag,
                           color: kAccentColor,
-                          size: 16,
+                          size: 18,
                         ),
                         kWidthSizedBox,
                         Center(
@@ -422,9 +421,9 @@ class _ViewPackageState extends State<ViewPackage> {
                   ),
                   kWidthSizedBox,
                   ElevatedButton(
-                    onPressed: _sharePackage,
+                    onPressed: sharePackage,
                     style: ElevatedButton.styleFrom(
-                      elevation: 20,
+                      elevation: 10,
                       backgroundColor: kAccentColor,
                       padding: const EdgeInsets.all(kDefaultPadding),
                     ),
