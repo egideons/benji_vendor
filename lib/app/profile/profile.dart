@@ -10,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../src/model/order_model.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../auth/login.dart';
+import '../package/packages.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -22,6 +24,29 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  @override
+  void initState() {
+    super.initState();
+    OrderController.instance.getOrdersByPendingStatus();
+    OrderController.instance.getOrdersByCompletedStatus();
+  }
+
+  List<OrderModel> get pendingOrders =>
+      OrderController.instance.vendorPendingOrders
+          .where((order) => order.assignedStatus == "PEND")
+          .toList();
+
+  List<OrderModel> get deliveredOrders =>
+      OrderController.instance.vendorCompletedOrders
+          .where((order) => order.assignedStatus == "COMP")
+          .toList();
+  int get pendingOrdersCount => pendingOrders.length;
+  int get deliveredOrdersCount => deliveredOrders.length;
+
+  totalNumberOfOrders() {
+    return pendingOrdersCount + deliveredOrdersCount;
+  }
+
   void logOut() async {
     UserController.instance.deleteUser();
     ProductController.instance.deleteCachedProducts();
@@ -42,6 +67,19 @@ class _ProfileState extends State<Profile> {
     Get.to(
       () => const ReviewsPage(),
       routeName: 'ReviewsPage',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  sendPackage() {
+    Get.to(
+      () => const Packages(),
+      routeName: 'Packages',
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
@@ -90,10 +128,10 @@ class _ProfileState extends State<Profile> {
         appBar: AppBar(
           backgroundColor: kAccentColor,
           elevation: 0,
-          title: const Text(
+          title: Text(
             'My Profile',
             style: TextStyle(
-              color: Colors.white,
+              color: kPrimaryColor,
               fontSize: 20,
               fontWeight: FontWeight.w700,
             ),
@@ -176,7 +214,7 @@ class _ProfileState extends State<Profile> {
               Container(
                 padding: const EdgeInsets.all(kDefaultPadding),
                 decoration: ShapeDecoration(
-                  color: Colors.white,
+                  color: kPrimaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -191,6 +229,22 @@ class _ProfileState extends State<Profile> {
                 ),
                 child: Column(
                   children: [
+                    ListTile(
+                      onTap: sendPackage,
+                      leading: FaIcon(
+                        FontAwesomeIcons.bicycle,
+                        color: kAccentColor,
+                      ),
+                      title: const Text(
+                        'Package delivery',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                    ),
                     ListTile(
                       onTap: reviewsPage,
                       leading: FaIcon(
@@ -220,17 +274,13 @@ class _ProfileState extends State<Profile> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      trailing: GetBuilder<OrderController>(
-                        initState: (state) async =>
-                            await OrderController.instance.getTotal(),
-                        builder: (controller) => Text(
-                          formatNumber(controller.total.value),
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                            color: Color(0xFF9B9BA5),
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      trailing: Text(
+                        formatNumber(totalNumberOfOrders()),
+                        textAlign: TextAlign.right,
+                        style: const TextStyle(
+                          color: Color(0xFF9B9BA5),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),

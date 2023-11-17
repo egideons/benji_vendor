@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:http/http.dart' as http;
+
+import '../providers/constants.dart';
+import '../providers/helper.dart';
 
 class ProductTypeModel {
   String id;
@@ -33,6 +35,7 @@ Future<List<ProductTypeModel>> getProductType(
       headers: authHeader());
 
   if (response.statusCode == 200) {
+    consoleLog("This is the response body for product types: ${response.body}");
     return (jsonDecode(response.body)['items'] as List)
         .map((item) => ProductTypeModel.fromJson(item))
         .toList();

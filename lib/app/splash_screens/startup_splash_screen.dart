@@ -1,4 +1,5 @@
 import 'package:benji_vendor/src/controller/auth_controller.dart';
+import 'package:benji_vendor/src/controller/category_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/login_controller.dart';
@@ -13,12 +14,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
+import '../../src/controller/send_package_controller.dart';
 import '../../src/providers/constants.dart';
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({super.key});
   final user = Get.put(UserController());
+  final category = Get.put(CategoryController());
   final login = Get.put(LoginController());
+  final auth = Get.put(AuthController());
   final product = Get.put(ProductController());
   final order = Get.put(OrderController());
   final form = Get.put(FormController());
@@ -26,6 +30,8 @@ class SplashScreen extends StatelessWidget {
   final latLngDetail = Get.put(LatLngDetailController());
   final profile = Get.put(ProfileController());
   final notify = Get.put(NotificationController());
+  final package = Get.put(SendPackageController());
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;

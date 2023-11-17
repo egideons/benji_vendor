@@ -4,9 +4,12 @@ import 'package:benji_vendor/src/components/container/vendors_order_container.da
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../src/controller/auth_controller.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 
 enum StatusType { delivered, pending, cancelled }
@@ -24,8 +27,10 @@ class _OrdersState extends State<Orders> {
   @override
   void initState() {
     super.initState();
+    AuthController.instance.checkIfAuthorized();
     scrollController.addListener(
         () => OrderController.instance.scrollListener(scrollController));
+    scrollController.addListener(_scrollListener);
   }
 
   @override
@@ -50,24 +55,41 @@ class _OrdersState extends State<Orders> {
   bool checkStatus(StatusType? theStatus, StatusType currentStatus) =>
       theStatus == currentStatus;
 
-  orderDetails() {
-    Get.to(
-      () => const OrderDetails(),
-      routeName: 'OrderDetails',
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      preventDuplicates: true,
-      popGesture: true,
-      transition: Transition.rightToLeft,
+  //========= variables ==========//
+  bool isScrollToTopBtnVisible = false;
+
+  final ScrollController scrollController = ScrollController();
+
+  //===================== Scroll to Top ==========================\\
+  Future<void> _scrollToTop() async {
+    await scrollController.animateTo(
+      0.0,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
     );
+    setState(() {
+      isScrollToTopBtnVisible = false;
+    });
   }
 
-  //========= variables ==========//
-  final ScrollController scrollController = ScrollController();
+  Future<void> _scrollListener() async {
+    if (scrollController.position.pixels >= 100 &&
+        isScrollToTopBtnVisible != true) {
+      setState(() {
+        isScrollToTopBtnVisible = true;
+      });
+    }
+    if (scrollController.position.pixels < 100 &&
+        isScrollToTopBtnVisible == true) {
+      setState(() {
+        isScrollToTopBtnVisible = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return MyResponsivePadding(
       child: Scaffold(
         appBar: AppBar(
@@ -85,6 +107,19 @@ class _OrdersState extends State<Orders> {
           ),
           actions: const [],
         ),
+        floatingActionButton: isScrollToTopBtnVisible
+            ? FloatingActionButton(
+                onPressed: _scrollToTop,
+                mini: deviceType(media.width) > 2 ? false : true,
+                backgroundColor: kAccentColor,
+                enableFeedback: true,
+                mouseCursor: SystemMouseCursors.click,
+                tooltip: "Scroll to top",
+                hoverColor: kAccentColor,
+                hoverElevation: 50.0,
+                child: const FaIcon(FontAwesomeIcons.chevronUp, size: 18),
+              )
+            : const SizedBox(),
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: Scrollbar(
@@ -190,13 +225,29 @@ class _OrdersState extends State<Orders> {
                         )
                       : controller.vendorsOrderList.isEmpty
                           ? const EmptyCard()
-                          : ListView.builder(
+                          : ListView.separated(
                               shrinkWrap: true,
                               itemCount: controller.vendorsOrderList.length,
                               physics: const BouncingScrollPhysics(),
-                              itemBuilder: (BuildContext context, int index) {
+                              separatorBuilder: (context, index) => kSizedBox,
+                              itemBuilder: (context, index) {
                                 return InkWell(
-                                  onTap: orderDetails,
+                                  onTap: () {
+                                    Get.to(
+                                      () => OrderDetails(
+                                        order:
+                                            controller.vendorsOrderList[index],
+                                      ),
+                                      routeName: 'OrderDetails',
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      fullscreenDialog: true,
+                                      curve: Curves.easeIn,
+                                      preventDuplicates: true,
+                                      popGesture: true,
+                                      transition: Transition.rightToLeft,
+                                    );
+                                  },
                                   borderRadius: BorderRadius.circular(12),
                                   mouseCursor: SystemMouseCursors.click,
                                   child: VendorsOrderContainer(
@@ -206,6 +257,7 @@ class _OrdersState extends State<Orders> {
                               },
                             ),
                 ),
+                kSizedBox,
                 GetBuilder<OrderController>(
                   builder: (controller) => Column(
                     children: [

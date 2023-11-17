@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
@@ -20,8 +21,11 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../src/components/input/my_message_textformfield.dart';
 import '../../src/controller/error_controller.dart';
+import '../../src/controller/product_controller.dart';
+import '../../src/controller/push_notifications_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
+import '../overview/overview.dart';
 
 class EditProduct extends StatefulWidget {
   final ProductModel product;
@@ -59,20 +63,20 @@ class _EditProductState extends State<EditProduct> {
   final formKey = GlobalKey<FormState>();
 
   //================================== FOCUS NODES ====================================\\
-  FocusNode productTypeFN = FocusNode();
-  FocusNode productNameFN = FocusNode();
-  FocusNode productDescriptionFN = FocusNode();
-  FocusNode productPriceFN = FocusNode();
-  FocusNode productQuantityFN = FocusNode();
-  FocusNode productDiscountFN = FocusNode();
+  final productTypeFN = FocusNode();
+  final productNameFN = FocusNode();
+  final productDescriptionFN = FocusNode();
+  final productPriceFN = FocusNode();
+  final productQuantityFN = FocusNode();
+  final productDiscountFN = FocusNode();
 
   //================================== CONTROLLERS ====================================\\
-  TextEditingController productNameEC = TextEditingController();
-  TextEditingController productDescriptionEC = TextEditingController();
-  TextEditingController productPriceEC = TextEditingController();
-  TextEditingController productQuantityEC = TextEditingController();
-  TextEditingController subCategoryEC = TextEditingController();
-  TextEditingController productTypeEC = TextEditingController();
+  final productNameEC = TextEditingController();
+  final productDescriptionEC = TextEditingController();
+  final productPriceEC = TextEditingController();
+  final productQuantityEC = TextEditingController();
+  final subCategoryEC = TextEditingController();
+  final productTypeEC = TextEditingController();
 
   //================================== VALUES ====================================\\
 
@@ -101,21 +105,44 @@ class _EditProductState extends State<EditProduct> {
     if (subCategoryEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please select a category");
     }
-    Map data = {
+    Map<String, dynamic> data = {
       'name': productNameEC.text,
       'description': productDescriptionEC.text,
       'price': productPriceEC.text,
       'quantity_available': productQuantityEC.text,
       'sub_category_id': subCategoryEC.text,
     };
-    Map<dynamic, dynamic> dataBody = {'data': data};
+
     consoleLog("This is the data : $data");
+    // await FormController.instance.postAuthstream(
+    //   Api.baseUrl + Api.changeProduct + widget.product.id,
+    //   data,
+    //   {'product_image': selectedImages},
+    //   'editProduct',
+    // );
+
     await FormController.instance.postAuthstream(
       Api.baseUrl + Api.changeProduct + widget.product.id,
-      dataBody,
+      {'data': jsonEncode(data)}, // Wrap 'data' in a Map
       {'product_image': selectedImages},
       'editProduct',
     );
+    if (FormController.instance.status.toString().startsWith('2')) {
+      ProductController.instance.reset();
+      await PushNotificationController.showNotification(
+        title: "Success.",
+        body: "${productNameEC.text} has been been successfully updated.",
+      );
+      Get.offAll(
+        () => const OverView(currentIndex: 2),
+        routeName: 'OverView',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        popGesture: true,
+        transition: Transition.rightToLeft,
+      );
+    }
   }
 
   pickProductImages(ImageSource source) async {

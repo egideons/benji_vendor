@@ -5,10 +5,10 @@ import 'dart:io';
 
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../providers/helper.dart';
 import 'user_controller.dart';
 
 class FormController extends GetxController {
@@ -37,6 +37,7 @@ class FormController extends GetxController {
       return;
     }
 
+    consoleLog(jsonDecode(response.body));
     responseObject.value = (jsonDecode(response.body) as Map);
     isLoad.value = false;
     update([tag]);

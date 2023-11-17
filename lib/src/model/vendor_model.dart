@@ -5,8 +5,9 @@
 import 'dart:convert';
 
 import 'package:benji_vendor/src/model/business_type_model.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:get/get.dart';
+
+import '../providers/constants.dart';
 
 // vendorModelFromJson(String str) => List<VendorModel>.from(
 //     json.decode(str).map((x) => VendorModel.fromJson(x)));

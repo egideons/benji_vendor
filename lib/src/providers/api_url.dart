@@ -23,6 +23,7 @@ class Api {
   static const changeProduct = "/products/changeProduct/";
   static const deleteProduct = "/products/deleteProduct/";
   static const notification = "/vendors/";
+  static const category = "/categories/list";
 
 //Vendor
   static const getSpecificVendor = "/vendors/getVendor/";
@@ -32,7 +33,10 @@ class Api {
   static const changeVendorBusinessProfile =
       "/vendors/changeVendorbusinessprofile/";
 
-  //Rider
+//Item Packages
+  static const getPackageCategory = "/sendPackage/getPackageCategory/";
+  static const getPackageWeight = "/sendPackage/getPackageWeight/";
+  static const createItemPackage = "/sendPackage/createItemPackage/";
 
   //BusinessTypes
   static const businessType = "/categories/list";

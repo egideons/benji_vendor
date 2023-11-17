@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/colors.dart';
+import '../../../theme/colors.dart';
 
 class ItemDropDownMenu extends StatelessWidget {
   const ItemDropDownMenu({
@@ -28,9 +28,7 @@ class ItemDropDownMenu extends StatelessWidget {
       width: mediaWidth,
       hintText: hintText,
       inputDecorationTheme: InputDecorationTheme(
-        errorStyle: const TextStyle(
-          color: kErrorColor,
-        ),
+        errorStyle: const TextStyle(color: kErrorColor),
         filled: true,
         fillColor: Colors.blue.shade50,
         focusColor: Colors.blue.shade50,

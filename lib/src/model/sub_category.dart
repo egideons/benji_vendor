@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:benji_vendor/src/model/category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:http/http.dart' as http;
+
+import '../providers/constants.dart';
+import '../providers/helper.dart';
 
 class SubCategory {
   String id;
@@ -47,6 +49,8 @@ Future<List<SubCategory>> getSubCategories(
       headers: authHeader());
 
   if (response.statusCode == 200) {
+    consoleLog(
+        "This is the response body for sub categories: ${response.body}");
     return (jsonDecode(response.body)['items'] as List)
         .map((item) => SubCategory.fromJson(item))
         .toList();

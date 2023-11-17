@@ -11,7 +11,6 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +21,9 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../src/providers/constants.dart';
 import '../../src/components/image/my_image.dart';
+import '../../src/components/section/business_category_modal.dart';
+import '../../src/controller/category_controller.dart';
+import '../../src/providers/helper.dart';
 import '../../src/providers/responsive_constants.dart';
 
 class BusinessInfo extends StatefulWidget {
@@ -36,6 +38,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
   @override
   void initState() {
     super.initState();
+    CategoryController.instance.getCategory();
     scrollController.addListener(_scrollListener);
     shopImage = UserController.instance.user.value.shopImage;
     shopNameEC.text = UserController.instance.user.value.shopName;
@@ -51,7 +54,9 @@ class _BusinessInfoState extends State<BusinessInfo> {
         UserController.instance.user.value.sunWeekOpeningHours;
     vendorSunClosingHoursEC.text =
         UserController.instance.user.value.sunWeekClosingHours;
-    // businessBioEC.text = UserController.instance.user.value.businessBio;
+    businessBioEC.text = UserController.instance.user.value.businessBio;
+    vendorBusinessTypeEC.text =
+        UserController.instance.user.value.shopType.name;
     consoleLog("This is the shop image: $shopImage");
   }
 
@@ -65,6 +70,8 @@ class _BusinessInfoState extends State<BusinessInfo> {
 
   //===================== ALL VARIABLES =======================\\
   String? shopImage;
+  String? shopType;
+  String? shopTypeHint;
 
   //======================================== GLOBAL KEYS ==============================================\\
   final _formKey = GlobalKey<FormState>();
@@ -82,6 +89,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
   final vendorSatClosingHoursEC = TextEditingController();
   final vendorSunClosingHoursEC = TextEditingController();
   final businessBioEC = TextEditingController();
+  final vendorBusinessTypeEC = TextEditingController();
 
   //=================================== FOCUS NODES ====================================\\
   final shopNameFN = FocusNode();
@@ -92,6 +100,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
   final vendorSatClosingHoursFN = FocusNode();
   final vendorSunClosingHoursFN = FocusNode();
   final businessBioFN = FocusNode();
+  final vendorBusinessTypeFN = FocusNode();
 
   //============================================= FUNCTIONS ===============================================\\
 
@@ -127,29 +136,35 @@ class _BusinessInfoState extends State<BusinessInfo> {
   Future<void> saveChanges() async {
     if (selectedCoverImage == null && shopImage!.isEmpty) {
       ApiProcessorController.errorSnack("Please select a shop image");
-    } else {
-      Map data = {
-        "shop_name": shopNameEC.text,
-        "weekOpeningHours": vendorMonToFriOpeningHoursEC.text,
-        "weekClosingHours": vendorMonToFriClosingHoursEC.text,
-        "satOpeningHours": vendorSatOpeningHoursEC.text,
-        "satClosingHours": vendorSatClosingHoursEC.text,
-        "sunWeekOpeningHours": vendorSunOpeningHoursEC.text,
-        "sunWeekClosingHours": vendorSunClosingHoursEC.text,
-        // "shop_image": selectedCoverImage
-        // "businessDescription": businessBioEC.text,
-      };
-      consoleLog("This is the data: $data");
-      consoleLog(
-          Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString());
-      consoleLog("shop_image: $selectedCoverImage");
-      await FormController.instance.postAuthstream(
-          Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString(),
-          data,
-          {'shop_image': selectedCoverImage},
-          'changeVendorBusinessProfile');
-      if (FormController.instance.status.toString().startsWith('2')) {}
+      return;
     }
+    if (shopType == null &&
+        vendorBusinessTypeEC.text.isEmpty &&
+        shopType!.isEmpty) {
+      ApiProcessorController.errorSnack("Please select a type of business");
+      return;
+    }
+    Map data = {
+      "shop_name": shopNameEC.text,
+      "weekOpeningHours": vendorMonToFriOpeningHoursEC.text,
+      "weekClosingHours": vendorMonToFriClosingHoursEC.text,
+      "satOpeningHours": vendorSatOpeningHoursEC.text,
+      "satClosingHours": vendorSatClosingHoursEC.text,
+      "sunWeekOpeningHours": vendorSunOpeningHoursEC.text,
+      "sunWeekClosingHours": vendorSunClosingHoursEC.text,
+      "description": businessBioEC.text,
+      "shop_type": shopType,
+    };
+    consoleLog("This is the data: $data");
+    consoleLog(
+        Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString());
+    consoleLog("shop_image: $selectedCoverImage");
+    await FormController.instance.postAuthstream(
+        Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString(),
+        data,
+        {'shop_image': selectedCoverImage},
+        'changeVendorBusinessProfile');
+    if (FormController.instance.status.toString().startsWith('2')) {}
   }
 
   //=========================== WIDGETS ====================================\\
@@ -440,160 +455,85 @@ class _BusinessInfoState extends State<BusinessInfo> {
                 radius: const Radius.circular(20),
                 child: Column(
                   children: [
-                    Column(
-                      children: [
-                        selectedCoverImage == null
-                            ? Container(
-                                width: media.width,
-                                height: 144,
-                                decoration: ShapeDecoration(
-                                  shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                      width: 0.50,
-                                      color: Color(0xFFE6E6E6),
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
+                    selectedCoverImage == null
+                        ? Container(
+                            width: media.width,
+                            height: 144,
+                            decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 0.50,
+                                  color: Color(0xFFE6E6E6),
                                 ),
-                                child: Center(
-                                  child: MyImage(url: shopImage!),
-                                  //     CachedNetworkImage(
-                                  //   imageUrl: shopImage!,
-                                  //   fit: BoxFit.cover,
-                                  //   progressIndicatorBuilder:
-                                  //       (context, url, downloadProgress) =>
-                                  //           Center(
-                                  //               child: CupertinoActivityIndicator(
-                                  //                   color: kAccentColor)),
-                                  //   errorWidget: (context, url, error) =>
-                                  //       Icon(Icons.error, color: kAccentColor),
-                                  // )
-                                ),
-                              )
-                            : Container(
-                                width: media.width,
-                                height: 144,
-                                decoration: ShapeDecoration(
-                                  image: DecorationImage(
-                                    image: FileImage(selectedCoverImage!),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                      width: 0.50,
-                                      color: Color(0xFFE6E6E6),
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                        InkWell(
-                          onTap: () {
-                            showModalBottomSheet(
-                              context: context,
-                              elevation: 20,
-                              barrierColor: kBlackColor.withOpacity(0.8),
-                              showDragHandle: true,
-                              useSafeArea: true,
-                              isDismissible: true,
-                              isScrollControlled: true,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(kDefaultPadding),
-                                ),
+                            ),
+                            child: Center(
+                              child: MyImage(url: shopImage!),
+                              //     CachedNetworkImage(
+                              //   imageUrl: shopImage!,
+                              //   fit: BoxFit.cover,
+                              //   progressIndicatorBuilder:
+                              //       (context, url, downloadProgress) =>
+                              //           Center(
+                              //               child: CupertinoActivityIndicator(
+                              //                   color: kAccentColor)),
+                              //   errorWidget: (context, url, error) =>
+                              //       Icon(Icons.error, color: kAccentColor),
+                              // )
+                            ),
+                          )
+                        : Container(
+                            width: media.width,
+                            height: 144,
+                            decoration: ShapeDecoration(
+                              image: DecorationImage(
+                                image: FileImage(selectedCoverImage!),
+                                fit: BoxFit.cover,
                               ),
-                              enableDrag: true,
-                              builder: ((builder) => uploadCoverImage()),
-                            );
-                          },
-                          splashColor: kAccentColor.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            child: Text(
-                              'Upload shop image',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: kAccentColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 0.50,
+                                  color: Color(0xFFE6E6E6),
+                                ),
+                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                           ),
+                    InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          elevation: 20,
+                          barrierColor: kBlackColor.withOpacity(0.8),
+                          showDragHandle: true,
+                          useSafeArea: true,
+                          isDismissible: true,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(kDefaultPadding),
+                            ),
+                          ),
+                          enableDrag: true,
+                          builder: ((builder) => uploadCoverImage()),
+                        );
+                      },
+                      splashColor: kAccentColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          'Upload shop image',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: kAccentColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
-                      ],
+                      ),
                     ),
-                    // Column(
-                    //   children: [
-                    //     selectedLogoImage == null
-                    //         ? Container(
-                    //             width: media.width,
-                    //             height: 144,
-                    //             decoration: ShapeDecoration(
-                    //               shape: RoundedRectangleBorder(
-                    //                 side: const BorderSide(
-                    //                   width: 0.50,
-                    //                   color: Color(0xFFE6E6E6),
-                    //                 ),
-                    //                 borderRadius: BorderRadius.circular(20),
-                    //               ),
-                    //             ),
-                    //             child: Center(
-                    //               child: FaIcon(
-                    //                 FontAwesomeIcons.solidCircleUser,
-                    //                 color: kAccentColor,
-                    //                 size: 40,
-                    //               ),
-                    //             ),
-                    //           )
-                    //         : Container(
-                    //             height: 200,
-                    //             width: 200,
-                    //             decoration: ShapeDecoration(
-                    //               shape: const OvalBorder(),
-                    //               image: DecorationImage(
-                    //                 image: FileImage(
-                    //                   selectedLogoImage!,
-                    //                 ),
-                    //                 fit: BoxFit.cover,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //     InkWell(
-                    //       onTap: () {
-                    //         showModalBottomSheet(
-                    //           context: context,
-                    //           elevation: 20,
-                    //           barrierColor: kBlackColor.withOpacity(0.8),
-                    //           showDragHandle: true,
-                    //           useSafeArea: true,
-                    //           isDismissible: true,
-                    //           isScrollControlled: true,
-                    //           shape: const RoundedRectangleBorder(
-                    //             borderRadius: BorderRadius.vertical(
-                    //               top: Radius.circular(kDefaultPadding),
-                    //             ),
-                    //           ),
-                    //           enableDrag: true,
-                    //           builder: ((builder) => uploadLogoImage()),
-                    //         );
-                    //       },
-                    //       splashColor: kAccentColor.withOpacity(0.1),
-                    //       borderRadius: BorderRadius.circular(10),
-                    //       child: Container(
-                    //         padding: const EdgeInsets.all(10),
-                    //         child: Text(
-                    //           'Upload business logo',
-                    //           style: TextStyle(
-                    //             color: kAccentColor,
-                    //             fontSize: 16,
-                    //             fontWeight: FontWeight.w400,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ],
                 ),
               ),
@@ -627,6 +567,52 @@ class _BusinessInfoState extends State<BusinessInfo> {
                       hintText: "Name of shop",
                       textInputType: TextInputType.text,
                     ),
+                    kSizedBox,
+                    const Text(
+                      "Type of Business",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    kSizedBox,
+                    GetBuilder<CategoryController>(
+                        init: CategoryController(),
+                        initState: (state) {
+                          CategoryController.instance.getCategory();
+                        },
+                        builder: (type) {
+                          return InkWell(
+                            onTap: () async {
+                              var data =
+                                  await shopTypeModal(context, type.category);
+                              if (data != null) {
+                                setState(() {
+                                  shopType = data.id;
+                                  shopTypeHint = data.name;
+                                  vendorBusinessTypeEC.text = data.name;
+                                });
+                                consoleLog(shopType.toString());
+                              }
+                            },
+                            child: MyBlueTextFormField(
+                              controller: vendorBusinessTypeEC,
+                              isEnabled: false,
+                              validator: (value) {
+                                if (value.isEmpty || value == null) {
+                                  "Field cannot be empty";
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {},
+                              textInputAction: TextInputAction.next,
+                              focusNode: vendorBusinessTypeFN,
+                              hintText: shopTypeHint ??
+                                  "E.g Restaurant, Auto Dealer, etc",
+                              textInputType: TextInputType.text,
+                            ),
+                          );
+                        }),
                     kSizedBox,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

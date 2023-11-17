@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:benji_vendor/src/model/client_model.dart';
 import 'package:benji_vendor/src/model/user_model.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
+
+import '../providers/constants.dart';
 
 List<NotificationModel> notificationModelFromJson(String str) =>
     List<NotificationModel>.from(

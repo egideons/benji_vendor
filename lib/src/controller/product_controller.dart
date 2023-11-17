@@ -49,7 +49,7 @@ class ProductController extends GetxController {
     update();
   }
 
-  Future getProducts() async {
+  Future<void> getProducts() async {
     if (loadedAll.value) {
       return;
     }
@@ -76,6 +76,7 @@ class ProductController extends GetxController {
       data = (jsonDecode(responseData)['items'] as List)
           .map((e) => ProductModel.fromJson(e))
           .toList();
+      consoleLog(data.toString());
       products.value += data;
     } catch (e) {
       consoleLog(e.toString());

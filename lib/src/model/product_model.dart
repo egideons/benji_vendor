@@ -1,6 +1,7 @@
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/model/vendor_model.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
+
+import '../providers/constants.dart';
 
 class ProductModel {
   String id;

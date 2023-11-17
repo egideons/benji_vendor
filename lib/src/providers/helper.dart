@@ -6,8 +6,6 @@ import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
-const String notAvailable = 'N/A';
-
 const String userBalance = "userBalance";
 
 // API URLS AND HTTP CALL FUNCTIONS
@@ -56,7 +54,7 @@ String statusTypeConverter(StatusType statusType) {
   if (statusType == StatusType.cancelled) {
     return "CANC";
   }
-  return "COMP";
+  return "PEND";
 }
 
 class UppercaseTextInputFormatter extends TextInputFormatter {
