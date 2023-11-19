@@ -338,7 +338,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                           child: MyTextFormField(
                             controller: _searchEC,
                             focusNode: _searchFN,
-                            hintText: "Enter your search",git 
+                            hintText: "Enter your search",
                             textInputType: TextInputType.text,
                             validator: (value) {
                               return null;
