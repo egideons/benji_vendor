@@ -39,6 +39,12 @@ class _ViewProductState extends State<ViewProduct> {
     consoleLog(widget.product.productImage);
   }
 
+  @override
+  void dispose() {
+    carouselController.stopAutoPlay();
+    super.dispose();
+  }
+
   bool deleteProductLoad = false;
   bool isScrollToTopBtnVisible = false;
   final scrollController = ScrollController();

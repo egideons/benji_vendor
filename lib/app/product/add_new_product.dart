@@ -22,6 +22,7 @@ import '../../src/components/input/my_message_textformfield.dart';
 import '../../src/controller/push_notifications_controller.dart';
 import '../../src/model/product_model.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 import '../overview/overview.dart';
 
@@ -149,9 +150,10 @@ class _AddProductState extends State<AddProduct> {
   }
 
   //=========================== WIDGETS ====================================\\
-  Widget uploadProductImages() {
+  Widget uploadProductImages(BuildContext context) {
+    var media = MediaQuery.of(context).size;
     return Container(
-      height: 160,
+      height: deviceType(media.width) >= 2 ? 200 : 160,
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -182,10 +184,8 @@ class _AddProductState extends State<AddProduct> {
                       decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(100),
-                          side: const BorderSide(
-                            width: 0.5,
-                            color: kGreyColor1,
-                          ),
+                          side:
+                              const BorderSide(width: 0.5, color: kGreyColor1),
                         ),
                       ),
                       child: Center(
@@ -294,13 +294,14 @@ class _AddProductState extends State<AddProduct> {
                             useSafeArea: true,
                             isDismissible: true,
                             isScrollControlled: true,
+                            enableDrag: true,
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(kDefaultPadding),
                               ),
                             ),
-                            enableDrag: true,
-                            builder: ((builder) => uploadProductImages()),
+                            builder: ((builder) =>
+                                uploadProductImages(context)),
                           );
                         },
                         splashColor: kAccentColor.withOpacity(0.1),

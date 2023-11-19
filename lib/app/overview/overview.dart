@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../theme/colors.dart';
@@ -33,6 +34,7 @@ class _OverViewState extends State<OverView> {
   ];
 
   void onTappedNavBar(int index) {
+    HapticFeedback.selectionClick();
     setState(() {
       currentIndex = index;
     });
@@ -46,6 +48,7 @@ class _OverViewState extends State<OverView> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: kPrimaryColor,
         currentIndex: currentIndex,
+        mouseCursor: SystemMouseCursors.click,
         onTap: onTappedNavBar,
         elevation: 20.0,
         selectedItemColor: kAccentColor,

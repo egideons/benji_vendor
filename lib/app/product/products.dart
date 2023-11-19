@@ -7,6 +7,7 @@ import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -33,7 +34,7 @@ class _ProductsState extends State<Products> {
     scrollController.addListener(() {
       ProductController.instance.scrollListener(scrollController);
     });
-    scrollController.addListener(_scrollListener);
+    scrollController.addListener(scrollListener);
   }
 
   @override
@@ -55,7 +56,9 @@ class _ProductsState extends State<Products> {
   //===================== Fucntions =======================\\
 
   //===================== Scroll to Top ==========================\\
-  Future<void> _scrollToTop() async {
+  Future<void> scrollToTop() async {
+    HapticFeedback.lightImpact();
+
     await scrollController.animateTo(
       0.0,
       duration: const Duration(milliseconds: 500),
@@ -66,7 +69,7 @@ class _ProductsState extends State<Products> {
     });
   }
 
-  Future<void> _scrollListener() async {
+  Future<void> scrollListener() async {
     if (scrollController.position.pixels >= 100 &&
         isScrollToTopBtnVisible != true) {
       setState(() {
@@ -93,6 +96,7 @@ class _ProductsState extends State<Products> {
   }
 
   addProduct() {
+    
     Get.to(
       () => const AddProduct(),
       routeName: 'AddProduct',
@@ -144,13 +148,13 @@ class _ProductsState extends State<Products> {
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: MyOutlinedElevatedButton(
-                    elevation: 5,
+                    elevation: 10,
                     onPressed: addProduct,
                     circularBorderRadius: 10,
-                    minimumSizeWidth: 65,
-                    minimumSizeHeight: 35,
-                    maximumSizeWidth: 65,
-                    maximumSizeHeight: 35,
+                    minimumSizeWidth: 80,
+                    minimumSizeHeight: 40,
+                    maximumSizeWidth: 90,
+                    maximumSizeHeight: 40,
                     title: "Add",
                     titleFontSize: 12,
                   ),
@@ -159,9 +163,10 @@ class _ProductsState extends State<Products> {
             ),
             floatingActionButton: isScrollToTopBtnVisible
                 ? FloatingActionButton(
-                    onPressed: _scrollToTop,
+                    onPressed: scrollToTop,
                     mini: deviceType(media.width) > 2 ? false : true,
                     backgroundColor: kAccentColor,
+                    foregroundColor: kPrimaryColor,
                     enableFeedback: true,
                     mouseCursor: SystemMouseCursors.click,
                     tooltip: "Scroll to top",
@@ -169,7 +174,14 @@ class _ProductsState extends State<Products> {
                     hoverElevation: 50.0,
                     child: const FaIcon(FontAwesomeIcons.chevronUp, size: 18),
                   )
-                : const SizedBox(),
+                : FloatingActionButton(
+                    onPressed: addProduct,
+                    elevation: 20.0,
+                    backgroundColor: kAccentColor,
+                    foregroundColor: kPrimaryColor,
+                    tooltip: "Add a product",
+                    child: const FaIcon(FontAwesomeIcons.plus),
+                  ),
             body: SafeArea(
               maintainBottomViewPadding: true,
               child: Scrollbar(

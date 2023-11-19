@@ -6,6 +6,7 @@ import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../providers/api_url.dart';
 import '../providers/helper.dart';
 
 class AuthController extends GetxController {
@@ -45,9 +46,11 @@ class AuthController extends GetxController {
 
   Future checkIfAuthorized() async {
     if (await isAuthorized()) {
+      consoleLog("User is authorized");
       return;
     } else {
       UserController.instance.deleteUser();
+      consoleLog("User is not authorized");
       Get.offAll(
         () => const Login(),
         fullscreenDialog: true,

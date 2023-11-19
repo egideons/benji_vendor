@@ -238,7 +238,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
   }
 
 //==================== Select Location using ===============\\
-  void _selectLocation() async {
+  void selectLocation() async {
     getPlaceMark(draggedLatLng);
   }
 
@@ -275,14 +275,15 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
       child: Scaffold(
         appBar: MyAppBar(
           title: "Locate on Map",
-          elevation: 0.0,
+          elevation: 0,
           actions: const [],
           backgroundColor: kPrimaryColor,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
         floatingActionButton: FloatingActionButton(
-          onPressed: _selectLocation,
+          onPressed: selectLocation,
           backgroundColor: kAccentColor,
+          foregroundColor: kPrimaryColor,
           tooltip: "Pin Location",
           mouseCursor: SystemMouseCursors.click,
           child: const FaIcon(
@@ -292,9 +293,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
         ),
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: kPrimaryColor,
-          ),
+          decoration: BoxDecoration(color: kPrimaryColor),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -312,7 +311,11 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
               kHalfSizedBox,
               MyElevatedButton(
                 title: "Save",
-                onPressed: userPosition == null ? () {} : saveFunc,
+                onPressed: userPosition == null
+                    ? pinnedLocation == null
+                        ? () {}
+                        : () {}
+                    : saveFunc,
               ),
             ],
           ),
@@ -320,11 +323,13 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: userPosition == null
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: kAccentColor,
-                  ),
-                )
+              ? pinnedLocation == null
+                  ? Center(
+                      child: CircularProgressIndicator(color: kAccentColor),
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(color: kAccentColor),
+                    )
               : Column(
                   children: [
                     Row(

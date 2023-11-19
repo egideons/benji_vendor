@@ -4,8 +4,8 @@ import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/model/package/delivery_item.dart';
 import 'package:benji_vendor/theme/colors.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
 
@@ -29,7 +29,7 @@ class _PackagesState extends State<Packages>
     pending = getDataPending();
     completed = getDataCompleted();
     tabBarController = TabController(length: 2, vsync: this);
-    scrollController.addListener(_scrollListener);
+    scrollController.addListener(scrollListener);
   }
 
   late Future<List<DeliveryItem>> pending;
@@ -69,6 +69,7 @@ class _PackagesState extends State<Packages>
 
   int selectedtabbar = 0;
   void clickOnTabBarOption(value) async {
+    HapticFeedback.selectionClick();
     setState(() {
       selectedtabbar = value;
     });
@@ -86,7 +87,7 @@ class _PackagesState extends State<Packages>
     });
   }
 
-  Future<void> _scrollListener() async {
+  Future<void> scrollListener() async {
     if (scrollController.position.pixels >= 100 &&
         isScrollToTopBtnVisible != true) {
       setState(() {
@@ -181,6 +182,7 @@ class _PackagesState extends State<Packages>
                 onPressed: scrollToTop,
                 mini: deviceType(media.width) > 2 ? false : true,
                 backgroundColor: kAccentColor,
+                foregroundColor: kPrimaryColor,
                 enableFeedback: true,
                 mouseCursor: SystemMouseCursors.click,
                 tooltip: "Scroll to top",
@@ -192,7 +194,6 @@ class _PackagesState extends State<Packages>
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: Scrollbar(
-            controller: scrollController,
             child: ListView(
               controller: scrollController,
               padding: const EdgeInsets.all(kDefaultPadding),
@@ -212,41 +213,33 @@ class _PackagesState extends State<Packages>
                         strokeAlign: BorderSide.strokeAlignOutside,
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: TabBar(
-                            controller: tabBarController,
-                            onTap: (value) => clickOnTabBarOption(value),
-                            enableFeedback: true,
-                            dragStartBehavior: DragStartBehavior.start,
-                            mouseCursor: SystemMouseCursors.click,
-                            automaticIndicatorColorAdjustment: true,
-                            overlayColor:
-                                MaterialStatePropertyAll(kAccentColor),
-                            labelColor: kPrimaryColor,
-                            unselectedLabelColor: kTextGreyColor,
-                            indicatorColor: kAccentColor,
-                            indicatorWeight: 2,
-                            splashBorderRadius: BorderRadius.circular(50),
-                            indicator: BoxDecoration(
-                              color: kAccentColor,
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            tabs: const [
-                              Tab(text: "Pending"),
-                              Tab(text: "Completed"),
-                            ],
-                          ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: TabBar(
+                        controller: tabBarController,
+                        onTap: (value) => clickOnTabBarOption(value),
+                        enableFeedback: true,
+                        mouseCursor: SystemMouseCursors.click,
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        dividerColor: kTransparentColor,
+                        automaticIndicatorColorAdjustment: true,
+                        labelColor: kPrimaryColor,
+                        unselectedLabelColor: kTextGreyColor,
+                        indicator: BoxDecoration(
+                          color: kAccentColor,
+                          borderRadius: BorderRadius.circular(50),
                         ),
-                      ],
+                        tabs: const [
+                          Tab(text: "Pending"),
+                          Tab(text: "Completed"),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 kSizedBox,
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  // padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: selectedtabbar == 0
                       ? FutureBuilder(
                           future: pending,

@@ -41,8 +41,12 @@ class OrderModel {
     return OrderModel(
       id: json["id"] ?? notAvailable,
       code: json["code"] ?? notAvailable,
-      totalPrice: json["total_price"] ?? 0.0,
-      deliveryFee: json["delivery_fee"] ?? 0.0,
+      totalPrice: json["total_price"] != null
+          ? double.parse(json["total_price"].toString())
+          : 0.0,
+      deliveryFee: json["delivery_fee"] != null
+          ? double.parse(json["delivery_fee"].toString())
+          : 0.0,
       assignedStatus: json["assigned_status"] ?? "PEND",
       deliveryStatus: json["delivery_status"] ?? "PEND",
       client: Client.fromJson(json["client"]),
