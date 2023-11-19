@@ -9,6 +9,7 @@ class ItemDropDownMenu extends StatelessWidget {
     required this.itemEC,
     required this.hintText,
     required this.dropdownMenuEntries,
+    this.enabled = true,
     this.onSelected,
     this.enableSearch,
     this.enableFilter,
@@ -18,7 +19,7 @@ class ItemDropDownMenu extends StatelessWidget {
   });
 
   final TextEditingController itemEC;
-
+  final bool enabled;
   final String hintText;
   final List<DropdownMenuEntry<Object>> dropdownMenuEntries;
   final Function(dynamic value)? onSelected;
@@ -33,6 +34,7 @@ class ItemDropDownMenu extends StatelessWidget {
     var media = MediaQuery.of(context).size;
     return DropdownMenu(
       dropdownMenuEntries: dropdownMenuEntries,
+      enabled: enabled,
       menuStyle: const MenuStyle(
         mouseCursor: MaterialStatePropertyAll(SystemMouseCursors.click),
         elevation: MaterialStatePropertyAll(10),

@@ -112,6 +112,7 @@ class _OrdersState extends State<Orders> {
                 onPressed: _scrollToTop,
                 mini: deviceType(media.width) > 2 ? false : true,
                 backgroundColor: kAccentColor,
+                foregroundColor: kPrimaryColor,
                 enableFeedback: true,
                 mouseCursor: SystemMouseCursors.click,
                 tooltip: "Scroll to top",

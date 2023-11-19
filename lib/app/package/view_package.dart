@@ -50,6 +50,11 @@ class _ViewPackageState extends State<ViewPackage> {
     ];
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   //================================================= ALL VARIABLES =====================================================\\
   DateTime now = DateTime.now();
   final List<String> titles = <String>[

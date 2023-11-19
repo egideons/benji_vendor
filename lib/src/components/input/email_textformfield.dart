@@ -37,7 +37,7 @@ class EmailTextFormField extends StatelessWidget {
       maxLines: 1,
       style: TextStyle(
         color: kSecondaryColor,
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(

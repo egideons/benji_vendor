@@ -360,7 +360,14 @@ class _SendPackageState extends State<SendPackage> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text("Next"),
+            child: Text(
+              "Next",
+              style: TextStyle(
+                color: kPrimaryColor,
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
           )
         : continuePage == true
             ? Row(
@@ -380,7 +387,14 @@ class _SendPackageState extends State<SendPackage> {
                         ),
                         child: controller.isLoad.value
                             ? CircularProgressIndicator(color: kPrimaryColor)
-                            : const Text("Submit"),
+                            : Text(
+                                "Submit",
+                                style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                              ),
                       );
                     },
                   ),
@@ -402,8 +416,8 @@ class _SendPackageState extends State<SendPackage> {
                     child: Text(
                       "Back",
                       style: TextStyle(
-                          color:
-                              submittingForm ? kTextGreyColor : kAccentColor),
+                        color: submittingForm ? kTextGreyColor : kAccentColor,
+                      ),
                     ),
                   )
                 ],
@@ -420,7 +434,14 @@ class _SendPackageState extends State<SendPackage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: const Text("Next"),
+                    child: Text(
+                      "Next",
+                      style: TextStyle(
+                        color: kPrimaryColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
                   ),
                   kWidthSizedBox,
                   OutlinedButton(
@@ -1152,6 +1173,7 @@ class _SendPackageState extends State<SendPackage> {
                 onPressed: scrollToTop,
                 mini: deviceType(media.width) > 2 ? false : true,
                 backgroundColor: kAccentColor,
+                foregroundColor: kPrimaryColor,
                 enableFeedback: true,
                 mouseCursor: SystemMouseCursors.click,
                 tooltip: "Scroll to top",

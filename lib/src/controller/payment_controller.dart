@@ -22,7 +22,6 @@ class PaymentController extends GetxController {
 
     try {
       final response = await http.get(
-        // Uri.parse('${Api.baseUrl}/payments/getdeliveryfee/$packageId/package'),
         Uri.parse('${Api.baseUrl}${Api.getDeliveryFee}$packageId/package'),
         headers: authHeader(),
       );
