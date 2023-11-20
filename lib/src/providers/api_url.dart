@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import '../controller/user_controller.dart';
-import '../model/create_vendor_model.dart';
 
 // API URLS AND HTTP CALL FUNCTIONS
 const baseURL = "https://resource.bgbot.app/api/v1";
@@ -37,6 +36,7 @@ class Api {
   static const getPackageCategory = "/sendPackage/getPackageCategory/";
   static const getPackageWeight = "/sendPackage/getPackageWeight/";
   static const createItemPackage = "/sendPackage/createItemPackage/";
+  static const reportPackage = "/clients/clientReportPackage/";
 
 //Payments
   static const getDeliveryFee = "/payments/getdeliveryfee/";
@@ -100,6 +100,8 @@ class HandleData {
           HttpHeaders.authorizationHeader: "Bearer $token",
         },
       );
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
       response = null;
       consoleLog(e.toString());
@@ -109,105 +111,6 @@ class HandleData {
 
   static Future put() async {}
   static Future delete() async {}
-
-  static Future<http.StreamedResponse?> streamAddVendor(
-      url, token, SendCreateModel data, bool vendorClassifier) async {
-    http.StreamedResponse? response;
-
-    //  final filePhotoName = basename(data.image!.path);
-
-    var request = http.MultipartRequest("POST", Uri.parse(url));
-    Map<String, String> headers = {
-      'Accept': 'application/json',
-      "Content-Type": content,
-      'authorization': 'Bearer $token',
-    };
-
-    // var file = await http.MultipartFile.fromPath('image', data.image!.path,
-    //     filename: filePhotoName);
-
-    request.headers.addAll(headers);
-
-    request.fields["email"] = data.businessEmail!.toString();
-    request.fields["phone"] = data.businessPhone!.toString();
-    request.fields["address"] = data.bussinessAddress!.toString();
-    request.fields["shop_name"] = data.businessName!.toString();
-
-    request.fields["shop_type"] = data.businessType!.toString();
-    request.fields["weekOpeningHours"] = data.openHours!.toString();
-    request.fields["weekClosingHours"] = data.closeHours!.toString();
-    request.fields["satOpeningHours"] = data.satOpenHours!.toString();
-    request.fields["satClosingHours"] = data.satCloseHours!.toString();
-    request.fields["sunWeekOpeningHours"] = data.sunOpenHours!.toString();
-
-    request.fields["sunWeekClosingHours"] = data.sunCloseHours!.toString();
-
-    request.fields["personalId"] = data.personaId!.toString();
-    request.fields["businessId"] = data.businessId!.toString();
-    request.fields["businessBio"] = data.businessBio!.toString();
-    request.fields["city"] = data.city!.toString();
-
-    request.fields["state"] = data.state!.toString();
-    request.fields["country"] = data.country!.toString();
-    request.fields["vendorClassifier"] = vendorClassifier.toString();
-    //  request.files.add(file);
-    try {
-      response = await request.send();
-    } catch (e) {
-      log(e.toString());
-      response = null;
-    }
-    return response;
-  }
-
-  static Future<http.StreamedResponse?> streamAddToVendor(
-      url, token, SendCreateModel data) async {
-    http.StreamedResponse? response;
-
-    //  final filePhotoName = basename(data.image!.path);
-
-    var request = http.MultipartRequest("POST", Uri.parse(url));
-    Map<String, String> headers = {
-      'Accept': 'application/json',
-      "Content-Type": content,
-      'authorization': 'Bearer $token',
-    };
-
-    // var file = await http.MultipartFile.fromPath('image', data.image!.path,
-    //     filename: filePhotoName);
-
-    request.headers.addAll(headers);
-
-    request.fields["email"] = data.businessEmail!.toString();
-    request.fields["phone"] = data.businessPhone!.toString();
-    request.fields["address"] = data.bussinessAddress!.toString();
-    request.fields["shop_name"] = data.businessName!.toString();
-
-    request.fields["shop_type"] = data.businessType!.toString();
-    request.fields["weekOpeningHours"] = data.openHours!.toString();
-    request.fields["weekClosingHours"] = data.closeHours!.toString();
-    request.fields["satOpeningHours"] = data.satOpenHours!.toString();
-    request.fields["satClosingHours"] = data.satCloseHours!.toString();
-    request.fields["sunWeekOpeningHours"] = data.sunOpenHours!.toString();
-
-    request.fields["sunWeekClosingHours"] = data.sunCloseHours!.toString();
-
-    request.fields["personalId"] = data.personaId!.toString();
-    request.fields["businessId"] = data.businessId!.toString();
-    request.fields["businessBio"] = data.businessBio!.toString();
-    request.fields["city"] = data.city!.toString();
-
-    request.fields["state"] = data.state!.toString();
-    request.fields["country"] = data.country!.toString();
-    //  request.files.add(file);
-    try {
-      response = await request.send();
-    } catch (e) {
-      log(e.toString());
-      response = null;
-    }
-    return response;
-  }
 }
 
 consoleLog(String val) {

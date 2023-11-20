@@ -79,7 +79,7 @@ class _ViewPackageState extends State<ViewPackage> {
 
   //=================================================  Navigation =====================================================\\
   void toReportPackage() => Get.to(
-        () => const ReportPackage(),
+        () => ReportPackage(deliveryItem: widget.deliveryItem),
         routeName: 'ReportPackage',
         duration: const Duration(milliseconds: 300),
         fullscreenDialog: true,
