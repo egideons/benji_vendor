@@ -41,7 +41,7 @@ class VendorModel {
   String satClosingHours;
   String sunWeekOpeningHours;
   String sunWeekClosingHours;
-  // String businessBio;
+  String description;
 
   VendorModel({
     required this.id,
@@ -66,7 +66,7 @@ class VendorModel {
     required this.satClosingHours,
     required this.sunWeekOpeningHours,
     required this.sunWeekClosingHours,
-    // required this.businessBio,
+    required this.description,
   });
 
   factory VendorModel.fromJson(Map<String, dynamic>? json) {
@@ -83,10 +83,15 @@ class VendorModel {
       address: json["address"] ?? notAvailable,
       isOnline: json["is_online"] ?? false,
       averageRating: ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
+      // json["average_rating"] != null
+      //     ? (json["average_rating"] is double
+      //         ? json["average_rating"]
+      //         : double.tryParse(json["average_rating"].toString()) ?? 0.0)
+      //     : 0.0,
       numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
       shopName: json["shop_name"] ?? notAvailable,
-      shopImage: json["shop_image"] ?? '',
-      profileLogo: json["profileLogo"] ?? '',
+      shopImage: json["shop_image"] ?? "",
+      profileLogo: json["profileLogo"] ?? "",
       shopType: BusinessType.fromJson(json["shop_type"]),
       weekOpeningHours: json["weekOpeningHours"] ?? notAvailable,
       weekClosingHours: json["weekClosingHours"] ?? notAvailable,
@@ -94,7 +99,7 @@ class VendorModel {
       satClosingHours: json["satClosingHours"] ?? notAvailable,
       sunWeekOpeningHours: json["sunWeekOpeningHours"] ?? notAvailable,
       sunWeekClosingHours: json["sunWeekClosingHours"] ?? notAvailable,
-      // businessBio: json["businessBio"] ?? notAvailable,
+      description: json["description"] ?? notAvailable,
     );
   }
 
@@ -120,7 +125,7 @@ class VendorModel {
         "satOpeningHours": satOpeningHours,
         "satClosingHours": satClosingHours,
         "sunWeekOpeningHours": sunWeekOpeningHours,
-        "sunWeekClosingHours": sunWeekClosingHours
-        // "businessBio": businessBio,
+        "sunWeekClosingHours": sunWeekClosingHours,
+        "description": description,
       };
 }

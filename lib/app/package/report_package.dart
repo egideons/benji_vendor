@@ -1,16 +1,21 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
 import '../../../src/providers/constants.dart';
 import '../../src/components/appbar/my appbar.dart';
 import '../../src/components/button/my elevatedButton.dart';
 import '../../src/components/input/my_message_textformfield.dart';
+import '../../src/controller/form_controller.dart';
+import '../../src/model/package/delivery_item.dart';
 import '../../theme/colors.dart';
 
 class ReportPackage extends StatefulWidget {
+  final DeliveryItem deliveryItem;
   const ReportPackage({
+    required this.deliveryItem,
     super.key,
   });
 
@@ -19,6 +24,11 @@ class ReportPackage extends StatefulWidget {
 }
 
 class _ReportPackageState extends State<ReportPackage> {
+  @override
+  void initState() {
+    super.initState();
+    consoleLog(widget.deliveryItem.id);
+  }
   //============================================ ALL VARIABLES ===========================================\\
 
   //============================================ BOOL VALUES ===========================================\\
@@ -35,16 +45,18 @@ class _ReportPackageState extends State<ReportPackage> {
 
   //============================================ FUNCTIONS ===========================================\\
 
-  Future<void> submitReport() async {
-    setState(() {
-      submittingReport = true;
-    });
-
-    setState(() {
-      submittingReport = false;
-    });
-
-    Get.back();
+  submitReport() async {
+    Map data = {
+      'package_id': widget.deliveryItem.id.toString(),
+      'message': messageEC.text,
+    };
+    String url = Api.baseUrl + Api.reportPackage + widget.deliveryItem.id;
+    url += '?message=${Uri.encodeComponent(messageEC.text)}';
+    consoleLog(url);
+    await FormController.instance.postAuth(url, data, 'reportPackage');
+    if (FormController.instance.status.toString().startsWith('2')) {
+      Get.close(1);
+    }
   }
 
   @override
@@ -53,25 +65,28 @@ class _ReportPackageState extends State<ReportPackage> {
       onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        extendBody: true,
-        extendBodyBehindAppBar: true,
         appBar: MyAppBar(
           title: "Help and support",
-          elevation: 0.0,
+          elevation: 0,
           actions: const [],
           backgroundColor: kPrimaryColor,
         ),
-        bottomSheet: Container(
+        bottomNavigationBar: Container(
           decoration: BoxDecoration(color: kPrimaryColor),
           padding: const EdgeInsets.all(kDefaultPadding),
-          child: MyElevatedButton(
-            onPressed: (() async {
-              if (formKey.currentState!.validate()) {
-                formKey.currentState!.save();
-                submitReport();
-              }
-            }),
-            title: "Submit",
+          child: GetBuilder<FormController>(
+            builder: (controller) {
+              return MyElevatedButton(
+                onPressed: (() async {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    submitReport();
+                  }
+                }),
+                isLoading: controller.isLoad.value,
+                title: "Submit",
+              );
+            },
           ),
         ),
         body: SafeArea(
@@ -104,11 +119,11 @@ class _ReportPackageState extends State<ReportPackage> {
                   children: [
                     MyMessageTextFormField(
                       controller: messageEC,
-                      textInputAction: TextInputAction.done,
+                      textInputAction: TextInputAction.newline,
                       focusNode: messageFN,
                       hintText: "Enter your message here",
                       maxLines: 10,
-                      keyboardType: TextInputType.text,
+                      keyboardType: TextInputType.multiline,
                       maxLength: 1000,
                       validator: (value) {
                         if (value == null || value!.isEmpty) {

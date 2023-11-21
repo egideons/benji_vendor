@@ -230,7 +230,9 @@ class _ReviewsPageState extends State<ReviewsPage> {
                           ),
                         )
                       : controller.reviews.isEmpty
-                          ? const EmptyCard()
+                          ? const EmptyCard(
+                              emptyCardMessage: "You have no reviews",
+                            )
                           : ListView.separated(
                               physics: const BouncingScrollPhysics(),
                               separatorBuilder: (context, index) => kSizedBox,

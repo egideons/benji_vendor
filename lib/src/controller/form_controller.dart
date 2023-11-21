@@ -66,10 +66,36 @@ class FormController extends GetxController {
     update([tag]);
   }
 
+  // Future postAuth(String url, Map data, String tag,
+  //     [String errorMsg = "Error occurred",
+  //     String successMsg = "Submitted successfully"]) async {
+  //   isLoad.value = true;
+  //   update([tag]);
+  //   final response = await http.post(
+  //     Uri.parse(url),
+  //     headers: authHeader(),
+  //     body: data,
+  //   );
+  //   status.value = response.statusCode;
+  //   consoleLog(response.body);
+  //   if (response.statusCode != 200) {
+  //     ApiProcessorController.errorSnack(errorMsg);
+  //     isLoad.value = false;
+  //     update([tag]);
+  //     return;
+  //   }
+
+  //   ApiProcessorController.successSnack(successMsg);
+  //   isLoad.value = false;
+  //   responseObject.value = jsonDecode(response.body) as Map;
+  //   update([tag]);
+  // }
+
   Future postAuth(String url, Map data, String tag,
       [String errorMsg = "Error occurred",
       String successMsg = "Submitted successfully"]) async {
     isLoad.value = true;
+    update();
     update([tag]);
     final response = await http.post(
       Uri.parse(url),
@@ -78,17 +104,79 @@ class FormController extends GetxController {
     );
     status.value = response.statusCode;
     consoleLog(response.body);
-    responseObject.value = (jsonDecode(response.body) as Map);
+    var responseBody = jsonDecode(response.body);
+
     if (response.statusCode != 200) {
       ApiProcessorController.errorSnack(errorMsg);
       isLoad.value = false;
+      update();
       update([tag]);
       return;
+    } else {
+      if (responseBody is String) {
+        ApiProcessorController.successSnack(successMsg);
+        isLoad.value = false;
+        update();
+        update([tag]);
+      } else if (responseBody is Map) {
+        responseObject.value = (responseBody);
+        ApiProcessorController.successSnack(successMsg);
+        isLoad.value = false;
+        update();
+        update([tag]);
+      }
     }
 
-    ApiProcessorController.successSnack(successMsg);
     isLoad.value = false;
-    responseObject.value = jsonDecode(response.body) as Map;
+    update();
+    update([tag]);
+  }
+
+  Future patchAuth(String url, Map data, String tag,
+      [String errorMsg = "Error occurred",
+      String successMsg = "Submitted successfully"]) async {
+    isLoad.value = true;
+    update();
+    update([tag]);
+    try {
+      final response = await http.patch(
+        Uri.parse(url),
+        headers: authHeader(),
+        body: jsonEncode(data),
+      );
+      status.value = response.statusCode;
+      consoleLog(response.body);
+      var responseBody = jsonDecode(response.body);
+
+      if (response.statusCode != 200) {
+        ApiProcessorController.errorSnack(errorMsg);
+        isLoad.value = false;
+        update();
+        update([tag]);
+        return;
+      } else {
+        if (responseBody is String) {
+          ApiProcessorController.successSnack(successMsg);
+          isLoad.value = false;
+          update();
+          update([tag]);
+        } else if (responseBody is Map) {
+          responseObject.value = (responseBody);
+          ApiProcessorController.successSnack(successMsg);
+          isLoad.value = false;
+          update();
+          update([tag]);
+        }
+      }
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
+    } catch (e) {
+      consoleLog(e.toString());
+      ApiProcessorController.errorSnack(errorMsg);
+    }
+
+    isLoad.value = false;
+    update();
     update([tag]);
   }
 

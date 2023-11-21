@@ -1,18 +1,21 @@
 import 'dart:io';
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/model/package/delivery_item.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../src/controller/form_controller.dart';
+import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import 'report_package.dart';
@@ -73,13 +76,15 @@ class _ViewPackageState extends State<ViewPackage> {
   ];
 
   List<String>? packageData;
+  bool isDispatched = false;
+  String dispatchMessage = "Your item has been dispatched";
   //=================================================  CONTROLLERS =====================================================\\
   final scrollController = ScrollController();
   final screenshotController = ScreenshotController();
 
   //=================================================  Navigation =====================================================\\
   void toReportPackage() => Get.to(
-        () => const ReportPackage(),
+        () => ReportPackage(deliveryItem: widget.deliveryItem),
         routeName: 'ReportPackage',
         duration: const Duration(milliseconds: 300),
         fullscreenDialog: true,
@@ -217,6 +222,30 @@ class _ViewPackageState extends State<ViewPackage> {
     );
   }
 
+  itemDispatched() async {
+    HapticFeedback.selectionClick();
+    Map<String, dynamic> data = {
+      "status": "dispatched",
+    };
+
+    var url =
+        "${Api.baseUrl}${Api.dispatchPackage}?package_id=${widget.deliveryItem.id}&display_message=$dispatchMessage";
+    consoleLog(url);
+    consoleLog(data.toString());
+    await FormController.instance.patchAuth(url, data, 'dispatchPackage');
+    if (FormController.instance.status.toString().startsWith('2')) {
+      setState(() {
+        isDispatched = true;
+      });
+      await Future.delayed(const Duration(microseconds: 500), () {
+        getDeliveryItemsByClientAndStatus('pending');
+        getDeliveryItemsByClientAndStatus('dispatched');
+        getDeliveryItemsByClientAndStatus('completed');
+        Get.close(2);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -243,8 +272,21 @@ class _ViewPackageState extends State<ViewPackage> {
                   height: deviceType(media.width) >= 2 ? 200 : 100,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(
-                          'assets/icons/${widget.deliveryItem.status.toLowerCase() == "pending" ? "package-waiting" : "package-success"}.png'),
+                      image: () {
+                        if (widget.deliveryItem.status.toLowerCase() ==
+                            "completed") {
+                          return const AssetImage(
+                              "assets/icons/package-success.png");
+                        }
+                        if (widget.deliveryItem.status.toLowerCase() ==
+                            "dispatched") {
+                          return const AssetImage(
+                              "assets/icons/delivery_bike.png");
+                        } else {
+                          return const AssetImage(
+                              "assets/icons/package-waiting.png");
+                        }
+                      }(),
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -325,11 +367,20 @@ class _ViewPackageState extends State<ViewPackage> {
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
                                   style: TextStyle(
-                                    color: widget.deliveryItem.status
-                                                .toLowerCase() !=
-                                            "pending"
-                                        ? kSuccessColor
-                                        : kSecondaryColor,
+                                    color: () {
+                                      if (widget.deliveryItem.status
+                                              .toLowerCase() ==
+                                          "completed") {
+                                        return kSuccessColor;
+                                      }
+                                      if (widget.deliveryItem.status
+                                              .toLowerCase() ==
+                                          "dispatched") {
+                                        return kSecondaryColor;
+                                      } else {
+                                        return kLoadingColor;
+                                      }
+                                    }(),
                                     fontSize: 12,
                                     fontFamily: 'sen',
                                     fontWeight: FontWeight.w700,
@@ -340,7 +391,9 @@ class _ViewPackageState extends State<ViewPackage> {
                           ),
                           Divider(color: kGreyColor2, height: 0),
                           kSizedBox,
-                          widget.deliveryItem.status.toLowerCase() != "pending"
+                          isDispatched == false &&
+                                  widget.deliveryItem.status.toLowerCase() !=
+                                      "pending"
                               ? Text(
                                   "Thanks for choosing our service",
                                   textAlign: TextAlign.center,
@@ -390,73 +443,85 @@ class _ViewPackageState extends State<ViewPackage> {
                 ),
               ),
               kSizedBox,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  OutlinedButton(
-                    onPressed: toReportPackage,
-                    style: OutlinedButton.styleFrom(
-                      elevation: 10,
-                      enableFeedback: true,
-                      backgroundColor: kPrimaryColor,
-                      padding: const EdgeInsets.all(kDefaultPadding),
-                    ),
-                    child: Row(
+              isDispatched == false &&
+                      widget.deliveryItem.status.toLowerCase() != "dispatched"
+                  ? GetBuilder<FormController>(
+                      init: FormController(),
+                      builder: (controller) {
+                        return MyElevatedButton(
+                          title: "Dispatched",
+                          onPressed: itemDispatched,
+                          isLoading: controller.isLoad.value,
+                        );
+                      },
+                    )
+                  : Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        FaIcon(
-                          FontAwesomeIcons.solidFlag,
-                          color: kAccentColor,
-                          size: 18,
+                        OutlinedButton(
+                          onPressed: toReportPackage,
+                          style: OutlinedButton.styleFrom(
+                            elevation: 10,
+                            enableFeedback: true,
+                            backgroundColor: kPrimaryColor,
+                            padding: const EdgeInsets.all(kDefaultPadding),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.solidFlag,
+                                color: kAccentColor,
+                                size: 18,
+                              ),
+                              kWidthSizedBox,
+                              Center(
+                                child: Text(
+                                  "Report",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: kAccentColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         kWidthSizedBox,
-                        Center(
-                          child: Text(
-                            "Report",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: kAccentColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
+                        ElevatedButton(
+                          onPressed: sharePackage,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 10,
+                            backgroundColor: kAccentColor,
+                            padding: const EdgeInsets.all(kDefaultPadding),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.shareNodes,
+                                color: kPrimaryColor,
+                                size: 18,
+                              ),
+                              kWidthSizedBox,
+                              SizedBox(
+                                child: Text(
+                                  "Share",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  kWidthSizedBox,
-                  ElevatedButton(
-                    onPressed: sharePackage,
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10,
-                      backgroundColor: kAccentColor,
-                      padding: const EdgeInsets.all(kDefaultPadding),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.shareNodes,
-                          color: kPrimaryColor,
-                          size: 18,
-                        ),
-                        kWidthSizedBox,
-                        SizedBox(
-                          child: Text(
-                            "Share",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: kPrimaryColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
               kSizedBox,
             ],
           ),

@@ -227,6 +227,7 @@ class _SendPackageState extends State<SendPackage> {
   }
 
   submitForm() async {
+    HapticFeedback.selectionClick();
     if (pickupEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please fill in a pickup address");
       return;

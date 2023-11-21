@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:benji_vendor/src/model/business_type_model.dart';
+import 'package:get/get.dart';
 
 import '../providers/api_url.dart';
 import '../providers/constants.dart';
@@ -84,12 +85,13 @@ class UserModel {
         longitude: json["longitude"] ?? notAvailable,
         latitude: json["latitude"] ?? notAvailable,
         isOnline: json["is_online"] ?? false,
-        // averageRating: ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
-        averageRating: json["average_rating"] != null
-            ? (json["average_rating"] is double
-                ? json["average_rating"]
-                : double.tryParse(json["average_rating"].toString()) ?? 0.0)
-            : 0.0,
+        averageRating:
+            ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
+        // averageRating: json["average_rating"] != null
+        //     ? (json["average_rating"] is double
+        //         ? json["average_rating"]
+        //         : double.tryParse(json["average_rating"].toString()) ?? 0.0)
+        //     : 0.0,
         numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
         shopName: json["shop_name"] ?? notAvailable,
         shopImage: json["shop_image"] ?? '',
