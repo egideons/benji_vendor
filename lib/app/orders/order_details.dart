@@ -2,9 +2,15 @@
 
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../../src/components/appbar/my appbar.dart';
+import '../../src/components/button/my elevatedButton.dart';
+import '../../src/controller/form_controller.dart';
+import '../../src/controller/order_controller.dart';
 import '../../src/model/order_model.dart';
+import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
@@ -24,8 +30,33 @@ class _OrderDetailsState extends State<OrderDetails> {
   }
 
 //============================== ALL VARIABLES ================================\\
+  bool isDispatched = false;
+  String dispatchMessage = "Your order has been dispatched";
 
-//============================== VARIABLES ================================\\
+//============================== FUNCTIONS ================================\\
+  orderDispatched() async {
+    HapticFeedback.selectionClick();
+    Map<String, dynamic> data = {
+      "delivery_status": "dispatched",
+    };
+
+    var url =
+        "${Api.baseUrl}${Api.changeOrderStatus}?order_id=${widget.order.id}&display_message=$dispatchMessage";
+    consoleLog(url);
+    consoleLog(data.toString());
+    await FormController.instance.patchAuth(url, data, 'dispatchOrder');
+    if (FormController.instance.status.toString().startsWith('2')) {
+      setState(() {
+        isDispatched = true;
+      });
+      await Future.delayed(const Duration(microseconds: 500), () {
+        OrderController.instance.getOrdersByPendingStatus();
+        OrderController.instance.getOrdersByDispatchedStatus();
+        OrderController.instance.getOrdersByCompletedStatus();
+        Get.close(1);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +68,22 @@ class _OrderDetailsState extends State<OrderDetails> {
           elevation: 0,
           actions: const [],
           backgroundColor: kPrimaryColor,
+        ),
+        bottomNavigationBar: Container(
+          padding: const EdgeInsets.all(kDefaultPadding),
+          child: isDispatched == false &&
+                  widget.order.deliveryStatus.toLowerCase() != "dispatched"
+              ? GetBuilder<FormController>(
+                  init: FormController(),
+                  builder: (controller) {
+                    return MyElevatedButton(
+                      title: "Dispatched",
+                      onPressed: orderDispatched,
+                      isLoading: controller.isLoad.value,
+                    );
+                  },
+                )
+              : const SizedBox(),
         ),
         body: ListView(
           physics: const BouncingScrollPhysics(),
@@ -102,20 +149,21 @@ class _OrderDetailsState extends State<OrderDetails> {
                             letterSpacing: -0.32,
                           ),
                         ),
-                        widget.order.deliveryStatus == "CANC"
-                            ? Text(
-                                'Canceled',
+                        widget.order.deliveryStatus == "COMP"
+                            ? const Text(
+                                'Delivered',
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
-                                  color: kAccentColor,
+                                  color: kSuccessColor,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: -0.32,
                                 ),
                               )
-                            : widget.order.deliveryStatus == "PEND"
+                            : isDispatched == true &&
+                                    widget.order.deliveryStatus == "dispatched"
                                 ? Text(
-                                    'Pending',
+                                    'Dispatched',
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
                                       color: kSecondaryColor,
@@ -124,16 +172,28 @@ class _OrderDetailsState extends State<OrderDetails> {
                                       letterSpacing: -0.32,
                                     ),
                                   )
-                                : const Text(
-                                    'Delivered',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      color: kSuccessColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: -0.32,
-                                    ),
-                                  ),
+                                : isDispatched == false &&
+                                        widget.order.deliveryStatus == "PEND"
+                                    ? Text(
+                                        'Pending',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          color: kLoadingColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          letterSpacing: -0.32,
+                                        ),
+                                      )
+                                    : Text(
+                                        'Canceled',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          color: kAccentColor,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          letterSpacing: -0.32,
+                                        ),
+                                      ),
                       ],
                     ),
                   ],

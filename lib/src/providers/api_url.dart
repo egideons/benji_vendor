@@ -24,6 +24,9 @@ class Api {
   static const notification = "/vendors/";
   static const category = "/categories/list";
 
+//Orders
+  static const changeOrderStatus = "/orders/changeOrderStatus";
+
 //Vendor
   static const getSpecificVendor = "/vendors/getVendor/";
   static const vendorsOrderList = "/vendors/";

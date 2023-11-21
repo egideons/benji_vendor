@@ -110,14 +110,20 @@ class VendorsOrderContainer extends StatelessWidget {
                 child: Text(
                   order.deliveryStatus == "CANC"
                       ? "Cancelled"
-                      : order.deliveryStatus == "PEND"
-                          ? "Pending"
-                          : "Completed",
+                      : order.deliveryStatus == "dispatched"
+                          ? "Dispatched"
+                          : order.deliveryStatus == "PEND"
+                              ? "Pending"
+                              : "Completed",
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: order.deliveryStatus == "PEND"
-                        ? kSecondaryColor
-                        : kSuccessColor,
+                    color: order.deliveryStatus == "CANC"
+                        ? kAccentColor
+                        : order.deliveryStatus == "dispatched"
+                            ? kSecondaryColor
+                            : order.deliveryStatus == "PEND"
+                                ? kLoadingColor
+                                : kSuccessColor,
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                   ),
