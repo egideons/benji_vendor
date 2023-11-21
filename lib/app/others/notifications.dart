@@ -9,7 +9,6 @@ import 'package:benji_vendor/src/model/notificatin_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../src/components/button/my elevatedButton.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import 'notification_buttons_page.dart';
@@ -57,7 +56,7 @@ class _NotificationsState extends State<Notifications> {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
+    // var media = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kPrimaryColor,
       appBar: MyAppBar(
@@ -66,15 +65,15 @@ class _NotificationsState extends State<Notifications> {
         elevation: 0,
         actions: const [],
       ),
-      bottomNavigationBar: Container(
-        width: media.width,
-        padding: const EdgeInsets.all(kDefaultPadding),
-        decoration: BoxDecoration(color: kPrimaryColor),
-        child: MyElevatedButton(
-          title: "Notifications",
-          onPressed: toNotifications,
-        ),
-      ),
+      // bottomNavigationBar: Container(
+      //   width: media.width,
+      //   padding: const EdgeInsets.all(kDefaultPadding),
+      //   decoration: BoxDecoration(color: kPrimaryColor),
+      //   child: MyElevatedButton(
+      //     title: "Notifications",
+      //     onPressed: toNotifications,
+      //   ),
+      // ),
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: GetBuilder<NotificationController>(
@@ -86,7 +85,9 @@ class _NotificationsState extends State<Notifications> {
                     ),
                   )
                 : notifications.notification.isEmpty
-                    ? EmptyCard()
+                    ? const EmptyCard(
+                        emptyCardMessage: "You have no notifications",
+                      )
                     : Scrollbar(
                         radius: const Radius.circular(10),
                         child: ListView(

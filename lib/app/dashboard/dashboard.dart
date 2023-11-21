@@ -424,7 +424,7 @@ class _DashboardState extends State<Dashboard> {
                                             ),
                                           )
                                         : controller.products.isEmpty
-                                            ? EmptyCard()
+                                            ? const EmptyCard()
                                             : ListView.separated(
                                                 physics:
                                                     const BouncingScrollPhysics(),

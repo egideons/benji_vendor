@@ -279,7 +279,13 @@ class _PackagesState extends State<Packages>
                                     child: Column(
                                       children: [
                                         snapshot.data!.isEmpty
-                                            ? EmptyCard()
+                                            ? EmptyCard(
+                                                emptyCardMessage:
+                                                    "You don't have any packages yet",
+                                                showButton: true,
+                                                buttonTitle: "Send a package",
+                                                onPressed: toSendPackageScreen,
+                                              )
                                             : ListView.separated(
                                                 reverse: true,
                                                 separatorBuilder: (context,
@@ -367,7 +373,10 @@ class _PackagesState extends State<Packages>
                                         child: Column(
                                           children: [
                                             snapshot.data!.isEmpty
-                                                ? EmptyCard()
+                                                ? const EmptyCard(
+                                                    emptyCardMessage:
+                                                        "You don't have any dispatched packages yet",
+                                                  )
                                                 : ListView.separated(
                                                     separatorBuilder: (context,
                                                             index) =>
@@ -459,7 +468,10 @@ class _PackagesState extends State<Packages>
                                         child: Column(
                                           children: [
                                             snapshot.data!.isEmpty
-                                                ? EmptyCard()
+                                                ? const EmptyCard(
+                                                    emptyCardMessage:
+                                                        "You don't have any delivered packages yet",
+                                                  )
                                                 : ListView.separated(
                                                     separatorBuilder: (context,
                                                             index) =>

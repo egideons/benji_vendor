@@ -229,7 +229,7 @@ class _OrdersState extends State<Orders> {
                           child: CircularProgressIndicator(color: kAccentColor),
                         )
                       : controller.vendorsOrderList.isEmpty
-                          ? EmptyCard(
+                          ? const EmptyCard(
                               emptyCardMessage: "You don't have any orders yet")
                           : ListView.separated(
                               shrinkWrap: true,

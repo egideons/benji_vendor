@@ -207,7 +207,11 @@ class _ProductsState extends State<Products> {
                             : controller.products.isEmpty
                                 ? EmptyCard(
                                     emptyCardMessage:
-                                        "You don't have any products yet")
+                                        "You don't have any products yet",
+                                    showButton: true,
+                                    buttonTitle: "Add product",
+                                    onPressed: addProduct,
+                                  )
                                 : refreshing
                                     ? Center(
                                         child: CircularProgressIndicator(
