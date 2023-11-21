@@ -1,3 +1,4 @@
+import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class NotificationButton extends StatelessWidget {
@@ -25,6 +26,7 @@ class NotificationButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             shadowColor: Theme.of(context).shadowColor,
             backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: kPrimaryColor,
           ),
           onPressed: onPressed,
           child: Text(text),
