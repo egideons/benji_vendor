@@ -86,7 +86,7 @@ class _NotificationsState extends State<Notifications> {
                     ),
                   )
                 : notifications.notification.isEmpty
-                    ? const EmptyCard()
+                    ? EmptyCard()
                     : Scrollbar(
                         radius: const Radius.circular(10),
                         child: ListView(

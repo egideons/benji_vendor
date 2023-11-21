@@ -14,11 +14,12 @@ class OrderModel {
   String deliveryStatus;
   Client client;
   List<Orderitem> orderitems;
-  String created;
   double preTotal;
-  String deliveryAddress;
   String latitude;
   String longitude;
+  String deliveryAddress;
+  String message;
+  String created;
 
   OrderModel({
     required this.id,
@@ -29,11 +30,12 @@ class OrderModel {
     required this.deliveryStatus,
     required this.client,
     required this.orderitems,
-    required this.created,
     required this.preTotal,
-    required this.deliveryAddress,
     required this.latitude,
     required this.longitude,
+    required this.deliveryAddress,
+    required this.message,
+    required this.created,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic>? json) {
@@ -41,12 +43,8 @@ class OrderModel {
     return OrderModel(
       id: json["id"] ?? notAvailable,
       code: json["code"] ?? notAvailable,
-      totalPrice: json["total_price"] != null
-          ? double.parse(json["total_price"].toString())
-          : 0.0,
-      deliveryFee: json["delivery_fee"] != null
-          ? double.parse(json["delivery_fee"].toString())
-          : 0.0,
+      totalPrice: json["total_price"] ?? 0.0,
+      deliveryFee: json["delivery_fee"] ?? 0.0,
       assignedStatus: json["assigned_status"] ?? "PEND",
       deliveryStatus: json["delivery_status"] ?? "PEND",
       client: Client.fromJson(json["client"]),
@@ -55,11 +53,12 @@ class OrderModel {
           : (json["orderitems"] as List)
               .map((item) => Orderitem.fromJson(item))
               .toList(),
-      created: json["created"] ?? notAvailable,
       preTotal: json["pre_total"] ?? notAvailable,
-      deliveryAddress: json["delivery_address"] ?? notAvailable,
       latitude: json["latitude"] ?? notAvailable,
       longitude: json["longitude"] ?? notAvailable,
+      deliveryAddress: json["delivery_address"] ?? notAvailable,
+      message: json["message"] ?? notAvailable,
+      created: json["created"] ?? notAvailable,
     );
   }
   Map<String, dynamic> toJson() => {
@@ -71,11 +70,12 @@ class OrderModel {
         "delivery_status": deliveryStatus,
         "client": client.toJson(),
         "orderitems": orderitems.map((item) => (item).toJson()).toList(),
-        "created": created,
         "pre_total": preTotal,
-        "delivery_address": deliveryAddress,
         "latitude": latitude,
         "longitude": longitude,
+        "delivery_address": deliveryAddress,
+        "message": message,
+        "created": created,
       };
 }
 

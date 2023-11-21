@@ -27,7 +27,7 @@ class _PackagesState extends State<Packages>
   void initState() {
     super.initState();
     pending = getDataPending();
-    // dispatched = getDispatched();
+    dispatched = getDataDispatched();
     completed = getDataCompleted();
     tabBarController = TabController(length: 3, vsync: this);
     scrollController.addListener(scrollListener);
@@ -44,6 +44,7 @@ class _PackagesState extends State<Packages>
   }
 
   bool isScrollToTopBtnVisible = false;
+  bool refreshing = false;
 
 //================================================= CONTROLLERS ===================================================\\
   late TabController tabBarController;
@@ -56,11 +57,11 @@ class _PackagesState extends State<Packages>
     return pending;
   }
 
-  // Future<List<DeliveryItem>> getDataDispatched() async {
-  //   List<DeliveryItem> dispatched =
-  //       await getDeliveryItemsByClientAndStatus('dispatched');
-  //   return dispatched;
-  // }
+  Future<List<DeliveryItem>> getDataDispatched() async {
+    List<DeliveryItem> dispatched =
+        await getDeliveryItemsByClientAndStatus('dispatched');
+    return dispatched;
+  }
 
   Future<List<DeliveryItem>> getDataCompleted() async {
     List<DeliveryItem> completed =
@@ -70,9 +71,17 @@ class _PackagesState extends State<Packages>
 
   Future<void> handleRefresh() async {
     setState(() {
+      refreshing = true;
+    });
+    setState(() {
       pending = getDataPending();
-      // dispatched = getDataDispatched();
+      dispatched = getDataDispatched();
       completed = getDataCompleted();
+    });
+    await Future.delayed(const Duration(milliseconds: 300), () {
+      setState(() {
+        refreshing = false;
+      });
     });
   }
 
@@ -125,6 +134,16 @@ class _PackagesState extends State<Packages>
       );
 
   void viewPendingPackage(deliveryItem) => Get.to(
+        () => ViewPackage(deliveryItem: deliveryItem),
+        routeName: 'ViewPackage',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.size,
+      );
+  void viewDispatchedPackage(deliveryItem) => Get.to(
         () => ViewPackage(deliveryItem: deliveryItem),
         routeName: 'ViewPackage',
         duration: const Duration(milliseconds: 300),
@@ -246,85 +265,11 @@ class _PackagesState extends State<Packages>
                 kSizedBox,
                 Container(
                   // padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: selectedtabbar == 0
-                      ? FutureBuilder(
-                          future: pending,
-                          builder: (context, snapshot) {
-                            if (snapshot.data != null) {
-                              return SizedBox(
-                                width: media.width,
-                                child: Column(
-                                  children: [
-                                    snapshot.data!.isEmpty
-                                        ? const EmptyCard()
-                                        : ListView.separated(
-                                            reverse: true,
-                                            separatorBuilder:
-                                                (context, index) =>
-                                                    Divider(color: kGreyColor2),
-                                            itemCount: snapshot.data!.length,
-                                            shrinkWrap: true,
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) =>
-                                                ListTile(
-                                              onTap: () => viewPendingPackage(
-                                                  snapshot.data![index]),
-                                              contentPadding:
-                                                  const EdgeInsets.all(0),
-                                              enableFeedback: true,
-                                              dense: true,
-                                              leading: FaIcon(
-                                                FontAwesomeIcons.boxesStacked,
-                                                color: kAccentColor,
-                                              ),
-                                              title: Text(
-                                                snapshot.data![index].itemName,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                style: const TextStyle(
-                                                  color: kTextBlackColor,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                              subtitle: Text.rich(
-                                                TextSpan(
-                                                  children: [
-                                                    const TextSpan(
-                                                        text: "Price:"),
-                                                    const TextSpan(text: " "),
-                                                    TextSpan(
-                                                      text:
-                                                          "₦${doubleFormattedText(snapshot.data![index].prices)}",
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                        fontFamily: 'sen',
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              trailing: FaIcon(
-                                                FontAwesomeIcons.hourglassHalf,
-                                                color: kLoadingColor,
-                                                size: 18,
-                                              ),
-                                            ),
-                                          ),
-                                  ],
-                                ),
-                              );
-                            }
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: kAccentColor,
-                              ),
-                            );
-                          },
+                  child: refreshing
+                      ? Center(
+                          child: CircularProgressIndicator(color: kAccentColor),
                         )
-                      : selectedtabbar == 1
+                      : selectedtabbar == 0
                           ? FutureBuilder(
                               future: pending,
                               builder: (context, snapshot) {
@@ -334,8 +279,9 @@ class _PackagesState extends State<Packages>
                                     child: Column(
                                       children: [
                                         snapshot.data!.isEmpty
-                                            ? const EmptyCard()
+                                            ? EmptyCard()
                                             : ListView.separated(
+                                                reverse: true,
                                                 separatorBuilder: (context,
                                                         index) =>
                                                     Divider(color: kGreyColor2),
@@ -347,9 +293,9 @@ class _PackagesState extends State<Packages>
                                                 itemBuilder: (context, index) =>
                                                     ListTile(
                                                   onTap: () =>
-                                                      viewDeliveredPackage(
-                                                          (snapshot
-                                                              .data![index])),
+                                                      viewPendingPackage(
+                                                          snapshot
+                                                              .data![index]),
                                                   contentPadding:
                                                       const EdgeInsets.all(0),
                                                   enableFeedback: true,
@@ -393,8 +339,9 @@ class _PackagesState extends State<Packages>
                                                     ),
                                                   ),
                                                   trailing: FaIcon(
-                                                    FontAwesomeIcons.bicycle,
-                                                    color: kSecondaryColor,
+                                                    FontAwesomeIcons
+                                                        .hourglassHalf,
+                                                    color: kLoadingColor,
                                                     size: 18,
                                                   ),
                                                 ),
@@ -410,92 +357,191 @@ class _PackagesState extends State<Packages>
                                 );
                               },
                             )
-                          : FutureBuilder(
-                              future: completed,
-                              builder: (context, snapshot) {
-                                if (snapshot.data != null) {
-                                  return SizedBox(
-                                    width: media.width,
-                                    child: Column(
-                                      children: [
-                                        snapshot.data!.isEmpty
-                                            ? const EmptyCard()
-                                            : ListView.separated(
-                                                separatorBuilder: (context,
-                                                        index) =>
-                                                    Divider(color: kGreyColor2),
-                                                itemCount:
-                                                    snapshot.data!.length,
-                                                shrinkWrap: true,
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                itemBuilder: (context, index) =>
-                                                    ListTile(
-                                                  onTap: () =>
-                                                      viewDeliveredPackage(
-                                                          (snapshot
-                                                              .data![index])),
-                                                  contentPadding:
-                                                      const EdgeInsets.all(0),
-                                                  enableFeedback: true,
-                                                  dense: true,
-                                                  leading: FaIcon(
-                                                    FontAwesomeIcons
-                                                        .boxesStacked,
-                                                    color: kAccentColor,
-                                                  ),
-                                                  title: Text(
-                                                    snapshot
-                                                        .data![index].itemName,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                    style: const TextStyle(
-                                                      color: kTextBlackColor,
-                                                      fontSize: 14,
-                                                      fontWeight:
-                                                          FontWeight.w700,
-                                                    ),
-                                                  ),
-                                                  subtitle: Text.rich(
-                                                    TextSpan(
-                                                      children: [
-                                                        const TextSpan(
-                                                            text: "Price:"),
-                                                        const TextSpan(
-                                                            text: " "),
-                                                        TextSpan(
-                                                          text:
-                                                              "₦${doubleFormattedText(snapshot.data![index].prices)}",
-                                                          style:
-                                                              const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                            fontFamily: 'sen',
-                                                          ),
+                          : selectedtabbar == 1
+                              ? FutureBuilder(
+                                  future: dispatched,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.data != null) {
+                                      return SizedBox(
+                                        width: media.width,
+                                        child: Column(
+                                          children: [
+                                            snapshot.data!.isEmpty
+                                                ? EmptyCard()
+                                                : ListView.separated(
+                                                    separatorBuilder: (context,
+                                                            index) =>
+                                                        Divider(
+                                                            color: kGreyColor2),
+                                                    itemCount:
+                                                        snapshot.data!.length,
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    itemBuilder:
+                                                        (context, index) =>
+                                                            ListTile(
+                                                      onTap: () =>
+                                                          viewDispatchedPackage(
+                                                              (snapshot.data![
+                                                                  index])),
+                                                      contentPadding:
+                                                          const EdgeInsets.all(
+                                                              0),
+                                                      enableFeedback: true,
+                                                      dense: true,
+                                                      leading: FaIcon(
+                                                        FontAwesomeIcons
+                                                            .boxesStacked,
+                                                        color: kAccentColor,
+                                                      ),
+                                                      title: Text(
+                                                        snapshot.data![index]
+                                                            .itemName,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 1,
+                                                        style: const TextStyle(
+                                                          color:
+                                                              kTextBlackColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w700,
                                                         ),
-                                                      ],
+                                                      ),
+                                                      subtitle: Text.rich(
+                                                        TextSpan(
+                                                          children: [
+                                                            const TextSpan(
+                                                                text: "Price:"),
+                                                            const TextSpan(
+                                                                text: " "),
+                                                            TextSpan(
+                                                              text:
+                                                                  "₦${doubleFormattedText(snapshot.data![index].prices)}",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontFamily:
+                                                                    'sen',
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      trailing: FaIcon(
+                                                        FontAwesomeIcons
+                                                            .bicycle,
+                                                        color: kSecondaryColor,
+                                                        size: 18,
+                                                      ),
                                                     ),
                                                   ),
-                                                  trailing: const FaIcon(
-                                                    FontAwesomeIcons
-                                                        .solidCircleCheck,
-                                                    color: kSuccessColor,
-                                                    size: 18,
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        color: kAccentColor,
+                                      ),
+                                    );
+                                  },
+                                )
+                              : FutureBuilder(
+                                  future: completed,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.data != null) {
+                                      return SizedBox(
+                                        width: media.width,
+                                        child: Column(
+                                          children: [
+                                            snapshot.data!.isEmpty
+                                                ? EmptyCard()
+                                                : ListView.separated(
+                                                    separatorBuilder: (context,
+                                                            index) =>
+                                                        Divider(
+                                                            color: kGreyColor2),
+                                                    itemCount:
+                                                        snapshot.data!.length,
+                                                    shrinkWrap: true,
+                                                    physics:
+                                                        const BouncingScrollPhysics(),
+                                                    itemBuilder:
+                                                        (context, index) =>
+                                                            ListTile(
+                                                      onTap: () =>
+                                                          viewDeliveredPackage(
+                                                              (snapshot.data![
+                                                                  index])),
+                                                      contentPadding:
+                                                          const EdgeInsets.all(
+                                                              0),
+                                                      enableFeedback: true,
+                                                      dense: true,
+                                                      leading: FaIcon(
+                                                        FontAwesomeIcons
+                                                            .boxesStacked,
+                                                        color: kAccentColor,
+                                                      ),
+                                                      title: Text(
+                                                        snapshot.data![index]
+                                                            .itemName,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 1,
+                                                        style: const TextStyle(
+                                                          color:
+                                                              kTextBlackColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                        ),
+                                                      ),
+                                                      subtitle: Text.rich(
+                                                        TextSpan(
+                                                          children: [
+                                                            const TextSpan(
+                                                                text: "Price:"),
+                                                            const TextSpan(
+                                                                text: " "),
+                                                            TextSpan(
+                                                              text:
+                                                                  "₦${doubleFormattedText(snapshot.data![index].prices)}",
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                fontFamily:
+                                                                    'sen',
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      trailing: const FaIcon(
+                                                        FontAwesomeIcons
+                                                            .solidCircleCheck,
+                                                        color: kSuccessColor,
+                                                        size: 18,
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
-                                              ),
-                                      ],
-                                    ),
-                                  );
-                                }
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: kAccentColor,
-                                  ),
-                                );
-                              },
-                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        color: kAccentColor,
+                                      ),
+                                    );
+                                  },
+                                ),
                 ),
               ],
             ),

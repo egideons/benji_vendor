@@ -36,6 +36,8 @@ class ProductModel {
       id: json["id"] ?? notAvailable,
       name: json["name"] ?? notAvailable,
       description: json["description"] ?? notAvailable,
+      // price:
+      //     json["price"] != null ? double.parse(json["price"].toString()) : 0.0,
       price: json["price"] ?? 0.0,
       quantityAvailable: json["quantity_available"] ?? 0,
       productImage: json["product_image"] ?? '',

@@ -41,13 +41,13 @@ class _OrdersState extends State<Orders> {
   }
 
   void clickDelivered() async {
-    await OrderController.instance.getOrdersByPendingStatus();
+    // await OrderController.instance.getOrdersByCompletedStatus();
 
     await OrderController.instance.setStatus(StatusType.delivered);
   }
 
   void clickPending() async {
-    // await OrderController.instance.getOrdersByCompletedStatus();
+    // await OrderController.instance.getOrdersByPendingStatus();
 
     await OrderController.instance.setStatus(StatusType.pending);
   }
@@ -229,7 +229,8 @@ class _OrdersState extends State<Orders> {
                           child: CircularProgressIndicator(color: kAccentColor),
                         )
                       : controller.vendorsOrderList.isEmpty
-                          ? const EmptyCard()
+                          ? EmptyCard(
+                              emptyCardMessage: "You don't have any orders yet")
                           : ListView.separated(
                               shrinkWrap: true,
                               itemCount: controller.vendorsOrderList.length,

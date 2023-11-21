@@ -1,6 +1,7 @@
 // ignore_for_file: empty_catches
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
@@ -87,12 +88,13 @@ class OrderController extends GetxController {
     String id = UserController.instance.user.value.id.toString();
     var url =
         "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?status=${statusTypeConverter(status.value)}&start=${loadNum.value - 10}&end=${loadNum.value}";
-    consoleLog(url);
+    consoleLog("This is the url: $url");
     loadNum.value += 10;
     token = UserController.instance.user.value.token;
-    http.Response? response = await HandleData.getApi(url, token);
+    var response = await HandleData.getApi(url, token);
+
     var responseData = await ApiProcessorController.errorState(response);
-    consoleLog(response!.body);
+    // var responseData = response!.body;
     if (responseData == null) {
       isLoad.value = false;
       loadedAll.value = true;
@@ -102,12 +104,22 @@ class OrderController extends GetxController {
     }
     List<OrderModel> data = [];
     try {
-      data = (jsonDecode(responseData)['items'] as List)
-          // data = (jsonDecode(responseData) as List)
-          .map((e) => OrderModel.fromJson(e))
-          .toList();
-      consoleLog(data.toString());
+      var decodedResponse = jsonDecode(responseData);
+      consoleLog("This is the status code: ${response!.statusCode.toString()}");
+      consoleLog("This is the decoded response: ${decodedResponse.toString()}");
+      if (decodedResponse.containsKey('items')) {
+        var items = decodedResponse['items'] as List;
+        data = items.map((e) => OrderModel.fromJson(e)).toList();
+      } else {
+        consoleLog("No 'items' key found in the response");
+      }
+      // data = (jsonDecode(responseData)['items'] as List)
+      // data = (jsonDecode(responseData) as List)
+      //     .map((e) => OrderModel.fromJson(e))
+      //     .toList();
       vendorsOrderList.value += data;
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
       consoleLog(e.toString());
     }
@@ -141,15 +153,40 @@ class OrderController extends GetxController {
     }
     List<OrderModel> data = [];
     try {
-      data = (jsonDecode(responseData)['items'] as List)
-          // data = (jsonDecode(responseData) as List)
-          .map((e) => OrderModel.fromJson(e))
-          .toList();
-      consoleLog(data.toString());
+      var decodedResponse = jsonDecode(responseData);
+      consoleLog("This is the status code: ${response.statusCode.toString()}");
+      consoleLog("This is the decoded response: ${decodedResponse.toString()}");
+      if (decodedResponse.containsKey('items')) {
+        var items = decodedResponse['items'] as List;
+        data = items.map((e) => OrderModel.fromJson(e)).toList();
+      } else {
+        consoleLog("No 'items' key found in the response");
+      }
+      // data = (jsonDecode(responseData)['items'] as List)
+      // data = (jsonDecode(responseData) as List)
+      //     .map((e) => OrderModel.fromJson(e))
+      //     .toList();
       vendorPendingOrders.value += data;
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
       consoleLog(e.toString());
     }
+    // try {
+    //   var decodedResponse = jsonDecode(responseData);
+    //   if (decodedResponse.containsKey('items')) {
+    //     var items = decodedResponse['items'] as List;
+    //     data = items.map((e) => OrderModel.fromJson(e)).toList();
+    //   } else {
+    //     consoleLog("No 'items' key found in the response");
+    //   }
+    //   consoleLog(data.toString());
+    //   vendorPendingOrders.value += data;
+    // } on SocketException {
+    //   ApiProcessorController.errorSnack("Please connect to the internet");
+    // } catch (e) {
+    //   consoleLog("An error occured: ${e.toString()}");
+    // }
     loadedAll.value = data.isEmpty;
     isLoad.value = false;
     isLoadMore.value = false;
@@ -180,15 +217,37 @@ class OrderController extends GetxController {
     }
     List<OrderModel> data = [];
     try {
-      data = (jsonDecode(responseData)['items'] as List)
-          // data = (jsonDecode(responseData) as List)
-          .map((e) => OrderModel.fromJson(e))
-          .toList();
-      consoleLog(data.toString());
-      vendorCompletedOrders.value += data;
+      var decodedResponse = jsonDecode(responseData);
+      consoleLog("This is the status code: ${response.statusCode.toString()}");
+      consoleLog("This is the decoded response: ${decodedResponse.toString()}");
+      if (decodedResponse.containsKey('items')) {
+        var items = decodedResponse['items'] as List;
+        data = items.map((e) => OrderModel.fromJson(e)).toList();
+      } else {
+        consoleLog("No 'items' key found in the response");
+      }
+      // data = (jsonDecode(responseData)['items'] as List)
+      // data = (jsonDecode(responseData) as List)
+      //     .map((e) => OrderModel.fromJson(e))
+      //     .toList();
+      vendorPendingOrders.value += data;
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
       consoleLog(e.toString());
     }
+    // try {
+    //   data = (jsonDecode(responseData)['items'] as List)
+    //       // data = (jsonDecode(responseData) as List)
+    //       .map((e) => OrderModel.fromJson(e))
+    //       .toList();
+    //   consoleLog(data.toString());
+    //   vendorCompletedOrders.value += data;
+    // } on SocketException {
+    //   ApiProcessorController.errorSnack("Please connect to the internet");
+    // } catch (e) {
+    //   consoleLog(e.toString());
+    // }
     loadedAll.value = data.isEmpty;
     isLoad.value = false;
     isLoadMore.value = false;

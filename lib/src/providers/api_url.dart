@@ -36,6 +36,7 @@ class Api {
   static const getPackageCategory = "/sendPackage/getPackageCategory/";
   static const getPackageWeight = "/sendPackage/getPackageWeight/";
   static const createItemPackage = "/sendPackage/createItemPackage/";
+  static const dispatchPackage = "/sendPackage/changePackageStatus";
   static const reportPackage = "/clients/clientReportPackage/";
 
 //Payments
@@ -113,6 +114,12 @@ class HandleData {
   static Future delete() async {}
 }
 
-consoleLog(String val) {
-  return debugPrint(val);
+void consoleLog(String val) {
+  for (var i = 0; i < val.length; i += 1024) {
+    debugPrint(val.substring(i, i + 1024 < val.length ? i + 1024 : val.length));
+  }
+}
+
+void consoleLogToFile(String val) {
+  File('log.txt').writeAsStringSync(val);
 }

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/package/item_category.dart';
 import 'package:benji_vendor/src/model/package/item_weight.dart';
@@ -73,17 +75,24 @@ class DeliveryItem {
 Future<List<DeliveryItem>> getDeliveryItemsByClientAndStatus(
     String status) async {
   UserModel? user = UserController.instance.user.value;
-  final response = await http.get(
-      Uri.parse(
-          '$baseURL/sendPackage/gettemPackageByClientId/${user.id}/$status'),
-      headers: authHeader());
-  if (response.statusCode == 200) {
-    return (jsonDecode(response.body) as List)
-        .map((item) => DeliveryItem.fromJson(item))
-        .toList();
-  } else {
-    return [];
+  try {
+    final response = await http.get(
+        Uri.parse(
+            '$baseURL/sendPackage/gettemPackageByClientId/${user.id}/$status'),
+        headers: authHeader());
+    if (response.statusCode == 200) {
+      return (jsonDecode(response.body) as List)
+          .map((item) => DeliveryItem.fromJson(item))
+          .toList();
+    } else {
+      return [];
+    }
+  } on SocketException {
+    ApiProcessorController.errorSnack("Please connect to the internet");
+  } catch (e) {
+    ApiProcessorController.errorSnack("An error occured. \nERROR: $e");
   }
+  return [];
 }
 
 Future<DeliveryItem> getDeliveryItemById(id) async {
@@ -91,9 +100,16 @@ Future<DeliveryItem> getDeliveryItemById(id) async {
       Uri.parse('$baseURL/sendPackage/gettemPackageById/$id/'),
       headers: authHeader());
 
-  if (response.statusCode == 200) {
-    return DeliveryItem.fromJson(jsonDecode(response.body));
-  } else {
-    throw Exception('Failed to load delivery item');
+  try {
+    if (response.statusCode == 200) {
+      return DeliveryItem.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load delivery item');
+    }
+  } on SocketException {
+    ApiProcessorController.errorSnack("Please connect to the internet");
+  } catch (e) {
+    ApiProcessorController.errorSnack("An error occured. \nERROR: $e");
   }
+  return DeliveryItem.fromJson(null);
 }

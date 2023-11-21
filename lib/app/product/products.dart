@@ -96,7 +96,6 @@ class _ProductsState extends State<Products> {
   }
 
   addProduct() {
-    
     Get.to(
       () => const AddProduct(),
       routeName: 'AddProduct',
@@ -145,20 +144,22 @@ class _ProductsState extends State<Products> {
                 ),
               ),
               actions: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: MyOutlinedElevatedButton(
-                    elevation: 10,
-                    onPressed: addProduct,
-                    circularBorderRadius: 10,
-                    minimumSizeWidth: 80,
-                    minimumSizeHeight: 40,
-                    maximumSizeWidth: 90,
-                    maximumSizeHeight: 40,
-                    title: "Add",
-                    titleFontSize: 12,
-                  ),
-                )
+                isScrollToTopBtnVisible
+                    ? Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: MyOutlinedElevatedButton(
+                          elevation: 10,
+                          onPressed: addProduct,
+                          circularBorderRadius: 10,
+                          minimumSizeWidth: 80,
+                          minimumSizeHeight: 40,
+                          maximumSizeWidth: 90,
+                          maximumSizeHeight: 40,
+                          title: "Add",
+                          titleFontSize: 12,
+                        ),
+                      )
+                    : const SizedBox(),
               ],
             ),
             floatingActionButton: isScrollToTopBtnVisible
@@ -204,7 +205,9 @@ class _ProductsState extends State<Products> {
                                 ),
                               )
                             : controller.products.isEmpty
-                                ? const EmptyCard()
+                                ? EmptyCard(
+                                    emptyCardMessage:
+                                        "You don't have any products yet")
                                 : refreshing
                                     ? Center(
                                         child: CircularProgressIndicator(
