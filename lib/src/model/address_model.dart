@@ -34,7 +34,7 @@ class DeliveryAddress {
     json ??= {};
     return DeliveryAddress(
       id: json["id"] ?? notAvailable,
-      userId: json["user_id"] ?? notAvailable,
+      userId: json["user_id"] ?? 0,
       title: json["title"] ?? notAvailable,
       details: json["details"] ?? notAvailable,
       recipientName: json["recipient_name"] ?? notAvailable,

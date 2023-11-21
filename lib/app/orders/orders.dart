@@ -12,7 +12,7 @@ import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 
-enum StatusType { delivered, pending, cancelled }
+enum StatusType { pending, dispatched, confirmed, delivered, cancelled }
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
@@ -40,16 +40,18 @@ class _OrdersState extends State<Orders> {
     super.dispose();
   }
 
-  void clickDelivered() async {
-    // await OrderController.instance.getOrdersByCompletedStatus();
-
-    await OrderController.instance.setStatus(StatusType.delivered);
+  void clickPending() async {
+    await OrderController.instance.setStatus(StatusType.pending);
   }
 
-  void clickPending() async {
-    // await OrderController.instance.getOrdersByPendingStatus();
+  void clickDispatched() async {
+    await OrderController.instance.setStatus(StatusType.dispatched);
+  }
 
-    await OrderController.instance.setStatus(StatusType.pending);
+  void clickDelivered() async {
+    await OrderController.instance.getOrdersByCompletedStatus();
+
+    await OrderController.instance.setStatus(StatusType.delivered);
   }
 
   void clickCancelled() async {
@@ -65,7 +67,7 @@ class _OrdersState extends State<Orders> {
   final ScrollController scrollController = ScrollController();
 
   //===================== Scroll to Top ==========================\\
-  Future<void> _scrollToTop() async {
+  Future<void> scrollToTop() async {
     await scrollController.animateTo(
       0.0,
       duration: const Duration(milliseconds: 500),
@@ -113,7 +115,7 @@ class _OrdersState extends State<Orders> {
         ),
         floatingActionButton: isScrollToTopBtnVisible
             ? FloatingActionButton(
-                onPressed: _scrollToTop,
+                onPressed: scrollToTop,
                 mini: deviceType(media.width) > 2 ? false : true,
                 backgroundColor: kAccentColor,
                 foregroundColor: kPrimaryColor,
@@ -143,6 +145,57 @@ class _OrdersState extends State<Orders> {
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: checkStatus(
+                                    controller.status.value, StatusType.pending)
+                                ? kAccentColor
+                                : const Color(0xFFF2F2F2),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16))),
+                          ),
+                          onPressed: clickPending,
+                          child: Text(
+                            'Pending',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: checkStatus(controller.status.value,
+                                      StatusType.pending)
+                                  ? kPrimaryColor
+                                  : kGreyColor2,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        kHalfWidthSizedBox,
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: checkStatus(
+                                    controller.status.value,
+                                    StatusType.dispatched)
+                                ? kAccentColor
+                                : const Color(0xFFF2F2F2),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16))),
+                          ),
+                          onPressed: clickDispatched,
+                          child: Text(
+                            'dispatched',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: checkStatus(controller.status.value,
+                                      StatusType.dispatched)
+                                  ? kPrimaryColor
+                                  : kGreyColor2,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        kHalfWidthSizedBox,
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: checkStatus(
                                     controller.status.value,
                                     StatusType.delivered)
                                 ? kAccentColor
@@ -166,30 +219,7 @@ class _OrdersState extends State<Orders> {
                           ),
                         ),
                         const SizedBox(width: 15),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: checkStatus(
-                                    controller.status.value, StatusType.pending)
-                                ? kAccentColor
-                                : const Color(0xFFF2F2F2),
-                            shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(16))),
-                          ),
-                          onPressed: clickPending,
-                          child: Text(
-                            'Pending',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: checkStatus(controller.status.value,
-                                      StatusType.pending)
-                                  ? kPrimaryColor
-                                  : kGreyColor2,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
+
                         // const SizedBox(width: 15),
                         // ElevatedButton(
                         //   style: ElevatedButton.styleFrom(
@@ -230,7 +260,7 @@ class _OrdersState extends State<Orders> {
                         )
                       : controller.vendorsOrderList.isEmpty
                           ? const EmptyCard(
-                              emptyCardMessage: "You don't have any orders yet")
+                              emptyCardMessage: "There are no orders here")
                           : ListView.separated(
                               shrinkWrap: true,
                               itemCount: controller.vendorsOrderList.length,

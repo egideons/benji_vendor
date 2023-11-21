@@ -51,6 +51,9 @@ String statusTypeConverter(StatusType statusType) {
   if (statusType == StatusType.pending) {
     return "PEND";
   }
+  if (statusType == StatusType.dispatched) {
+    return "dispatched";
+  }
   if (statusType == StatusType.cancelled) {
     return "CANC";
   }

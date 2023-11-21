@@ -52,7 +52,6 @@ class _DashboardState extends State<Dashboard> {
     consoleLog(
         "This is the profile logo: ${UserController.instance.user.value.profileLogo}");
     OrderController.instance.getOrdersByPendingStatus();
-    OrderController.instance.getOrdersByCompletedStatus();
   }
 
   List<OrderModel> get pendingOrders =>
@@ -60,15 +59,23 @@ class _DashboardState extends State<Dashboard> {
           .where((order) => order.assignedStatus == "PEND")
           .toList();
 
+  List<OrderModel> get dispatchedOrders =>
+      OrderController.instance.vendorCompletedOrders
+          .where((order) => order.assignedStatus == "dispatched")
+          .toList();
+
   List<OrderModel> get deliveredOrders =>
       OrderController.instance.vendorCompletedOrders
           .where((order) => order.assignedStatus == "COMP")
           .toList();
+
   int get pendingOrdersCount => pendingOrders.length;
+  int get dispatchedOrdersCount => pendingOrders.length;
   int get deliveredOrdersCount => deliveredOrders.length;
 
   void printOrderCounts() {
     consoleLog('Pending Orders Count: $pendingOrdersCount');
+    consoleLog('Dispatched Orders Count: $dispatchedOrdersCount');
     consoleLog('Delivered Orders Count: $deliveredOrdersCount');
   }
 
