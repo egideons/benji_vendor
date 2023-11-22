@@ -233,11 +233,12 @@ class _SendPackageState extends State<SendPackage> {
       return;
     }
     if (senderNameEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please fill in your name");
+      ApiProcessorController.errorSnack("Please fill in the sender's name");
       return;
     }
     if (senderPhoneEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please fill in your phone number");
+      ApiProcessorController.errorSnack(
+          "Please fill in the sender's phone number");
       return;
     }
     if (dropOffEC.text.isEmpty) {

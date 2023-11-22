@@ -49,8 +49,6 @@ class _OrdersState extends State<Orders> {
   }
 
   void clickDelivered() async {
-    await OrderController.instance.getOrdersByCompletedStatus();
-
     await OrderController.instance.setStatus(StatusType.delivered);
   }
 
@@ -180,7 +178,7 @@ class _OrdersState extends State<Orders> {
                           ),
                           onPressed: clickDispatched,
                           child: Text(
-                            'dispatched',
+                            'Dispatched',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: checkStatus(controller.status.value,
@@ -273,6 +271,38 @@ class _OrdersState extends State<Orders> {
                                       () => OrderDetails(
                                         order:
                                             controller.vendorsOrderList[index],
+                                        orderStatus: controller
+                                                    .vendorsOrderList[index]
+                                                    .deliveryStatus ==
+                                                "CANC"
+                                            ? "Cancelled"
+                                            : controller.vendorsOrderList[index]
+                                                        .deliveryStatus ==
+                                                    "dispatched"
+                                                ? "Dispatched"
+                                                : controller
+                                                            .vendorsOrderList[
+                                                                index]
+                                                            .deliveryStatus ==
+                                                        "PEND"
+                                                    ? "Pending"
+                                                    : "Completed",
+                                        orderStatusColor: controller
+                                                    .vendorsOrderList[index]
+                                                    .deliveryStatus ==
+                                                "CANC"
+                                            ? kAccentColor
+                                            : controller.vendorsOrderList[index]
+                                                        .deliveryStatus ==
+                                                    "dispatched"
+                                                ? kSecondaryColor
+                                                : controller
+                                                            .vendorsOrderList[
+                                                                index]
+                                                            .deliveryStatus ==
+                                                        "PEND"
+                                                    ? kLoadingColor
+                                                    : kSuccessColor,
                                       ),
                                       routeName: 'OrderDetails',
                                       duration:

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../src/components/appbar/my appbar.dart';
 import '../../src/components/button/my elevatedButton.dart';
 import '../../src/controller/form_controller.dart';
-import '../../src/controller/order_controller.dart';
+import '../../src/controller/push_notifications_controller.dart';
 import '../../src/model/order_model.dart';
 import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
@@ -16,8 +16,14 @@ import '../../theme/colors.dart';
 
 class OrderDetails extends StatefulWidget {
   final OrderModel order;
+  final String orderStatus;
+  final Color orderStatusColor;
 
-  const OrderDetails({super.key, required this.order});
+  const OrderDetails(
+      {super.key,
+      required this.order,
+      required this.orderStatus,
+      required this.orderStatusColor});
 
   @override
   State<OrderDetails> createState() => _OrderDetailsState();
@@ -46,13 +52,16 @@ class _OrderDetailsState extends State<OrderDetails> {
     consoleLog(data.toString());
     await FormController.instance.patchAuth(url, data, 'dispatchOrder');
     if (FormController.instance.status.toString().startsWith('2')) {
+      await PushNotificationController.showNotification(
+        title: "Success",
+        body: dispatchMessage,
+        summary: "Package Delivery",
+        largeIcon: "asset://assets/icons/package.png",
+      );
       setState(() {
         isDispatched = true;
       });
       await Future.delayed(const Duration(microseconds: 500), () {
-        OrderController.instance.getOrdersByPendingStatus();
-        OrderController.instance.getOrdersByDispatchedStatus();
-        OrderController.instance.getOrdersByCompletedStatus();
         Get.close(1);
       });
     }
@@ -71,8 +80,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         ),
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(kDefaultPadding),
-          child: isDispatched == false &&
-                  widget.order.deliveryStatus.toLowerCase() != "dispatched"
+          child: isDispatched == false
               ? GetBuilder<FormController>(
                   init: FormController(),
                   builder: (controller) {
@@ -149,51 +157,64 @@ class _OrderDetailsState extends State<OrderDetails> {
                             letterSpacing: -0.32,
                           ),
                         ),
-                        widget.order.deliveryStatus == "COMP"
-                            ? const Text(
-                                'Delivered',
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                  color: kSuccessColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: -0.32,
-                                ),
-                              )
-                            : isDispatched == true &&
-                                    widget.order.deliveryStatus == "dispatched"
-                                ? Text(
-                                    'Dispatched',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      color: kSecondaryColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: -0.32,
-                                    ),
-                                  )
-                                : isDispatched == false &&
-                                        widget.order.deliveryStatus == "PEND"
-                                    ? Text(
-                                        'Pending',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          color: kLoadingColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: -0.32,
-                                        ),
-                                      )
-                                    : Text(
-                                        'Canceled',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          color: kAccentColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: -0.32,
-                                        ),
-                                      ),
+
+                        Text(
+                          widget.orderStatus,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: widget.orderStatusColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.32,
+                          ),
+                        )
+                        // widget.order.deliveryStatus == "COMP"
+                        //     ? const Text(
+                        //         'Delivered',
+                        //         textAlign: TextAlign.right,
+                        //         style: TextStyle(
+                        //           color: kSuccessColor,
+                        //           fontSize: 16,
+                        //           fontWeight: FontWeight.w700,
+                        //           letterSpacing: -0.32,
+                        //         ),
+                        //       )
+                        //     : isDispatched == true &&
+                        //             widget.order.deliveryStatus == "dispatched"
+                        //         ? Text(
+                        //             'Dispatched',
+                        //             textAlign: TextAlign.right,
+                        //             style: TextStyle(
+                        //               color: kSecondaryColor,
+                        //               fontSize: 16,
+                        //               fontWeight: FontWeight.w700,
+                        //               letterSpacing: -0.32,
+                        //             ),
+                        //           )
+                        //         : isDispatched == false &&
+                        //                 widget.order.deliveryStatus == "PEND"
+                        //             ?
+                        //             Text(
+                        //                 'Canceled',
+                        //                 textAlign: TextAlign.right,
+                        //                 style: TextStyle(
+                        //                   color: kAccentColor,
+                        //                   fontSize: 16,
+                        //                   fontWeight: FontWeight.w700,
+                        //                   letterSpacing: -0.32,
+                        //                 ),
+                        //               )
+
+                        //             :  Text(
+                        //                 'Pending',
+                        //                 textAlign: TextAlign.right,
+                        //                 style: TextStyle(
+                        //                   color: kLoadingColor,
+                        //                   fontSize: 16,
+                        //                   fontWeight: FontWeight.w700,
+                        //                   letterSpacing: -0.32,
+                        //                 ),
+                        //               )
                       ],
                     ),
                   ],

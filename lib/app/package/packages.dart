@@ -378,6 +378,7 @@ class _PackagesState extends State<Packages>
                                                         "You don't have any dispatched packages yet",
                                                   )
                                                 : ListView.separated(
+                                                    reverse: true,
                                                     separatorBuilder: (context,
                                                             index) =>
                                                         Divider(
@@ -473,6 +474,7 @@ class _PackagesState extends State<Packages>
                                                         "You don't have any delivered packages yet",
                                                   )
                                                 : ListView.separated(
+                                                    reverse: true,
                                                     separatorBuilder: (context,
                                                             index) =>
                                                         Divider(

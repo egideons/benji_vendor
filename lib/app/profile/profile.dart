@@ -27,18 +27,16 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    OrderController.instance.getOrdersByPendingStatus();
-    OrderController.instance.getOrdersByCompletedStatus();
   }
 
   List<OrderModel> get pendingOrders =>
-      OrderController.instance.vendorPendingOrders
-          .where((order) => order.assignedStatus == "PEND")
+      OrderController.instance.vendorsOrderList
+          .where((order) => order.deliveryStatus == "PEND")
           .toList();
 
   List<OrderModel> get deliveredOrders =>
-      OrderController.instance.vendorCompletedOrders
-          .where((order) => order.assignedStatus == "COMP")
+      OrderController.instance.vendorsOrderList
+          .where((order) => order.deliveryStatus == "COMP")
           .toList();
   int get pendingOrdersCount => pendingOrders.length;
   int get deliveredOrdersCount => deliveredOrders.length;
