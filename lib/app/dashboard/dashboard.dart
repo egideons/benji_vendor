@@ -51,23 +51,20 @@ class _DashboardState extends State<Dashboard> {
     numberOfNotifications = NotificationController.instance.notification.length;
     consoleLog(
         "This is the profile logo: ${UserController.instance.user.value.profileLogo}");
-    OrderController.instance.getOrdersByPendingStatus();
-    OrderController.instance.getOrdersByDispatchedStatus();
-    OrderController.instance.getOrdersByCompletedStatus();
   }
 
   List<OrderModel> get pendingOrders =>
-      OrderController.instance.vendorPendingOrders
+      OrderController.instance.vendorsOrderList
           .where((order) => order.deliveryStatus == "PEND")
           .toList();
 
   List<OrderModel> get dispatchedOrders =>
-      OrderController.instance.vendorDispatchedOrders
+      OrderController.instance.vendorsOrderList
           .where((order) => order.deliveryStatus == "dispatched")
           .toList();
 
   List<OrderModel> get deliveredOrders =>
-      OrderController.instance.vendorCompletedOrders
+      OrderController.instance.vendorsOrderList
           .where((order) => order.deliveryStatus == "COMP")
           .toList();
 

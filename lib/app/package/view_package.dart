@@ -15,6 +15,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../src/controller/form_controller.dart';
+import '../../src/controller/push_notifications_controller.dart';
 import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
@@ -234,6 +235,12 @@ class _ViewPackageState extends State<ViewPackage> {
     consoleLog(data.toString());
     await FormController.instance.patchAuth(url, data, 'dispatchPackage');
     if (FormController.instance.status.toString().startsWith('2')) {
+      await PushNotificationController.showNotification(
+        title: "Success",
+        body: dispatchMessage,
+        summary: "Package Delivery",
+        largeIcon: "asset://assets/icons/package.png",
+      );
       setState(() {
         isDispatched = true;
       });

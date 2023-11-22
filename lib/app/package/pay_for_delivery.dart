@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, unused_field
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -11,9 +12,11 @@ import 'package:lottie/lottie.dart';
 import '../../src/components/appbar/my appbar.dart';
 import '../../src/components/button/my elevatedButton.dart';
 import '../../src/controller/auth_controller.dart';
+import '../../src/controller/error_controller.dart';
 import '../../src/controller/payment_controller.dart';
 import '../../src/controller/push_notifications_controller.dart';
 import '../../src/controller/user_controller.dart';
+import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
@@ -56,9 +59,9 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     super.initState();
     getUserData();
     getTotalPrice();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      callGetDeliveryFee();
-    });
+    callGetDeliveryFee();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    // });
     packageData = <String>[
       widget.senderName,
       "$countryDialCode ${widget.senderPhoneNumber}",
@@ -82,12 +85,12 @@ class _PayForDeliveryState extends State<PayForDelivery> {
 
   // Map? _data;
   String countryDialCode = '+234';
-  final double subTotal = 0;
+  // final double subTotal = 0
   double totalPrice = 0;
   int deliveryFee =
       PaymentController.instance.responseObject.containsKey('delivery_fee')
           ? PaymentController.instance.responseObject['delivery_fee']
-          : null;
+          : 0;
   double serviceFee = 0;
   String? userFirstName;
   String? userLastName;
@@ -98,7 +101,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
   // double insuranceFee = 0;
   // double discountFee = 0;
   getTotalPrice() {
-    totalPrice = subTotal + deliveryFee + serviceFee;
+    totalPrice = deliveryFee + serviceFee;
   }
 
   final List<String> titles = <String>[
@@ -133,34 +136,41 @@ class _PayForDeliveryState extends State<PayForDelivery> {
 
 //======== Place Order =======\\
   Future<void> placeOrder() async {
-    SquadTransactionResponse? response = await Squad.checkout(
-      context,
-      charge(),
-      sandbox: true,
-      showAppbar: false,
-      appBar: AppBarConfig(
-        color: kAccentColor,
-        leadingIcon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
-      ),
-    );
-
-    if (response != null && response.status.toString().startsWith("2")) {
-      await PushNotificationController.showNotification(
-        title: "Payment Successful ✅",
-        body: "You have successfully paid for the delivery.",
-        summary: "Package Delivery",
-        largeIcon: "asset://assets/icons/package-success.png",
+    try {
+      SquadTransactionResponse? response = await Squad.checkout(
+        context,
+        charge(),
+        sandbox: true,
+        showAppbar: false,
+        appBar: AppBarConfig(
+          color: kAccentColor,
+          leadingIcon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
+        ),
       );
-      Get.close(2);
+
+      if (response != null && response.status.toString().startsWith("2")) {
+        await PushNotificationController.showNotification(
+          title: "Payment Successful ✅",
+          body: "You have successfully paid for the delivery.",
+          summary: "Package Delivery",
+          largeIcon: "asset://assets/icons/package-success.png",
+        );
+        Get.close(3);
+      }
+      debugPrint(
+        "Squad transaction completed======>${response?.toJson().toString()}",
+      );
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
+    } catch (e) {
+      consoleLog(e.toString());
     }
-    debugPrint(
-      "Squad transaction completed======>${response?.toJson().toString()}",
-    );
   }
 
   Charge charge() {
     return Charge(
-      amount: (subTotal * 100).toInt() + (deliveryFee * 100).toInt(),
+      // amount: (subTotal * 100).toInt() + (deliveryFee * 100).toInt(),
+      amount: (deliveryFee * 100).toInt(),
       publicKey: squadPublicKey,
       email: "$userEmail",
       currencyCode: currency,
@@ -334,29 +344,6 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                       const Divider(height: 20, color: kGreyColor1),
                       Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Subtotal',
-                                style: TextStyle(
-                                  color: kTextBlackColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              Text(
-                                '₦${doubleFormattedText(subTotal)}',
-                                style: TextStyle(
-                                  color: kTextGreyColor,
-                                  fontSize: 16,
-                                  fontFamily: 'Sen',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                          kSizedBox,
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

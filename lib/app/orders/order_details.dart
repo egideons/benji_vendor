@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../src/components/appbar/my appbar.dart';
 import '../../src/components/button/my elevatedButton.dart';
 import '../../src/controller/form_controller.dart';
-import '../../src/controller/order_controller.dart';
+import '../../src/controller/push_notifications_controller.dart';
 import '../../src/model/order_model.dart';
 import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
@@ -52,13 +52,16 @@ class _OrderDetailsState extends State<OrderDetails> {
     consoleLog(data.toString());
     await FormController.instance.patchAuth(url, data, 'dispatchOrder');
     if (FormController.instance.status.toString().startsWith('2')) {
+      await PushNotificationController.showNotification(
+        title: "Success",
+        body: dispatchMessage,
+        summary: "Package Delivery",
+        largeIcon: "asset://assets/icons/package.png",
+      );
       setState(() {
         isDispatched = true;
       });
       await Future.delayed(const Duration(microseconds: 500), () {
-        OrderController.instance.getOrdersByPendingStatus();
-        OrderController.instance.getOrdersByDispatchedStatus();
-        OrderController.instance.getOrdersByCompletedStatus();
         Get.close(1);
       });
     }

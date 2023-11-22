@@ -48,16 +48,16 @@ class OrderModel {
       assignedStatus: json["assigned_status"] ?? "PEND",
       deliveryStatus: json["delivery_status"] ?? "PEND",
       client: Client.fromJson(json["client"]),
-      orderitems: json["orderitems"] == null
-          ? []
-          : (json["orderitems"] as List)
-              .map((item) => Orderitem.fromJson(item))
-              .toList(),
-      preTotal: (json["pre_total"] != null)
-          ? double.parse(json["pre_total"].toString())
-          : 0.0,
-      // preTotal:
-      //     json["pre_total"] != null ? double.parse(json["pre_total"]) : 0.0,
+      orderitems: (json["orderitems"] as List)
+          .map((item) => Orderitem.fromJson(item))
+          .toList(),
+      //  json["orderitems"] == null
+      //     ? []
+      //     : (json["orderitems"] as List)
+      //         .map((item) => Orderitem.fromJson(item))
+      //         .toList(),
+      preTotal:
+          json["pre_total"] != null ? double.parse(json["pre_total"]) : 0.0,
       latitude: json["latitude"] ?? notAvailable,
       longitude: json["longitude"] ?? notAvailable,
       deliveryAddress: json["delivery_address"] ?? notAvailable,

@@ -178,7 +178,7 @@ class _OrdersState extends State<Orders> {
                           ),
                           onPressed: clickDispatched,
                           child: Text(
-                            'dispatched',
+                            'Dispatched',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: checkStatus(controller.status.value,
