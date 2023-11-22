@@ -32,6 +32,13 @@ class LoginController extends GetxController {
           await HandleData.postApi(Api.baseUrl + Api.login, null, finalData);
 
       if (response == null || response.statusCode != 200) {
+        if (response!.statusCode == 502) {
+          ApiProcessorController.errorSnack(
+              "We are currently experiencing a downtime. Please try again later");
+          isLoad.value = false;
+          update();
+          return;
+        }
         ApiProcessorController.errorSnack(
             "Invalid email or password. Try again");
         isLoad.value = false;

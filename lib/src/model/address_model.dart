@@ -39,7 +39,7 @@ class DeliveryAddress {
       details: json["details"] ?? notAvailable,
       recipientName: json["recipient_name"] ?? notAvailable,
       phone: json["phone"] ?? notAvailable,
-      country: CountryModel.fromJson(json),
+      country: CountryModel.fromJson(json["country"]),
       state: json["state"] ?? notAvailable,
       city: json["city"] ?? notAvailable,
       latitude: json["latitude"] ?? notAvailable,

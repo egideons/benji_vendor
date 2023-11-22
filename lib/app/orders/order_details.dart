@@ -16,8 +16,14 @@ import '../../theme/colors.dart';
 
 class OrderDetails extends StatefulWidget {
   final OrderModel order;
+  final String orderStatus;
+  final Color orderStatusColor;
 
-  const OrderDetails({super.key, required this.order});
+  const OrderDetails(
+      {super.key,
+      required this.order,
+      required this.orderStatus,
+      required this.orderStatusColor});
 
   @override
   State<OrderDetails> createState() => _OrderDetailsState();
@@ -71,8 +77,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         ),
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(kDefaultPadding),
-          child: isDispatched == false &&
-                  widget.order.deliveryStatus.toLowerCase() != "dispatched"
+          child: isDispatched == false
               ? GetBuilder<FormController>(
                   init: FormController(),
                   builder: (controller) {
@@ -149,51 +154,64 @@ class _OrderDetailsState extends State<OrderDetails> {
                             letterSpacing: -0.32,
                           ),
                         ),
-                        widget.order.deliveryStatus == "COMP"
-                            ? const Text(
-                                'Delivered',
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                  color: kSuccessColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: -0.32,
-                                ),
-                              )
-                            : isDispatched == true &&
-                                    widget.order.deliveryStatus == "dispatched"
-                                ? Text(
-                                    'Dispatched',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      color: kSecondaryColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      letterSpacing: -0.32,
-                                    ),
-                                  )
-                                : isDispatched == false &&
-                                        widget.order.deliveryStatus == "PEND"
-                                    ? Text(
-                                        'Pending',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          color: kLoadingColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: -0.32,
-                                        ),
-                                      )
-                                    : Text(
-                                        'Canceled',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                          color: kAccentColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: -0.32,
-                                        ),
-                                      ),
+
+                        Text(
+                          widget.orderStatus,
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            color: widget.orderStatusColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.32,
+                          ),
+                        )
+                        // widget.order.deliveryStatus == "COMP"
+                        //     ? const Text(
+                        //         'Delivered',
+                        //         textAlign: TextAlign.right,
+                        //         style: TextStyle(
+                        //           color: kSuccessColor,
+                        //           fontSize: 16,
+                        //           fontWeight: FontWeight.w700,
+                        //           letterSpacing: -0.32,
+                        //         ),
+                        //       )
+                        //     : isDispatched == true &&
+                        //             widget.order.deliveryStatus == "dispatched"
+                        //         ? Text(
+                        //             'Dispatched',
+                        //             textAlign: TextAlign.right,
+                        //             style: TextStyle(
+                        //               color: kSecondaryColor,
+                        //               fontSize: 16,
+                        //               fontWeight: FontWeight.w700,
+                        //               letterSpacing: -0.32,
+                        //             ),
+                        //           )
+                        //         : isDispatched == false &&
+                        //                 widget.order.deliveryStatus == "PEND"
+                        //             ?
+                        //             Text(
+                        //                 'Canceled',
+                        //                 textAlign: TextAlign.right,
+                        //                 style: TextStyle(
+                        //                   color: kAccentColor,
+                        //                   fontSize: 16,
+                        //                   fontWeight: FontWeight.w700,
+                        //                   letterSpacing: -0.32,
+                        //                 ),
+                        //               )
+
+                        //             :  Text(
+                        //                 'Pending',
+                        //                 textAlign: TextAlign.right,
+                        //                 style: TextStyle(
+                        //                   color: kLoadingColor,
+                        //                   fontSize: 16,
+                        //                   fontWeight: FontWeight.w700,
+                        //                   letterSpacing: -0.32,
+                        //                 ),
+                        //               )
                       ],
                     ),
                   ],
