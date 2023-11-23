@@ -57,8 +57,8 @@ class OrderModel {
               : (json["orderitems"] as List)
                   .map((item) => Orderitem.fromJson(item))
                   .toList(),
-      preTotal:
-          json["pre_total"] != null ? double.parse(json["pre_total"]) : 0.0,
+      preTotal: json["pre_total"] ?? 0.0,
+      // json["pre_total"] != null ? double.parse(json["pre_total"]) : 0.0,
       latitude: json["latitude"] ?? notAvailable,
       longitude: json["longitude"] ?? notAvailable,
       deliveryAddress: json["delivery_address"] ?? notAvailable,

@@ -116,6 +116,9 @@ class OrderController extends GetxController {
         // Handle the response as a map with 'items' key
         var items = decodedResponse['items'] as List;
         data = items.map((e) => OrderModel.fromJson(e)).toList();
+      } else if (decodedResponse is String) {
+        var items = decodedResponse as List;
+        data = items.map((e) => OrderModel.fromJson(e)).toList();
       } else {
         consoleLog("Invalid response structure: $decodedResponse");
       }

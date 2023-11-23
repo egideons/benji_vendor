@@ -80,7 +80,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         ),
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(kDefaultPadding),
-          child: isDispatched == false
+          child: isDispatched == false && widget.orderStatus == "Pending"
               ? GetBuilder<FormController>(
                   init: FormController(),
                   builder: (controller) {
