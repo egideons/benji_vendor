@@ -49,16 +49,11 @@ class OrderModel {
       assignedStatus: json["assigned_status"] ?? "PEND",
       deliveryStatus: json["delivery_status"] ?? "dispatched",
       client: Client.fromJson(json["client"]),
-      orderitems:
-
-          //  (json["orderitems"] as List)
-          //     .map((item) => Orderitem.fromJson(item))
-          //     .toList(),
-          json["orderitems"] == null
-              ? []
-              : (json["orderitems"] as List)
-                  .map((item) => Orderitem.fromJson(item))
-                  .toList(),
+      orderitems: json["orderitems"] == null
+          ? []
+          : (json["orderitems"] as List)
+              .map((item) => Orderitem.fromJson(item))
+              .toList(),
       preTotal: () {
         var preTotalJson = json!["pre_total"];
         if (preTotalJson is String) {
