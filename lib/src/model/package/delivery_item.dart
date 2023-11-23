@@ -64,7 +64,7 @@ class DeliveryItem {
       itemCategory: ItemCategory.fromJson(json['itemCategory']),
       itemWeight: ItemWeight.fromJson(json['itemWeight']),
       itemQuantity: json['itemQuantity'] ?? 0,
-      itemValue: json['itemValue'] ?? notAvailable,
+      itemValue: json['itemValue'] ?? 0,
       itemImage: json['itemImage'],
       prices: json['prices'] ?? 0.0,
       status: json['status'] ?? notAvailable,
