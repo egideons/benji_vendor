@@ -3,6 +3,7 @@ import 'package:benji_vendor/src/model/address_model.dart';
 import 'package:benji_vendor/src/model/client_model.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 
+import '../providers/api_url.dart';
 import '../providers/constants.dart';
 
 class OrderModel {
@@ -46,10 +47,11 @@ class OrderModel {
       totalPrice: json["total_price"] ?? 0.0,
       deliveryFee: json["delivery_fee"] ?? 0.0,
       assignedStatus: json["assigned_status"] ?? "PEND",
-      deliveryStatus: json["delivery_status"] ?? "PEND",
+      deliveryStatus: json["delivery_status"] ?? "dispatched",
       client: Client.fromJson(json["client"]),
       orderitems:
-          // (json["orderitems"] as List)
+
+          //  (json["orderitems"] as List)
           //     .map((item) => Orderitem.fromJson(item))
           //     .toList(),
           json["orderitems"] == null
@@ -57,7 +59,23 @@ class OrderModel {
               : (json["orderitems"] as List)
                   .map((item) => Orderitem.fromJson(item))
                   .toList(),
-      preTotal: json["pre_total"] ?? 0.0,
+      preTotal: () {
+        var preTotalJson = json!["pre_total"];
+        if (preTotalJson is String) {
+          return double.parse(preTotalJson);
+        } else if (preTotalJson is int) {
+          return preTotalJson.toDouble();
+        } else if (preTotalJson == null) {
+          consoleLog("pre_total is null");
+          return 0.0;
+        } else {
+          consoleLog(
+              "Unexpected type found in pre_total: ${preTotalJson.runtimeType}");
+          return 0.0;
+        }
+      }(),
+
+      // preTotal: json["pre_total"] ?? 0.0,
       // json["pre_total"] != null ? double.parse(json["pre_total"]) : 0.0,
       latitude: json["latitude"] ?? notAvailable,
       longitude: json["longitude"] ?? notAvailable,

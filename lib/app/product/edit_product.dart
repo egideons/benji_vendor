@@ -99,9 +99,9 @@ class _EditProductState extends State<EditProduct> {
 
   //================================== FUNCTIONS ====================================\\
   Future<void> submit() async {
-    if (selectedImages == null && productImages!.isEmpty) {
-      ApiProcessorController.errorSnack("Please select product images");
-    }
+    // if (selectedImages == null && productImages!.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please select product images");
+    // }
     if (subCategoryEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please select a category");
     }

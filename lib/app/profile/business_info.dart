@@ -23,6 +23,7 @@ import '../../../src/providers/constants.dart';
 import '../../src/components/image/my_image.dart';
 import '../../src/components/section/business_category_modal.dart';
 import '../../src/controller/category_controller.dart';
+import '../../src/controller/push_notifications_controller.dart';
 import '../../src/providers/helper.dart';
 import '../../src/providers/responsive_constants.dart';
 
@@ -164,7 +165,13 @@ class _BusinessInfoState extends State<BusinessInfo> {
         data,
         {'shop_image': selectedCoverImage},
         'changeVendorBusinessProfile');
-    if (FormController.instance.status.toString().startsWith('2')) {}
+    if (FormController.instance.status.toString().startsWith('2')) {
+      await PushNotificationController.showNotification(
+        title: "Success.",
+        body: "Your business profile has been successfully updated.",
+      );
+      Get.close(1);
+    }
   }
 
   //=========================== WIDGETS ====================================\\

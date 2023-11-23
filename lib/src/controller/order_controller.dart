@@ -19,17 +19,12 @@ class OrderController extends GetxController {
   }
 
   var isLoad = false.obs;
-  var vendorsOrderList = <OrderModel>[].obs;
-
   var loadedAll = false.obs;
   var isLoadMore = false.obs;
   var loadNum = 10.obs;
   var total = 0.obs;
   var status = StatusType.delivered.obs;
-
-  var vendorPendingOrders = <OrderModel>[].obs;
-  var vendorDispatchedOrders = <OrderModel>[].obs;
-  var vendorCompletedOrders = <OrderModel>[].obs;
+  var vendorsOrderList = <OrderModel>[].obs;
 
   deleteCachedOrders() {
     vendorsOrderList.value = <OrderModel>[];
@@ -113,12 +108,8 @@ class OrderController extends GetxController {
         data = decodedResponse.map((e) => OrderModel.fromJson(e)).toList();
       } else if (decodedResponse is Map<String, dynamic> &&
           decodedResponse.containsKey('items')) {
-        // Handle the response as a map with 'items' key
         var items = decodedResponse['items'] as List;
-        data = items.map((e) => OrderModel.fromJson(e)).toList();
-      } else if (decodedResponse is String) {
-        var items = decodedResponse as List;
-        data = items.map((e) => OrderModel.fromJson(e)).toList();
+        data = items.map((value) => OrderModel.fromJson(value)).toList();
       } else {
         consoleLog("Invalid response structure: $decodedResponse");
       }

@@ -6,7 +6,6 @@ import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/app/product/view_product.dart';
-import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/dashboard_product_container.dart';
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
@@ -24,6 +23,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../src/components/appbar/home appBar vendor name.dart';
+import '../../src/components/card/empty.dart';
 import '../../src/components/container/home orders container.dart';
 import '../../src/controller/auth_controller.dart';
 import '../../src/controller/notification_controller.dart';
@@ -286,7 +286,9 @@ class _DashboardState extends State<Dashboard> {
               maintainBottomViewPadding: true,
               child: Scrollbar(
                 child: refreshing
-                    ? CircularProgressIndicator(color: kAccentColor)
+                    ? Center(
+                        child: CircularProgressIndicator(color: kAccentColor),
+                      )
                     : ListView(
                         physics: const BouncingScrollPhysics(),
                         controller: scrollController,
@@ -416,6 +418,12 @@ class _DashboardState extends State<Dashboard> {
                               kHalfSizedBox,
                             ],
                           ),
+                          // ProductController.instance.products.isEmpty
+                          //     ? const EmptyCard(
+                          //         emptyCardMessage:
+                          //             "You don't have any products yet.",
+                          //       )
+                          //     :
                           SizedBox(
                               height: deviceType(media.width) >= 2 ? 260 : 200,
                               child: GetBuilder<ProductController>(
@@ -430,7 +438,10 @@ class _DashboardState extends State<Dashboard> {
                                             ),
                                           )
                                         : controller.products.isEmpty
-                                            ? const EmptyCard()
+                                            ? const EmptyCard(
+                                                emptyCardMessage:
+                                                    "You don't have any products yet.",
+                                              )
                                             : ListView.separated(
                                                 physics:
                                                     const BouncingScrollPhysics(),
