@@ -124,7 +124,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Oder ID',
+                          'Order ID',
                           style: TextStyle(
                             color: kTextGreyColor,
                             fontSize: 11.62,

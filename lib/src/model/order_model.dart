@@ -37,7 +37,6 @@ class OrderModel {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic>? json) {
-    print('json $json');
     json ??= {};
     return OrderModel(
       id: json["id"] ?? notAvailable,

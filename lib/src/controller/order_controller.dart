@@ -54,7 +54,15 @@ class OrderController extends GetxController {
 
   setStatus([StatusType newStatus = StatusType.pending]) async {
     status.value = newStatus;
-    vendorsOrderList.value = [];
+    if (newStatus == StatusType.pending) {
+      vendorsOrderList.value = vendorPendingOrders;
+    } else if (newStatus == StatusType.dispatched) {
+      vendorsOrderList.value = vendorDispatchedOrders;
+    } else if (newStatus == StatusType.delivered) {
+      vendorsOrderList.value = vendorDeliveredOrders;
+    } else {
+      vendorsOrderList.value = [];
+    }
     loadNum.value = 10;
     loadedAll.value = false;
     update();
@@ -84,19 +92,14 @@ class OrderController extends GetxController {
       return;
     }
     isLoad.value = true;
-    late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        // "https://resource.bgbot.app/api/v1/vendors/426/listMyOrdersByStatus?created_date=2023-11-23&start=0&end=10&status=PEND";
         "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$yesterdayFormattedDate&start=${loadNum.value - 10}&end=1&status=${statusTypeConverter(status.value)}";
-    consoleLog(yesterdayFormattedDate);
-    consoleLog("This is the url: $url");
     loadNum.value += 10;
-    token = UserController.instance.user.value.token;
+    String token = UserController.instance.user.value.token;
     var response = await HandleData.getApi(url, token);
 
     var responseData = await ApiProcessorController.errorState(response);
-    // var responseData = response!.body;
     if (responseData == null) {
       isLoad.value = false;
       loadedAll.value = true;
@@ -107,13 +110,17 @@ class OrderController extends GetxController {
     List<OrderModel> data = [];
     try {
       var decodedResponse = jsonDecode(responseData);
-
-      print(decodedResponse.runtimeType);
-
       data =
           (decodedResponse as List).map((e) => OrderModel.fromJson(e)).toList();
 
       vendorsOrderList.value = data;
+      if (status.value == StatusType.pending) {
+        vendorPendingOrders.value = data;
+      } else if (status.value == StatusType.dispatched) {
+        vendorDispatchedOrders.value = data;
+      } else if (status.value == StatusType.delivered) {
+        vendorDeliveredOrders.value = data;
+      }
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
