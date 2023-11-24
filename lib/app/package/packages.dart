@@ -87,7 +87,6 @@ class _PackagesState extends State<Packages>
 
   int selectedtabbar = 0;
   void clickOnTabBarOption(value) async {
-    HapticFeedback.selectionClick();
     setState(() {
       selectedtabbar = value;
     });

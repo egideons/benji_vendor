@@ -41,7 +41,6 @@ class _OrderDetailsState extends State<OrderDetails> {
 
 //============================== FUNCTIONS ================================\\
   orderDispatched() async {
-    HapticFeedback.selectionClick();
     Map<String, dynamic> data = {
       "delivery_status": "dispatched",
     };

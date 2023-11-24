@@ -3,7 +3,6 @@ import 'package:benji_vendor/src/model/address_model.dart';
 import 'package:benji_vendor/src/model/client_model.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 
-import '../providers/api_url.dart';
 import '../providers/constants.dart';
 
 class OrderModel {
@@ -15,10 +14,9 @@ class OrderModel {
   String deliveryStatus;
   Client client;
   List<Orderitem> orderitems;
-  double preTotal;
   String latitude;
   String longitude;
-  String deliveryAddress;
+  DeliveryAddress deliveryAddress;
   String message;
   String created;
 
@@ -31,7 +29,6 @@ class OrderModel {
     required this.deliveryStatus,
     required this.client,
     required this.orderitems,
-    required this.preTotal,
     required this.latitude,
     required this.longitude,
     required this.deliveryAddress,
@@ -40,6 +37,7 @@ class OrderModel {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic>? json) {
+    print('json $json');
     json ??= {};
     return OrderModel(
       id: json["id"] ?? notAvailable,
@@ -47,34 +45,16 @@ class OrderModel {
       totalPrice: json["total_price"] ?? 0.0,
       deliveryFee: json["delivery_fee"] ?? 0.0,
       assignedStatus: json["assigned_status"] ?? "PEND",
-      deliveryStatus: json["delivery_status"] ?? "dispatched",
+      deliveryStatus: json["delivery_status"] ?? "PEND",
       client: Client.fromJson(json["client"]),
       orderitems: json["orderitems"] == null
           ? []
           : (json["orderitems"] as List)
-              .map((item) => Orderitem.fromJson(item))
+              .map((item) => Orderitem.fromJson(Map.from(item)))
               .toList(),
-      preTotal: () {
-        var preTotalJson = json!["pre_total"];
-        if (preTotalJson is String) {
-          return double.parse(preTotalJson);
-        } else if (preTotalJson is int) {
-          return preTotalJson.toDouble();
-        } else if (preTotalJson == null) {
-          consoleLog("pre_total is null");
-          return 0.0;
-        } else {
-          consoleLog(
-              "Unexpected type found in pre_total: ${preTotalJson.runtimeType}");
-          return 0.0;
-        }
-      }(),
-
-      // preTotal: json["pre_total"] ?? 0.0,
-      // json["pre_total"] != null ? double.parse(json["pre_total"]) : 0.0,
       latitude: json["latitude"] ?? notAvailable,
       longitude: json["longitude"] ?? notAvailable,
-      deliveryAddress: json["delivery_address"] ?? notAvailable,
+      deliveryAddress: DeliveryAddress.fromJson(json["delivery_address"]),
       message: json["message"] ?? notAvailable,
       created: json["created"] ?? notAvailable,
     );
@@ -88,7 +68,6 @@ class OrderModel {
         "delivery_status": deliveryStatus,
         "client": client.toJson(),
         "orderitems": orderitems.map((item) => (item).toJson()).toList(),
-        "pre_total": preTotal,
         "latitude": latitude,
         "longitude": longitude,
         "delivery_address": deliveryAddress,

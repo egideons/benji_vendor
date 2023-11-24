@@ -51,20 +51,22 @@ class _DashboardState extends State<Dashboard> {
     numberOfNotifications = NotificationController.instance.notification.length;
     consoleLog(
         "This is the profile logo: ${UserController.instance.user.value.profileLogo}");
+    OrderController.instance.getOrdersByPendingStatus();
+    OrderController.instance.getOrdersByDeliveredStatus();
   }
 
   List<OrderModel> get pendingOrders =>
-      OrderController.instance.vendorsOrderList
+      OrderController.instance.vendorPendingOrders
           .where((order) => order.deliveryStatus == "PEND")
           .toList();
 
   List<OrderModel> get dispatchedOrders =>
-      OrderController.instance.vendorsOrderList
+      OrderController.instance.vendorDispatchedOrders
           .where((order) => order.deliveryStatus == "dispatched")
           .toList();
 
   List<OrderModel> get deliveredOrders =>
-      OrderController.instance.vendorsOrderList
+      OrderController.instance.vendorDeliveredOrders
           .where((order) => order.deliveryStatus == "COMP")
           .toList();
 
@@ -101,7 +103,6 @@ class _DashboardState extends State<Dashboard> {
   }
 
   addProduct() {
-    HapticFeedback.lightImpact();
     Get.to(
       () => const AddProduct(),
       routeName: 'AddProduct',

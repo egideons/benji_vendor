@@ -11,6 +11,7 @@ import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../providers/constants.dart';
 import '../providers/helper.dart';
 
 class OrderController extends GetxController {
@@ -25,6 +26,9 @@ class OrderController extends GetxController {
   var total = 0.obs;
   var status = StatusType.delivered.obs;
   var vendorsOrderList = <OrderModel>[].obs;
+  var vendorPendingOrders = <OrderModel>[].obs;
+  var vendorDispatchedOrders = <OrderModel>[].obs;
+  var vendorDeliveredOrders = <OrderModel>[].obs;
 
   deleteCachedOrders() {
     vendorsOrderList.value = <OrderModel>[];
@@ -48,7 +52,7 @@ class OrderController extends GetxController {
     }
   }
 
-  setStatus([StatusType newStatus = StatusType.delivered]) async {
+  setStatus([StatusType newStatus = StatusType.pending]) async {
     status.value = newStatus;
     vendorsOrderList.value = [];
     loadNum.value = 10;
@@ -83,7 +87,53 @@ class OrderController extends GetxController {
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?status=${statusTypeConverter(status.value)}&start=${loadNum.value - 10}&end=${loadNum.value}";
+        // "https://resource.bgbot.app/api/v1/vendors/426/listMyOrdersByStatus?created_date=2023-11-23&start=0&end=10&status=PEND";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$yesterdayFormattedDate&start=${loadNum.value - 10}&end=1&status=${statusTypeConverter(status.value)}";
+    consoleLog(yesterdayFormattedDate);
+    consoleLog("This is the url: $url");
+    loadNum.value += 10;
+    token = UserController.instance.user.value.token;
+    var response = await HandleData.getApi(url, token);
+
+    var responseData = await ApiProcessorController.errorState(response);
+    // var responseData = response!.body;
+    if (responseData == null) {
+      isLoad.value = false;
+      loadedAll.value = true;
+      isLoadMore.value = false;
+      update();
+      return;
+    }
+    List<OrderModel> data = [];
+    try {
+      var decodedResponse = jsonDecode(responseData);
+
+      print(decodedResponse.runtimeType);
+
+      data =
+          (decodedResponse as List).map((e) => OrderModel.fromJson(e)).toList();
+
+      vendorsOrderList.value = data;
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
+    } catch (e) {
+      consoleLog(e.toString());
+    }
+    loadedAll.value = data.isEmpty;
+    isLoad.value = false;
+    isLoadMore.value = false;
+    update();
+  }
+
+  Future getOrdersByPendingStatus() async {
+    if (loadedAll.value) {
+      return;
+    }
+    isLoad.value = true;
+    late String token;
+    String id = UserController.instance.user.value.id.toString();
+    var url =
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=${loadNum.value}&status=PEND";
     consoleLog("This is the url: $url");
     loadNum.value += 10;
     token = UserController.instance.user.value.token;
@@ -123,7 +173,127 @@ class OrderController extends GetxController {
       // data = (jsonDecode(responseData) as List)
       //     .map((e) => OrderModel.fromJson(e))
       //     .toList();
-      vendorsOrderList.value += data;
+      vendorPendingOrders.value += data;
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
+    } catch (e) {
+      consoleLog(e.toString());
+    }
+    loadedAll.value = data.isEmpty;
+    isLoad.value = false;
+    isLoadMore.value = false;
+    update();
+  }
+
+  Future getOrdersByDispatchedStatus() async {
+    if (loadedAll.value) {
+      return;
+    }
+    isLoad.value = true;
+    late String token;
+    String id = UserController.instance.user.value.id.toString();
+    var url =
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=${loadNum.value}&status=dispatched";
+    consoleLog("This is the url: $url");
+    loadNum.value += 10;
+    token = UserController.instance.user.value.token;
+    var response = await HandleData.getApi(url, token);
+
+    var responseData = await ApiProcessorController.errorState(response);
+    // var responseData = response!.body;
+    if (responseData == null) {
+      isLoad.value = false;
+      loadedAll.value = true;
+      isLoadMore.value = false;
+      update();
+      return;
+    }
+    List<OrderModel> data = [];
+    try {
+      var decodedResponse = jsonDecode(responseData);
+      consoleLog("This is the status code: ${response!.statusCode.toString()}");
+      consoleLog("This is the decoded response: ${decodedResponse.toString()}");
+
+      if (decodedResponse is List) {
+        data = decodedResponse.map((e) => OrderModel.fromJson(e)).toList();
+      } else if (decodedResponse is Map<String, dynamic> &&
+          decodedResponse.containsKey('items')) {
+        var items = decodedResponse['items'] as List;
+        data = items.map((value) => OrderModel.fromJson(value)).toList();
+      } else {
+        consoleLog("Invalid response structure: $decodedResponse");
+      }
+      // if (decodedResponse.containsKey('items')) {
+      //   var items = decodedResponse['items'] as List;
+      //   data = items.map((e) => OrderModel.fromJson(e)).toList();
+      // } else {
+      //   consoleLog("No 'items' key found in the response");
+      // }
+      // data = (jsonDecode(responseData)['items'] as List)
+      // data = (jsonDecode(responseData) as List)
+      //     .map((e) => OrderModel.fromJson(e))
+      //     .toList();
+      vendorDispatchedOrders.value += data;
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
+    } catch (e) {
+      consoleLog(e.toString());
+    }
+    loadedAll.value = data.isEmpty;
+    isLoad.value = false;
+    isLoadMore.value = false;
+    update();
+  }
+
+  Future getOrdersByDeliveredStatus() async {
+    if (loadedAll.value) {
+      return;
+    }
+    isLoad.value = true;
+    late String token;
+    String id = UserController.instance.user.value.id.toString();
+    var url =
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=${loadNum.value}&status=COMP";
+    consoleLog("This is the url: $url");
+    loadNum.value += 10;
+    token = UserController.instance.user.value.token;
+    var response = await HandleData.getApi(url, token);
+
+    var responseData = await ApiProcessorController.errorState(response);
+    // var responseData = response!.body;
+    if (responseData == null) {
+      isLoad.value = false;
+      loadedAll.value = true;
+      isLoadMore.value = false;
+      update();
+      return;
+    }
+    List<OrderModel> data = [];
+    try {
+      var decodedResponse = jsonDecode(responseData);
+      consoleLog("This is the status code: ${response!.statusCode.toString()}");
+      consoleLog("This is the decoded response: ${decodedResponse.toString()}");
+
+      if (decodedResponse is List) {
+        data = decodedResponse.map((e) => OrderModel.fromJson(e)).toList();
+      } else if (decodedResponse is Map<String, dynamic> &&
+          decodedResponse.containsKey('items')) {
+        var items = decodedResponse['items'] as List;
+        data = items.map((value) => OrderModel.fromJson(value)).toList();
+      } else {
+        consoleLog("Invalid response structure: $decodedResponse");
+      }
+      // if (decodedResponse.containsKey('items')) {
+      //   var items = decodedResponse['items'] as List;
+      //   data = items.map((e) => OrderModel.fromJson(e)).toList();
+      // } else {
+      //   consoleLog("No 'items' key found in the response");
+      // }
+      // data = (jsonDecode(responseData)['items'] as List)
+      // data = (jsonDecode(responseData) as List)
+      //     .map((e) => OrderModel.fromJson(e))
+      //     .toList();
+      vendorDeliveredOrders.value += data;
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
