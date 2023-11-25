@@ -39,6 +39,16 @@ class OrderController extends GetxController {
     status.value = StatusType.delivered;
   }
 
+  resetOrders() async {
+    vendorsOrderList.value = <OrderModel>[];
+    loadedAll.value = false;
+    isLoadMore.value = false;
+    loadNum.value = 10;
+    total.value = 0;
+    status.value = StatusType.pending;
+    setStatus();
+  }
+
   Future<void> scrollListener(scrollController) async {
     if (OrderController.instance.loadedAll.value) {
       return;
@@ -94,7 +104,7 @@ class OrderController extends GetxController {
     isLoad.value = true;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$yesterdayFormattedDate&start=${loadNum.value - 10}&end=1&status=${statusTypeConverter(status.value)}";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=1&status=${statusTypeConverter(status.value)}";
     loadNum.value += 10;
     String token = UserController.instance.user.value.token;
     var response = await HandleData.getApi(url, token);

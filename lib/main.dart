@@ -37,7 +37,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  static final navigatorKey = GlobalKey<NavigatorState>();
 
   // This widget is the root of the application.
   @override
@@ -46,7 +45,7 @@ class MyApp extends StatelessWidget {
       title: "Benji Vendor",
       debugShowCheckedModeBanner: false,
       color: kPrimaryColor,
-      navigatorKey: navigatorKey,
+      navigatorKey: Get.key,
       themeMode: ThemeMode.light,
       darkTheme: AppTheme.darkTheme,
       theme: AppTheme.lightTheme,

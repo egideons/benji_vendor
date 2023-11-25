@@ -128,14 +128,12 @@ class _EditProductState extends State<EditProduct> {
       'editProduct',
     );
     if (FormController.instance.status.toString().startsWith('2')) {
-      print('first edit p');
-
       ProductController.instance.refreshData();
       await PushNotificationController.showNotification(
         title: "Success.",
         body: "${productNameEC.text} has been been successfully updated.",
       );
-      print('last edit p');
+
       Get.offAll(
         () => const OverView(currentIndex: 2),
         routeName: 'OverView',

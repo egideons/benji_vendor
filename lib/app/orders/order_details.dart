@@ -1,8 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../src/components/appbar/my appbar.dart';
@@ -61,6 +61,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         isDispatched = true;
       });
       await Future.delayed(const Duration(microseconds: 500), () {
+        OrderController.instance.resetOrders();
         Get.close(1);
       });
     }
