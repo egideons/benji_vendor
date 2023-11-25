@@ -99,9 +99,9 @@ class _EditProductState extends State<EditProduct> {
 
   //================================== FUNCTIONS ====================================\\
   Future<void> submit() async {
-    if (selectedImages == null && productImages!.isEmpty) {
-      ApiProcessorController.errorSnack("Please select product images");
-    }
+    // if (selectedImages == null && productImages!.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please select product images");
+    // }
     if (subCategoryEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please select a category");
     }
@@ -128,11 +128,12 @@ class _EditProductState extends State<EditProduct> {
       'editProduct',
     );
     if (FormController.instance.status.toString().startsWith('2')) {
-      ProductController.instance.reset();
+      ProductController.instance.refreshData();
       await PushNotificationController.showNotification(
         title: "Success.",
         body: "${productNameEC.text} has been been successfully updated.",
       );
+
       Get.offAll(
         () => const OverView(currentIndex: 2),
         routeName: 'OverView',

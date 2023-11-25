@@ -27,8 +27,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../theme/colors.dart';
-import '../../controller/error_controller.dart';
 import '../../controller/form_controller.dart';
+import '../../controller/push_notifications_controller.dart';
 import '../../providers/api_url.dart';
 import '../../providers/constants.dart';
 import '../image/my_image.dart';
@@ -175,29 +175,34 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   }
 
   Future<void> updateData() async {
-    if (selectedLogoImage == null && profileLogo!.isEmpty) {
-      ApiProcessorController.errorSnack("Please select a logo image");
-    } else {
-      Map data = {
-        'first_name': firstNameEC.text,
-        'last_name': lastNameEC.text,
-        'address': mapsLocationEC.text,
-        'gender': horizontalGroupValue,
-        'phone': userPhoneNumberEC.text,
-        'latitude': latitude,
-        'longitude': longitude,
-      };
-      consoleLog("This is the data: $data");
-      consoleLog(
-          Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString());
-      consoleLog("profile logo: $selectedLogoImage");
-      await FormController.instance.postAuthstream(
-          Api.baseUrl + Api.changeVendorPersonalProfile + vendorId.toString(),
-          data,
-          {'profileLogo': selectedLogoImage},
-          "changeVendorPersonalProfile");
-      if (FormController.instance.status.toString().startsWith('2')) {}
-    }
+    // if (selectedLogoImage == null && profileLogo!.isEmpty) {
+    //   ApiProcessorController.errorSnack("Please select a logo image");
+    //   return;
+    // }
+    Map data = {
+      'first_name': firstNameEC.text,
+      'last_name': lastNameEC.text,
+      'address': mapsLocationEC.text,
+      'gender': horizontalGroupValue,
+      'phone': userPhoneNumberEC.text,
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+    consoleLog("This is the data: $data");
+    consoleLog(
+        Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString());
+    consoleLog("profile logo: $selectedLogoImage");
+    await FormController.instance.postAuthstream(
+        Api.baseUrl + Api.changeVendorPersonalProfile + vendorId.toString(),
+        data,
+        {'profileLogo': selectedLogoImage},
+        "changeVendorPersonalProfile");
+    if (FormController.instance.status.toString().startsWith('2')) {}
+    await PushNotificationController.showNotification(
+      title: "Success.",
+      body: "Your personal profile has been successfully updated.",
+    );
+    Get.close(1);
   }
 
   //===================== COPY TO CLIPBOARD =======================\\

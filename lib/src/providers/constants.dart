@@ -40,6 +40,15 @@ const String emailPattern =
 
 //===================== DateTime Formate ==========================\\
 
+DateTime today = DateTime.now();
+
+String formattedDate = DateFormat('yyyy-MM-dd').format(today);
+
+DateTime yesterday = today.subtract(const Duration(days: 1));
+
+String yesterdayFormattedDate =
+    "${yesterday.year}-${yesterday.month.toString().padLeft(2, '0')}-${yesterday.day.toString().padLeft(2, '0')}";
+
 String formatDateAndTime(DateTime dateTime) {
   // Format the date as '23 Feb 2020'
   String formattedDate = DateFormat('dd MMM y').format(dateTime);

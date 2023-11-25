@@ -224,7 +224,6 @@ class _ViewPackageState extends State<ViewPackage> {
   }
 
   itemDispatched() async {
-    HapticFeedback.selectionClick();
     Map<String, dynamic> data = {
       "status": "dispatched",
     };

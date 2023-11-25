@@ -72,7 +72,7 @@ class PushNotificationController extends GetxController {
 
   static Future<void> onActionReceivedMethod(
       ReceivedAction receivedAction) async {
-    MyApp.navigatorKey.currentState?.push(
+    Get.key.currentState?.push(
       MaterialPageRoute(
         builder: (_) => SplashScreen(),
       ),
@@ -80,7 +80,7 @@ class PushNotificationController extends GetxController {
     debugPrint("onActionReceiveMethod");
     final payload = receivedAction.payload ?? {};
     if (payload["navigate"] == "true") {
-      MyApp.navigatorKey.currentState?.push(
+      Get.key.currentState?.push(
         MaterialPageRoute(
           builder: (_) => SplashScreen(),
         ),

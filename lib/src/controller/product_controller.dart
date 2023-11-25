@@ -49,6 +49,13 @@ class ProductController extends GetxController {
     update();
   }
 
+  refreshData() {
+    loadedAll.value = false;
+    loadNum.value = 10;
+    products.value = [];
+    getProducts();
+  }
+
   Future<void> getProducts() async {
     if (loadedAll.value) {
       return;

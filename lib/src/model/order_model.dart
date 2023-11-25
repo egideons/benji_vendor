@@ -14,10 +14,9 @@ class OrderModel {
   String deliveryStatus;
   Client client;
   List<Orderitem> orderitems;
-  double preTotal;
   String latitude;
   String longitude;
-  String deliveryAddress;
+  DeliveryAddress deliveryAddress;
   String message;
   String created;
 
@@ -30,7 +29,6 @@ class OrderModel {
     required this.deliveryStatus,
     required this.client,
     required this.orderitems,
-    required this.preTotal,
     required this.latitude,
     required this.longitude,
     required this.deliveryAddress,
@@ -48,20 +46,14 @@ class OrderModel {
       assignedStatus: json["assigned_status"] ?? "PEND",
       deliveryStatus: json["delivery_status"] ?? "PEND",
       client: Client.fromJson(json["client"]),
-      orderitems:
-          // (json["orderitems"] as List)
-          //     .map((item) => Orderitem.fromJson(item))
-          //     .toList(),
-          json["orderitems"] == null
-              ? []
-              : (json["orderitems"] as List)
-                  .map((item) => Orderitem.fromJson(item))
-                  .toList(),
-      preTotal:
-          json["pre_total"] != null ? double.parse(json["pre_total"]) : 0.0,
+      orderitems: json["orderitems"] == null
+          ? []
+          : (json["orderitems"] as List)
+              .map((item) => Orderitem.fromJson(Map.from(item)))
+              .toList(),
       latitude: json["latitude"] ?? notAvailable,
       longitude: json["longitude"] ?? notAvailable,
-      deliveryAddress: json["delivery_address"] ?? notAvailable,
+      deliveryAddress: DeliveryAddress.fromJson(json["delivery_address"]),
       message: json["message"] ?? notAvailable,
       created: json["created"] ?? notAvailable,
     );
@@ -75,7 +67,6 @@ class OrderModel {
         "delivery_status": deliveryStatus,
         "client": client.toJson(),
         "orderitems": orderitems.map((item) => (item).toJson()).toList(),
-        "pre_total": preTotal,
         "latitude": latitude,
         "longitude": longitude,
         "delivery_address": deliveryAddress,
