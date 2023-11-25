@@ -9,7 +9,6 @@ import 'package:benji_vendor/src/components/input/my_intl_phonefield.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/name_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
-import 'package:benji_vendor/src/components/section/my_floating_snackbar.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
@@ -18,7 +17,6 @@ import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
@@ -45,7 +43,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   @override
   void initState() {
     super.initState();
-    userCode = UserController.instance.user.value.code;
     firstNameEC.text = UserController.instance.user.value.firstName;
     lastNameEC.text = UserController.instance.user.value.lastName;
     mapsLocationEC.text = UserController.instance.user.value.address;
@@ -68,7 +65,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
 
 //======================================== ALL VARIABLES ==============================================\\
   final String countryDialCode = '+234';
-  String? userCode;
+
   String? latitude;
   String? longitude;
   List<AutocompletePrediction> placePredictions = [];
@@ -205,23 +202,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
     Get.close(1);
   }
 
-  //===================== COPY TO CLIPBOARD =======================\\
-  void copyToClipboard(BuildContext context, String userCode) {
-    Clipboard.setData(
-      ClipboardData(text: userCode),
-    );
-
-    //===================== SNACK BAR =======================\\
-
-    mySnackBar(
-      context,
-      kSuccessColor,
-      "Success!",
-      "ID copied to clipboard",
-      const Duration(seconds: 2),
-    );
-  }
-
   Widget uploadLogoImage() => Container(
         height: 140,
         width: MediaQuery.of(context).size.width,
@@ -324,86 +304,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
           padding: const EdgeInsets.all(kDefaultPadding),
           physics: const BouncingScrollPhysics(),
           children: [
-            GetBuilder<UserController>(
-              builder: (controller) {
-                return Container(
-                  width: media.width,
-                  padding: const EdgeInsets.all(kDefaultPadding),
-                  decoration: ShapeDecoration(
-                    color: kPrimaryColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    shadows: const [
-                      BoxShadow(
-                        color: Color(0x0F000000),
-                        blurRadius: 24,
-                        offset: Offset(0, 4),
-                        spreadRadius: 0,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Username: ${controller.user.value.username}",
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        textAlign: TextAlign.start,
-                        style: const TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      Text(
-                        "Business Email: ${controller.user.value.email}",
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            userCode!,
-                            softWrap: true,
-                            style: const TextStyle(
-                              color: kTextBlackColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              copyToClipboard(context, userCode!);
-                            },
-                            tooltip: "Copy ID",
-                            mouseCursor: SystemMouseCursors.click,
-                            icon: FaIcon(
-                              FontAwesomeIcons.solidCopy,
-                              size: 14,
-                              color: kAccentColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            kSizedBox,
-            const Divider(thickness: 4),
-            kSizedBox,
             Text(
               "Edit your Business Logo".toUpperCase(),
               textAlign: TextAlign.center,
