@@ -10,6 +10,7 @@ import 'package:benji_vendor/src/components/container/dashboard_product_containe
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
@@ -18,15 +19,14 @@ import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../src/components/appbar/home appBar vendor name.dart';
 import '../../src/components/card/empty.dart';
-import '../../src/components/container/home orders container.dart';
 import '../../src/controller/auth_controller.dart';
 import '../../src/controller/notification_controller.dart';
-import '../../src/model/order_model.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
@@ -46,43 +46,29 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     AuthController.instance.checkIfAuthorized();
+    userCode = UserController.instance.user.value.code;
 
     numberOfNotifications = NotificationController.instance.notification.length;
     consoleLog(
         "This is the profile logo: ${UserController.instance.user.value.profileLogo}");
-    // OrderController.instance.getOrdersByPendingStatus();
-    // OrderController.instance.getOrdersByDeliveredStatus();
-  }
-
-  List<OrderModel> get pendingOrders =>
-      OrderController.instance.vendorPendingOrders
-          .where((order) => order.deliveryStatus == "PEND")
-          .toList();
-
-  List<OrderModel> get dispatchedOrders =>
-      OrderController.instance.vendorDispatchedOrders
-          .where((order) => order.deliveryStatus == "dispatched")
-          .toList();
-
-  List<OrderModel> get deliveredOrders =>
-      OrderController.instance.vendorDeliveredOrders
-          .where((order) => order.deliveryStatus == "COMP")
-          .toList();
-
-  int get pendingOrdersCount => pendingOrders.length;
-  int get dispatchedOrdersCount => dispatchedOrders.length;
-  int get deliveredOrdersCount => deliveredOrders.length;
-
-  void printOrderCounts() {
-    consoleLog('Pending Orders Count: $pendingOrdersCount');
-    consoleLog('Dispatched Orders Count: $dispatchedOrdersCount');
-    consoleLog('Delivered Orders Count: $deliveredOrdersCount');
   }
 
 //=================================== ALL VARIABLES =====================================\\
+  String? userCode;
   int? numberOfNotifications;
   final scrollController = ScrollController();
   bool refreshing = false;
+
+//=================================== ALL FUNCTIONS =====================================\\
+
+  //===================== COPY TO CLIPBOARD =======================\\
+  copyToClipboard(BuildContext context, String userCode) {
+    Clipboard.setData(
+      ClipboardData(text: userCode),
+    );
+
+    ApiProcessorController.successSnack("ID copied to clipboard");
+  }
 
   Future<void> handleRefresh() async {
     setState(() {
@@ -191,7 +177,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
-    printOrderCounts();
+
     return MyResponsivePadding(
       child: MyLiquidRefresh(
         onRefresh: handleRefresh,
@@ -295,31 +281,83 @@ class _DashboardState extends State<Dashboard> {
                         scrollDirection: Axis.vertical,
                         padding: const EdgeInsets.all(kDefaultPadding),
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GetBuilder<OrderController>(
-                                builder: (controller) {
-                                  return OrdersContainer(
-                                    onTap: () =>
-                                        ordersPage(StatusType.delivered),
-                                    numberOfOrders:
-                                        formatNumber(deliveredOrdersCount),
-                                    typeOfOrders: "Delivered",
-                                  );
-                                },
-                              ),
-                              GetBuilder<OrderController>(
-                                builder: (controller) {
-                                  return OrdersContainer(
-                                    onTap: () => ordersPage(StatusType.pending),
-                                    numberOfOrders:
-                                        formatNumber(pendingOrdersCount),
-                                    typeOfOrders: "Pending",
-                                  );
-                                },
-                              ),
-                            ],
+                          GetBuilder<UserController>(
+                            builder: (controller) {
+                              return Container(
+                                width: media.width,
+                                padding: const EdgeInsets.all(kDefaultPadding),
+                                decoration: ShapeDecoration(
+                                  color: kPrimaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  shadows: const [
+                                    BoxShadow(
+                                      color: Color(0x0F000000),
+                                      blurRadius: 24,
+                                      offset: Offset(0, 4),
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Username: ${controller.user.value.username}",
+                                      softWrap: true,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.start,
+                                      style: const TextStyle(
+                                        color: kTextBlackColor,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Business Email: ${controller.user.value.email}",
+                                      softWrap: true,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                        color: kTextBlackColor,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "$userCode",
+                                          softWrap: true,
+                                          style: const TextStyle(
+                                            color: kTextBlackColor,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            copyToClipboard(context, userCode!);
+                                          },
+                                          tooltip: "Copy ID",
+                                          mouseCursor: SystemMouseCursors.click,
+                                          icon: FaIcon(
+                                            FontAwesomeIcons.solidCopy,
+                                            size: 14,
+                                            color: kAccentColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                           kSizedBox,
                           Column(

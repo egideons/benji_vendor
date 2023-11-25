@@ -105,6 +105,7 @@ class OrderController extends GetxController {
     String id = UserController.instance.user.value.id.toString();
     var url =
         "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=1&status=${statusTypeConverter(status.value)}";
+    consoleLog(url);
     loadNum.value += 10;
     String token = UserController.instance.user.value.token;
     var response = await HandleData.getApi(url, token);
