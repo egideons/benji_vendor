@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:benji_vendor/app/profile/my_blue_textformfield.dart';
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/components/input/my_item_drop.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
@@ -21,7 +22,6 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../src/providers/constants.dart';
 import '../../src/components/image/my_image.dart';
-import '../../src/components/section/business_category_modal.dart';
 import '../../src/controller/category_controller.dart';
 import '../../src/controller/push_notifications_controller.dart';
 import '../../src/providers/helper.dart';
@@ -154,7 +154,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
       "sunWeekOpeningHours": vendorSunOpeningHoursEC.text,
       "sunWeekClosingHours": vendorSunClosingHoursEC.text,
       "description": businessBioEC.text,
-      "shop_type": shopType,
+      "shop_type": vendorBusinessTypeEC.text,
     };
     consoleLog("This is the data: $data");
     consoleLog(
@@ -588,36 +588,29 @@ class _BusinessInfoState extends State<BusinessInfo> {
                         initState: (state) {
                           CategoryController.instance.getCategory();
                         },
-                        builder: (type) {
-                          return InkWell(
-                            onTap: () async {
-                              var data =
-                                  await shopTypeModal(context, type.category);
-                              if (data != null) {
-                                setState(() {
-                                  shopType = data.id;
-                                  shopTypeHint = data.name;
-                                  vendorBusinessTypeEC.text = data.name;
-                                });
-                                consoleLog(shopType.toString());
-                              }
-                            },
-                            child: MyBlueTextFormField(
-                              controller: vendorBusinessTypeEC,
-                              isEnabled: false,
-                              validator: (value) {
-                                if (value.isEmpty || value == null) {
-                                  "Field cannot be empty";
-                                }
-                                return null;
-                              },
-                              onSaved: (value) {},
-                              textInputAction: TextInputAction.next,
-                              focusNode: vendorBusinessTypeFN,
-                              hintText: shopTypeHint ??
-                                  "E.g Restaurant, Auto Dealer, etc",
-                              textInputType: TextInputType.text,
-                            ),
+                        builder: (controller) {
+                          return ItemDropDownMenu(
+                            itemEC: vendorBusinessTypeEC,
+                            hintText: UserController
+                                        .instance.user.value.shopType.name ==
+                                    notAvailable
+                                ? "E.g Restaurant, Auto Dealer, etc"
+                                : UserController
+                                    .instance.user.value.shopType.name,
+                            dropdownMenuEntries:
+                                controller.category.value.isEmpty &&
+                                        controller.isLoad.value
+                                    ? [
+                                        const DropdownMenuEntry(
+                                          value: 'Loading...',
+                                          label: 'Loading...',
+                                          enabled: false,
+                                        )
+                                      ]
+                                    : controller.category
+                                        .map((item) => DropdownMenuEntry(
+                                            value: item.id, label: item.name))
+                                        .toList(),
                           );
                         }),
                     kSizedBox,

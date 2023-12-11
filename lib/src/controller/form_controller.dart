@@ -21,7 +21,8 @@ class FormController extends GetxController {
   var responseObject = {}.obs;
 
   Future getAuth(String url, String tag,
-      [String errorMsg = "Error occurred"]) async {
+      [String errorMsg = "Error occurred",
+      String successMsg = "Submitted successfully"]) async {
     isLoad.value = true;
     update([tag]);
     final response = await http.get(
@@ -29,6 +30,8 @@ class FormController extends GetxController {
       headers: authHeader(),
     );
     status.value = response.statusCode;
+    consoleLog(response.body);
+
     update([tag]);
     if (response.statusCode != 200) {
       ApiProcessorController.errorSnack(errorMsg);
@@ -37,8 +40,8 @@ class FormController extends GetxController {
       return;
     }
 
-    consoleLog(jsonDecode(response.body));
-    responseObject.value = (jsonDecode(response.body) as Map);
+    ApiProcessorController.successSnack(successMsg);
+
     isLoad.value = false;
     update([tag]);
   }
@@ -246,8 +249,7 @@ class FormController extends GetxController {
       if (response.statusCode == 200) {
         UserController.instance.saveUser(
             normalResp.body, UserController.instance.user.value.token);
-        // UserController.instance.saveVendor(
-        //     normalResp.body, UserController.instance.user.value.token);
+
         ApiProcessorController.successSnack(successMsg);
         isLoad.value = false;
         update();
