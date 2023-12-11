@@ -56,8 +56,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
     vendorSunClosingHoursEC.text =
         UserController.instance.user.value.sunWeekClosingHours;
     businessBioEC.text = UserController.instance.user.value.businessBio;
-    vendorBusinessTypeEC.text =
-        UserController.instance.user.value.shopType.name;
+    vendorBusinessTypeEC.text = UserController.instance.user.value.shopType.id;
     consoleLog("This is the shop image: $shopImage");
   }
 
