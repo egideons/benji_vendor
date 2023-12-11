@@ -8,6 +8,7 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
+import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -102,11 +103,8 @@ class OrderController extends GetxController {
     }
     isLoad.value = true;
     String id = UserController.instance.user.value.id.toString();
-    // var url =
-    //     "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=1&status=${statusTypeConverter(status.value)}";
-
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrders?start=0&end=100";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=1&status=${statusTypeConverter(status.value)}";
 
     consoleLog(url);
     loadNum.value += 10;

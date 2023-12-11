@@ -12,7 +12,14 @@ import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 
-enum StatusType { pending, dispatched, confirmed, delivered, cancelled }
+enum StatusType {
+  pending,
+  dispatched,
+  processing,
+  confirmed,
+  delivered,
+  cancelled
+}
 
 class Orders extends StatefulWidget {
   const Orders({super.key});
