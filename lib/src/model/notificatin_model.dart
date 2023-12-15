@@ -48,23 +48,3 @@ class NotificationModel {
         "vendor": vendor,
       };
 }
-
-class Agent {
-  String? username;
-  String? email;
-
-  Agent({
-    this.username,
-    this.email,
-  });
-
-  factory Agent.fromJson(Map<String, dynamic> json) => Agent(
-        username: json["username"],
-        email: json["email"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "username": username,
-        "email": email,
-      };
-}
