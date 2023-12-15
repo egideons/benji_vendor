@@ -46,16 +46,16 @@ Map<String, String> authHeader([String? authToken, String? contentType]) {
 
 String statusTypeConverter(StatusType statusType) {
   if (statusType == StatusType.delivered) {
-    return "COMP";
+    return "completed";
+  }
+  if (statusType == StatusType.processing) {
+    return "processing";
   }
   if (statusType == StatusType.pending) {
     return "PEND";
   }
-  if (statusType == StatusType.dispatched) {
-    return "dispatched";
-  }
   if (statusType == StatusType.cancelled) {
-    return "CANC";
+    return "cancelled";
   }
   return "PEND";
 }

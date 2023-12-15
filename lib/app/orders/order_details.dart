@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:flutter/material.dart';
@@ -41,15 +42,10 @@ class _OrderDetailsState extends State<OrderDetails> {
 
 //============================== FUNCTIONS ================================\\
   orderDispatched() async {
-    Map<String, dynamic> data = {
-      "delivery_status": "dispatched",
-    };
-
     var url =
-        "${Api.baseUrl}${Api.changeOrderStatus}?order_id=${widget.order.id}&display_message=$dispatchMessage";
+        "${Api.baseUrl}${Api.changeOrderStatus}?order_id=${widget.order.id}";
     consoleLog(url);
-    consoleLog(data.toString());
-    await FormController.instance.patchAuth(url, data, 'dispatchOrder');
+    await FormController.instance.getAuth(url, 'dispatchOrder');
     if (FormController.instance.status.toString().startsWith('2')) {
       await PushNotificationController.showNotification(
         title: "Success",
@@ -80,8 +76,9 @@ class _OrderDetailsState extends State<OrderDetails> {
         ),
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(kDefaultPadding),
-          child: isDispatched == false && widget.orderStatus == "Pending"
+          child: isDispatched == false && widget.order.deliveryStatus == "PEND"
               ? GetBuilder<FormController>(
+                  id: 'dispatchOrder',
                   init: FormController(),
                   builder: (controller) {
                     return MyElevatedButton(
@@ -91,7 +88,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                     );
                   },
                 )
-              : const SizedBox(),
+              : MyElevatedButton(
+                  title: "Given to rider",
+                  onPressed: orderDispatched,
+                  disable: true,
+                ),
         ),
         body: ListView(
           physics: const BouncingScrollPhysics(),
@@ -321,19 +322,14 @@ class _OrderDetailsState extends State<OrderDetails> {
                       Container(
                         width: 60,
                         height: 60,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
-                          image: DecorationImage(
-                            image: AssetImage(
-                                "assets/images/profile/avatar-image.jpg"),
-                          ),
+                        decoration: BoxDecoration(
+                          color: kLightGreyColor,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
                         ),
-                        // child: CircleAvatar(
-                        //   radius: deviceType(media.width) >= 2 ? 60 : 30,
-                        //   child: ClipOval(
-                        //     child: MyImage(url: widget.order.client.image),
-                        //   ),
-                        // ),
+                        child: MyImage(
+                          url: widget.order.client.image,
+                        ),
                       ),
                       kWidthSizedBox,
                       Column(

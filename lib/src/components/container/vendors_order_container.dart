@@ -1,5 +1,6 @@
 // ignore_for_file: unused_field
 
+import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,22 +43,10 @@ class VendorsOrderContainer extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: kLightGreyColor,
                   borderRadius: BorderRadius.circular(16),
-                  image: const DecorationImage(
-                    image: AssetImage("assets/images/profile/avatar-image.jpg"),
-                  ),
                 ),
-                // child:
-
-                //  CachedNetworkImage(
-                //   imageUrl: order.client.image ?? "",
-                //   fit: BoxFit.cover,
-                //   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                //       Center(
-                //     child: CupertinoActivityIndicator(color: kAccentColor),
-                //   ),
-                //   errorWidget: (context, url, error) =>
-                //       Icon(Icons.error, color: kAccentColor),
-                // ),
+                child: MyImage(
+                  url: order.client.image,
+                ),
               ),
               kHalfSizedBox,
               SizedBox(

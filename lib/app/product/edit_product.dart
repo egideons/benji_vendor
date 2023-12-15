@@ -22,7 +22,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../src/components/input/my_message_textformfield.dart';
 import '../../src/controller/error_controller.dart';
 import '../../src/controller/product_controller.dart';
-import '../../src/controller/push_notifications_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../overview/overview.dart';
@@ -120,7 +119,7 @@ class _EditProductState extends State<EditProduct> {
     //   {'product_image': selectedImages},
     //   'editProduct',
     // );
-
+    print({'product_image': selectedImages});
     await FormController.instance.postAuthstream(
       Api.baseUrl + Api.changeProduct + widget.product.id,
       {'data': jsonEncode(data)}, // Wrap 'data' in a Map
@@ -129,10 +128,10 @@ class _EditProductState extends State<EditProduct> {
     );
     if (FormController.instance.status.toString().startsWith('2')) {
       ProductController.instance.refreshData();
-      await PushNotificationController.showNotification(
-        title: "Success.",
-        body: "${productNameEC.text} has been been successfully updated.",
-      );
+      // await PushNotificationController.showNotification(
+      //   title: "Success.",
+      //   body: "${productNameEC.text} has been been successfully updated.",
+      // );
 
       Get.offAll(
         () => const OverView(currentIndex: 2),

@@ -6,6 +6,7 @@ import 'package:benji_vendor/src/controller/login_controller.dart';
 import 'package:benji_vendor/src/controller/notification_controller.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
+import 'package:benji_vendor/src/controller/product_property_controller.dart';
 import 'package:benji_vendor/src/controller/profile_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
@@ -33,6 +34,7 @@ class SplashScreen extends StatelessWidget {
   final notify = Get.put(NotificationController());
   final package = Get.put(SendPackageController());
   final deliveryFee = Get.put(PaymentController());
+  final productProperty = Get.put(ProductPropertyController());
 
   @override
   Widget build(BuildContext context) {

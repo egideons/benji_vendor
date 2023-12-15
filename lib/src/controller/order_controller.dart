@@ -8,11 +8,11 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
+import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../providers/constants.dart';
-import '../providers/helper.dart';
 
 class OrderController extends GetxController {
   static OrderController get instance {
@@ -105,6 +105,7 @@ class OrderController extends GetxController {
     String id = UserController.instance.user.value.id.toString();
     var url =
         "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=1&status=${statusTypeConverter(status.value)}";
+
     consoleLog(url);
     loadNum.value += 10;
     String token = UserController.instance.user.value.token;
@@ -120,7 +121,8 @@ class OrderController extends GetxController {
     }
     List<OrderModel> data = [];
     try {
-      var decodedResponse = jsonDecode(responseData);
+      var decodedResponse = jsonDecode(responseData)['items'];
+      print(decodedResponse);
       data =
           (decodedResponse as List).map((e) => OrderModel.fromJson(e)).toList();
 
