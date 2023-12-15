@@ -259,29 +259,29 @@ class _ProfileState extends State<Profile> {
                       ),
                       trailing: const FaIcon(FontAwesomeIcons.chevronRight),
                     ),
-                    ListTile(
-                      leading: FaIcon(
-                        FontAwesomeIcons.receipt,
-                        color: kAccentColor,
-                      ),
-                      title: const Text(
-                        'Number of Orders',
-                        style: TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      trailing: Text(
-                        formatNumber(totalNumberOfOrders()),
-                        textAlign: TextAlign.right,
-                        style: const TextStyle(
-                          color: Color(0xFF9B9BA5),
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
+                    // ListTile(
+                    //   leading: FaIcon(
+                    //     FontAwesomeIcons.receipt,
+                    //     color: kAccentColor,
+                    //   ),
+                    //   title: const Text(
+                    //     'Number of Orders',
+                    //     style: TextStyle(
+                    //       color: kTextBlackColor,
+                    //       fontSize: 15,
+                    //       fontWeight: FontWeight.w400,
+                    //     ),
+                    //   ),
+                    //   trailing: Text(
+                    //     formatNumber(totalNumberOfOrders()),
+                    //     textAlign: TextAlign.right,
+                    //     style: const TextStyle(
+                    //       color: Color(0xFF9B9BA5),
+                    //       fontSize: 18,
+                    //       fontWeight: FontWeight.w700,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
