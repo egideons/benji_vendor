@@ -281,8 +281,8 @@ class _OrdersState extends State<Orders> {
                                         orderStatus: controller
                                                     .vendorsOrderList[index]
                                                     .deliveryStatus ==
-                                                "CANC"
-                                            ? "Cancelled"
+                                                "COMP"
+                                            ? "Completeds"
                                             : controller.vendorsOrderList[index]
                                                         .deliveryStatus ==
                                                     "dispatched"

@@ -27,6 +27,7 @@ class SplashScreen extends StatelessWidget {
   final auth = Get.put(AuthController());
   final product = Get.put(ProductController());
   final order = Get.put(OrderController());
+
   final form = Get.put(FormController());
   final reviews = Get.put(ReviewsController());
   final latLngDetail = Get.put(LatLngDetailController());
@@ -38,6 +39,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    order.setStatus();
     var size = MediaQuery.of(context).size;
     return GetBuilder<AuthController>(
       init: AuthController(),
