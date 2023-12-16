@@ -225,10 +225,16 @@ class FormController extends GetxController {
         if (files[key] == null) {
           continue;
         }
-        request.files
-            .add(await http.MultipartFile.fromPath(key, files[key]!.path));
+
+        request.files.add(await http.MultipartFile.fromPath(
+            key, files[key]!.path,
+            filename: files[key]!.path.split('/').last));
       }
-      consoleLog("${request.files}");
+      consoleLog("${request.files.map((e) => [
+            e.filename,
+            e.field,
+            e.contentType
+          ]).toList()}");
 
       request.headers.addAll(headers);
 
