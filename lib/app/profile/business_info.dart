@@ -163,7 +163,8 @@ class _BusinessInfoState extends State<BusinessInfo> {
         Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString(),
         data,
         {'shop_image': selectedCoverImage},
-        'changeVendorBusinessProfile');
+        'changeVendorBusinessProfile',
+        true);
     if (FormController.instance.status.toString().startsWith('2')) {
       await PushNotificationController.showNotification(
         title: "Success.",

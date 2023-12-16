@@ -207,10 +207,15 @@ class FormController extends GetxController {
   }
 
   Future postAuthstream(
-      String url, Map data, Map<String, File?> files, String tag,
-      [String errorMsg = "Error occurred",
-      String successMsg = "Submitted successfully",
-      String noInternetMsg = "Please connect to the internet"]) async {
+    String url,
+    Map data,
+    Map<String, File?> files,
+    String tag, [
+    saveUser = false,
+    String errorMsg = "Error occurred",
+    String successMsg = "Submitted successfully",
+    String noInternetMsg = "Please connect to the internet",
+  ]) async {
     http.StreamedResponse? response;
 
     isLoad.value = true;
@@ -253,8 +258,10 @@ class FormController extends GetxController {
       consoleLog('resp response $normalResp');
       consoleLog('stream response ${normalResp.body}');
       if (response.statusCode == 200) {
-        UserController.instance.saveUser(
-            normalResp.body, UserController.instance.user.value.token);
+        if (saveUser) {
+          UserController.instance.saveUser(
+              normalResp.body, UserController.instance.user.value.token);
+        }
 
         ApiProcessorController.successSnack(successMsg);
         isLoad.value = false;
