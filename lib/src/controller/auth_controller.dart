@@ -24,8 +24,12 @@ class AuthController extends GetxController {
   }
 
   Future checkAuth() async {
+    if (await isAuthorized() == null) {
+      ApiProcessorController.errorSnack('Connect to the internet');
+      return;
+    }
     try {
-      if (await isAuthorized()) {
+      if (await isAuthorized() == true) {
         consoleLog("User is authorized");
         Get.offAll(
           () => const OverView(),
@@ -56,8 +60,12 @@ class AuthController extends GetxController {
   }
 
   Future checkIfAuthorized() async {
+    if (await isAuthorized() == null) {
+      ApiProcessorController.errorSnack('Connect to the internet');
+      return;
+    }
     try {
-      if (await isAuthorized()) {
+      if (await isAuthorized() == true) {
         consoleLog("User is authorized");
         return;
       } else {

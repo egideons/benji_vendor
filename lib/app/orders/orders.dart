@@ -108,7 +108,7 @@ class _OrdersState extends State<Orders> {
           automaticallyImplyLeading: false,
           elevation: 0,
           title: const Text(
-            "Today's Orders",
+            "Orders",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,

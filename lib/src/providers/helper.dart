@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/main.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
@@ -19,12 +21,18 @@ void setRememberBalance(bool show) {
   prefs.setBool(userBalance, show);
 }
 
-Future<bool> isAuthorized() async {
-  final response = await http.get(
-    Uri.parse('$baseURL/auth/'),
-    headers: authHeader(),
-  );
-  return response.statusCode == 200;
+Future<bool?> isAuthorized() async {
+  try {
+    final response = await http.get(
+      Uri.parse('$baseURL/auth/'),
+      headers: authHeader(),
+    );
+    return response.statusCode == 200;
+  } on SocketException {
+    return null;
+  } catch (e) {
+    return false;
+  }
 }
 
 Map<String, String> authHeader([String? authToken, String? contentType]) {
@@ -46,7 +54,7 @@ Map<String, String> authHeader([String? authToken, String? contentType]) {
 
 String statusTypeConverter(StatusType statusType) {
   if (statusType == StatusType.delivered) {
-    return "completed";
+    return "COMP";
   }
   if (statusType == StatusType.processing) {
     return "processing";
@@ -57,6 +65,10 @@ String statusTypeConverter(StatusType statusType) {
   if (statusType == StatusType.cancelled) {
     return "cancelled";
   }
+  if (statusType == StatusType.dispatched) {
+    return "dispatched";
+  }
+
   return "PEND";
 }
 

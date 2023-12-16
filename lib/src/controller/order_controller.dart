@@ -10,9 +10,6 @@ import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/helper.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-
-import '../providers/constants.dart';
 
 class OrderController extends GetxController {
   static OrderController get instance {
@@ -79,24 +76,6 @@ class OrderController extends GetxController {
     await getOrdersByStatus();
   }
 
-  Future getTotal() async {
-    late String token;
-    String id = UserController.instance.user.value.id.toString();
-    var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrders?start=0&end=1";
-    token = UserController.instance.user.value.token;
-    http.Response? response = await HandleData.getApi(url, token);
-
-    try {
-      total.value =
-          jsonDecode(response?.body ?? ({'total': 0}).toString())['total'];
-    } catch (e) {
-      total.value = 0;
-      consoleLog(e.toString());
-    }
-    update();
-  }
-
   Future getOrdersByStatus() async {
     if (loadedAll.value) {
       return;
@@ -104,7 +83,7 @@ class OrderController extends GetxController {
     isLoad.value = true;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=1&status=${statusTypeConverter(status.value)}";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?start=${loadNum.value - 10}&end=100&status=${statusTypeConverter(status.value)}";
 
     consoleLog(url);
     loadNum.value += 10;
@@ -121,7 +100,7 @@ class OrderController extends GetxController {
     }
     List<OrderModel> data = [];
     try {
-      var decodedResponse = jsonDecode(responseData)['items'];
+      var decodedResponse = jsonDecode(responseData);
       print(decodedResponse);
       data =
           (decodedResponse as List).map((e) => OrderModel.fromJson(e)).toList();
@@ -153,12 +132,13 @@ class OrderController extends GetxController {
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=${loadNum.value}&status=PEND";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?start=${loadNum.value - 10}&end=${loadNum.value}&status=PEND";
     consoleLog("This is the url: $url");
     loadNum.value += 10;
     token = UserController.instance.user.value.token;
     var response = await HandleData.getApi(url, token);
-
+    consoleLog("This is the body: ${response?.body.toString()}");
+    consoleLog("This is the status code: ${response?.statusCode.toString()}");
     var responseData = await ApiProcessorController.errorState(response);
     // var responseData = response!.body;
     if (responseData == null) {
@@ -168,21 +148,14 @@ class OrderController extends GetxController {
       update();
       return;
     }
+
     List<OrderModel> data = [];
     try {
       var decodedResponse = jsonDecode(responseData);
-      consoleLog("This is the status code: ${response!.statusCode.toString()}");
       consoleLog("This is the decoded response: ${decodedResponse.toString()}");
 
-      if (decodedResponse is List) {
-        data = decodedResponse.map((e) => OrderModel.fromJson(e)).toList();
-      } else if (decodedResponse is Map<String, dynamic> &&
-          decodedResponse.containsKey('items')) {
-        var items = decodedResponse['items'] as List;
-        data = items.map((value) => OrderModel.fromJson(value)).toList();
-      } else {
-        consoleLog("Invalid response structure: $decodedResponse");
-      }
+      data = decodedResponse.map((e) => OrderModel.fromJson(e)).toList();
+
       // if (decodedResponse.containsKey('items')) {
       //   var items = decodedResponse['items'] as List;
       //   data = items.map((e) => OrderModel.fromJson(e)).toList();
@@ -213,7 +186,7 @@ class OrderController extends GetxController {
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=${loadNum.value}&status=dispatched";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?start=${loadNum.value - 10}&end=${loadNum.value}&status=dispatched";
     consoleLog("This is the url: $url");
     loadNum.value += 10;
     token = UserController.instance.user.value.token;
@@ -234,15 +207,8 @@ class OrderController extends GetxController {
       consoleLog("This is the status code: ${response!.statusCode.toString()}");
       consoleLog("This is the decoded response: ${decodedResponse.toString()}");
 
-      if (decodedResponse is List) {
-        data = decodedResponse.map((e) => OrderModel.fromJson(e)).toList();
-      } else if (decodedResponse is Map<String, dynamic> &&
-          decodedResponse.containsKey('items')) {
-        var items = decodedResponse['items'] as List;
-        data = items.map((value) => OrderModel.fromJson(value)).toList();
-      } else {
-        consoleLog("Invalid response structure: $decodedResponse");
-      }
+      data = decodedResponse.map((e) => OrderModel.fromJson(e)).toList();
+
       // if (decodedResponse.containsKey('items')) {
       //   var items = decodedResponse['items'] as List;
       //   data = items.map((e) => OrderModel.fromJson(e)).toList();
@@ -273,7 +239,7 @@ class OrderController extends GetxController {
     late String token;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?created_date=$formattedDate&start=${loadNum.value - 10}&end=${loadNum.value}&status=COMP";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?start=${loadNum.value - 10}&end=${loadNum.value}&status=COMP";
     consoleLog("This is the url: $url");
     loadNum.value += 10;
     token = UserController.instance.user.value.token;
@@ -294,15 +260,8 @@ class OrderController extends GetxController {
       consoleLog("This is the status code: ${response!.statusCode.toString()}");
       consoleLog("This is the decoded response: ${decodedResponse.toString()}");
 
-      if (decodedResponse is List) {
-        data = decodedResponse.map((e) => OrderModel.fromJson(e)).toList();
-      } else if (decodedResponse is Map<String, dynamic> &&
-          decodedResponse.containsKey('items')) {
-        var items = decodedResponse['items'] as List;
-        data = items.map((value) => OrderModel.fromJson(value)).toList();
-      } else {
-        consoleLog("Invalid response structure: $decodedResponse");
-      }
+      data = decodedResponse.map((e) => OrderModel.fromJson(e)).toList();
+
       // if (decodedResponse.containsKey('items')) {
       //   var items = decodedResponse['items'] as List;
       //   data = items.map((e) => OrderModel.fromJson(e)).toList();
