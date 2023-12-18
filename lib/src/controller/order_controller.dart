@@ -105,13 +105,13 @@ class OrderController extends GetxController {
       data =
           (decodedResponse as List).map((e) => OrderModel.fromJson(e)).toList();
 
-      vendorsOrderList.value = data;
+      vendorsOrderList.value += data;
       if (status.value == StatusType.pending) {
-        vendorPendingOrders.value = data;
+        vendorPendingOrders.value += data;
       } else if (status.value == StatusType.dispatched) {
-        vendorDispatchedOrders.value = data;
+        vendorDispatchedOrders.value += data;
       } else if (status.value == StatusType.delivered) {
-        vendorDeliveredOrders.value = data;
+        vendorDeliveredOrders.value += data;
       }
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");

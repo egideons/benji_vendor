@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:benji_vendor/app/overview/overview.dart';
+import 'package:benji_vendor/app/splash_screens/login_splash_screen.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/login_model.dart';
@@ -83,10 +83,10 @@ class LoginController extends GetxController {
         update();
         ApiProcessorController.successSnack("Login Successful");
         Get.offAll(
-          () => const OverView(),
+          () => LoginSplashScreen(),
           fullscreenDialog: true,
           curve: Curves.easeIn,
-          routeName: "OverView",
+          routeName: "LoginSplashScreen",
           predicate: (route) => false,
           popGesture: true,
           transition: Transition.cupertinoDialog,
