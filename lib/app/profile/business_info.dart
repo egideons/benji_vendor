@@ -158,12 +158,13 @@ class _BusinessInfoState extends State<BusinessInfo> {
     consoleLog("This is the data: $data");
     consoleLog(
         Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString());
-    consoleLog("shop_image: $selectedCoverImage");
+    consoleLog("shop_image: ${selectedCoverImage?.path}");
     await FormController.instance.postAuthstream(
         Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString(),
         data,
         {'shop_image': selectedCoverImage},
-        'changeVendorBusinessProfile');
+        'changeVendorBusinessProfile',
+        true);
     if (FormController.instance.status.toString().startsWith('2')) {
       await PushNotificationController.showNotification(
         title: "Success.",

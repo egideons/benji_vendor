@@ -108,7 +108,7 @@ class _OrdersState extends State<Orders> {
           automaticallyImplyLeading: false,
           elevation: 0,
           title: const Text(
-            "Today's Orders",
+            "Orders",
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.black,
@@ -281,8 +281,8 @@ class _OrdersState extends State<Orders> {
                                         orderStatus: controller
                                                     .vendorsOrderList[index]
                                                     .deliveryStatus ==
-                                                "CANC"
-                                            ? "Cancelled"
+                                                "COMP"
+                                            ? "Completeds"
                                             : controller.vendorsOrderList[index]
                                                         .deliveryStatus ==
                                                     "dispatched"

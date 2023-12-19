@@ -193,7 +193,8 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
         Api.baseUrl + Api.changeVendorPersonalProfile + vendorId.toString(),
         data,
         {'profileLogo': selectedLogoImage},
-        "changeVendorPersonalProfile");
+        "changeVendorPersonalProfile",
+        true);
     if (FormController.instance.status.toString().startsWith('2')) {}
     await PushNotificationController.showNotification(
       title: "Success.",

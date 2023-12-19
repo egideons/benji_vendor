@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:benji_vendor/app/auth/login.dart';
 import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/main.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,12 @@ class UserController extends GetxController {
   }
 
   Future checkAuth() async {
-    if (await isAuthorized()) {
+    if (await isAuthorized() == null) {
+      ApiProcessorController.errorSnack('Connect to the internet');
+      return;
+    }
+
+    if (await isAuthorized() == true) {
       Get.offAll(
         () => const OverView(),
         fullscreenDialog: true,
