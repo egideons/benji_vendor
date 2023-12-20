@@ -61,15 +61,15 @@ class OrderController extends GetxController {
 
   setStatus([StatusType newStatus = StatusType.pending]) async {
     status.value = newStatus;
-    if (newStatus == StatusType.pending) {
-      vendorsOrderList.value = vendorPendingOrders;
-    } else if (newStatus == StatusType.dispatched) {
-      vendorsOrderList.value = vendorDispatchedOrders;
-    } else if (newStatus == StatusType.delivered) {
-      vendorsOrderList.value = vendorDeliveredOrders;
-    } else {
-      vendorsOrderList.value = [];
-    }
+    // if (newStatus == StatusType.pending) {
+    //   vendorsOrderList.value = vendorPendingOrders;
+    // } else if (newStatus == StatusType.dispatched) {
+    //   vendorsOrderList.value = vendorDispatchedOrders;
+    // } else if (newStatus == StatusType.delivered) {
+    //   vendorsOrderList.value = vendorDeliveredOrders;
+    // } else {
+    // }
+    vendorsOrderList.value = [];
     loadNum.value = 10;
     loadedAll.value = false;
     update();
@@ -83,7 +83,7 @@ class OrderController extends GetxController {
     isLoad.value = true;
     String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?start=${loadNum.value - 10}&end=100&status=${statusTypeConverter(status.value)}";
+        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?start=${loadNum.value - 10}&end=${loadNum.value}&status=${statusTypeConverter(status.value)}";
 
     consoleLog(url);
     loadNum.value += 10;
@@ -106,13 +106,13 @@ class OrderController extends GetxController {
           (decodedResponse as List).map((e) => OrderModel.fromJson(e)).toList();
 
       vendorsOrderList.value += data;
-      if (status.value == StatusType.pending) {
-        vendorPendingOrders.value += data;
-      } else if (status.value == StatusType.dispatched) {
-        vendorDispatchedOrders.value += data;
-      } else if (status.value == StatusType.delivered) {
-        vendorDeliveredOrders.value += data;
-      }
+      // if (status.value == StatusType.pending) {
+      //   vendorPendingOrders.value += data;
+      // } else if (status.value == StatusType.dispatched) {
+      //   vendorDispatchedOrders.value += data;
+      // } else if (status.value == StatusType.delivered) {
+      //   vendorDeliveredOrders.value += data;
+      // }
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {

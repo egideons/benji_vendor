@@ -49,7 +49,8 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
     userPhoneNumberEC.text = UserController.instance.user.value.phone;
     latitude = UserController.instance.user.value.latitude;
     longitude = UserController.instance.user.value.longitude;
-    horizontalGroupValue = UserController.instance.user.value.gender;
+    horizontalGroupValue =
+        UserController.instance.user.value.gender.toUpperCase();
     profileLogo = UserController.instance.user.value.profileLogo;
     consoleLog("This is the profile logo url: $profileLogo");
   }
