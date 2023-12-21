@@ -27,7 +27,7 @@ class _ProductsState extends State<Products> {
   @override
   void initState() {
     super.initState();
-    ProductController.instance.getProducts();
+
     scrollController.addListener(() {
       ProductController.instance.scrollListener(scrollController);
     });
@@ -84,7 +84,7 @@ class _ProductsState extends State<Products> {
       refreshing = true;
     });
     await Future.delayed(const Duration(milliseconds: 500),
-        () => ProductController.instance.getProducts());
+        () => ProductController.instance.refreshData());
     setState(() {
       refreshing = false;
     });
@@ -187,10 +187,9 @@ class _ProductsState extends State<Products> {
                   physics: const BouncingScrollPhysics(),
                   children: [
                     GetBuilder<ProductController>(
-                      initState: (state) async {
-                        await ProductController.instance.getProducts();
-                      },
-                      init: ProductController(),
+                      // initState: (state) async {
+                      //   await ProductController.instance.getProducts();
+                      // },
                       builder: (controller) {
                         return controller.isLoad.value &&
                                 controller.products.isEmpty
@@ -237,9 +236,6 @@ class _ProductsState extends State<Products> {
                       },
                     ),
                     GetBuilder<ProductController>(
-                      initState: (state) async {
-                        await ProductController.instance.getProducts();
-                      },
                       builder: (controller) => Column(
                         children: [
                           controller.isLoadMore.value
