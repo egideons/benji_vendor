@@ -108,5 +108,3 @@ convertToCurrency(String e) {
   return newStr;
 }
 
-const String squadPublicKey =
-    'sandbox_pk_416415c8a3d27e85e971a3d0475734442ffbb124b579';

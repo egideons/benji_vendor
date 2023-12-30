@@ -3,8 +3,8 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:benji_vendor/app/package/packages.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_squad/flutter_squad.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
@@ -16,8 +16,10 @@ import '../../src/controller/error_controller.dart';
 import '../../src/controller/payment_controller.dart';
 import '../../src/controller/push_notifications_controller.dart';
 import '../../src/controller/user_controller.dart';
+import '../../src/payment/alatpay.dart';
 import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/keys.dart';
 import '../../theme/colors.dart';
 
 class PayForDelivery extends StatefulWidget {
@@ -135,30 +137,41 @@ class _PayForDeliveryState extends State<PayForDelivery> {
   }
 
 //======== Place Order =======\\
-  Future<void> placeOrder() async {
+  void  placeOrder() {
+    String apiKey = alatPayPrimaryKey;
+    String businessId = alatPayBuinessId;
+    String email = UserController.instance.user.value.email;
+    String phone = UserController.instance.user.value.phone;
+    String firstName = UserController.instance.user.value.firstName;
+    String lastName = UserController.instance.user.value.lastName;
+    String currency = 'NGN';
+    String amount = (deliveryFee).toString();
+    Map meta = {
+      "client_id": UserController.instance.user.value.id,
+      "the_package_id": widget.packageId
+    };
     try {
-      SquadTransactionResponse? response = await Squad.checkout(
+      Navigator.push(
         context,
-        charge(),
-        sandbox: true,
-        showAppbar: false,
-        appBar: AppBarConfig(
-          color: kAccentColor,
-          leadingIcon: const FaIcon(FontAwesomeIcons.solidCircleXmark),
-        ),
-      );
-
-      if (response != null && response.status.toString().startsWith("2")) {
-        await PushNotificationController.showNotification(
-          title: "Payment Successful ✅",
-          body: "You have successfully paid for the delivery.",
-          summary: "Package Delivery",
-          largeIcon: "asset://assets/icons/package-success.png",
-        );
-        Get.close(3);
-      }
-      debugPrint(
-        "Squad transaction completed======>${response?.toJson().toString()}",
+        MaterialPageRoute(builder: (context) {
+          return AlatPayWidget(
+            apiKey: apiKey,
+            businessId: businessId,
+            email: email,
+            phone: phone,
+            firstName: firstName,
+            lastName: lastName,
+            currency: currency,
+            amount: amount,
+            metaData: meta,
+            onTransaction: (response) {
+              consoleLog('the response from my alatpay $response');
+              if (response != null) {
+                toPackages();
+              }
+            },
+          );
+        }),
       );
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
@@ -167,27 +180,16 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     }
   }
 
-  Charge charge() {
-    dynamic meta = {
-      "client_id": UserController.instance.user.value.id,
-      "the_package_id": widget.packageId
-    };
-    print('the meta $meta');
-
-    return Charge(
-      // amount: (subTotal * 100).toInt() + (deliveryFee * 100).toInt(),
-      amount: (deliveryFee * 100).toInt(),
-      publicKey: squadPublicKey,
-      email: "$userEmail",
-      currencyCode: currency,
-      transactionRef: "BENJI-PYM-${generateRandomString(10)}",
-      paymentChannels: ["card", "bank", "ussd", "transfer"],
-      customerName: "$userFirstName $userLastName",
-      callbackUrl: null,
-      metadata: meta,
-      passCharge: true,
-    );
-  }
+  void toPackages() => Get.off(
+        () => const Packages(),
+    routeName: 'Packages',
+    duration: const Duration(milliseconds: 300),
+    fullscreenDialog: true,
+    curve: Curves.easeIn,
+    preventDuplicates: true,
+    popGesture: true,
+    transition: Transition.rightToLeft,
+  );
 
   String generateRandomString(int len) {
     const chars =
