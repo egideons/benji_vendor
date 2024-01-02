@@ -1,11 +1,9 @@
-// ignore_for_file: use_build_context_synchronously, unused_field
 
 import 'dart:io';
 import 'dart:math';
 
 import 'package:benji_vendor/app/package/packages.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
 
@@ -14,7 +12,6 @@ import '../../src/components/button/my elevatedButton.dart';
 import '../../src/controller/auth_controller.dart';
 import '../../src/controller/error_controller.dart';
 import '../../src/controller/payment_controller.dart';
-import '../../src/controller/push_notifications_controller.dart';
 import '../../src/controller/user_controller.dart';
 import '../../src/payment/alatpay.dart';
 import '../../src/providers/api_url.dart';
