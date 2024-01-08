@@ -3,20 +3,34 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
 import 'package:benji_vendor/app/profile/my_blue_textformfield.dart';
+import 'package:benji_vendor/app/profile/select_bank.dart';
 import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop.dart';
+import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
+import 'package:benji_vendor/src/components/input/my_textformfield.dart';
+import 'package:benji_vendor/src/components/section/location_list_tile.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
+import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/controller/withdraw_controller.dart';
+import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
+import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
+import 'package:benji_vendor/src/model/vendor_business.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
+import 'package:benji_vendor/src/providers/keys.dart';
+import 'package:benji_vendor/src/providers/network_utils.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -28,7 +42,8 @@ import '../../src/providers/helper.dart';
 import '../../src/providers/responsive_constants.dart';
 
 class BusinessInfo extends StatefulWidget {
-  const BusinessInfo({super.key});
+  const BusinessInfo({super.key, this.business});
+  final VendorBusinessModel? business;
 
   @override
   State<BusinessInfo> createState() => _BusinessInfoState();
@@ -72,6 +87,14 @@ class _BusinessInfoState extends State<BusinessInfo> {
   String? shopImage;
   String? shopType;
   String? shopTypeHint;
+  String bankCode = "";
+  List<AutocompletePrediction> placePredictions = [];
+  final selectedLocation = ValueNotifier<String?>(null);
+  final LatLngDetailController latLngDetailController =
+      LatLngDetailController.instance;
+  String? latitude;
+  String? longitude;
+  bool isTyping = false;
 
   //======================================== GLOBAL KEYS ==============================================\\
   final _formKey = GlobalKey<FormState>();
@@ -91,6 +114,12 @@ class _BusinessInfoState extends State<BusinessInfo> {
   final businessBioEC = TextEditingController();
   final vendorBusinessTypeEC = TextEditingController();
 
+  final addressEC = TextEditingController();
+  final accountNameEC = TextEditingController();
+  final accountNumberEC = TextEditingController();
+  final accountTypeEC = TextEditingController();
+  final accountBankEC = TextEditingController();
+
   //=================================== FOCUS NODES ====================================\\
   final shopNameFN = FocusNode();
   final vendorMonToFriOpeningHoursFN = FocusNode();
@@ -101,6 +130,12 @@ class _BusinessInfoState extends State<BusinessInfo> {
   final vendorSunClosingHoursFN = FocusNode();
   final businessBioFN = FocusNode();
   final vendorBusinessTypeFN = FocusNode();
+
+  final addressFN = FocusNode();
+  final accountNameFN = FocusNode();
+  final accountNumberFN = FocusNode();
+  final accountTypeFN = FocusNode();
+  final accountBankFN = FocusNode();
 
   //============================================= FUNCTIONS ===============================================\\
 
@@ -121,16 +156,82 @@ class _BusinessInfoState extends State<BusinessInfo> {
     }
   }
 
-  // pickLogoImage(ImageSource source) async {
-  //   final XFile? image = await _picker.pickImage(
-  //     source: source,
-  //   );
-  //   if (image != null) {
-  //     selectedLogoImage = File(image.path);
-  //     Get.back();
-  //     setState(() {});
-  //   }
-  // }
+  //Google Maps
+  setLocation(index) async {
+    final newLocation = placePredictions[index].description!;
+    selectedLocation.value = newLocation;
+
+    setState(() {
+      addressEC.text = newLocation;
+    });
+
+    List<Location> location = await locationFromAddress(newLocation);
+    latitude = location[0].latitude.toString();
+    longitude = location[0].longitude.toString();
+  }
+
+// select bank
+  selectBank() async {
+    final result = await Get.to(
+      () => const SelectBank(),
+      routeName: 'SelectBank',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.downToUp,
+    );
+    if (result != null) {
+      final newBankName = result['name'];
+      final newBankCode = result['code'];
+
+      setState(() {
+        accountBankEC.text = newBankName;
+        bankCode = newBankCode;
+      });
+    }
+  }
+
+  void placeAutoComplete(String query) async {
+    Uri uri = Uri.https(
+        "maps.googleapis.com",
+        '/maps/api/place/autocomplete/json', //unencoder path
+        {
+          "input": query, //query params
+          "key": googlePlacesApiKey, //google places api key
+        });
+
+    String? response = await NetworkUtility.fetchUrl(uri);
+    PlaceAutocompleteResponse result =
+        PlaceAutocompleteResponse.parseAutoCompleteResult(response!);
+    if (result.predictions != null) {
+      setState(() {
+        placePredictions = result.predictions!;
+      });
+    }
+  }
+
+  void getLocationOnMap() async {
+    await Get.to(
+      () => const GetLocationOnMap(),
+      routeName: 'GetLocationOnMap',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+    latitude = latLngDetailController.latLngDetail.value[0];
+    longitude = latLngDetailController.latLngDetail.value[1];
+    addressEC.text = latLngDetailController.latLngDetail.value[2];
+    latLngDetailController.setEmpty();
+    if (kDebugMode) {
+      print("LATLNG: $latitude,$longitude");
+      print(addressEC.text);
+    }
+  }
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
@@ -265,96 +366,6 @@ class _BusinessInfoState extends State<BusinessInfo> {
           ],
         ),
       );
-
-  // Widget uploadLogoImage() => Container(
-  //       height: 140,
-  //       width: MediaQuery.of(context).size.width,
-  //       margin: const EdgeInsets.only(
-  //         left: kDefaultPadding,
-  //         right: kDefaultPadding,
-  //         bottom: kDefaultPadding,
-  //       ),
-  //       child: Column(
-  //         children: <Widget>[
-  //           const Text(
-  //             "Upload Logo Image",
-  //             style: TextStyle(
-  //               fontSize: 18,
-  //               fontWeight: FontWeight.w600,
-  //             ),
-  //           ),
-  //           kSizedBox,
-  //           Row(
-  //             mainAxisAlignment: MainAxisAlignment.start,
-  //             children: [
-  //               Column(
-  //                 children: [
-  //                   InkWell(
-  //                     onTap: () {
-  //                       pickLogoImage(ImageSource.camera);
-  //                     },
-  //                     borderRadius: BorderRadius.circular(100),
-  //                     child: Container(
-  //                       height: 60,
-  //                       width: 60,
-  //                       decoration: ShapeDecoration(
-  //                         shape: RoundedRectangleBorder(
-  //                           borderRadius: BorderRadius.circular(100),
-  //                           side: BorderSide(
-  //                             width: 0.5,
-  //                             color: kLightGreyColor,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                       child: Center(
-  //                         child: FaIcon(
-  //                           FontAwesomeIcons.camera,
-  //                           color: kAccentColor,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   kHalfSizedBox,
-  //                   const Text("Camera"),
-  //                 ],
-  //               ),
-  //               kWidthSizedBox,
-  //               Column(
-  //                 children: [
-  //                   InkWell(
-  //                     onTap: () {
-  //                       pickLogoImage(ImageSource.gallery);
-  //                     },
-  //                     borderRadius: BorderRadius.circular(100),
-  //                     child: Container(
-  //                       height: 60,
-  //                       width: 60,
-  //                       decoration: ShapeDecoration(
-  //                         shape: RoundedRectangleBorder(
-  //                           borderRadius: BorderRadius.circular(100),
-  //                           side: BorderSide(
-  //                             width: 0.5,
-  //                             color: kLightGreyColor,
-  //                           ),
-  //                         ),
-  //                       ),
-  //                       child: Center(
-  //                         child: FaIcon(
-  //                           FontAwesomeIcons.image,
-  //                           color: kAccentColor,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                   kHalfSizedBox,
-  //                   const Text("Gallery"),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ],
-  //       ),
-  //     );
 
   //===================== Scroll to Top ==========================\\
   Future<void> _scrollToTop() async {
@@ -826,6 +837,236 @@ class _BusinessInfoState extends State<BusinessInfo> {
                           textInputType: TextInputType.text,
                         ),
                         kSizedBox,
+                        // account section
+                        const Text(
+                          'Bank Name',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        GetBuilder<WithdrawController>(
+                          builder: (controller) {
+                            return InkWell(
+                              onTap: controller.listOfBanks.isEmpty &&
+                                      controller.isLoad.value
+                                  ? null
+                                  : selectBank,
+                              child: MyBlueTextFormField(
+                                controller: accountBankEC,
+                                isEnabled: false,
+                                textInputAction: TextInputAction.next,
+                                focusNode: accountBankFN,
+                                hintText: controller.listOfBanks.isEmpty &&
+                                        controller.isLoad.value
+                                    ? "Loading..."
+                                    : "Select a bank",
+                                suffixIcon: FaIcon(
+                                  FontAwesomeIcons.chevronDown,
+                                  size: 20,
+                                  color: kAccentColor,
+                                ),
+                                textInputType: TextInputType.name,
+                                validator: (value) {
+                                  if (value == null || value!.isEmpty) {
+                                    return "Select a bank";
+                                  }
+                                  return null;
+                                },
+                                onSaved: (value) {
+                                  setState(() {
+                                    accountBankEC.text = value!;
+                                  });
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        kSizedBox,
+                        const Text(
+                          'Account Number',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        MyTextFormField(
+                          textCapitalization: TextCapitalization.none,
+                          controller: accountNumberEC,
+                          focusNode: accountNumberFN,
+                          hintText: "Enter the account number here",
+                          textInputAction: TextInputAction.next,
+                          textInputType: TextInputType.name,
+                          onChanged: (value) {
+                            if (value.length >= 10) {
+                              WithdrawController.instance.validateBankNumbers(
+                                  accountNumberEC.text, bankCode);
+                            }
+                            setState(() {});
+                          },
+                          validator: (value) {
+                            if (value == null || value!.isEmpty) {
+                              accountNumberFN.requestFocus();
+                              return "Enter the account number";
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            accountNumberEC.text = value!;
+                          },
+                        ),
+                        kSizedBox,
+                        GetBuilder<WithdrawController>(builder: (controller) {
+                          if (controller.isLoadValidateAccount.value) {
+                            return Text(
+                              'Loading...',
+                              style: TextStyle(
+                                color: kAccentColor.withOpacity(0.8),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            );
+                          }
+                          if (accountNumberEC.text.length < 10) {
+                            return const Text('');
+                          }
+                          return Text(
+                            controller.validateAccount.value.requestSuccessful
+                                ? controller.validateAccount.value.responseBody
+                                    .accountName
+                                : 'Bank details not found',
+                            style: TextStyle(
+                              color: kAccentColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          );
+                        }),
+
+                        kSizedBox,
+                        // map addresss
+                        const Text(
+                          "Address",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Location on Google maps',
+                              style: TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            kHalfSizedBox,
+                            MyMapsTextFormField(
+                              controller: addressEC,
+                              validator: (value) {
+                                if (value == null) {
+                                  addressFN.requestFocus();
+                                  "Enter a location";
+                                }
+                                return null;
+                              },
+                              onChanged: (value) {
+                                placeAutoComplete(value);
+                                setState(() {
+                                  selectedLocation.value = value;
+                                  isTyping = true;
+                                });
+                                if (kDebugMode) {
+                                  print(
+                                      "ONCHANGED VALUE: ${selectedLocation.value}");
+                                }
+                              },
+                              textInputAction: TextInputAction.done,
+                              focusNode: addressFN,
+                              hintText: "Search a location",
+                              textInputType: TextInputType.text,
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.all(kDefaultPadding),
+                                child: FaIcon(
+                                  FontAwesomeIcons.locationDot,
+                                  color: kAccentColor,
+                                  size: 18,
+                                ),
+                              ),
+                            ),
+                            kSizedBox,
+                            Divider(
+                              height: 10,
+                              thickness: 2,
+                              color: kLightGreyColor,
+                            ),
+                            ElevatedButton.icon(
+                              onPressed: getLocationOnMap,
+                              icon: FaIcon(
+                                FontAwesomeIcons.locationArrow,
+                                color: kAccentColor,
+                                size: 18,
+                              ),
+                              label: const Text("Locate on map"),
+                              style: ElevatedButton.styleFrom(
+                                elevation: 0,
+                                backgroundColor: kLightGreyColor,
+                                foregroundColor: kTextBlackColor,
+                                fixedSize: Size(media.width, 40),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              height: 10,
+                              thickness: 2,
+                              color: kLightGreyColor,
+                            ),
+                            const Text(
+                              "Suggestions:",
+                              style: TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            kHalfSizedBox,
+                            SizedBox(
+                              height: () {
+                                if (isTyping == false) {
+                                  return 0.0;
+                                }
+                                if (isTyping == true) {
+                                  return 150.0;
+                                }
+                              }(),
+                              child: Scrollbar(
+                                controller: scrollController,
+                                child: ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: placePredictions.length,
+                                  itemBuilder: (context, index) =>
+                                      LocationListTile(
+                                    onTap: () => setLocation(index),
+                                    location:
+                                        placePredictions[index].description!,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        kSizedBox,
+
+                        // business bio
                         const Text(
                           "Business description",
                           style: TextStyle(

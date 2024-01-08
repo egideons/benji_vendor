@@ -24,6 +24,8 @@ class Api {
   static const notification = "/vendors/";
   static const category = "/categories/list";
 
+  static const listBanks = "/payments/list_banks";
+  static const validateBankNumber = "/payments/validateBankNumbers/";
 //Orders
   static const changeOrderStatus = "/orders/vendorChangeStatus";
 
