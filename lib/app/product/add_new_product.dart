@@ -357,6 +357,16 @@ class _AddProductState extends State<AddProduct> {
                         ),
                       ),
                       kSizedBox,
+                      const Text(
+                        'Businesses',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.32,
+                        ),
+                      ),
+                      kHalfSizedBox,
                       GetBuilder<VendorBusinessController>(
                         initState: (state) {
                           VendorBusinessController.instance.getVendorBusiness();

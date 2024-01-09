@@ -1,4 +1,5 @@
 import 'package:benji_vendor/app/profile/business_info.dart';
+import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/vendor_business_container.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../src/components/button/my outlined elevatedButton.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
@@ -113,37 +113,11 @@ class _VendorBusinessState extends State<VendorBusiness> {
         child: MyLiquidRefresh(
           onRefresh: handleRefresh,
           child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: kPrimaryColor,
+            appBar: MyAppBar(
+              title: "Your Businesses",
               elevation: 0,
-              automaticallyImplyLeading: false,
-              title: const Text(
-                'Your Businesses',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: kTextBlackColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              actions: [
-                isScrollToTopBtnVisible
-                    ? Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: MyOutlinedElevatedButton(
-                          elevation: 10,
-                          onPressed: addVendorBusiness,
-                          circularBorderRadius: 10,
-                          minimumSizeWidth: 80,
-                          minimumSizeHeight: 40,
-                          maximumSizeWidth: 90,
-                          maximumSizeHeight: 40,
-                          title: "Add",
-                          titleFontSize: 12,
-                        ),
-                      )
-                    : const SizedBox(),
-              ],
+              actions: const [],
+              backgroundColor: kPrimaryColor,
             ),
             floatingActionButton: isScrollToTopBtnVisible
                 ? FloatingActionButton(
