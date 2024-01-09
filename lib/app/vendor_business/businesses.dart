@@ -92,16 +92,16 @@ class _VendorBusinessState extends State<VendorBusiness> {
   }
 
   editBusiness(VendorBusinessModel business) {
-    // Get.to(
-    //   () => EditBusiness(business: business),
-    //   routeName: 'ViewProduct',
-    //   duration: const Duration(milliseconds: 300),
-    //   fullscreenDialog: true,
-    //   curve: Curves.easeIn,
-    //   preventDuplicates: true,
-    //   popGesture: true,
-    //   transition: Transition.rightToLeft,
-    // );
+    Get.to(
+      () => BusinessInfo(business: business),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "BusinessInfo",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
   }
 
   @override

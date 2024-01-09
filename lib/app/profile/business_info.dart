@@ -65,6 +65,9 @@ class _BusinessInfoState extends State<BusinessInfo> {
       accountNameEC.text = widget.business!.accountName;
       accountNumberEC.text = widget.business!.accountNumber;
       accountTypeEC.text = widget.business!.accountType;
+      countryValue = widget.business!.country;
+      stateValue = widget.business!.state;
+      cityValue = widget.business!.city;
 
       businessIdEC.text = widget.business!.businessId;
       shopImage = widget.business!.shopImage;
@@ -260,6 +263,17 @@ class _BusinessInfoState extends State<BusinessInfo> {
       return;
     }
     Map data = {
+      "address": addressEC.text,
+      "latitude": latitude,
+      "longitude": longitude,
+      "accountBank": accountBankEC.text,
+      "accountName": accountNameEC.text,
+      "accountNumber": accountNumberEC.text,
+      "accountType": accountTypeEC.text,
+      "country": countryValue,
+      "state": stateValue,
+      "city": cityValue,
+      "businessId": businessIdEC.text,
       "shop_name": shopNameEC.text,
       "weekOpeningHours": vendorMonToFriOpeningHoursEC.text,
       "weekClosingHours": vendorMonToFriClosingHoursEC.text,
@@ -267,15 +281,14 @@ class _BusinessInfoState extends State<BusinessInfo> {
       "satClosingHours": vendorSatClosingHoursEC.text,
       "sunWeekOpeningHours": vendorSunOpeningHoursEC.text,
       "sunWeekClosingHours": vendorSunClosingHoursEC.text,
-      "description": businessBioEC.text,
+      "businessBio": businessBioEC.text,
       "shop_type": vendorBusinessTypeEC.text,
     };
     consoleLog("This is the data: $data");
-    consoleLog(
-        Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString());
+
     consoleLog("shop_image: ${selectedCoverImage?.path}");
     await FormController.instance.postAuthstream(
-        Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString(),
+        '${Api.baseUrl}/vendors/createVendorBusiness/$vendorId',
         data,
         {'shop_image': selectedCoverImage},
         'changeVendorBusinessProfile',
