@@ -501,7 +501,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
                               ),
                             ),
                             child: Center(
-                              child: MyImage(url: shopImage!),
+                              child: MyImage(url: shopImage),
                               //     CachedNetworkImage(
                               //   imageUrl: shopImage!,
                               //   fit: BoxFit.cover,
@@ -958,9 +958,17 @@ class _BusinessInfoState extends State<BusinessInfo> {
                             ),
                           );
                         }),
+                        //  address and location
 
                         kSizedBox,
-                        //  address and location
+                        const Text(
+                          'Country',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        kSizedBox,
                         CSCPicker(
                           layout: Layout.vertical,
                           countryFilter: const [CscCountry.Nigeria],
@@ -983,6 +991,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
                             });
                           },
                         ),
+                        kSizedBox,
 
                         const Text(
                           "Address",
