@@ -1,7 +1,6 @@
 // ignore_for_file: unused_field
 
 import 'package:benji_vendor/src/components/image/my_image.dart';
-import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -73,12 +72,24 @@ class VendorsOrderContainer extends StatelessWidget {
                   alignment: WrapAlignment.spaceBetween,
                   children: [
                     Text(
-                      UserController.instance.user.value.shopName,
-                      maxLines: 2,
-                      overflow: TextOverflow.clip,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                      order.deliveryStatus == "CANC"
+                          ? "Cancelled"
+                          : order.deliveryStatus == "dispatched"
+                              ? "Dispatched"
+                              : order.deliveryStatus == "PEND"
+                                  ? "Pending"
+                                  : "Completed",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: order.deliveryStatus == "CANC"
+                            ? kAccentColor
+                            : order.deliveryStatus == "dispatched"
+                                ? kSecondaryColor
+                                : order.deliveryStatus == "PEND"
+                                    ? kLoadingColor
+                                    : kSuccessColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(width: 5),
@@ -91,31 +102,6 @@ class VendorsOrderContainer extends StatelessWidget {
                       ),
                     )
                   ],
-                ),
-              ),
-              kHalfSizedBox,
-              SizedBox(
-                width: media.width - 200,
-                child: Text(
-                  order.deliveryStatus == "CANC"
-                      ? "Cancelled"
-                      : order.deliveryStatus == "dispatched"
-                          ? "Dispatched"
-                          : order.deliveryStatus == "PEND"
-                              ? "Pending"
-                              : "Completed",
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: order.deliveryStatus == "CANC"
-                        ? kAccentColor
-                        : order.deliveryStatus == "dispatched"
-                            ? kSecondaryColor
-                            : order.deliveryStatus == "PEND"
-                                ? kLoadingColor
-                                : kSuccessColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                  ),
                 ),
               ),
               kHalfSizedBox,

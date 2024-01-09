@@ -16,7 +16,6 @@ import 'package:benji_vendor/src/components/section/location_list_tile.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
-import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
@@ -622,35 +621,31 @@ class _BusinessInfoState extends State<BusinessInfo> {
                     ),
                     kSizedBox,
                     GetBuilder<CategoryController>(
-                        init: CategoryController(),
-                        initState: (state) {
-                          CategoryController.instance.getCategory();
-                        },
-                        builder: (controller) {
-                          return ItemDropDownMenu(
-                            itemEC: vendorBusinessTypeEC,
-                            hintText: UserController
-                                        .instance.user.value.shopType.name ==
-                                    notAvailable
-                                ? "E.g Restaurant, Auto Dealer, etc"
-                                : UserController
-                                    .instance.user.value.shopType.name,
-                            dropdownMenuEntries:
-                                controller.category.value.isEmpty &&
-                                        controller.isLoad.value
-                                    ? [
-                                        const DropdownMenuEntry(
-                                          value: 'Loading...',
-                                          label: 'Loading...',
-                                          enabled: false,
-                                        )
-                                      ]
-                                    : controller.category
-                                        .map((item) => DropdownMenuEntry(
-                                            value: item.id, label: item.name))
-                                        .toList(),
-                          );
-                        }),
+                      init: CategoryController(),
+                      initState: (state) {
+                        CategoryController.instance.getCategory();
+                      },
+                      builder: (controller) {
+                        return ItemDropDownMenu(
+                          itemEC: vendorBusinessTypeEC,
+                          hintText: "E.g Restaurant, Auto Dealer, etc",
+                          dropdownMenuEntries:
+                              controller.category.value.isEmpty &&
+                                      controller.isLoad.value
+                                  ? [
+                                      const DropdownMenuEntry(
+                                        value: 'Loading...',
+                                        label: 'Loading...',
+                                        enabled: false,
+                                      )
+                                    ]
+                                  : controller.category
+                                      .map((item) => DropdownMenuEntry(
+                                          value: item.id, label: item.name))
+                                      .toList(),
+                        );
+                      },
+                    ),
                     kSizedBox,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
