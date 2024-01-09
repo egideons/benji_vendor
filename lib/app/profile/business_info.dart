@@ -25,6 +25,7 @@ import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
 import 'package:benji_vendor/theme/colors.dart';
+import 'package:csc_picker/csc_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -56,23 +57,29 @@ class _BusinessInfoState extends State<BusinessInfo> {
     super.initState();
     CategoryController.instance.getCategory();
     scrollController.addListener(_scrollListener);
-    shopImage = UserController.instance.user.value.shopImage;
-    shopNameEC.text = UserController.instance.user.value.shopName;
-    vendorMonToFriOpeningHoursEC.text =
-        UserController.instance.user.value.weekOpeningHours;
-    vendorMonToFriClosingHoursEC.text =
-        UserController.instance.user.value.weekClosingHours;
-    vendorSatOpeningHoursEC.text =
-        UserController.instance.user.value.satClosingHours;
-    vendorSatClosingHoursEC.text =
-        UserController.instance.user.value.satClosingHours;
-    vendorSunOpeningHoursEC.text =
-        UserController.instance.user.value.sunWeekOpeningHours;
-    vendorSunClosingHoursEC.text =
-        UserController.instance.user.value.sunWeekClosingHours;
-    businessBioEC.text = UserController.instance.user.value.businessBio;
-    vendorBusinessTypeEC.text = UserController.instance.user.value.shopType.id;
-    consoleLog("This is the shop image: $shopImage");
+    if (widget.business != null) {
+      addressEC.text = widget.business!.address;
+      latitude = widget.business!.latitude;
+      longitude = widget.business!.longitude;
+      accountBankEC.text = widget.business!.accountBank;
+      accountNameEC.text = widget.business!.accountName;
+      accountNumberEC.text = widget.business!.accountNumber;
+      accountTypeEC.text = widget.business!.accountType;
+
+      businessIdEC.text = widget.business!.businessId;
+      shopImage = widget.business!.shopImage;
+      shopNameEC.text = widget.business!.shopName;
+      vendorMonToFriOpeningHoursEC.text = widget.business!.weekOpeningHours;
+      vendorMonToFriClosingHoursEC.text = widget.business!.weekClosingHours;
+      vendorSatOpeningHoursEC.text = widget.business!.satOpeningHours;
+      vendorSatClosingHoursEC.text = widget.business!.satClosingHours;
+      vendorSunOpeningHoursEC.text = widget.business!.sunWeekOpeningHours;
+      vendorSunClosingHoursEC.text = widget.business!.sunWeekClosingHours;
+      businessBioEC.text = widget.business!.businessBio;
+      vendorBusinessTypeEC.text = widget.business!.shopType.id;
+
+      consoleLog("This is the shop image: $shopImage");
+    }
   }
 
   @override
@@ -95,6 +102,9 @@ class _BusinessInfoState extends State<BusinessInfo> {
   String? latitude;
   String? longitude;
   bool isTyping = false;
+  String countryValue = "";
+  String stateValue = "";
+  String cityValue = "";
 
   //======================================== GLOBAL KEYS ==============================================\\
   final _formKey = GlobalKey<FormState>();
@@ -113,12 +123,14 @@ class _BusinessInfoState extends State<BusinessInfo> {
   final vendorSunClosingHoursEC = TextEditingController();
   final businessBioEC = TextEditingController();
   final vendorBusinessTypeEC = TextEditingController();
-
   final addressEC = TextEditingController();
+
   final accountNameEC = TextEditingController();
   final accountNumberEC = TextEditingController();
   final accountTypeEC = TextEditingController();
   final accountBankEC = TextEditingController();
+
+  final businessIdEC = TextEditingController();
 
   //=================================== FOCUS NODES ====================================\\
   final shopNameFN = FocusNode();
@@ -136,6 +148,8 @@ class _BusinessInfoState extends State<BusinessInfo> {
   final accountNumberFN = FocusNode();
   final accountTypeFN = FocusNode();
   final accountBankFN = FocusNode();
+
+  final businessIdFN = FocusNode();
 
   //============================================= FUNCTIONS ===============================================\\
 
@@ -946,7 +960,30 @@ class _BusinessInfoState extends State<BusinessInfo> {
                         }),
 
                         kSizedBox,
-                        // map addresss
+                        //  address and location
+                        CSCPicker(
+                          layout: Layout.vertical,
+                          countryFilter: const [CscCountry.Nigeria],
+                          countryDropdownLabel: "Select a Country",
+                          stateDropdownLabel: "Select a State",
+                          cityDropdownLabel: "Select a City",
+                          onCountryChanged: (value) {
+                            setState(() {
+                              countryValue = value;
+                            });
+                          },
+                          onStateChanged: (value) {
+                            setState(() {
+                              stateValue = value ?? "";
+                            });
+                          },
+                          onCityChanged: (value) {
+                            setState(() {
+                              cityValue = value ?? "";
+                            });
+                          },
+                        ),
+
                         const Text(
                           "Address",
                           style: TextStyle(
@@ -1057,7 +1094,8 @@ class _BusinessInfoState extends State<BusinessInfo> {
                                       LocationListTile(
                                     onTap: () => setLocation(index),
                                     location:
-                                        placePredictions[index].description!,
+                                        placePredictions[index].description ??
+                                            '',
                                   ),
                                 ),
                               ),
