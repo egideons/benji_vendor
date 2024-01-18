@@ -119,7 +119,6 @@ class _EditProductState extends State<EditProduct> {
     //   {'product_image': selectedImages},
     //   'editProduct',
     // );
-    print({'product_image': selectedImages});
     await FormController.instance.postAuthstream(
       Api.baseUrl + Api.changeProduct + widget.product.id,
       {'data': jsonEncode(data)}, // Wrap 'data' in a Map

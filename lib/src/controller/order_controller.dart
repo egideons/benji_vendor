@@ -101,7 +101,6 @@ class OrderController extends GetxController {
     List<OrderModel> data = [];
     try {
       var decodedResponse = jsonDecode(responseData);
-      print(decodedResponse);
       data =
           (decodedResponse as List).map((e) => OrderModel.fromJson(e)).toList();
 
