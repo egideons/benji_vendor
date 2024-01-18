@@ -13,6 +13,7 @@ import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -28,7 +29,11 @@ import '../others/notifications.dart';
 import '../product/add_new_product.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  final VoidCallback showNavigation;
+  final VoidCallback hideNavigation;
+  const Dashboard(
+      {Key? key, required this.showNavigation, required this.hideNavigation})
+      : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -36,22 +41,56 @@ class Dashboard extends StatefulWidget {
 
 typedef ModalContentBuilder = Widget Function(BuildContext);
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardState extends State<Dashboard>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
     // AuthController.instance.checkIfAuthorized();
     userCode = UserController.instance.user.value.username;
+    BusinessController.instance.getVendorBusiness();
 
     numberOfNotifications = NotificationController.instance.notification.length;
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    scrollController.addListener(_scrollListener);
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+              ScrollDirection.forward ||
+          scrollController.position.pixels < 100) {
+        widget.showNavigation();
+      } else {
+        widget.hideNavigation();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _animationController.dispose();
+    scrollController.dispose();
+    handleRefresh().ignore();
+    scrollController.removeListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        widget.showNavigation();
+      } else {
+        widget.hideNavigation();
+      }
+    });
   }
 
 //=================================== ALL VARIABLES =====================================\\
   String? userCode;
   int? numberOfNotifications;
-  final scrollController = ScrollController();
   bool refreshing = false;
+  bool _isScrollToTopBtnVisible = false;
   bool showBusinesses = true;
+
+  //============================================== CONTROLLERS =================================================\\
+  final scrollController = ScrollController();
+  late AnimationController _animationController;
 
 //=================================== ALL FUNCTIONS =====================================\\
 
@@ -79,6 +118,28 @@ class _DashboardState extends State<Dashboard> {
       refreshing = false;
     });
   }
+
+  //============================= Scroll to Top ======================================//
+  void scrollToTop() {
+    _animationController.reverse();
+    scrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+  }
+
+  void _scrollListener() {
+    //========= Show action button ========//
+    if (scrollController.position.pixels >= 100) {
+      _animationController.forward();
+      setState(() => _isScrollToTopBtnVisible = true);
+    }
+    //========= Hide action button ========//
+    else if (scrollController.position.pixels < 100) {
+      _animationController.reverse();
+      setState(() => _isScrollToTopBtnVisible = false);
+    }
+  }
+
+//==================== NAVIGATION ==================\\
 
   addProduct() {
     Get.to(
@@ -249,6 +310,23 @@ class _DashboardState extends State<Dashboard> {
                 kWidthSizedBox,
               ],
             ),
+            floatingActionButton: _isScrollToTopBtnVisible
+                ? FloatingActionButton(
+                    onPressed: scrollToTop,
+                    mini: deviceType(media.width) > 2 ? false : true,
+                    backgroundColor: kAccentColor,
+                    enableFeedback: true,
+                    mouseCursor: SystemMouseCursors.click,
+                    tooltip: "Scroll to top",
+                    hoverColor: kAccentColor,
+                    hoverElevation: 50.0,
+                    child: FaIcon(
+                      FontAwesomeIcons.chevronUp,
+                      size: 18,
+                      color: kPrimaryColor,
+                    ),
+                  )
+                : const SizedBox(),
             body: SafeArea(
               maintainBottomViewPadding: true,
               child: Scrollbar(
@@ -286,109 +364,104 @@ class _DashboardState extends State<Dashboard> {
                           GetBuilder<BusinessController>(
                               init: BusinessController(),
                               builder: (controller) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        showBusinesses = !showBusinesses;
-                                      });
-                                    },
-                                    borderRadius:
-                                        BorderRadius.circular(kDefaultPadding),
-                                    child: Container(
-                                      padding:
-                                          const EdgeInsets.all(kDefaultPadding),
-                                      decoration: ShapeDecoration(
-                                        shadows: [
-                                          BoxShadow(
-                                            color: kBlackColor.withOpacity(0.1),
-                                            blurRadius: 5,
-                                            spreadRadius: 2,
-                                            blurStyle: BlurStyle.normal,
-                                          ),
-                                        ],
-                                        color: const Color(0xFFFEF8F8),
-                                        shape: RoundedRectangleBorder(
-                                          side: const BorderSide(
-                                            width: 0.50,
-                                            color: Color(0xFFFDEDED),
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(25),
+                                return InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      showBusinesses = !showBusinesses;
+                                    });
+                                  },
+                                  borderRadius:
+                                      BorderRadius.circular(kDefaultPadding),
+                                  child: Container(
+                                    padding:
+                                        const EdgeInsets.all(kDefaultPadding),
+                                    decoration: ShapeDecoration(
+                                      shadows: [
+                                        BoxShadow(
+                                          color: kBlackColor.withOpacity(0.1),
+                                          blurRadius: 5,
+                                          spreadRadius: 2,
+                                          blurStyle: BlurStyle.normal,
                                         ),
+                                      ],
+                                      color: const Color(0xFFFEF8F8),
+                                      shape: RoundedRectangleBorder(
+                                        side: const BorderSide(
+                                          width: 0.50,
+                                          color: Color(0xFFFDEDED),
+                                        ),
+                                        borderRadius: BorderRadius.circular(25),
                                       ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          FaIcon(
-                                            FontAwesomeIcons.shop,
-                                            color: kAccentColor,
-                                            size: 16,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                showBusinesses
-                                                    ? "Hide Businesses"
-                                                    : "Show Businesses",
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: kTextBlackColor,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        FaIcon(
+                                          FontAwesomeIcons.shop,
+                                          color: kAccentColor,
+                                          size: 16,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              showBusinesses
+                                                  ? "Hide Businesses"
+                                                  : "Show Businesses",
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                color: kTextBlackColor,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
                                               ),
-                                              kHalfWidthSizedBox,
-                                              Text.rich(
-                                                TextSpan(
-                                                  children: [
-                                                    TextSpan(
-                                                      text: "(",
-                                                      style: TextStyle(
-                                                        color: kTextGreyColor,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
+                                            ),
+                                            kHalfWidthSizedBox,
+                                            Text.rich(
+                                              TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: "(",
+                                                    style: TextStyle(
+                                                      color: kTextGreyColor,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
-                                                    TextSpan(
-                                                      text: refreshing
-                                                          ? "..."
-                                                          : "${controller.businesses.length}",
-                                                      style: TextStyle(
-                                                        color: kAccentColor,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w700,
-                                                      ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: refreshing
+                                                        ? "..."
+                                                        : "${controller.businesses.length}",
+                                                    style: TextStyle(
+                                                      color: kAccentColor,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w700,
                                                     ),
-                                                    TextSpan(
-                                                      text: ")",
-                                                      style: TextStyle(
-                                                        color: kTextGreyColor,
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: ")",
+                                                    style: TextStyle(
+                                                      color: kTextGreyColor,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                          FaIcon(
-                                            showBusinesses
-                                                ? FontAwesomeIcons.caretDown
-                                                : FontAwesomeIcons.caretUp,
-                                            color: kAccentColor,
-                                            size: 16,
-                                          ),
-                                        ],
-                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                        FaIcon(
+                                          showBusinesses
+                                              ? FontAwesomeIcons.caretDown
+                                              : FontAwesomeIcons.caretUp,
+                                          color: kAccentColor,
+                                          size: 16,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 );
@@ -398,25 +471,14 @@ class _DashboardState extends State<Dashboard> {
                             init: BusinessController(),
                             builder: (controller) {
                               return refreshing
-                                  ? const Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      child: BusinessListSkeleton(),
-                                    )
+                                  ? const BusinessListSkeleton()
                                   : controller.isLoad.value &&
                                           controller.businesses.isEmpty
-                                      ? const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10),
-                                          child: BusinessListSkeleton(),
-                                        )
+                                      ? const BusinessListSkeleton()
                                       : showBusinesses
                                           ? ListView.separated(
                                               physics:
                                                   const BouncingScrollPhysics(),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
                                               separatorBuilder:
                                                   (context, index) =>
                                                       kHalfSizedBox,
