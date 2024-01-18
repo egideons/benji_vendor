@@ -7,7 +7,7 @@ import 'package:benji_vendor/src/model/vendor_model.dart';
 
 import '../providers/constants.dart';
 
-class VendorBusinessModel {
+class BusinessModel {
   String id;
   String country;
   String state;
@@ -32,7 +32,7 @@ class VendorBusinessModel {
   String accountType;
   String accountBank;
 
-  VendorBusinessModel({
+  BusinessModel({
     required this.id,
     required this.country,
     required this.state,
@@ -58,9 +58,9 @@ class VendorBusinessModel {
     required this.accountBank,
   });
 
-  factory VendorBusinessModel.fromJson(Map<String, dynamic>? json) {
+  factory BusinessModel.fromJson(Map<String, dynamic>? json) {
     json ??= {};
-    return VendorBusinessModel(
+    return BusinessModel(
       id: json["id"] ?? '',
       country: json["country"] ?? notAvailable,
       state: json["state"] ?? notAvailable,

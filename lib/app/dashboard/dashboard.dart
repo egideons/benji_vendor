@@ -18,8 +18,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../src/components/appbar/home_appbar.dart';
+import '../../src/components/skeletons/vendor_skeletons.dart';
+import '../../src/controller/business_controller.dart';
 import '../../src/controller/notification_controller.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
 import '../product/add_new_product.dart';
@@ -48,6 +51,7 @@ class _DashboardState extends State<Dashboard> {
   int? numberOfNotifications;
   final scrollController = ScrollController();
   bool refreshing = false;
+  bool showBusinesses = true;
 
 //=================================== ALL FUNCTIONS =====================================\\
 
@@ -191,9 +195,6 @@ class _DashboardState extends State<Dashboard> {
                           backgroundColor: kLightGreyColor,
                           child: ClipOval(
                             child:
-                                //  controller.user.value.profileLogo.isEmpty
-                                //     ?
-                                // Image.asset('assets/icons/store.png')
                                 MyImage(url: controller.user.value.profileLogo),
                           ),
                         ),
@@ -260,7 +261,337 @@ class _DashboardState extends State<Dashboard> {
                         controller: scrollController,
                         scrollDirection: Axis.vertical,
                         padding: const EdgeInsets.all(kDefaultPadding),
-                        children: const [
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(kDefaultPadding),
+                            width: media.width,
+                            height: deviceType(media.width) >= 2 ? 200 : 140,
+                            decoration: ShapeDecoration(
+                              color: kPrimaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kDefaultPadding),
+                              ),
+                              shadows: const [
+                                BoxShadow(
+                                  color: Color(0x0F000000),
+                                  blurRadius: 24,
+                                  offset: Offset(0, 4),
+                                  spreadRadius: 4,
+                                ),
+                              ],
+                            ),
+                          ),
+                          kSizedBox,
+                          GetBuilder<BusinessController>(
+                              init: BusinessController(),
+                              builder: (controller) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        showBusinesses = !showBusinesses;
+                                      });
+                                    },
+                                    borderRadius:
+                                        BorderRadius.circular(kDefaultPadding),
+                                    child: Container(
+                                      padding:
+                                          const EdgeInsets.all(kDefaultPadding),
+                                      decoration: ShapeDecoration(
+                                        shadows: [
+                                          BoxShadow(
+                                            color: kBlackColor.withOpacity(0.1),
+                                            blurRadius: 5,
+                                            spreadRadius: 2,
+                                            blurStyle: BlurStyle.normal,
+                                          ),
+                                        ],
+                                        color: const Color(0xFFFEF8F8),
+                                        shape: RoundedRectangleBorder(
+                                          side: const BorderSide(
+                                            width: 0.50,
+                                            color: Color(0xFFFDEDED),
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          FaIcon(
+                                            FontAwesomeIcons.shop,
+                                            color: kAccentColor,
+                                            size: 16,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                showBusinesses
+                                                    ? "Hide Businesses"
+                                                    : "Show Businesses",
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  color: kTextBlackColor,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              kHalfWidthSizedBox,
+                                              Text.rich(
+                                                TextSpan(
+                                                  children: [
+                                                    TextSpan(
+                                                      text: "(",
+                                                      style: TextStyle(
+                                                        color: kTextGreyColor,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: refreshing
+                                                          ? "..."
+                                                          : "${controller.businesses.length}",
+                                                      style: TextStyle(
+                                                        color: kAccentColor,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: ")",
+                                                      style: TextStyle(
+                                                        color: kTextGreyColor,
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          FaIcon(
+                                            showBusinesses
+                                                ? FontAwesomeIcons.caretDown
+                                                : FontAwesomeIcons.caretUp,
+                                            color: kAccentColor,
+                                            size: 16,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                          kSizedBox,
+                          GetBuilder<BusinessController>(
+                            init: BusinessController(),
+                            builder: (controller) {
+                              return refreshing
+                                  ? const Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: BusinessListSkeleton(),
+                                    )
+                                  : controller.isLoad.value &&
+                                          controller.businesses.isEmpty
+                                      ? const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          child: BusinessListSkeleton(),
+                                        )
+                                      : showBusinesses
+                                          ? ListView.separated(
+                                              physics:
+                                                  const BouncingScrollPhysics(),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              separatorBuilder:
+                                                  (context, index) =>
+                                                      kHalfSizedBox,
+                                              shrinkWrap: true,
+                                              addAutomaticKeepAlives: true,
+                                              itemCount:
+                                                  controller.businesses.length,
+                                              itemBuilder: (context, index) {
+                                                return InkWell(
+                                                  onTap: () {},
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                  child: Container(
+                                                    decoration: ShapeDecoration(
+                                                      color: kPrimaryColor,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(16),
+                                                      ),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          height: 120,
+                                                          width: 120,
+                                                          decoration:
+                                                              ShapeDecoration(
+                                                            color:
+                                                                kLightGreyColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          16),
+                                                            ),
+                                                          ),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(10),
+                                                            child: MyImage(
+                                                              url: controller
+                                                                  .businesses[
+                                                                      index]
+                                                                  .shopImage,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        kHalfWidthSizedBox,
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            SizedBox(
+                                                              width:
+                                                                  media.width -
+                                                                      200,
+                                                              child: Text(
+                                                                controller
+                                                                    .businesses[
+                                                                        index]
+                                                                    .shopName,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color:
+                                                                      kTextBlackColor,
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            kHalfSizedBox,
+                                                            SizedBox(
+                                                              width:
+                                                                  media.width -
+                                                                      200,
+                                                              child: Text(
+                                                                controller
+                                                                    .businesses[
+                                                                        index]
+                                                                    .address,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color:
+                                                                      kAccentColor,
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w300,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            kSizedBox,
+                                                            SizedBox(
+                                                              width:
+                                                                  media.width -
+                                                                      150,
+                                                              child: Row(
+                                                                children: [
+                                                                  FaIcon(
+                                                                    FontAwesomeIcons
+                                                                        .solidIdCard,
+                                                                    color:
+                                                                        kAccentColor,
+                                                                    size: 16,
+                                                                  ),
+                                                                  kHalfWidthSizedBox,
+                                                                  SizedBox(
+                                                                    width: media
+                                                                            .width -
+                                                                        200,
+                                                                    child: Text
+                                                                        .rich(
+                                                                      maxLines:
+                                                                          1,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      TextSpan(
+                                                                        children: [
+                                                                          const TextSpan(
+                                                                            text:
+                                                                                "TIN: ",
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: kTextBlackColor,
+                                                                              fontSize: 16,
+                                                                              fontWeight: FontWeight.w300,
+                                                                            ),
+                                                                          ),
+                                                                          TextSpan(
+                                                                            text:
+                                                                                controller.businesses[index].businessId,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: kTextBlackColor,
+                                                                              fontSize: 16,
+                                                                              fontWeight: FontWeight.w300,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            )
+                                          : const SizedBox();
+                            },
+                          ),
+
+                          kSizedBox,
                           // GetBuilder<UserController>(
                           //   builder: (controller) {
                           //     return Container(
