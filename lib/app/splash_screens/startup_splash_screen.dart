@@ -1,44 +1,18 @@
 import 'package:benji_vendor/src/controller/auth_controller.dart';
-import 'package:benji_vendor/src/controller/category_controller.dart';
-import 'package:benji_vendor/src/controller/form_controller.dart';
-import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
-import 'package:benji_vendor/src/controller/login_controller.dart';
-import 'package:benji_vendor/src/controller/notification_controller.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
-import 'package:benji_vendor/src/controller/product_controller.dart';
-import 'package:benji_vendor/src/controller/product_property_controller.dart';
-import 'package:benji_vendor/src/controller/profile_controller.dart';
-import 'package:benji_vendor/src/controller/reviews_controller.dart';
-import 'package:benji_vendor/src/controller/user_controller.dart';
-import 'package:benji_vendor/src/controller/vendor_business_controller.dart';
 import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
-import '../../src/controller/payment_controller.dart';
-import '../../src/controller/send_package_controller.dart';
 import '../../src/providers/constants.dart';
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({super.key});
-  final user = Get.put(UserController());
-  final category = Get.put(CategoryController());
-  final login = Get.put(LoginController());
-  final auth = Get.put(AuthController());
-  final product = Get.put(ProductController());
+
   final order = Get.put(OrderController());
 
-  final form = Get.put(FormController());
-  final reviews = Get.put(ReviewsController());
-  final latLngDetail = Get.put(LatLngDetailController());
-  final profile = Get.put(ProfileController());
-  final notify = Get.put(NotificationController());
-  final package = Get.put(SendPackageController());
-  final deliveryFee = Get.put(PaymentController());
-  final productProperty = Get.put(ProductPropertyController());
-  final vendorBusiness = Get.put(VendorBusinessController());
   final withdraw = Get.put(WithdrawController());
 
   @override
