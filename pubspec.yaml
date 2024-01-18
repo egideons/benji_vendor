@@ -25,6 +25,7 @@ dependencies:
   get: ^4.6.5
   permission_handler: ^10.3.0
   image_picker: ^1.0.1
+  csc_picker: ^0.2.7
   intl_phone_field: ^3.2.0
   intl: ^0.18.1
   flutter_layout_grid: ^2.0.5
@@ -50,7 +51,6 @@ dependencies:
   awesome_notifications_core:
   awesome_notifications_fcm:
   webviewx: ^0.2.2
-
 
 dev_dependencies:
   flutter_test:

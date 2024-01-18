@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:benji_vendor/app/splash_screens/startup_splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -17,7 +19,7 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(statusBarColor: kTransparentColor),
   );
-  
+
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
   // Get.put(FcmMessagingController());
@@ -42,6 +44,29 @@ class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
+    if (Platform.isIOS) {
+      return GetCupertinoApp(
+        title: "Benji Vendor",
+        debugShowCheckedModeBanner: false,
+        color: kPrimaryColor,
+        navigatorKey: Get.key,
+        theme: AppTheme.iOSLightTheme,
+        defaultTransition: Transition.rightToLeft,
+        home: SplashScreen(),
+      );
+    } else if (Platform.isAndroid) {
+      return GetMaterialApp(
+        title: "Benji Vendor",
+        debugShowCheckedModeBanner: false,
+        color: kPrimaryColor,
+        navigatorKey: Get.key,
+        themeMode: ThemeMode.light,
+        darkTheme: AppTheme.darkTheme,
+        theme: AppTheme.lightTheme,
+        defaultTransition: Transition.rightToLeft,
+        home: SplashScreen(),
+      );
+    }
     return GetMaterialApp(
       title: "Benji Vendor",
       debugShowCheckedModeBanner: false,

@@ -10,6 +10,8 @@ import 'package:benji_vendor/src/controller/product_property_controller.dart';
 import 'package:benji_vendor/src/controller/profile_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/controller/vendor_business_controller.dart';
+import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -36,10 +38,13 @@ class SplashScreen extends StatelessWidget {
   final package = Get.put(SendPackageController());
   final deliveryFee = Get.put(PaymentController());
   final productProperty = Get.put(ProductPropertyController());
+  final vendorBusiness = Get.put(VendorBusinessController());
+  final withdraw = Get.put(WithdrawController());
 
   @override
   Widget build(BuildContext context) {
     order.setStatus();
+    withdraw.listBanks();
     var size = MediaQuery.of(context).size;
     return GetBuilder<AuthController>(
       init: AuthController(),

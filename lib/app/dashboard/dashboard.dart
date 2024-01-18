@@ -16,7 +16,6 @@ import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
-import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,11 +45,9 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     super.initState();
     AuthController.instance.checkIfAuthorized();
-    userCode = UserController.instance.user.value.code;
+    userCode = UserController.instance.user.value.username;
 
     numberOfNotifications = NotificationController.instance.notification.length;
-    consoleLog(
-        "This is the profile logo: ${UserController.instance.user.value.profileLogo}");
   }
 
 //=================================== ALL VARIABLES =====================================\\
@@ -222,7 +219,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     AppBarVendor(
                       vendorName: controller.user.value.username,
-                      vendorLocation: controller.user.value.code,
+                      vendorLocation: controller.user.value.username,
                     ),
                   ],
                 ),

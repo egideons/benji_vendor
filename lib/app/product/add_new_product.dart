@@ -10,6 +10,7 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/controller/vendor_business_controller.dart';
 import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
@@ -60,6 +61,7 @@ class _AddProductState extends State<AddProduct> {
   final productPriceFN = FocusNode();
   final productQuantityFN = FocusNode();
   final productDiscountFN = FocusNode();
+  final vendorBusinessFN = FocusNode();
 
   //================================== CONTROLLERS ====================================\\
   final scrollController = ScrollController();
@@ -69,6 +71,7 @@ class _AddProductState extends State<AddProduct> {
   final productQuantityEC = TextEditingController();
   final productSubCategoryEC = TextEditingController();
   final productTypeEC = TextEditingController();
+  final vendorBusinessEC = TextEditingController();
 
   //================================== VALUES ====================================\\
 
@@ -111,6 +114,7 @@ class _AddProductState extends State<AddProduct> {
       'sub_category_id': productSubCategoryEC.text,
       'product_type': productTypeEC.text,
       'vendor_id': UserController.instance.user.value.id,
+      'business_id': vendorBusinessEC.text,
       'is_available': true,
       'is_recommended': true,
       'is_trending': true,
@@ -351,6 +355,43 @@ class _AddProductState extends State<AddProduct> {
                                       ),
                           ),
                         ),
+                      ),
+                      kSizedBox,
+                      const Text(
+                        'Businesses',
+                        style: TextStyle(
+                          color: kTextBlackColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: -0.32,
+                        ),
+                      ),
+                      kHalfSizedBox,
+                      GetBuilder<VendorBusinessController>(
+                        initState: (state) {
+                          VendorBusinessController.instance.getVendorBusiness();
+                        },
+                        builder: (controller) {
+                          return ItemDropDownMenu(
+                            itemEC: vendorBusinessEC,
+                            hintText: "E.g Restaurant, Auto Dealer, etc",
+                            dropdownMenuEntries:
+                                controller.businesses.isEmpty &&
+                                        controller.isLoad.value
+                                    ? [
+                                        const DropdownMenuEntry(
+                                          value: 'Loading...',
+                                          label: 'Loading...',
+                                          enabled: false,
+                                        )
+                                      ]
+                                    : controller.businesses
+                                        .map((item) => DropdownMenuEntry(
+                                            value: item.id,
+                                            label: item.shopName))
+                                        .toList(),
+                          );
+                        },
                       ),
                       kSizedBox,
                       const Text(

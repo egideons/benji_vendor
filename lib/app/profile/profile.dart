@@ -1,7 +1,7 @@
 import 'package:benji_vendor/app/others/reviews.dart';
-import 'package:benji_vendor/app/profile/business_info.dart';
 import 'package:benji_vendor/app/profile/personal_info.dart';
 import 'package:benji_vendor/app/profile/settings.dart';
+import 'package:benji_vendor/app/vendor_business/businesses.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
@@ -87,16 +87,18 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void toBusinessInfo() => Get.to(
-        () => const BusinessInfo(),
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        routeName: "BusinessInfo",
-        preventDuplicates: true,
-        popGesture: false,
-        transition: Transition.rightToLeft,
-      );
+  void toBusiness() {
+    Get.to(
+      () => const VendorBusiness(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "VendorBusiness",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+  }
 
   void toPersonalInfo() => Get.to(
         () => const PersonalInfo(),
@@ -174,13 +176,13 @@ class _ProfileState extends State<Profile> {
                       trailing: const FaIcon(FontAwesomeIcons.chevronRight),
                     ),
                     ListTile(
-                      onTap: toBusinessInfo,
+                      onTap: toBusiness,
                       leading: FaIcon(
                         FontAwesomeIcons.store,
                         color: kAccentColor,
                       ),
                       title: const Text(
-                        'Business Info',
+                        'Businesses',
                         style: TextStyle(
                           color: kTextBlackColor,
                           fontSize: 15,
