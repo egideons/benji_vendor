@@ -1,6 +1,6 @@
 // ignore_for_file: unused_field
 
-import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/controller/notification_controller.dart';

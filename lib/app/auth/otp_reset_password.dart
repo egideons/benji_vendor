@@ -3,12 +3,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/input/otp_textFormField.dart';
 import 'package:benji_vendor/src/components/section/my_fixed_snackbar.dart';
 import 'package:benji_vendor/src/components/section/reusable%20authentication%20first%20half.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

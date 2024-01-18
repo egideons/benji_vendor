@@ -18,7 +18,7 @@ class WithdrawController extends GetxController {
   var isLoadWithdraw = false.obs;
   var isLoad = false.obs;
   var isLoadValidateAccount = false.obs;
-  // var userId = UserController.instance.user.value.id;
+  var userId = UserController.instance.user.value.id;
   var listOfBanks = <BankModel>[].obs;
   var listOfBanksSearch = <BankModel>[].obs;
   var validateAccount = ValidateBankAccountModel.fromJson(null).obs;
@@ -31,9 +31,9 @@ class WithdrawController extends GetxController {
     update();
   }
 
-  makeWithdrawal(double amount) {
-    final userId = UserController.instance.user.value.id;
-  }
+  // makeWithdrawal(double amount) {
+  //   final userId = UserController.instance.user.value.id;
+  // }
 
   listBanks() async {
     var url = "${Api.baseUrl}${Api.listBanks}";
@@ -75,14 +75,11 @@ class WithdrawController extends GetxController {
       String accountNumber, String bankCode) async {
     var url =
         "${Api.baseUrl}${Api.validateBankNumber}?account_number=$accountNumber&bank_code=$bankCode";
-    print(url);
     isLoadValidateAccount.value = true;
     update();
 
     try {
       final response = await http.get(Uri.parse(url), headers: authHeader());
-      print(response.body);
-      print(response.statusCode);
 
       if (response.statusCode != 200) {
         validateAccount.value = ValidateBankAccountModel.fromJson(null);

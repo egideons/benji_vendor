@@ -3,7 +3,7 @@
 import 'dart:io';
 
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
-import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/input/my_intl_phonefield.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';

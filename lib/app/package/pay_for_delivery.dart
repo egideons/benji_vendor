@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'dart:math';
 
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../src/components/appbar/my appbar.dart';
+import '../../src/components/appbar/my_appbar.dart';
 import '../../src/components/button/my elevatedButton.dart';
 import '../../src/controller/auth_controller.dart';
 import '../../src/controller/error_controller.dart';
@@ -134,7 +133,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
   }
 
 //======== Place Order =======\\
-  void  placeOrder() {
+  void placeOrder() {
     String apiKey = alatPayPrimaryKey;
     String businessId = alatPayBuinessId;
     String email = UserController.instance.user.value.email;
@@ -179,14 +178,14 @@ class _PayForDeliveryState extends State<PayForDelivery> {
 
   void toPackages() => Get.off(
         () => const Packages(),
-    routeName: 'Packages',
-    duration: const Duration(milliseconds: 300),
-    fullscreenDialog: true,
-    curve: Curves.easeIn,
-    preventDuplicates: true,
-    popGesture: true,
-    transition: Transition.rightToLeft,
-  );
+        routeName: 'Packages',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.rightToLeft,
+      );
 
   String generateRandomString(int len) {
     const chars =

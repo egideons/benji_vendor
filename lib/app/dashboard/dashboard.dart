@@ -1,30 +1,23 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'dart:math';
-
 import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/app/product/view_product.dart';
-import 'package:benji_vendor/src/components/container/dashboard_product_container.dart';
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
-import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
-import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../src/components/appbar/home appBar vendor name.dart';
-import '../../src/components/card/empty.dart';
-import '../../src/controller/auth_controller.dart';
+import '../../src/components/appbar/home_appbar.dart';
 import '../../src/controller/notification_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
@@ -44,7 +37,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    AuthController.instance.checkIfAuthorized();
+    // AuthController.instance.checkIfAuthorized();
     userCode = UserController.instance.user.value.username;
 
     numberOfNotifications = NotificationController.instance.notification.length;
@@ -63,7 +56,6 @@ class _DashboardState extends State<Dashboard> {
     Clipboard.setData(
       ClipboardData(text: userCode),
     );
-
     ApiProcessorController.successSnack("ID copied to clipboard");
   }
 
@@ -125,7 +117,7 @@ class _DashboardState extends State<Dashboard> {
 
   profilePage() {
     Get.to(
-      () => const OverView(currentIndex: 3),
+      () => const OverView(currentIndex: 1),
       routeName: 'OverView',
       duration: const Duration(milliseconds: 0),
       fullscreenDialog: true,
@@ -181,19 +173,10 @@ class _DashboardState extends State<Dashboard> {
         child: GestureDetector(
           onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
           child: Scaffold(
-            floatingActionButton: FloatingActionButton(
-              onPressed: addProduct,
-              elevation: 20.0,
-              backgroundColor: kAccentColor,
-              foregroundColor: kPrimaryColor,
-              tooltip: "Add a product",
-              child: const FaIcon(FontAwesomeIcons.plus),
-            ),
             appBar: AppBar(
-              automaticallyImplyLeading: false,
               backgroundColor: kPrimaryColor,
               titleSpacing: kDefaultPadding / 2,
-              elevation: 0.0,
+              elevation: 0,
               title: GetBuilder<UserController>(
                 builder: (controller) => Row(
                   children: [
@@ -205,21 +188,20 @@ class _DashboardState extends State<Dashboard> {
                         child: CircleAvatar(
                           maxRadius: 25,
                           minRadius: 20,
-                          backgroundColor: kTransparentColor,
+                          backgroundColor: kLightGreyColor,
                           child: ClipOval(
-                              child:
-                                  //  controller.user.value.profileLogo.isEmpty
-                                  //     ?
-                                  Image.asset('assets/icons/store.png')
-                              // : MyImage(
-                              //     url: controller.user.value.profileLogo),
-                              ),
+                            child:
+                                //  controller.user.value.profileLogo.isEmpty
+                                //     ?
+                                // Image.asset('assets/icons/store.png')
+                                MyImage(url: controller.user.value.profileLogo),
+                          ),
                         ),
                       ),
                     ),
                     AppBarVendor(
-                      vendorName: controller.user.value.username,
-                      vendorLocation: controller.user.value.username,
+                      vendorName:
+                          "${controller.user.value.firstName} ${controller.user.value.lastName}",
                     ),
                   ],
                 ),
@@ -230,10 +212,11 @@ class _DashboardState extends State<Dashboard> {
                     IconButton(
                       iconSize: 20,
                       onPressed: toNotificationsPage,
+                      tooltip: "Notifications",
                       icon: FaIcon(
                         FontAwesomeIcons.bell,
                         color: kAccentColor,
-                        size: 30,
+                        size: 24,
                       ),
                     ),
                     // Positioned(
@@ -277,242 +260,240 @@ class _DashboardState extends State<Dashboard> {
                         controller: scrollController,
                         scrollDirection: Axis.vertical,
                         padding: const EdgeInsets.all(kDefaultPadding),
-                        children: [
-                          GetBuilder<UserController>(
-                            builder: (controller) {
-                              return Container(
-                                width: media.width,
-                                padding: const EdgeInsets.all(kDefaultPadding),
-                                decoration: ShapeDecoration(
-                                  color: kPrimaryColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  shadows: const [
-                                    BoxShadow(
-                                      color: Color(0x0F000000),
-                                      blurRadius: 24,
-                                      offset: Offset(0, 4),
-                                      spreadRadius: 0,
-                                    ),
-                                  ],
-                                ),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Username: ${controller.user.value.username}",
-                                      softWrap: true,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.start,
-                                      style: const TextStyle(
-                                        color: kTextBlackColor,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Business Email: ${controller.user.value.email}",
-                                      softWrap: true,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: kTextBlackColor,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "$userCode",
-                                          softWrap: true,
-                                          style: const TextStyle(
-                                            color: kTextBlackColor,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          onPressed: () {
-                                            copyToClipboard(context, userCode!);
-                                          },
-                                          tooltip: "Copy ID",
-                                          mouseCursor: SystemMouseCursors.click,
-                                          icon: FaIcon(
-                                            FontAwesomeIcons.solidCopy,
-                                            size: 14,
-                                            color: kAccentColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          kSizedBox,
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Reviews',
-                                    style: TextStyle(
-                                      color: kTextGreyColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: reviewsPage,
-                                    child: Text(
-                                      'See All Reviews',
-                                      style: TextStyle(
-                                        color: kAccentColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: kAccentColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              kHalfSizedBox,
-                              GetBuilder<ReviewsController>(
-                                initState: (state) {
-                                  ReviewsController.instance.getAvgRating();
-                                  ReviewsController.instance.getReviews();
-                                },
-                                builder: (controller) => Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    FaIcon(
-                                      FontAwesomeIcons.solidStar,
-                                      color: kStarColor,
-                                      size: 20,
-                                    ),
-                                    kHalfWidthSizedBox,
-                                    Text(
-                                      "${controller.avgRating.value.toPrecision(1)}",
-                                      style: TextStyle(
-                                        color: kStarColor,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                    kWidthSizedBox,
-                                    Text(
-                                      'You have ${formatNumber(controller.total.value)} Reviews',
-                                      style: const TextStyle(
-                                        color: Color(0xFF32343E),
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              kSizedBox,
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Latest Products',
-                                    style: TextStyle(
-                                      color: kTextGreyColor,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: productsPage,
-                                    child: Text(
-                                      'See All',
-                                      style: TextStyle(
-                                        color: kAccentColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: kAccentColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              kHalfSizedBox,
-                            ],
-                          ),
+                        children: const [
+                          // GetBuilder<UserController>(
+                          //   builder: (controller) {
+                          //     return Container(
+                          //       width: media.width,
+                          //       padding: const EdgeInsets.all(kDefaultPadding),
+                          //       decoration: ShapeDecoration(
+                          //         color: kPrimaryColor,
+                          //         shape: RoundedRectangleBorder(
+                          //           borderRadius: BorderRadius.circular(12),
+                          //         ),
+                          //         shadows: const [
+                          //           BoxShadow(
+                          //             color: Color(0x0F000000),
+                          //             blurRadius: 24,
+                          //             offset: Offset(0, 4),
+                          //             spreadRadius: 0,
+                          //           ),
+                          //         ],
+                          //       ),
+                          //       child: Column(
+                          //         mainAxisAlignment:
+                          //             MainAxisAlignment.spaceAround,
+                          //         crossAxisAlignment: CrossAxisAlignment.start,
+                          //         children: [
+                          //           Text(
+                          //             "Username: ${controller.user.value.username}",
+                          //             softWrap: true,
+                          //             overflow: TextOverflow.ellipsis,
+                          //             maxLines: 1,
+                          //             textAlign: TextAlign.start,
+                          //             style: const TextStyle(
+                          //               color: kTextBlackColor,
+                          //               fontSize: 18,
+                          //               fontWeight: FontWeight.w700,
+                          //             ),
+                          //           ),
+                          //           Text(
+                          //             "Business Email: ${controller.user.value.email}",
+                          //             softWrap: true,
+                          //             overflow: TextOverflow.ellipsis,
+                          //             maxLines: 1,
+                          //             textAlign: TextAlign.center,
+                          //             style: const TextStyle(
+                          //               color: kTextBlackColor,
+                          //               fontSize: 16,
+                          //               fontWeight: FontWeight.w400,
+                          //             ),
+                          //           ),
+                          //           Row(
+                          //             children: [
+                          //               Text(
+                          //                 "$userCode",
+                          //                 softWrap: true,
+                          //                 style: const TextStyle(
+                          //                   color: kTextBlackColor,
+                          //                   fontSize: 14,
+                          //                   fontWeight: FontWeight.w400,
+                          //                 ),
+                          //               ),
+                          //               IconButton(
+                          //                 onPressed: () {
+                          //                   copyToClipboard(context, userCode!);
+                          //                 },
+                          //                 tooltip: "Copy ID",
+                          //                 mouseCursor: SystemMouseCursors.click,
+                          //                 icon: FaIcon(
+                          //                   FontAwesomeIcons.solidCopy,
+                          //                   size: 14,
+                          //                   color: kAccentColor,
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
+                          // kSizedBox,
+                          // Column(
+                          //   children: [
+                          //     Row(
+                          //       mainAxisAlignment:
+                          //           MainAxisAlignment.spaceBetween,
+                          //       children: [
+                          //         Text(
+                          //           'Reviews',
+                          //           style: TextStyle(
+                          //             color: kTextGreyColor,
+                          //             fontSize: 14,
+                          //             fontWeight: FontWeight.w400,
+                          //           ),
+                          //         ),
+                          //         TextButton(
+                          //           onPressed: reviewsPage,
+                          //           child: Text(
+                          //             'See All Reviews',
+                          //             style: TextStyle(
+                          //               color: kAccentColor,
+                          //               fontSize: 14,
+                          //               fontWeight: FontWeight.w400,
+                          //               decoration: TextDecoration.underline,
+                          //               decorationColor: kAccentColor,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     kHalfSizedBox,
+                          //     GetBuilder<ReviewsController>(
+                          //       initState: (state) {
+                          //         ReviewsController.instance.getAvgRating();
+                          //         ReviewsController.instance.getReviews();
+                          //       },
+                          //       builder: (controller) => Row(
+                          //         crossAxisAlignment: CrossAxisAlignment.center,
+                          //         mainAxisAlignment: MainAxisAlignment.start,
+                          //         children: [
+                          //           FaIcon(
+                          //             FontAwesomeIcons.solidStar,
+                          //             color: kStarColor,
+                          //             size: 20,
+                          //           ),
+                          //           kHalfWidthSizedBox,
+                          //           Text(
+                          //             "${controller.avgRating.value.toPrecision(1)}",
+                          //             style: TextStyle(
+                          //               color: kStarColor,
+                          //               fontSize: 20,
+                          //               fontWeight: FontWeight.w700,
+                          //             ),
+                          //           ),
+                          //           kWidthSizedBox,
+                          //           Text(
+                          //             'You have ${formatNumber(controller.total.value)} Reviews',
+                          //             style: const TextStyle(
+                          //               color: Color(0xFF32343E),
+                          //               fontSize: 18,
+                          //               fontWeight: FontWeight.w400,
+                          //             ),
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //     kSizedBox,
+                          //     Row(
+                          //       mainAxisAlignment:
+                          //           MainAxisAlignment.spaceBetween,
+                          //       children: [
+                          //         Text(
+                          //           'Latest Products',
+                          //           style: TextStyle(
+                          //             color: kTextGreyColor,
+                          //             fontSize: 14,
+                          //             fontWeight: FontWeight.w400,
+                          //           ),
+                          //         ),
+                          //         TextButton(
+                          //           onPressed: productsPage,
+                          //           child: Text(
+                          //             'See All',
+                          //             style: TextStyle(
+                          //               color: kAccentColor,
+                          //               fontSize: 14,
+                          //               fontWeight: FontWeight.w400,
+                          //               decoration: TextDecoration.underline,
+                          //               decorationColor: kAccentColor,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //     kHalfSizedBox,
+                          //   ],
+                          // ),
+
                           // ProductController.instance.products.isEmpty
                           //     ? const EmptyCard(
                           //         emptyCardMessage:
                           //             "You don't have any products yet.",
                           //       )
                           //     :
-                          SizedBox(
-                              height: deviceType(media.width) >= 2 ? 260 : 200,
-                              child: GetBuilder<ProductController>(
-                                  initState: (state) async =>
-                                      await ProductController.instance
-                                          .getProducts(),
-                                  builder: (controller) {
-                                    return controller.isLoad.value
-                                        ? Center(
-                                            child: CircularProgressIndicator(
-                                              color: kAccentColor,
-                                            ),
-                                          )
-                                        : controller.products.isEmpty
-                                            ? const EmptyCard(
-                                                emptyCardMessage:
-                                                    "You don't have any products yet.",
-                                              )
-                                            : ListView.separated(
-                                                physics:
-                                                    const BouncingScrollPhysics(),
-                                                separatorBuilder:
-                                                    (context, index) =>
-                                                        kWidthSizedBox,
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                reverse: true,
-                                                shrinkWrap: true,
-                                                itemCount: min(
-                                                    controller.products.length,
-                                                    10),
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index) {
-                                                  return DashboardProductContainer(
-                                                    productName: controller
-                                                        .products[index].name,
-                                                    child: InkWell(
-                                                      onTap: () =>
-                                                          productDetail(
-                                                              controller
-                                                                      .products[
-                                                                  index]),
-                                                      child: MyImage(
-                                                        url: controller
-                                                            .products[index]
-                                                            .productImage,
-                                                        imageHeight: 150,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                  })),
+                          // SizedBox(
+                          //   height: deviceType(media.width) >= 2 ? 300 : 260,
+                          //   child: GetBuilder<ProductController>(
+                          //     initState: (state) async =>
+                          //         await ProductController.instance
+                          //             .getProducts(),
+                          //     builder: (controller) {
+                          //       return controller.isLoad.value
+                          //           ? Center(
+                          //               child: CircularProgressIndicator(
+                          //                 color: kAccentColor,
+                          //               ),
+                          //             )
+                          //           : controller.products.isEmpty
+                          //               ? const EmptyCard(
+                          //                   emptyCardMessage:
+                          //                       "You don't have any products yet.",
+                          //                 )
+                          //               : ListView.separated(
+                          //                   physics:
+                          //                       const BouncingScrollPhysics(),
+                          //                   separatorBuilder:
+                          //                       (context, index) =>
+                          //                           kWidthSizedBox,
+                          //                   scrollDirection: Axis.horizontal,
+                          //                   reverse: true,
+                          //                   shrinkWrap: true,
+                          //                   itemCount: min(
+                          //                       controller.products.length, 10),
+                          //                   itemBuilder: (BuildContext context,
+                          //                       int index) {
+                          //                     return DashboardProductContainer(
+                          //                       productName: controller
+                          //                           .products[index].name,
+                          //                       child: InkWell(
+                          //                         onTap: () => productDetail(
+                          //                             controller
+                          //                                 .products[index]),
+                          //                         child: MyImage(
+                          //                           url: controller
+                          //                               .products[index]
+                          //                               .productImage,
+                          //                           imageHeight: 150,
+                          //                         ),
+                          //                       ),
+                          //                     );
+                          //                   },
+                          //                 );
+                          //     },
+                          //   ),
+                          // ),
                         ],
                       ),
               ),

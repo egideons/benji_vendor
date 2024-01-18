@@ -1,5 +1,6 @@
 // ignore_for_file: empty_catches
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:benji_vendor/app/auth/login.dart';
@@ -25,12 +26,13 @@ class AuthController extends GetxController {
 
   Future checkAuth() async {
     if (await isAuthorized() == null) {
-      ApiProcessorController.errorSnack('Connect to the internet');
+      ApiProcessorController.errorSnack('Please connect to the internet');
       return;
     }
     try {
       if (await isAuthorized() == true) {
-        consoleLog("User is authorized");
+        log("User is authorized");
+
         Get.offAll(
           () => const OverView(),
           fullscreenDialog: true,
@@ -41,7 +43,10 @@ class AuthController extends GetxController {
           transition: Transition.cupertinoDialog,
         );
       } else {
-        consoleLog("User is not authorized");
+        log("User is not authorized");
+        ApiProcessorController.errorSnack(
+          "User is not authorized, Please log in.",
+        );
         Get.offAll(
           () => const Login(),
           fullscreenDialog: true,
@@ -55,7 +60,7 @@ class AuthController extends GetxController {
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
-      consoleLog(e.toString());
+      log(e.toString());
     }
   }
 
@@ -66,10 +71,13 @@ class AuthController extends GetxController {
     }
     try {
       if (await isAuthorized() == true) {
-        consoleLog("User is authorized");
+        log("User is authorized");
         return;
       } else {
         UserController.instance.deleteUser();
+        ApiProcessorController.errorSnack(
+          "User is not authorized, Please log in",
+        );
         consoleLog("User is not authorized");
         Get.offAll(
           () => const Login(),
