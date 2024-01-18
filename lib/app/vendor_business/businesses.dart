@@ -4,8 +4,8 @@ import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/vendor_business_container.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
+import 'package:benji_vendor/src/controller/business_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
-import 'package:benji_vendor/src/controller/vendor_business_controller.dart';
 import 'package:benji_vendor/src/model/vendor_business.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +91,7 @@ class _VendorBusinessState extends State<VendorBusiness> {
     );
   }
 
-  editBusiness(VendorBusinessModel business) {
+  editBusiness(BusinessModel business) {
     Get.to(
       () => BusinessInfo(business: business),
       duration: const Duration(milliseconds: 300),
@@ -148,10 +148,9 @@ class _VendorBusinessState extends State<VendorBusiness> {
                   padding: const EdgeInsets.all(kDefaultPadding),
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    GetBuilder<VendorBusinessController>(
+                    GetBuilder<BusinessController>(
                       initState: (state) async {
-                        await VendorBusinessController.instance
-                            .getVendorBusiness();
+                        await BusinessController.instance.getVendorBusiness();
                       },
                       builder: (controller) {
                         return controller.isLoad.value &&

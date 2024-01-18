@@ -10,13 +10,13 @@ import 'package:http/http.dart' as http;
 
 import '../providers/helper.dart';
 
-class VendorBusinessController extends GetxController {
-  static VendorBusinessController get instance {
-    return Get.find<VendorBusinessController>();
+class BusinessController extends GetxController {
+  static BusinessController get instance {
+    return Get.find<BusinessController>();
   }
 
   var isLoad = false.obs;
-  var businesses = <VendorBusinessModel>[].obs;
+  var businesses = <BusinessModel>[].obs;
 
   Future getVendorBusiness() async {
     isLoad.value = true;
@@ -30,7 +30,7 @@ class VendorBusinessController extends GetxController {
 
       if (response.statusCode == 200) {
         businesses.value = (jsonDecode(response.body) as List)
-            .map((item) => VendorBusinessModel.fromJson(item))
+            .map((item) => BusinessModel.fromJson(item))
             .toList();
       }
     } catch (e) {

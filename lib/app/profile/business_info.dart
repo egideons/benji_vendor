@@ -43,7 +43,7 @@ import '../../src/providers/responsive_constants.dart';
 
 class BusinessInfo extends StatefulWidget {
   const BusinessInfo({super.key, this.business});
-  final VendorBusinessModel? business;
+  final BusinessModel? business;
 
   @override
   State<BusinessInfo> createState() => _BusinessInfoState();

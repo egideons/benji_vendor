@@ -6,11 +6,11 @@ import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
+import 'package:benji_vendor/src/controller/business_controller.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
-import 'package:benji_vendor/src/controller/vendor_business_controller.dart';
 import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
@@ -367,9 +367,9 @@ class _AddProductState extends State<AddProduct> {
                         ),
                       ),
                       kHalfSizedBox,
-                      GetBuilder<VendorBusinessController>(
+                      GetBuilder<BusinessController>(
                         initState: (state) {
-                          VendorBusinessController.instance.getVendorBusiness();
+                          BusinessController.instance.getVendorBusiness();
                         },
                         builder: (controller) {
                           return ItemDropDownMenu(

@@ -4,7 +4,7 @@ import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyImage extends StatelessWidget {
   final String? url;
@@ -18,14 +18,18 @@ class MyImage extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: CachedNetworkImage(
-        imageUrl: url == null ? '' : baseImage + url!,
+        imageUrl: url == null
+            ? ''
+            : url!.startsWith("https")
+                ? url!
+                : baseImage + url!,
         height: min(media.height, imageHeight),
         filterQuality: FilterQuality.high,
         fit: BoxFit.cover,
         progressIndicatorBuilder: (context, url, downloadProgress) =>
             Center(child: CupertinoActivityIndicator(color: kAccentColor)),
         errorWidget: (context, url, error) =>
-            Icon(Icons.error, color: kAccentColor),
+            FaIcon(FontAwesomeIcons.circleInfo, color: kAccentColor),
       ),
     );
   }

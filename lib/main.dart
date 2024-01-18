@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'firebase_options.dart';
 import 'src/controller/auth_controller.dart';
+import 'src/controller/business_controller.dart';
 import 'src/controller/category_controller.dart';
 import 'src/controller/fcm_messaging_controller.dart';
 import 'src/controller/form_controller.dart';
@@ -26,7 +27,6 @@ import 'src/controller/push_notifications_controller.dart';
 import 'src/controller/reviews_controller.dart';
 import 'src/controller/send_package_controller.dart';
 import 'src/controller/user_controller.dart';
-import 'src/controller/vendor_business_controller.dart';
 import 'src/controller/withdraw_controller.dart';
 import 'theme/app_theme.dart';
 import 'theme/colors.dart';
@@ -56,7 +56,7 @@ void main() async {
   Get.put(SendPackageController());
   Get.put(PaymentController());
   Get.put(ProductPropertyController());
-  Get.put(VendorBusinessController());
+  Get.put(BusinessController());
   Get.put(WithdrawController());
 
   if (!kIsWeb) {
