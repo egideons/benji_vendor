@@ -64,7 +64,7 @@ class _BusinessInfoState extends State<BusinessInfo> {
       accountNameEC.text = widget.business!.accountName;
       accountNumberEC.text = widget.business!.accountNumber;
       accountTypeEC.text = widget.business!.accountType;
-      countryValue = widget.business!.country;
+      countryValue = widget.business!.country.name;
       stateValue = widget.business!.state;
       cityValue = widget.business!.city;
 

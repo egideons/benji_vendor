@@ -2,19 +2,23 @@
 //
 //     final vendorModel = vendorModelFromJson(jsonString);
 
+import 'dart:developer';
+
 import 'package:benji_vendor/src/model/business_type_model.dart';
 import 'package:benji_vendor/src/model/vendor_model.dart';
 
 import '../providers/constants.dart';
+import 'country_model.dart';
 
 class BusinessModel {
   String id;
-  String country;
+  CountryModel country;
   String state;
   String city;
   String address;
   String shopName;
-  String shopImage;
+  dynamic shopImage;
+  dynamic coverImage;
   BusinessType shopType;
   String weekOpeningHours;
   String weekClosingHours;
@@ -31,6 +35,7 @@ class BusinessModel {
   String accountNumber;
   String accountType;
   String accountBank;
+  dynamic agent;
 
   BusinessModel({
     required this.id,
@@ -39,6 +44,7 @@ class BusinessModel {
     required this.city,
     required this.address,
     required this.shopImage,
+    required this.coverImage,
     required this.shopType,
     required this.shopName,
     required this.vendorOwner,
@@ -56,18 +62,21 @@ class BusinessModel {
     required this.accountNumber,
     required this.accountType,
     required this.accountBank,
+    required this.agent,
   });
 
   factory BusinessModel.fromJson(Map<String, dynamic>? json) {
+    log("Business JSON: $json");
     json ??= {};
     return BusinessModel(
       id: json["id"] ?? '',
-      country: json["country"] ?? notAvailable,
+      country: CountryModel.fromJson(json['country'] ?? {}),
       state: json["state"] ?? notAvailable,
       city: json["city"] ?? notAvailable,
       address: json["address"] ?? notAvailable,
       shopName: json["shop_name"] ?? notAvailable,
       shopImage: json["shop_image"] ?? "",
+      coverImage: json['coverImage'] ?? notAvailable,
       shopType: BusinessType.fromJson(json["shop_type"]),
       vendorOwner: VendorModel.fromJson(json['vendor_owner']),
       weekOpeningHours: json["weekOpeningHours"] ?? notAvailable,
@@ -84,6 +93,7 @@ class BusinessModel {
       accountNumber: json["accountNumber"] ?? notAvailable,
       accountType: json["accountType"] ?? notAvailable,
       accountBank: json["accountBank"] ?? notAvailable,
+      agent: json['agent'],
     );
   }
 

@@ -24,17 +24,20 @@ class _OverViewState extends State<OverView> {
   }
 
 //======== variables =========//
+  bool _bottomNavBarIsVisible = true;
   late int currentIndex;
 
-  final List<Widget> pages = const [
-    Dashboard(),
-    Profile(),
-  ];
+//===================================== FUNCTIONS =================================================\\
 
-  void onTappedNavBar(int index) {
-    HapticFeedback.selectionClick();
+  void showNav() {
     setState(() {
-      currentIndex = index;
+      _bottomNavBarIsVisible = true;
+    });
+  }
+
+  void hideNav() {
+    setState(() {
+      _bottomNavBarIsVisible = false;
     });
   }
 
@@ -53,48 +56,85 @@ class _OverViewState extends State<OverView> {
 
   @override
   Widget build(BuildContext context) {
+    //===================================== PAGINATION =================================================\\
+    final List<Widget> pages = [
+      Dashboard(showNavigation: showNav, hideNavigation: hideNav),
+      const Profile(),
+    ];
+
+    void onTappedNavBar(int index) {
+      HapticFeedback.selectionClick();
+      setState(() {
+        currentIndex = index;
+      });
+    }
+
     return Scaffold(
       body: pages[currentIndex],
       backgroundColor: kPrimaryColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: addVendorBusiness,
-        elevation: 20.0,
-        backgroundColor: kAccentColor,
-        foregroundColor: kPrimaryColor,
-        tooltip: "Add a business",
-        enableFeedback: true,
-        mouseCursor: SystemMouseCursors.click,
-        child: const FaIcon(FontAwesomeIcons.plus),
-      ),
+      floatingActionButton: !_bottomNavBarIsVisible
+          ? Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: FloatingActionButton(
+                onPressed: addVendorBusiness,
+                elevation: 20.0,
+                backgroundColor: kAccentColor,
+                foregroundColor: kPrimaryColor,
+                tooltip: "Add a business",
+                enableFeedback: true,
+                mouseCursor: SystemMouseCursors.click,
+                child: const FaIcon(FontAwesomeIcons.plus),
+              ),
+            )
+          : FloatingActionButton(
+              onPressed: addVendorBusiness,
+              elevation: 20.0,
+              backgroundColor: kAccentColor,
+              foregroundColor: kPrimaryColor,
+              tooltip: "Add a business",
+              enableFeedback: true,
+              mouseCursor: SystemMouseCursors.click,
+              child: const FaIcon(FontAwesomeIcons.plus),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: kPrimaryColor,
-        landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
-        currentIndex: currentIndex,
-        mouseCursor: SystemMouseCursors.click,
-        onTap: onTappedNavBar,
-        elevation: 20.0,
-        selectedItemColor: kAccentColor,
-        selectedIconTheme: IconThemeData(color: kAccentColor),
-        showSelectedLabels: true,
-        unselectedItemColor: const Color(0xFFBDBDBD),
-        unselectedIconTheme: const IconThemeData(color: Color(0xFFBDBDBD)),
-        showUnselectedLabels: true,
-        enableFeedback: true,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.grid_view),
-            label: "Overview",
-            activeIcon: Icon(Icons.grid_view_rounded),
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.user),
-            label: "Profile",
-            activeIcon: FaIcon(FontAwesomeIcons.solidUser),
-          ),
-        ],
+      bottomNavigationBar: AnimatedContainer(
+        height: _bottomNavBarIsVisible ? kBottomNavigationBarHeight : 0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+        child: Wrap(
+          children: [
+            BottomNavigationBar(
+              backgroundColor: kPrimaryColor,
+              landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+              currentIndex: currentIndex,
+              mouseCursor: SystemMouseCursors.click,
+              onTap: onTappedNavBar,
+              elevation: 20.0,
+              selectedItemColor: kAccentColor,
+              selectedIconTheme: IconThemeData(color: kAccentColor),
+              showSelectedLabels: true,
+              unselectedItemColor: const Color(0xFFBDBDBD),
+              unselectedIconTheme:
+                  const IconThemeData(color: Color(0xFFBDBDBD)),
+              showUnselectedLabels: true,
+              enableFeedback: true,
+              type: BottomNavigationBarType.fixed,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.grid_view),
+                  label: "Overview",
+                  activeIcon: Icon(Icons.grid_view_rounded),
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.user),
+                  label: "Profile",
+                  activeIcon: FaIcon(FontAwesomeIcons.solidUser),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
