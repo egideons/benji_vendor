@@ -66,7 +66,7 @@ void main() async {
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
     await PushNotificationController.initializeNotification();
 
-    await FcmMessagingController.instance.handleFCM();
+    // await FcmMessagingController.instance.handleFCM();
   }
 
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
