@@ -72,16 +72,30 @@ class _OverViewState extends State<OverView> {
     return Scaffold(
       body: pages[currentIndex],
       backgroundColor: kPrimaryColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: addVendorBusiness,
-        elevation: 20.0,
-        backgroundColor: kAccentColor,
-        foregroundColor: kPrimaryColor,
-        tooltip: "Add a business",
-        enableFeedback: true,
-        mouseCursor: SystemMouseCursors.click,
-        child: const FaIcon(FontAwesomeIcons.plus),
-      ),
+      floatingActionButton: !_bottomNavBarIsVisible
+          ? Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: FloatingActionButton(
+                onPressed: addVendorBusiness,
+                elevation: 20.0,
+                backgroundColor: kAccentColor,
+                foregroundColor: kPrimaryColor,
+                tooltip: "Add a business",
+                enableFeedback: true,
+                mouseCursor: SystemMouseCursors.click,
+                child: const FaIcon(FontAwesomeIcons.plus),
+              ),
+            )
+          : FloatingActionButton(
+              onPressed: addVendorBusiness,
+              elevation: 20.0,
+              backgroundColor: kAccentColor,
+              foregroundColor: kPrimaryColor,
+              tooltip: "Add a business",
+              enableFeedback: true,
+              mouseCursor: SystemMouseCursors.click,
+              child: const FaIcon(FontAwesomeIcons.plus),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       bottomNavigationBar: AnimatedContainer(
