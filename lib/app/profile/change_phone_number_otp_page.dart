@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/input/otp_textFormField.dart';
 import 'package:benji_vendor/src/components/section/reusable%20authentication%20first%20half.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
@@ -95,9 +95,7 @@ class _OTPChangePhoneNumberState extends State<OTPChangePhoneNumber> {
         context,
         "Something went wrong".toUpperCase(),
         kAccentColor,
-        const Duration(
-          seconds: 2
-        ),
+        const Duration(seconds: 2),
       );
 
       Get.back();

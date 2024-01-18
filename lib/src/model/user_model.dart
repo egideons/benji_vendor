@@ -1,4 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
+
+import 'package:benji_vendor/src/controller/error_controller.dart';
+import 'package:get/get.dart';
 
 import '../providers/api_url.dart';
 import '../providers/constants.dart';
@@ -25,10 +29,9 @@ class UserModel {
   String city;
   String lga;
   String profileLogo;
-
-  // bool isOnline;
-  // double averageRating;
-  // int numberOfClientsReactions;
+  bool isOnline;
+  double averageRating;
+  int numberOfClientsReactions;
   // String shopName;
   // String shopImage;
   // BusinessType shopType;
@@ -58,9 +61,9 @@ class UserModel {
     required this.city,
     required this.lga,
     required this.profileLogo,
-    // required this.isOnline,
-    // required this.averageRating,
-    // required this.numberOfClientsReactions,
+    required this.isOnline,
+    required this.averageRating,
+    required this.numberOfClientsReactions,
     // required this.shopName,
     // required this.shopImage,
     // required this.shopType,
@@ -94,16 +97,18 @@ class UserModel {
         state: json["state"] ?? notAvailable,
         city: json["city"] ?? notAvailable,
         lga: json["lga"] ?? notAvailable,
-        profileLogo: json["profileLogo"] ?? '',
-        // isOnline: json["is_online"] ?? false,
-        // averageRating:
-        //     ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
+        profileLogo: json['profileLogo'] == null || json['profileLogo'] == ""
+            ? 'https://img.freepik.com/free-psd/3d-icon-social-media-app_23-2150049569.jpg'
+            : json['profileLogo'],
+        isOnline: json["is_online"] ?? false,
+        averageRating:
+            ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
         // averageRating: json["average_rating"] != null
         //     ? (json["average_rating"] is double
         //         ? json["average_rating"]
         //         : double.tryParse(json["average_rating"].toString()) ?? 0.0)
         //     : 0.0,
-        // numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
+        numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
         // shopName: json["shop_name"] ?? notAvailable,
         // shopImage: json["shop_image"] ?? '',
         // shopType: BusinessType.fromJson(json["shop_type"]),
@@ -115,6 +120,9 @@ class UserModel {
         // sunWeekClosingHours: json["sunWeekClosingHours"] ?? notAvailable,
         // businessBio: json["description"] ?? notAvailable,
       );
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
+      return UserModel.fromJson(null);
     } catch (e) {
       consoleLog("Error parsing average_rating: $e");
       return UserModel.fromJson(null);
@@ -138,9 +146,9 @@ class UserModel {
         "city": city,
         "lga": lga,
         "profileLogo": profileLogo,
-        // "is_online": isOnline,
-        // "average_rating": averageRating,
-        // "number_of_clients_reactions": numberOfClientsReactions,
+        "is_online": isOnline,
+        "average_rating": averageRating,
+        "number_of_clients_reactions": numberOfClientsReactions,
         // "shop_name": shopName,
         // "shop_image": shopImage,
         // "shop_type": shopType.toJson(),

@@ -1,14 +1,11 @@
 // ignore_for_file: use_build_context_synchronously, file_names
 
-import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/input/email_textformfield.dart';
 import 'package:benji_vendor/src/components/section/my_fixed_snackbar.dart';
 import 'package:benji_vendor/src/components/section/reusable%20authentication%20first%20half.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-
 import 'package:flutter/material.dart';
-import '../../src/providers/responsive_constants.dart';
-
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
@@ -16,6 +13,7 @@ import 'package:http/http.dart' as http;
 
 import '../../main.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 import 'otp_reset_password.dart';
 

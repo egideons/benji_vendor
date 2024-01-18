@@ -1,5 +1,5 @@
 import 'package:benji_vendor/app/profile/business_info.dart';
-import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/vendor_business_container.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';

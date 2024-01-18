@@ -1,4 +1,4 @@
-import 'package:benji_vendor/src/components/appbar/my%20appbar.dart';
+import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/section/select_bank_body.dart';
 import 'package:flutter/material.dart';
 

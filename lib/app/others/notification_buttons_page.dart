@@ -1,7 +1,7 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 
-import '../../src/components/appbar/my appbar.dart';
+import '../../src/components/appbar/my_appbar.dart';
 import '../../src/components/button/notification_button.dart';
 import '../../src/controller/push_notifications_controller.dart';
 import '../../src/providers/constants.dart';
