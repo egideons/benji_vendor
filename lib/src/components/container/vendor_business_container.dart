@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, unused_local_variable
 
 import 'package:benji_vendor/src/components/image/my_image.dart';
-import 'package:benji_vendor/src/model/vendor_business.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../theme/colors.dart';

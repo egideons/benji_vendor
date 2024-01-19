@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, invalid_use_of_protected_member
 
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
@@ -49,8 +50,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
     userPhoneNumberEC.text = UserController.instance.user.value.phone;
     latitude = UserController.instance.user.value.latitude;
     longitude = UserController.instance.user.value.longitude;
-    horizontalGroupValue =
-        UserController.instance.user.value.gender.toUpperCase();
+    horizontalGroupValue = UserController.instance.user.value.gender;
     profileLogo = UserController.instance.user.value.profileLogo;
     consoleLog("This is the profile logo url: $profileLogo");
   }
@@ -152,7 +152,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
   }
 
   void getLocationOnMap() async {
-    await Get.to(
+    var result = await Get.to(
       () => const GetLocationOnMap(),
       routeName: 'GetLocationOnMap',
       duration: const Duration(milliseconds: 300),
@@ -162,14 +162,14 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
       popGesture: true,
       transition: Transition.rightToLeft,
     );
-    latitude = latLngDetailController.latLngDetail.value[0];
-    longitude = latLngDetailController.latLngDetail.value[1];
-    mapsLocationEC.text = latLngDetailController.latLngDetail.value[2];
-    latLngDetailController.setEmpty();
-    if (kDebugMode) {
-      print("LATLNG: $latitude,$longitude");
-      print(mapsLocationEC.text);
+    if (result != null) {
+      mapsLocationEC.text = result["pinnedLocation"];
+      latitude = result["latitude"];
+      longitude = result["longitude"];
     }
+    log(
+      "Received Data - Maps Location: ${mapsLocationEC.text}, Latitude: $latitude, Longitude: $longitude",
+    );
   }
 
   Future<void> updateData() async {
@@ -306,25 +306,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
           padding: const EdgeInsets.all(kDefaultPadding),
           physics: const BouncingScrollPhysics(),
           children: [
-            Text(
-              "Edit your Business Logo".toUpperCase(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: kTextBlackColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              "This is visible to users",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: kAccentColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            kSizedBox,
             Column(
               children: [
                 selectedLogoImage == null
@@ -342,24 +323,13 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                         ),
                         child: Center(
                           child: MyImage(url: profileLogo!),
-
-                          //           CachedNetworkImage(
-                          //     imageUrl: profileLogo!,
-                          //     fit: BoxFit.cover,
-                          //     progressIndicatorBuilder:
-                          //         (context, url, downloadProgress) => Center(
-                          //             child: CupertinoActivityIndicator(
-                          //                 color: kAccentColor)),
-                          //     errorWidget: (context, url, error) =>
-                          //         Icon(Icons.error, color: kAccentColor),
-                          // ),
                         ),
                       )
                     : Container(
                         height: 200,
                         width: 200,
                         decoration: ShapeDecoration(
-                          shape: const OvalBorder(),
+                          shape: const CircleBorder(),
                           image: DecorationImage(
                             image: FileImage(selectedLogoImage!),
                             fit: BoxFit.cover,
@@ -391,7 +361,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      'Upload business logo',
+                      'Upload your profile picture',
                       style: TextStyle(
                         color: kAccentColor,
                         fontSize: 16,
@@ -401,27 +371,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                   ),
                 ),
               ],
-            ),
-            kSizedBox,
-            const Divider(thickness: 4),
-            kSizedBox,
-            Text(
-              "Edit your personal profile".toUpperCase(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: kTextBlackColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              "Your personal profile is not visible to users",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: kAccentColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
             ),
             kSizedBox,
             Form(

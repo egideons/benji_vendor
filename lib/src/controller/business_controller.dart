@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:benji_vendor/src/controller/user_controller.dart';
-import 'package:benji_vendor/src/model/vendor_business.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -18,13 +18,17 @@ class BusinessController extends GetxController {
   var isLoad = false.obs;
   var businesses = <BusinessModel>[].obs;
 
-  Future getVendorBusiness() async {
+  Future getVendorBusinesses() async {
     isLoad.value = true;
+
+    String userId = UserController.instance.user.value.id.toString();
+
+    String url = Api.baseUrl + Api.getVendorBusinesses + userId;
+    var parsedURL = Uri.parse(url);
 
     try {
       var response = await http.get(
-        Uri.parse(
-            '$baseURL/vendors/getVendorBusinesses/${UserController.instance.user.value.id}'),
+        parsedURL,
         headers: authHeader(),
       );
 

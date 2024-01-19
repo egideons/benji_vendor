@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, invalid_use_of_protected_member
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
@@ -218,7 +219,9 @@ class _SendPackageState extends State<SendPackage> {
 
       double latitudeValue = double.parse(latitude);
       double longitudeValue = double.parse(longitude);
-
+      log(
+        "Received Data - Maps Location: $pinnedLocation, Latitude: $latitude, Longitude: $longitude",
+      );
       setState(() {
         pickupEC.text = pinnedLocation;
         latitudePick = latitudeValue.toString();

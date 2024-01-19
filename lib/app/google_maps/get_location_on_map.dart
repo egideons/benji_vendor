@@ -261,11 +261,13 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
     latLngDetailController
         .setLatLngdetail([latitude, longitude, pinnedLocation]);
 
-    Get.back(result: {
-      'pinnedLocation': pinnedLocation,
-      'latitude': latitude,
-      'longitude': longitude,
-    });
+    Get.back(
+      result: {
+        'pinnedLocation': pinnedLocation,
+        'latitude': latitude,
+        'longitude': longitude,
+      },
+    );
   }
 
   @override
