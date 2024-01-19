@@ -306,25 +306,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
           padding: const EdgeInsets.all(kDefaultPadding),
           physics: const BouncingScrollPhysics(),
           children: [
-            Text(
-              "Edit your Business Logo".toUpperCase(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: kTextBlackColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              "This is visible to users",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: kAccentColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            kSizedBox,
             Column(
               children: [
                 selectedLogoImage == null
@@ -342,24 +323,13 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                         ),
                         child: Center(
                           child: MyImage(url: profileLogo!),
-
-                          //           CachedNetworkImage(
-                          //     imageUrl: profileLogo!,
-                          //     fit: BoxFit.cover,
-                          //     progressIndicatorBuilder:
-                          //         (context, url, downloadProgress) => Center(
-                          //             child: CupertinoActivityIndicator(
-                          //                 color: kAccentColor)),
-                          //     errorWidget: (context, url, error) =>
-                          //         Icon(Icons.error, color: kAccentColor),
-                          // ),
                         ),
                       )
                     : Container(
                         height: 200,
                         width: 200,
                         decoration: ShapeDecoration(
-                          shape: const OvalBorder(),
+                          shape: const CircleBorder(),
                           image: DecorationImage(
                             image: FileImage(selectedLogoImage!),
                             fit: BoxFit.cover,
@@ -391,7 +361,7 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      'Upload business logo',
+                      'Upload your profile picture',
                       style: TextStyle(
                         color: kAccentColor,
                         fontSize: 16,
@@ -401,27 +371,6 @@ class _PersonalInfoBodyState extends State<PersonalInfoBody> {
                   ),
                 ),
               ],
-            ),
-            kSizedBox,
-            const Divider(thickness: 4),
-            kSizedBox,
-            Text(
-              "Edit your personal profile".toUpperCase(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: kTextBlackColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              "Your personal profile is not visible to users",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: kAccentColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-              ),
             ),
             kSizedBox,
             Form(

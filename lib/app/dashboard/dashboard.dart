@@ -1,17 +1,11 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:benji_vendor/app/orders/orders.dart';
-import 'package:benji_vendor/app/others/reviews.dart';
-import 'package:benji_vendor/app/overview/overview.dart';
-import 'package:benji_vendor/app/product/view_product.dart';
 import 'package:benji_vendor/app/profile/personal_info.dart';
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
-import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
-import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +20,6 @@ import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 import '../others/notifications.dart';
-import '../product/add_new_product.dart';
 
 class Dashboard extends StatefulWidget {
   final VoidCallback showNavigation;
@@ -137,44 +130,44 @@ class _DashboardState extends State<Dashboard>
 
 //==================== NAVIGATION ==================\\
 
-  addProduct() {
-    Get.to(
-      () => const AddProduct(),
-      routeName: 'AddProduct',
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      preventDuplicates: true,
-      popGesture: true,
-      transition: Transition.downToUp,
-    );
-  }
+  // addProduct() {
+  //   Get.to(
+  //     () => const AddProduct(),
+  //     routeName: 'AddProduct',
+  //     duration: const Duration(milliseconds: 300),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     preventDuplicates: true,
+  //     popGesture: true,
+  //     transition: Transition.downToUp,
+  //   );
+  // }
 
-  reviewsPage() {
-    Get.to(
-      () => const ReviewsPage(),
-      routeName: 'ReviewsPage',
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      preventDuplicates: true,
-      popGesture: true,
-      transition: Transition.rightToLeft,
-    );
-  }
+  // reviewsPage() {
+  //   Get.to(
+  //     () => const ReviewsPage(),
+  //     routeName: 'ReviewsPage',
+  //     duration: const Duration(milliseconds: 300),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     preventDuplicates: true,
+  //     popGesture: true,
+  //     transition: Transition.rightToLeft,
+  //   );
+  // }
 
-  productDetail(ProductModel product) {
-    Get.to(
-      () => ViewProduct(product: product),
-      routeName: 'ViewProduct',
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      preventDuplicates: true,
-      popGesture: true,
-      transition: Transition.rightToLeft,
-    );
-  }
+  // productDetail(ProductModel product) {
+  //   Get.to(
+  //     () => ViewProduct(product: product),
+  //     routeName: 'ViewProduct',
+  //     duration: const Duration(milliseconds: 300),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     preventDuplicates: true,
+  //     popGesture: true,
+  //     transition: Transition.rightToLeft,
+  //   );
+  // }
 
   profilePage() {
     Get.to(
@@ -188,30 +181,30 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
-  productsPage() {
-    Get.to(
-      () => const OverView(currentIndex: 2),
-      routeName: 'OverView',
-      duration: const Duration(milliseconds: 0),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      preventDuplicates: false,
-      popGesture: true,
-    );
-  }
+  // productsPage() {
+  //   Get.to(
+  //     () => const OverView(currentIndex: 2),
+  //     routeName: 'OverView',
+  //     duration: const Duration(milliseconds: 0),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     preventDuplicates: false,
+  //     popGesture: true,
+  //   );
+  // }
 
-  ordersPage(StatusType status) {
-    OrderController.instance.setStatus(status);
-    Get.to(
-      () => const OverView(currentIndex: 1),
-      routeName: 'OverView',
-      duration: const Duration(milliseconds: 0),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      preventDuplicates: false,
-      popGesture: true,
-    );
-  }
+  // ordersPage(StatusType status) {
+  //   OrderController.instance.setStatus(status);
+  //   Get.to(
+  //     () => const OverView(currentIndex: 1),
+  //     routeName: 'OverView',
+  //     duration: const Duration(milliseconds: 0),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     preventDuplicates: false,
+  //     popGesture: true,
+  //   );
+  // }
 
   void toNotificationsPage() => Get.to(
         () => const Notifications(),
@@ -227,7 +220,6 @@ class _DashboardState extends State<Dashboard>
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
-
     return MyResponsivePadding(
       child: MyLiquidRefresh(
         onRefresh: handleRefresh,
@@ -238,39 +230,37 @@ class _DashboardState extends State<Dashboard>
               backgroundColor: kPrimaryColor,
               titleSpacing: kDefaultPadding / 2,
               elevation: 0,
-              title: GetBuilder<UserController>(
-                builder: (controller) => Row(
-                  children: [
-                    Text(
-                      "BEN",
-                      style: TextStyle(
-                        color: kSecondaryColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 2,
-                      ),
+              title: Row(
+                children: [
+                  Text(
+                    "BEN",
+                    style: TextStyle(
+                      color: kSecondaryColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 2,
                     ),
-                    Text(
-                      "JI",
-                      style: TextStyle(
-                        color: kAccentColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 2,
-                      ),
+                  ),
+                  Text(
+                    "JI",
+                    style: TextStyle(
+                      color: kAccentColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 2,
                     ),
-                    kHalfWidthSizedBox,
-                    Text(
-                      "VENDOR",
-                      style: TextStyle(
-                        color: kAccentColor,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 2,
-                      ),
+                  ),
+                  kHalfWidthSizedBox,
+                  Text(
+                    "VENDOR",
+                    style: TextStyle(
+                      color: kAccentColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 2,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               actions: [
                 Stack(

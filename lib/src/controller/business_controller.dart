@@ -3,7 +3,7 @@
 import 'dart:convert';
 
 import 'package:benji_vendor/src/controller/user_controller.dart';
-import 'package:benji_vendor/src/model/vendor_business.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

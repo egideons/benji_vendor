@@ -6,7 +6,7 @@ import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/business_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
-import 'package:benji_vendor/src/model/vendor_business.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
