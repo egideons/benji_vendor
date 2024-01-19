@@ -3,6 +3,7 @@
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../theme/colors.dart';
 import '../../providers/constants.dart';
@@ -30,67 +31,124 @@ class _VendorsProductContainerState extends State<VendorBusinessContainer> {
     var media = MediaQuery.of(context).size;
     return InkWell(
       onTap: widget.onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(20),
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2.5),
-        width: media.width,
         decoration: ShapeDecoration(
           color: kPrimaryColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
           ),
-          shadows: const [
+          shadows: [
             BoxShadow(
-              color: Color(0x0F000000),
-              blurRadius: 24,
-              offset: Offset(0, 4),
-              spreadRadius: 0,
-            )
+              color: kBlackColor.withOpacity(0.1),
+              blurRadius: 5,
+              spreadRadius: 2,
+              blurStyle: BlurStyle.normal,
+            ),
           ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              width: deviceType(media.width) >= 2
-                  ? media.width - 250
-                  : media.width - 300,
-              height: deviceType(media.width) >= 2 ? 150 : 100,
+              height: 120,
+              width: 120,
               decoration: ShapeDecoration(
-                color: kPageSkeletonColor,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
+                  color: kLightGreyColor, shape: const CircleBorder()),
+              child: MyImage(
+                url: widget.business.shopImage,
               ),
-              child: MyImage(url: widget.business.shopImage),
             ),
             kHalfWidthSizedBox,
             Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.business.shopName,
-                  style: const TextStyle(
-                    color: kTextBlackColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
                 SizedBox(
-                  width: media.width - 250,
+                  width: deviceType(media.width) >= 2
+                      ? media.width - 400
+                      : deviceType(media.width) > 1 &&
+                              deviceType(media.width) < 2
+                          ? media.width - 250
+                          : media.width - 220,
                   child: Text(
-                    widget.business.businessBio,
+                    widget.business.shopName,
+                    textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                    style: TextStyle(
-                      color: kTextGreyColor,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w400,
+                    style: const TextStyle(
+                      color: kTextBlackColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
                 kHalfSizedBox,
+                SizedBox(
+                  width: deviceType(media.width) >= 2
+                      ? media.width - 400
+                      : deviceType(media.width) > 1 &&
+                              deviceType(media.width) < 2
+                          ? media.width - 250
+                          : media.width - 220,
+                  child: Text(
+                    widget.business.address,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: kAccentColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ),
+                kSizedBox,
+                SizedBox(
+                  width: deviceType(media.width) >= 2
+                      ? media.width - 400
+                      : deviceType(media.width) > 1 &&
+                              deviceType(media.width) < 2
+                          ? media.width - 250
+                          : media.width - 220,
+                  child: Row(
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.solidIdCard,
+                        color: kAccentColor,
+                        size: 16,
+                      ),
+                      kHalfWidthSizedBox,
+                      SizedBox(
+                        width: deviceType(media.width) >= 2
+                            ? media.width - 430
+                            : deviceType(media.width) > 1 &&
+                                    deviceType(media.width) < 2
+                                ? media.width - 250
+                                : media.width - 220,
+                        child: Text.rich(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          TextSpan(
+                            children: [
+                              const TextSpan(
+                                text: "TIN: ",
+                                style: TextStyle(
+                                  color: kTextBlackColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                              TextSpan(
+                                text: widget.business.businessId,
+                                style: const TextStyle(
+                                  color: kTextBlackColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],

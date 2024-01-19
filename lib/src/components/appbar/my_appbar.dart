@@ -27,7 +27,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 //========================================= FUNCTIONS ============================================\\
 
 //========================================= Navigation ============================================\\
-  void _popContext() => Get.back();
+  void popContext() => Get.back();
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           InkWell(
             borderRadius: BorderRadius.circular(24),
-            onTap: _popContext,
+            onTap: popContext,
             mouseCursor: SystemMouseCursors.click,
             child: Container(
               width: 40,

@@ -8,10 +8,7 @@ import '../../../../theme/colors.dart';
 class WelcomeGreeting extends StatelessWidget {
   final String vendorName;
 
-  const WelcomeGreeting({
-    super.key,
-    required this.vendorName,
-  });
+  const WelcomeGreeting({super.key, required this.vendorName});
 
   @override
   Widget build(BuildContext context) {

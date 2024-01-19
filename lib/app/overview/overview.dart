@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
 
 import '../../theme/colors.dart';
-import '../businesses/business_info.dart';
+import '../businesses/add_business.dart';
 import '../dashboard/dashboard.dart';
 import '../profile/profile.dart';
 

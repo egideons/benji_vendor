@@ -1,4 +1,4 @@
-import 'package:benji_vendor/app/businesses/business_info.dart';
+import 'package:benji_vendor/app/businesses/add_business.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/vendor_business_container.dart';
@@ -183,7 +183,8 @@ class _VendorBusinessState extends State<VendorBusiness> {
                                           //     index;
                                           return VendorBusinessContainer(
                                             onTap: () => editBusiness(
-                                                controller.businesses[index]),
+                                              controller.businesses[index],
+                                            ),
                                             business:
                                                 controller.businesses[index],
                                           );
