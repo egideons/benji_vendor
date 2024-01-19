@@ -1,7 +1,10 @@
 // ignore_for_file: empty_catches
 
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
@@ -36,9 +39,16 @@ class BusinessController extends GetxController {
         businesses.value = (jsonDecode(response.body) as List)
             .map((item) => BusinessModel.fromJson(item))
             .toList();
+        log(response.body);
+      } else {
+        log(response.statusCode.toString());
+        log(response.body);
+        ApiProcessorController.errorSnack("An error occured, please refresh.");
       }
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
-      consoleLog(e.toString());
+      log(e.toString());
     }
     isLoad.value = false;
     update();

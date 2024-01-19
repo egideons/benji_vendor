@@ -16,6 +16,7 @@ import '../../src/components/skeletons/businesses_skeletons.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
+import 'edit_business.dart';
 
 class EditBusinessesPage extends StatefulWidget {
   const EditBusinessesPage({super.key});
@@ -90,11 +91,11 @@ class _EditBusinessesPageState extends State<EditBusinessesPage> {
 
   editBusiness(BusinessModel business) {
     Get.to(
-      () => AddBusiness(business: business),
+      () => EditBusiness(business: business),
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
-      routeName: "AddBusiness",
+      routeName: "EditBusiness",
       preventDuplicates: true,
       popGesture: false,
       transition: Transition.rightToLeft,

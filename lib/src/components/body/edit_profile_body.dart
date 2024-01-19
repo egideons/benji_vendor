@@ -311,7 +311,8 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                 selectedLogoImage == null
                     ? Container(
                         width: media.width,
-                        height: 144,
+                        // height: 144,
+                        padding: const EdgeInsets.all(20),
                         decoration: ShapeDecoration(
                           shape: RoundedRectangleBorder(
                             side: const BorderSide(
