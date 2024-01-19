@@ -150,7 +150,7 @@ class _VendorBusinessState extends State<VendorBusiness> {
                   children: [
                     GetBuilder<BusinessController>(
                       initState: (state) async {
-                        await BusinessController.instance.getVendorBusiness();
+                        await BusinessController.instance.getVendorBusinesses();
                       },
                       builder: (controller) {
                         return controller.isLoad.value &&

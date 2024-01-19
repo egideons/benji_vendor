@@ -18,13 +18,17 @@ class BusinessController extends GetxController {
   var isLoad = false.obs;
   var businesses = <BusinessModel>[].obs;
 
-  Future getVendorBusiness() async {
+  Future getVendorBusinesses() async {
     isLoad.value = true;
+
+    String userId = UserController.instance.user.value.id.toString();
+
+    String url = Api.baseUrl + Api.getVendorBusinesses + userId;
+    var parsedURL = Uri.parse(url);
 
     try {
       var response = await http.get(
-        Uri.parse(
-            '$baseURL/vendors/getVendorBusinesses/${UserController.instance.user.value.id}'),
+        parsedURL,
         headers: authHeader(),
       );
 

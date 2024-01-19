@@ -369,7 +369,7 @@ class _AddProductState extends State<AddProduct> {
                       kHalfSizedBox,
                       GetBuilder<BusinessController>(
                         initState: (state) {
-                          BusinessController.instance.getVendorBusiness();
+                          BusinessController.instance.getVendorBusinesses();
                         },
                         builder: (controller) {
                           return ItemDropDownMenu(

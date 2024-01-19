@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../theme/colors.dart';
 
-class AppBarVendor extends StatelessWidget {
+class WelcomeGreeting extends StatelessWidget {
   final String vendorName;
 
-  const AppBarVendor({
+  const WelcomeGreeting({
     super.key,
     required this.vendorName,
   });
