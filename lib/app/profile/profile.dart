@@ -1,6 +1,6 @@
-import 'package:benji_vendor/app/businesses/businesses.dart';
+import 'package:benji_vendor/app/businesses/edit_businesses.dart';
 import 'package:benji_vendor/app/others/reviews.dart';
-import 'package:benji_vendor/app/profile/personal_info.dart';
+import 'package:benji_vendor/app/profile/edit_profile.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
@@ -88,11 +88,11 @@ class _ProfileState extends State<Profile> {
 
   void toBusinesses() {
     Get.to(
-      () => const VendorBusiness(),
+      () => const EditBusinessesPage(),
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
-      routeName: "VendorBusiness",
+      routeName: "EditBusinessesPage",
       preventDuplicates: true,
       popGesture: false,
       transition: Transition.rightToLeft,

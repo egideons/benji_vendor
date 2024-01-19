@@ -215,7 +215,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
         child: Column(
           children: <Widget>[
             const Text(
-              "Upload Logo Image",
+              "Upload Profile picture",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -238,9 +238,9 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                         decoration: ShapeDecoration(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
-                            side: BorderSide(
+                            side: const BorderSide(
                               width: 0.5,
-                              color: kLightGreyColor,
+                              color: kGreyColor1,
                             ),
                           ),
                         ),
@@ -270,9 +270,9 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                         decoration: ShapeDecoration(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
-                            side: BorderSide(
+                            side: const BorderSide(
                               width: 0.5,
-                              color: kLightGreyColor,
+                              color: kGreyColor1,
                             ),
                           ),
                         ),
@@ -356,6 +356,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                       builder: ((builder) => uploadLogoImage()),
                     );
                   },
+                  onLongPress: null,
                   splashColor: kAccentColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                   child: Container(

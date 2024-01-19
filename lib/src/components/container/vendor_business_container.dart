@@ -68,7 +68,7 @@ class _VendorsProductContainerState extends State<VendorBusinessContainer> {
                       : deviceType(media.width) > 1 &&
                               deviceType(media.width) < 2
                           ? media.width - 250
-                          : media.width - 250,
+                          : media.width - 220,
                   child: Text(
                     widget.business.shopName,
                     textAlign: TextAlign.start,
@@ -87,7 +87,7 @@ class _VendorsProductContainerState extends State<VendorBusinessContainer> {
                       : deviceType(media.width) > 1 &&
                               deviceType(media.width) < 2
                           ? media.width - 250
-                          : media.width - 250,
+                          : media.width - 220,
                   child: Text(
                     widget.business.address,
                     overflow: TextOverflow.ellipsis,
@@ -105,7 +105,7 @@ class _VendorsProductContainerState extends State<VendorBusinessContainer> {
                       : deviceType(media.width) > 1 &&
                               deviceType(media.width) < 2
                           ? media.width - 250
-                          : media.width - 250,
+                          : media.width - 220,
                   child: Row(
                     children: [
                       FaIcon(
