@@ -13,7 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../src/components/section/welcome_greeting.dart';
-import '../../src/components/skeletons/vendor_skeletons.dart';
+import '../../src/components/skeletons/businesses_skeletons.dart';
 import '../../src/controller/business_controller.dart';
 import '../../src/controller/notification_controller.dart';
 import '../../src/providers/constants.dart';
@@ -559,7 +559,14 @@ class _DashboardState extends State<Dashboard>
                             : controller.isLoad.value &&
                                     controller.businesses.isEmpty
                                 ? const BusinessListSkeleton()
-                                : showBusinesses
+                                 : controller.businesses.isEmpty
+                                    ? EmptyCard(
+                                        emptyCardMessage:
+                                            "You don't have any businesses yet",
+                                        showButton: true,
+                                        buttonTitle: "Add product",
+                                        onPressed: addVendorBusiness,
+                                      ) showBusinesses
                                     ? ListView.separated(
                                         physics: const BouncingScrollPhysics(),
                                         separatorBuilder: (context, index) =>
