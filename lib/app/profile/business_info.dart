@@ -4,10 +4,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
-import 'package:benji_vendor/app/profile/my_blue_textformfield.dart';
 import 'package:benji_vendor/app/profile/select_bank.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/components/input/my_blue_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';

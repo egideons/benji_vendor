@@ -359,7 +359,7 @@ class _DashboardState extends State<Dashboard>
                               child: CircleAvatar(
                                 maxRadius: 50,
                                 minRadius: 50,
-                                backgroundColor: kLightGreyColor,
+                                // backgroundColor: kLightGreyColor,
                                 child: ClipOval(
                                   child: MyImage(
                                     url: controller.user.value.profileLogo,
@@ -469,7 +469,7 @@ class _DashboardState extends State<Dashboard>
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   FaIcon(
-                                    FontAwesomeIcons.shop,
+                                    FontAwesomeIcons.store,
                                     color: kAccentColor,
                                     size: 16,
                                   ),

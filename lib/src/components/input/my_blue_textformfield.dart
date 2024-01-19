@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../theme/colors.dart';
-import '../../src/providers/responsive_constants.dart';
+import '../../../../theme/colors.dart';
+import '../../providers/responsive_constants.dart';
 
 class MyBlueTextFormField extends StatelessWidget {
   final String hintText;
