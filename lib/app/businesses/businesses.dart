@@ -1,4 +1,4 @@
-import 'package:benji_vendor/app/profile/business_info.dart';
+import 'package:benji_vendor/app/businesses/business_info.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/vendor_business_container.dart';
@@ -81,11 +81,11 @@ class _VendorBusinessState extends State<VendorBusiness> {
 
   addVendorBusiness() {
     Get.to(
-      () => const BusinessInfo(),
+      () => const AddBusiness(),
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
-      routeName: "BusinessInfo",
+      routeName: "AddBusiness",
       preventDuplicates: true,
       popGesture: false,
       transition: Transition.rightToLeft,
@@ -94,11 +94,11 @@ class _VendorBusinessState extends State<VendorBusiness> {
 
   editBusiness(BusinessModel business) {
     Get.to(
-      () => BusinessInfo(business: business),
+      () => AddBusiness(business: business),
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
-      routeName: "BusinessInfo",
+      routeName: "AddBusiness",
       preventDuplicates: true,
       popGesture: false,
       transition: Transition.rightToLeft,

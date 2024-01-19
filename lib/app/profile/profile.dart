@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../auth/login.dart';
-import '../package/packages.dart';
+import '../packages/packages.dart';
 import '../settings/settings.dart';
 
 class Profile extends StatefulWidget {

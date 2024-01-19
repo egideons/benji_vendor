@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../src/components/card/empty.dart';
 import '../../src/components/section/welcome_greeting.dart';
 import '../../src/components/skeletons/businesses_skeletons.dart';
 import '../../src/controller/business_controller.dart';
@@ -19,6 +20,7 @@ import '../../src/controller/notification_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
+import '../businesses/business_info.dart';
 import '../others/notifications.dart';
 
 class Dashboard extends StatefulWidget {
@@ -178,6 +180,19 @@ class _DashboardState extends State<Dashboard>
       curve: Curves.easeIn,
       preventDuplicates: false,
       popGesture: true,
+    );
+  }
+
+  addVendorBusiness() {
+    Get.to(
+      () => const AddBusiness(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "AddBusiness",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
     );
   }
 
@@ -559,219 +574,230 @@ class _DashboardState extends State<Dashboard>
                             : controller.isLoad.value &&
                                     controller.businesses.isEmpty
                                 ? const BusinessListSkeleton()
-                                 : controller.businesses.isEmpty
+                                : controller.businesses.isEmpty
                                     ? EmptyCard(
                                         emptyCardMessage:
                                             "You don't have any businesses yet",
                                         showButton: true,
-                                        buttonTitle: "Add product",
+                                        buttonTitle: "Add a business",
                                         onPressed: addVendorBusiness,
-                                      ) showBusinesses
-                                    ? ListView.separated(
-                                        physics: const BouncingScrollPhysics(),
-                                        separatorBuilder: (context, index) =>
-                                            kHalfSizedBox,
-                                        shrinkWrap: true,
-                                        addAutomaticKeepAlives: true,
-                                        itemCount: controller.businesses.length,
-                                        itemBuilder: (context, index) {
-                                          return InkWell(
-                                            onTap: () {},
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: Container(
-                                              decoration: ShapeDecoration(
-                                                color: kPrimaryColor,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(16),
-                                                ),
-                                                shadows: [
-                                                  BoxShadow(
-                                                    color: kBlackColor
-                                                        .withOpacity(0.1),
-                                                    blurRadius: 5,
-                                                    spreadRadius: 2,
-                                                    blurStyle: BlurStyle.normal,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    height: 120,
-                                                    width: 120,
-                                                    decoration: ShapeDecoration(
-                                                        color: kLightGreyColor,
-                                                        shape:
-                                                            const CircleBorder()),
-                                                    child: MyImage(
-                                                      url: controller
-                                                          .businesses[index]
-                                                          .shopImage,
+                                      )
+                                    : showBusinesses
+                                        ? ListView.separated(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            separatorBuilder:
+                                                (context, index) =>
+                                                    kHalfSizedBox,
+                                            shrinkWrap: true,
+                                            addAutomaticKeepAlives: true,
+                                            itemCount:
+                                                controller.businesses.length,
+                                            itemBuilder: (context, index) {
+                                              return InkWell(
+                                                onTap: () {},
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                child: Container(
+                                                  decoration: ShapeDecoration(
+                                                    color: kPrimaryColor,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              16),
                                                     ),
-                                                  ),
-                                                  kHalfWidthSizedBox,
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        width: deviceType(media
-                                                                    .width) >=
-                                                                2
-                                                            ? media.width - 400
-                                                            : deviceType(media
-                                                                            .width) >
-                                                                        1 &&
-                                                                    deviceType(media
-                                                                            .width) <
-                                                                        2
-                                                                ? media.width -
-                                                                    250
-                                                                : media.width -
-                                                                    220,
-                                                        child: Text(
-                                                          controller
-                                                              .businesses[index]
-                                                              .shopName,
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style:
-                                                              const TextStyle(
-                                                            color:
-                                                                kTextBlackColor,
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      kHalfSizedBox,
-                                                      SizedBox(
-                                                        width: deviceType(media
-                                                                    .width) >=
-                                                                2
-                                                            ? media.width - 400
-                                                            : deviceType(media
-                                                                            .width) >
-                                                                        1 &&
-                                                                    deviceType(media
-                                                                            .width) <
-                                                                        2
-                                                                ? media.width -
-                                                                    250
-                                                                : media.width -
-                                                                    220,
-                                                        child: Text(
-                                                          controller
-                                                              .businesses[index]
-                                                              .address,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            color: kAccentColor,
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w300,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      kSizedBox,
-                                                      SizedBox(
-                                                        width: deviceType(media
-                                                                    .width) >=
-                                                                2
-                                                            ? media.width - 400
-                                                            : deviceType(media
-                                                                            .width) >
-                                                                        1 &&
-                                                                    deviceType(media
-                                                                            .width) <
-                                                                        2
-                                                                ? media.width -
-                                                                    250
-                                                                : media.width -
-                                                                    220,
-                                                        child: Row(
-                                                          children: [
-                                                            FaIcon(
-                                                              FontAwesomeIcons
-                                                                  .solidIdCard,
-                                                              color:
-                                                                  kAccentColor,
-                                                              size: 16,
-                                                            ),
-                                                            kHalfWidthSizedBox,
-                                                            SizedBox(
-                                                              width: deviceType(
-                                                                          media
-                                                                              .width) >=
-                                                                      2
-                                                                  ? media.width -
-                                                                      430
-                                                                  : deviceType(media.width) >
-                                                                              1 &&
-                                                                          deviceType(media.width) <
-                                                                              2
-                                                                      ? media.width -
-                                                                          250
-                                                                      : media.width -
-                                                                          220,
-                                                              child: Text.rich(
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                TextSpan(
-                                                                  children: [
-                                                                    const TextSpan(
-                                                                      text:
-                                                                          "TIN: ",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color:
-                                                                            kTextBlackColor,
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight.w300,
-                                                                      ),
-                                                                    ),
-                                                                    TextSpan(
-                                                                      text: controller
-                                                                          .businesses[
-                                                                              index]
-                                                                          .businessId,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color:
-                                                                            kTextBlackColor,
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight.w300,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
+                                                    shadows: [
+                                                      BoxShadow(
+                                                        color: kBlackColor
+                                                            .withOpacity(0.1),
+                                                        blurRadius: 5,
+                                                        spreadRadius: 2,
+                                                        blurStyle:
+                                                            BlurStyle.normal,
                                                       ),
                                                     ],
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      )
-                                    : const SizedBox();
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        height: 120,
+                                                        width: 120,
+                                                        decoration: ShapeDecoration(
+                                                            color:
+                                                                kLightGreyColor,
+                                                            shape:
+                                                                const CircleBorder()),
+                                                        child: MyImage(
+                                                          url: controller
+                                                              .businesses[index]
+                                                              .shopImage,
+                                                        ),
+                                                      ),
+                                                      kHalfWidthSizedBox,
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          SizedBox(
+                                                            width: deviceType(media
+                                                                        .width) >=
+                                                                    2
+                                                                ? media.width -
+                                                                    400
+                                                                : deviceType(media.width) >
+                                                                            1 &&
+                                                                        deviceType(media.width) <
+                                                                            2
+                                                                    ? media.width -
+                                                                        250
+                                                                    : media.width -
+                                                                        220,
+                                                            child: Text(
+                                                              controller
+                                                                  .businesses[
+                                                                      index]
+                                                                  .shopName,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .start,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color:
+                                                                    kTextBlackColor,
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          kHalfSizedBox,
+                                                          SizedBox(
+                                                            width: deviceType(media
+                                                                        .width) >=
+                                                                    2
+                                                                ? media.width -
+                                                                    400
+                                                                : deviceType(media.width) >
+                                                                            1 &&
+                                                                        deviceType(media.width) <
+                                                                            2
+                                                                    ? media.width -
+                                                                        250
+                                                                    : media.width -
+                                                                        220,
+                                                            child: Text(
+                                                              controller
+                                                                  .businesses[
+                                                                      index]
+                                                                  .address,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: TextStyle(
+                                                                color:
+                                                                    kAccentColor,
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          kSizedBox,
+                                                          SizedBox(
+                                                            width: deviceType(media
+                                                                        .width) >=
+                                                                    2
+                                                                ? media.width -
+                                                                    400
+                                                                : deviceType(media.width) >
+                                                                            1 &&
+                                                                        deviceType(media.width) <
+                                                                            2
+                                                                    ? media.width -
+                                                                        250
+                                                                    : media.width -
+                                                                        220,
+                                                            child: Row(
+                                                              children: [
+                                                                FaIcon(
+                                                                  FontAwesomeIcons
+                                                                      .solidIdCard,
+                                                                  color:
+                                                                      kAccentColor,
+                                                                  size: 16,
+                                                                ),
+                                                                kHalfWidthSizedBox,
+                                                                SizedBox(
+                                                                  width: deviceType(media
+                                                                              .width) >=
+                                                                          2
+                                                                      ? media.width -
+                                                                          430
+                                                                      : deviceType(media.width) > 1 &&
+                                                                              deviceType(media.width) <
+                                                                                  2
+                                                                          ? media.width -
+                                                                              250
+                                                                          : media.width -
+                                                                              220,
+                                                                  child:
+                                                                      Text.rich(
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    TextSpan(
+                                                                      children: [
+                                                                        const TextSpan(
+                                                                          text:
+                                                                              "TIN: ",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                kTextBlackColor,
+                                                                            fontSize:
+                                                                                16,
+                                                                            fontWeight:
+                                                                                FontWeight.w300,
+                                                                          ),
+                                                                        ),
+                                                                        TextSpan(
+                                                                          text: controller
+                                                                              .businesses[index]
+                                                                              .businessId,
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                kTextBlackColor,
+                                                                            fontSize:
+                                                                                16,
+                                                                            fontWeight:
+                                                                                FontWeight.w300,
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : const SizedBox();
                       },
                     ),
 
