@@ -1,7 +1,6 @@
+import 'package:benji_vendor/app/businesses/businesses.dart';
 import 'package:benji_vendor/app/others/reviews.dart';
 import 'package:benji_vendor/app/profile/personal_info.dart';
-import 'package:benji_vendor/app/profile/settings.dart';
-import 'package:benji_vendor/app/vendor_business/businesses.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
@@ -10,11 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../src/model/order_model.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../auth/login.dart';
 import '../package/packages.dart';
+import '../settings/settings.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -29,21 +28,21 @@ class _ProfileState extends State<Profile> {
     super.initState();
   }
 
-  List<OrderModel> get pendingOrders =>
-      OrderController.instance.vendorsOrderList
-          .where((order) => order.deliveryStatus == "PEND")
-          .toList();
+  // List<OrderModel> get pendingOrders =>
+  //     OrderController.instance.vendorsOrderList
+  //         .where((order) => order.deliveryStatus == "PEND")
+  //         .toList();
 
-  List<OrderModel> get deliveredOrders =>
-      OrderController.instance.vendorsOrderList
-          .where((order) => order.deliveryStatus == "COMP")
-          .toList();
-  int get pendingOrdersCount => pendingOrders.length;
-  int get deliveredOrdersCount => deliveredOrders.length;
+  // List<OrderModel> get deliveredOrders =>
+  //     OrderController.instance.vendorsOrderList
+  //         .where((order) => order.deliveryStatus == "COMP")
+  //         .toList();
+  // int get pendingOrdersCount => pendingOrders.length;
+  // int get deliveredOrdersCount => deliveredOrders.length;
 
-  totalNumberOfOrders() {
-    return pendingOrdersCount + deliveredOrdersCount;
-  }
+  // totalNumberOfOrders() {
+  //   return pendingOrdersCount + deliveredOrdersCount;
+  // }
 
   void logOut() async {
     UserController.instance.deleteUser();
@@ -87,7 +86,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void toBusiness() {
+  void toBusinesses() {
     Get.to(
       () => const VendorBusiness(),
       duration: const Duration(milliseconds: 300),
@@ -176,22 +175,6 @@ class _ProfileState extends State<Profile> {
                       trailing: const FaIcon(FontAwesomeIcons.chevronRight),
                     ),
                     ListTile(
-                      onTap: toBusiness,
-                      leading: FaIcon(
-                        FontAwesomeIcons.store,
-                        color: kAccentColor,
-                      ),
-                      title: const Text(
-                        'Businesses',
-                        style: TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
-                    ),
-                    ListTile(
                       onTap: toSettings,
                       leading: FaIcon(
                         FontAwesomeIcons.gear,
@@ -246,13 +229,13 @@ class _ProfileState extends State<Profile> {
                       trailing: const FaIcon(FontAwesomeIcons.chevronRight),
                     ),
                     ListTile(
-                      onTap: reviewsPage,
+                      onTap: toBusinesses,
                       leading: FaIcon(
-                        FontAwesomeIcons.solidComment,
+                        FontAwesomeIcons.store,
                         color: kAccentColor,
                       ),
                       title: const Text(
-                        'User Reviews',
+                        'Edit Businesses',
                         style: TextStyle(
                           color: kTextBlackColor,
                           fontSize: 15,
@@ -261,6 +244,22 @@ class _ProfileState extends State<Profile> {
                       ),
                       trailing: const FaIcon(FontAwesomeIcons.chevronRight),
                     ),
+                    // ListTile(
+                    //   onTap: reviewsPage,
+                    //   leading: FaIcon(
+                    //     FontAwesomeIcons.solidComment,
+                    //     color: kAccentColor,
+                    //   ),
+                    //   title: const Text(
+                    //     'User Reviews',
+                    //     style: TextStyle(
+                    //       color: kTextBlackColor,
+                    //       fontSize: 15,
+                    //       fontWeight: FontWeight.w400,
+                    //     ),
+                    //   ),
+                    //   trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                    // ),
                     // ListTile(
                     //   leading: FaIcon(
                     //     FontAwesomeIcons.receipt,
