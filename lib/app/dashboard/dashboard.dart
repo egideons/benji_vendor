@@ -183,6 +183,7 @@ class _DashboardState extends State<Dashboard>
       curve: Curves.easeIn,
       preventDuplicates: false,
       popGesture: true,
+      transition: Transition.rightToLeft,
     );
   }
 
@@ -386,9 +387,7 @@ class _DashboardState extends State<Dashboard>
                                                 controller.businesses.length,
                                             itemBuilder: (context, index) {
                                               return VendorBusinessContainer(
-                                                onTap: () => editBusiness(
-                                                    controller
-                                                        .businesses[index]),
+                                                onTap: () {},
                                                 business: controller
                                                     .businesses[index],
                                               );
