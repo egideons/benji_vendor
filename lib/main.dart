@@ -89,18 +89,6 @@ class MyApp extends StatelessWidget {
         defaultTransition: Transition.rightToLeft,
         home: SplashScreen(),
       );
-    } else if (Platform.isAndroid) {
-      return GetMaterialApp(
-        title: "Benji Vendor",
-        debugShowCheckedModeBanner: false,
-        color: kPrimaryColor,
-        navigatorKey: Get.key,
-        themeMode: ThemeMode.light,
-        darkTheme: AppTheme.darkTheme,
-        theme: AppTheme.lightTheme,
-        defaultTransition: Transition.rightToLeft,
-        home: SplashScreen(),
-      );
     }
     return GetMaterialApp(
       title: "Benji Vendor",
