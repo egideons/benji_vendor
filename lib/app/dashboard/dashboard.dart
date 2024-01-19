@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
 
 import 'package:benji_vendor/app/profile/personal_info.dart';
-import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
@@ -12,13 +11,19 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../src/components/section/welcome_greeting.dart';
-import '../../src/components/skeletons/vendor_skeletons.dart';
+import '../../src/components/appbar/app_bar_title.dart';
+import '../../src/components/card/dashboard_user_card.dart';
+import '../../src/components/card/empty.dart';
+import '../../src/components/container/vendor_business_container.dart';
+import '../../src/components/section/dashboard_businesses_display_controller.dart';
+import '../../src/components/skeletons/businesses_skeletons.dart';
 import '../../src/controller/business_controller.dart';
 import '../../src/controller/notification_controller.dart';
+import '../../src/model/business_model.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
+import '../businesses/add_business.dart';
 import '../others/notifications.dart';
 
 class Dashboard extends StatefulWidget {
@@ -169,15 +174,41 @@ class _DashboardState extends State<Dashboard>
   //   );
   // }
 
-  profilePage() {
+  editProfile() {
     Get.to(
-      () => const PersonalInfo(),
-      routeName: 'PersonalInfo',
+      () => const EditProfile(),
+      routeName: 'EditProfile',
       duration: const Duration(milliseconds: 0),
       fullscreenDialog: true,
       curve: Curves.easeIn,
       preventDuplicates: false,
       popGesture: true,
+    );
+  }
+
+  addVendorBusiness() {
+    Get.to(
+      () => const AddBusiness(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "AddBusiness",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  editBusiness(BusinessModel business) {
+    Get.to(
+      () => AddBusiness(business: business),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "AddBusiness",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
     );
   }
 
@@ -230,38 +261,7 @@ class _DashboardState extends State<Dashboard>
               backgroundColor: kPrimaryColor,
               titleSpacing: kDefaultPadding / 2,
               elevation: 0,
-              title: Row(
-                children: [
-                  Text(
-                    "BEN",
-                    style: TextStyle(
-                      color: kSecondaryColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                  Text(
-                    "JI",
-                    style: TextStyle(
-                      color: kAccentColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                  kHalfWidthSizedBox,
-                  Text(
-                    "VENDOR",
-                    style: TextStyle(
-                      color: kAccentColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 2,
-                    ),
-                  ),
-                ],
-              ),
+              title: const AppBarTitle(),
               actions: [
                 Stack(
                   children: [
@@ -331,208 +331,31 @@ class _DashboardState extends State<Dashboard>
                   scrollDirection: Axis.vertical,
                   padding: const EdgeInsets.all(kDefaultPadding),
                   children: [
-                    GetBuilder<UserController>(builder: (controller) {
-                      return Container(
-                        padding: const EdgeInsets.all(kDefaultPadding),
-                        width: media.width,
-                        height: deviceType(media.width) >= 2 ? 200 : 140,
-                        decoration: ShapeDecoration(
-                          color: kPrimaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(kDefaultPadding),
-                          ),
-                          shadows: const [
-                            BoxShadow(
-                              color: Color(0x0F000000),
-                              blurRadius: 24,
-                              offset: Offset(0, 4),
-                              spreadRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            GestureDetector(
-                              onTap: profilePage,
-                              child: CircleAvatar(
-                                maxRadius: 50,
-                                minRadius: 50,
-                                // backgroundColor: kLightGreyColor,
-                                child: ClipOval(
-                                  child: MyImage(
-                                    url: controller.user.value.profileLogo,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            kHalfWidthSizedBox,
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                WelcomeGreeting(
-                                  vendorName:
-                                      "${controller.user.value.firstName} ${controller.user.value.lastName}",
-                                ),
-                                kHalfSizedBox,
-                                Row(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        FaIcon(
-                                          FontAwesomeIcons.solidEnvelope,
-                                          color: kAccentColor,
-                                          size: 15,
-                                        ),
-                                        kHalfSizedBox,
-                                        FaIcon(
-                                          FontAwesomeIcons.mapLocationDot,
-                                          color: kAccentColor,
-                                          size: 15,
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(width: 5),
-                                    Column(
-                                      children: [
-                                        SizedBox(
-                                          width: media.width - 250,
-                                          child: Text(
-                                            controller.user.value.email,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: kTextGreyColor,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                        kHalfSizedBox,
-                                        SizedBox(
-                                          width: media.width - 250,
-                                          child: Text(
-                                            controller.user.value.address,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: kTextGreyColor,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
+                    GetBuilder<UserController>(
+                      builder: (controller) {
+                        return DashboardUserCard(
+                          user: controller.user.value,
+                          onTap: editProfile,
+                        );
+                      },
+                    ),
                     kSizedBox,
                     GetBuilder<BusinessController>(
-                        init: BusinessController(),
-                        builder: (controller) {
-                          return InkWell(
-                            onTap: () {
-                              setState(() {
-                                showBusinesses = !showBusinesses;
-                              });
-                            },
-                            borderRadius:
-                                BorderRadius.circular(kDefaultPadding),
-                            child: Container(
-                              padding: const EdgeInsets.all(kDefaultPadding),
-                              decoration: ShapeDecoration(
-                                shadows: [
-                                  BoxShadow(
-                                    color: kBlackColor.withOpacity(0.1),
-                                    blurRadius: 5,
-                                    spreadRadius: 2,
-                                    blurStyle: BlurStyle.normal,
-                                  ),
-                                ],
-                                color: const Color(0xFFFEF8F8),
-                                shape: RoundedRectangleBorder(
-                                  side: const BorderSide(
-                                    width: 0.50,
-                                    color: Color(0xFFFDEDED),
-                                  ),
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  FaIcon(
-                                    FontAwesomeIcons.store,
-                                    color: kAccentColor,
-                                    size: 16,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        showBusinesses
-                                            ? "Hide Businesses"
-                                            : "Show Businesses",
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: kTextBlackColor,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      kHalfWidthSizedBox,
-                                      Text.rich(
-                                        TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: "(",
-                                              style: TextStyle(
-                                                color: kTextGreyColor,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: refreshing
-                                                  ? "..."
-                                                  : "${controller.businesses.length}",
-                                              style: TextStyle(
-                                                color: kAccentColor,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: ")",
-                                              style: TextStyle(
-                                                color: kTextGreyColor,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  FaIcon(
-                                    showBusinesses
-                                        ? FontAwesomeIcons.caretDown
-                                        : FontAwesomeIcons.caretUp,
-                                    color: kAccentColor,
-                                    size: 16,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        }),
+                      init: BusinessController(),
+                      builder: (controller) {
+                        return DashboardDisplayBusinessesController(
+                          refreshing: refreshing,
+                          showBusinesses: showBusinesses,
+                          onTap: () {
+                            setState(() {
+                              showBusinesses = !showBusinesses;
+                            });
+                          },
+                          numberOfBusinesses:
+                              controller.businesses.length.toString(),
+                        );
+                      },
+                    ),
                     kSizedBox,
                     GetBuilder<BusinessController>(
                       init: BusinessController(),
@@ -542,165 +365,36 @@ class _DashboardState extends State<Dashboard>
                             : controller.isLoad.value &&
                                     controller.businesses.isEmpty
                                 ? const BusinessListSkeleton()
-                                : showBusinesses
-                                    ? ListView.separated(
-                                        physics: const BouncingScrollPhysics(),
-                                        separatorBuilder: (context, index) =>
-                                            kHalfSizedBox,
-                                        shrinkWrap: true,
-                                        addAutomaticKeepAlives: true,
-                                        itemCount: controller.businesses.length,
-                                        itemBuilder: (context, index) {
-                                          return InkWell(
-                                            onTap: () {},
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: Container(
-                                              decoration: ShapeDecoration(
-                                                color: kPrimaryColor,
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(16),
-                                                ),
-                                                shadows: [
-                                                  BoxShadow(
-                                                    color: kBlackColor
-                                                        .withOpacity(0.1),
-                                                    blurRadius: 5,
-                                                    spreadRadius: 2,
-                                                    blurStyle: BlurStyle.normal,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    height: 120,
-                                                    width: 120,
-                                                    decoration: ShapeDecoration(
-                                                        color: kLightGreyColor,
-                                                        shape:
-                                                            const CircleBorder()),
-                                                    child: MyImage(
-                                                      url: controller
-                                                          .businesses[index]
-                                                          .shopImage,
-                                                    ),
-                                                  ),
-                                                  kHalfWidthSizedBox,
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      SizedBox(
-                                                        width:
-                                                            media.width - 200,
-                                                        child: Text(
-                                                          controller
-                                                              .businesses[index]
-                                                              .shopName,
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style:
-                                                              const TextStyle(
-                                                            color:
-                                                                kTextBlackColor,
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w700,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      kHalfSizedBox,
-                                                      SizedBox(
-                                                        width:
-                                                            media.width - 200,
-                                                        child: Text(
-                                                          controller
-                                                              .businesses[index]
-                                                              .address,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: TextStyle(
-                                                            color: kAccentColor,
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w300,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      kSizedBox,
-                                                      SizedBox(
-                                                        width:
-                                                            media.width - 200,
-                                                        child: Row(
-                                                          children: [
-                                                            FaIcon(
-                                                              FontAwesomeIcons
-                                                                  .solidIdCard,
-                                                              color:
-                                                                  kAccentColor,
-                                                              size: 16,
-                                                            ),
-                                                            kHalfWidthSizedBox,
-                                                            SizedBox(
-                                                              width:
-                                                                  media.width -
-                                                                      230,
-                                                              child: Text.rich(
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                TextSpan(
-                                                                  children: [
-                                                                    const TextSpan(
-                                                                      text:
-                                                                          "TIN: ",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color:
-                                                                            kTextBlackColor,
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight.w300,
-                                                                      ),
-                                                                    ),
-                                                                    TextSpan(
-                                                                      text: controller
-                                                                          .businesses[
-                                                                              index]
-                                                                          .businessId,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color:
-                                                                            kTextBlackColor,
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight.w300,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        },
+                                : controller.businesses.isEmpty
+                                    ? EmptyCard(
+                                        emptyCardMessage:
+                                            "You don't have any businesses yet",
+                                        showButton: true,
+                                        buttonTitle: "Add a business",
+                                        onPressed: addVendorBusiness,
                                       )
-                                    : const SizedBox();
+                                    : showBusinesses
+                                        ? ListView.separated(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            separatorBuilder:
+                                                (context, index) =>
+                                                    kHalfSizedBox,
+                                            shrinkWrap: true,
+                                            addAutomaticKeepAlives: true,
+                                            itemCount:
+                                                controller.businesses.length,
+                                            itemBuilder: (context, index) {
+                                              return VendorBusinessContainer(
+                                                onTap: () => editBusiness(
+                                                    controller
+                                                        .businesses[index]),
+                                                business: controller
+                                                    .businesses[index],
+                                              );
+                                            },
+                                          )
+                                        : const SizedBox();
                       },
                     ),
 

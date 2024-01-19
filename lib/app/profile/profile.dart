@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 import '../auth/login.dart';
-import '../package/packages.dart';
+import '../packages/packages.dart';
 import '../settings/settings.dart';
 
 class Profile extends StatefulWidget {
@@ -99,12 +99,12 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  void toPersonalInfo() => Get.to(
-        () => const PersonalInfo(),
+  void toEditProfile() => Get.to(
+        () => const EditProfile(),
         duration: const Duration(milliseconds: 300),
         fullscreenDialog: true,
         curve: Curves.easeIn,
-        routeName: "PersonalInfo",
+        routeName: "EditProfile",
         preventDuplicates: true,
         popGesture: false,
         transition: Transition.rightToLeft,
@@ -161,7 +161,7 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   children: [
                     ListTile(
-                      onTap: toPersonalInfo,
+                      onTap: toEditProfile,
                       leading: FaIcon(FontAwesomeIcons.solidUser,
                           color: kAccentColor),
                       title: const Text(
@@ -242,7 +242,10 @@ class _ProfileState extends State<Profile> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
-                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                      trailing: FaIcon(
+                        FontAwesomeIcons.solidPenToSquare,
+                        color: kAccentColor,
+                      ),
                     ),
                     // ListTile(
                     //   onTap: reviewsPage,

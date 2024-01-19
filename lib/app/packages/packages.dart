@@ -1,4 +1,4 @@
-import 'package:benji_vendor/app/package/send_package.dart';
+import 'package:benji_vendor/app/packages/send_package.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';

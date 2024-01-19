@@ -3,8 +3,8 @@ import 'package:benji_vendor/src/components/body/personal_info_body.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
 
-class PersonalInfo extends StatelessWidget {
-  const PersonalInfo({Key? key}) : super(key: key);
+class EditProfile extends StatelessWidget {
+  const EditProfile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class PersonalInfo extends StatelessWidget {
       ),
       body: GestureDetector(
         onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
-        child: const PersonalInfoBody(),
+        child: const EditProfileBody(),
       ),
     );
   }

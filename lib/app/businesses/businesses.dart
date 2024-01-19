@@ -1,4 +1,4 @@
-import 'package:benji_vendor/app/profile/business_info.dart';
+import 'package:benji_vendor/app/businesses/add_business.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/vendor_business_container.dart';
@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../src/components/skeletons/businesses_skeletons.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
@@ -80,11 +81,11 @@ class _VendorBusinessState extends State<VendorBusiness> {
 
   addVendorBusiness() {
     Get.to(
-      () => const BusinessInfo(),
+      () => const AddBusiness(),
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
-      routeName: "BusinessInfo",
+      routeName: "AddBusiness",
       preventDuplicates: true,
       popGesture: false,
       transition: Transition.rightToLeft,
@@ -93,11 +94,11 @@ class _VendorBusinessState extends State<VendorBusiness> {
 
   editBusiness(BusinessModel business) {
     Get.to(
-      () => BusinessInfo(business: business),
+      () => AddBusiness(business: business),
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
-      routeName: "BusinessInfo",
+      routeName: "AddBusiness",
       preventDuplicates: true,
       popGesture: false,
       transition: Transition.rightToLeft,
@@ -153,26 +154,18 @@ class _VendorBusinessState extends State<VendorBusiness> {
                         await BusinessController.instance.getVendorBusinesses();
                       },
                       builder: (controller) {
-                        return controller.isLoad.value &&
-                                controller.businesses.isEmpty
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                  color: kAccentColor,
-                                ),
-                              )
-                            : controller.businesses.isEmpty
-                                ? EmptyCard(
-                                    emptyCardMessage:
-                                        "You don't have any businesses yet",
-                                    showButton: true,
-                                    buttonTitle: "Add product",
-                                    onPressed: addVendorBusiness,
-                                  )
-                                : refreshing
-                                    ? Center(
-                                        child: CircularProgressIndicator(
-                                          color: kAccentColor,
-                                        ),
+                        return refreshing
+                            ? const BusinessListSkeleton()
+                            : controller.isLoad.value &&
+                                    controller.businesses.isEmpty
+                                ? const BusinessListSkeleton()
+                                : controller.businesses.isEmpty
+                                    ? EmptyCard(
+                                        emptyCardMessage:
+                                            "You don't have any businesses yet",
+                                        showButton: true,
+                                        buttonTitle: "Add product",
+                                        onPressed: addVendorBusiness,
                                       )
                                     : ListView.builder(
                                         shrinkWrap: true,
@@ -190,7 +183,8 @@ class _VendorBusinessState extends State<VendorBusiness> {
                                           //     index;
                                           return VendorBusinessContainer(
                                             onTap: () => editBusiness(
-                                                controller.businesses[index]),
+                                              controller.businesses[index],
+                                            ),
                                             business:
                                                 controller.businesses[index],
                                           );

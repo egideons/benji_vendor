@@ -41,15 +41,15 @@ import '../../src/controller/push_notifications_controller.dart';
 import '../../src/providers/helper.dart';
 import '../../src/providers/responsive_constants.dart';
 
-class BusinessInfo extends StatefulWidget {
-  const BusinessInfo({super.key, this.business});
+class AddBusiness extends StatefulWidget {
+  const AddBusiness({super.key, this.business});
   final BusinessModel? business;
 
   @override
-  State<BusinessInfo> createState() => _BusinessInfoState();
+  State<AddBusiness> createState() => _AddBusinessState();
 }
 
-class _BusinessInfoState extends State<BusinessInfo> {
+class _AddBusinessState extends State<AddBusiness> {
   //==========================================================================================\\
   @override
   void initState() {

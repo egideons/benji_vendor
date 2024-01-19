@@ -3,6 +3,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../theme/colors.dart';
 import '../../providers/constants.dart';
+import '../../providers/responsive_constants.dart';
 import 'page_skeleton.dart';
 
 class BusinessListSkeleton extends StatelessWidget {
@@ -16,7 +17,7 @@ class BusinessListSkeleton extends StatelessWidget {
     return ListView.separated(
       separatorBuilder: (context, index) =>
           const SizedBox(height: kDefaultPadding),
-      itemCount: 30,
+      itemCount: 20,
       addAutomaticKeepAlives: true,
       physics: const BouncingScrollPhysics(),
       shrinkWrap: true,
@@ -39,7 +40,11 @@ class BusinessListSkeleton extends StatelessWidget {
               ),
               kSizedBox,
               SizedBox(
-                width: media.width - 200,
+                width: deviceType(media.width) >= 2
+                    ? media.width - 400
+                    : deviceType(media.width) > 1 && deviceType(media.width) < 2
+                        ? media.width - 250
+                        : media.width - 220,
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -50,9 +55,23 @@ class BusinessListSkeleton extends StatelessWidget {
                 ),
               ),
               kHalfSizedBox,
-              PageSkeleton(height: 15, width: media.width - 200),
+              PageSkeleton(
+                  height: 15,
+                  width: deviceType(media.width) >= 2
+                      ? media.width - 400
+                      : deviceType(media.width) > 1 &&
+                              deviceType(media.width) < 2
+                          ? media.width - 250
+                          : media.width - 220),
               kSizedBox,
-              PageSkeleton(height: 15, width: media.width - 200),
+              PageSkeleton(
+                  height: 15,
+                  width: deviceType(media.width) >= 2
+                      ? media.width - 400
+                      : deviceType(media.width) > 1 &&
+                              deviceType(media.width) < 2
+                          ? media.width - 250
+                          : media.width - 220),
             ],
           ),
         ],

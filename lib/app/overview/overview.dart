@@ -4,8 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
 
 import '../../theme/colors.dart';
+import '../businesses/add_business.dart';
 import '../dashboard/dashboard.dart';
-import '../profile/business_info.dart';
 import '../profile/profile.dart';
 
 class OverView extends StatefulWidget {
@@ -43,11 +43,11 @@ class _OverViewState extends State<OverView> {
 
   addVendorBusiness() {
     Get.to(
-      () => const BusinessInfo(),
+      () => const AddBusiness(),
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
-      routeName: "BusinessInfo",
+      routeName: "AddBusiness",
       preventDuplicates: true,
       popGesture: false,
       transition: Transition.downToUp,
