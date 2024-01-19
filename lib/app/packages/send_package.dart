@@ -8,7 +8,7 @@ import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/input/my_intl_phonefield.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
-import 'package:benji_vendor/src/components/number_textformfield.dart';
+import 'package:benji_vendor/src/components/input/number_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';

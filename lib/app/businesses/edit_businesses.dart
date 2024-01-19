@@ -16,17 +16,25 @@ import '../../src/components/skeletons/businesses_skeletons.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
+import 'edit_business.dart';
 
-class VendorBusiness extends StatefulWidget {
-  const VendorBusiness({super.key});
+class EditBusinessesPage extends StatefulWidget {
+  const EditBusinessesPage({super.key});
 
   @override
-  State<VendorBusiness> createState() => _VendorBusinessState();
+  State<EditBusinessesPage> createState() => _EditBusinessesPageState();
 }
 
-class _VendorBusinessState extends State<VendorBusiness> {
+class _EditBusinessesPageState extends State<EditBusinessesPage> {
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(scrollListener);
+  }
+
   @override
   void dispose() {
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -43,28 +51,18 @@ class _VendorBusinessState extends State<VendorBusiness> {
 
   //===================== Scroll to Top ==========================\\
   Future<void> scrollToTop() async {
-    await scrollController.animateTo(
-      0.0,
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
-    setState(() {
-      isScrollToTopBtnVisible = false;
-    });
+    scrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
   }
 
-  Future<void> scrollListener() async {
-    if (scrollController.position.pixels >= 100 &&
-        isScrollToTopBtnVisible != true) {
-      setState(() {
-        isScrollToTopBtnVisible = true;
-      });
+  void scrollListener() async {
+    //========= Show action button ========//
+    if (scrollController.position.pixels >= 100) {
+      setState(() => isScrollToTopBtnVisible = true);
     }
-    if (scrollController.position.pixels < 100 &&
-        isScrollToTopBtnVisible == true) {
-      setState(() {
-        isScrollToTopBtnVisible = false;
-      });
+    //========= Hide action button ========//
+    else if (scrollController.position.pixels < 100) {
+      setState(() => isScrollToTopBtnVisible = false);
     }
   }
 
@@ -72,8 +70,7 @@ class _VendorBusinessState extends State<VendorBusiness> {
     setState(() {
       refreshing = true;
     });
-    await Future.delayed(const Duration(milliseconds: 500),
-        () => ProductController.instance.refreshData());
+    await BusinessController.instance.getVendorBusinesses();
     setState(() {
       refreshing = false;
     });
@@ -94,11 +91,11 @@ class _VendorBusinessState extends State<VendorBusiness> {
 
   editBusiness(BusinessModel business) {
     Get.to(
-      () => AddBusiness(business: business),
+      () => EditBusiness(business: business),
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
-      routeName: "AddBusiness",
+      routeName: "EditBusiness",
       preventDuplicates: true,
       popGesture: false,
       transition: Transition.rightToLeft,
@@ -115,7 +112,7 @@ class _VendorBusinessState extends State<VendorBusiness> {
           onRefresh: handleRefresh,
           child: Scaffold(
             appBar: MyAppBar(
-              title: "Your Businesses",
+              title: "Select a Business to edit",
               elevation: 0,
               actions: const [],
               backgroundColor: kPrimaryColor,
@@ -133,14 +130,7 @@ class _VendorBusinessState extends State<VendorBusiness> {
                     hoverElevation: 50.0,
                     child: const FaIcon(FontAwesomeIcons.chevronUp, size: 18),
                   )
-                : FloatingActionButton(
-                    onPressed: addVendorBusiness,
-                    elevation: 20.0,
-                    backgroundColor: kAccentColor,
-                    foregroundColor: kPrimaryColor,
-                    tooltip: "Add a business",
-                    child: const FaIcon(FontAwesomeIcons.plus),
-                  ),
+                : const SizedBox(),
             body: SafeArea(
               maintainBottomViewPadding: true,
               child: Scrollbar(
@@ -167,7 +157,7 @@ class _VendorBusinessState extends State<VendorBusiness> {
                                         buttonTitle: "Add product",
                                         onPressed: addVendorBusiness,
                                       )
-                                    : ListView.builder(
+                                    : ListView.separated(
                                         shrinkWrap: true,
                                         reverse: true,
                                         itemCount: controller.businesses.length,
@@ -175,6 +165,9 @@ class _VendorBusinessState extends State<VendorBusiness> {
                                         addSemanticIndexes: true,
                                         dragStartBehavior:
                                             DragStartBehavior.start,
+                                        separatorBuilder: (context, index) =>
+                                            kHalfSizedBox,
+                                        addAutomaticKeepAlives: true,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           // int reversedIndex =
