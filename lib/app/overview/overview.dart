@@ -123,7 +123,7 @@ class _OverViewState extends State<OverView> {
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.grid_view),
-                  label: "Overview",
+                  label: "Dashboard",
                   activeIcon: Icon(Icons.grid_view_rounded),
                 ),
                 BottomNavigationBarItem(
