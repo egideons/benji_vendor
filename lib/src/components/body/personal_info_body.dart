@@ -32,14 +32,14 @@ import '../../providers/api_url.dart';
 import '../../providers/constants.dart';
 import '../image/my_image.dart';
 
-class PersonalInfoBody extends StatefulWidget {
-  const PersonalInfoBody({Key? key}) : super(key: key);
+class EditProfileBody extends StatefulWidget {
+  const EditProfileBody({Key? key}) : super(key: key);
 
   @override
-  State<PersonalInfoBody> createState() => _PersonalInfoBodyState();
+  State<EditProfileBody> createState() => _EditProfileBodyState();
 }
 
-class _PersonalInfoBodyState extends State<PersonalInfoBody> {
+class _EditProfileBodyState extends State<EditProfileBody> {
   //==========================================================================================\\
   @override
   void initState() {

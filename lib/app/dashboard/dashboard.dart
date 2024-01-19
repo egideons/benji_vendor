@@ -169,10 +169,10 @@ class _DashboardState extends State<Dashboard>
   //   );
   // }
 
-  profilePage() {
+  editProfile() {
     Get.to(
-      () => const PersonalInfo(),
-      routeName: 'PersonalInfo',
+      () => const EditProfile(),
+      routeName: 'EditProfile',
       duration: const Duration(milliseconds: 0),
       fullscreenDialog: true,
       curve: Curves.easeIn,
@@ -335,7 +335,6 @@ class _DashboardState extends State<Dashboard>
                       return Container(
                         padding: const EdgeInsets.all(kDefaultPadding),
                         width: media.width,
-                        height: deviceType(media.width) >= 2 ? 200 : 140,
                         decoration: ShapeDecoration(
                           color: kPrimaryColor,
                           shape: RoundedRectangleBorder(
@@ -355,10 +354,12 @@ class _DashboardState extends State<Dashboard>
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             GestureDetector(
-                              onTap: profilePage,
+                              onTap: editProfile,
                               child: CircleAvatar(
-                                maxRadius: 50,
-                                minRadius: 50,
+                                maxRadius:
+                                    deviceType(media.width) >= 2 ? 90 : 50,
+                                minRadius:
+                                    deviceType(media.width) >= 2 ? 90 : 50,
                                 // backgroundColor: kLightGreyColor,
                                 child: ClipOval(
                                   child: MyImage(
@@ -367,7 +368,9 @@ class _DashboardState extends State<Dashboard>
                                 ),
                               ),
                             ),
-                            kHalfWidthSizedBox,
+                            deviceType(media.width) >= 2
+                                ? kWidthSizedBox
+                                : kHalfWidthSizedBox,
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -383,13 +386,17 @@ class _DashboardState extends State<Dashboard>
                                         FaIcon(
                                           FontAwesomeIcons.solidEnvelope,
                                           color: kAccentColor,
-                                          size: 15,
+                                          size: deviceType(media.width) >= 2
+                                              ? 20
+                                              : 15,
                                         ),
                                         kHalfSizedBox,
                                         FaIcon(
                                           FontAwesomeIcons.mapLocationDot,
                                           color: kAccentColor,
-                                          size: 15,
+                                          size: deviceType(media.width) >= 2
+                                              ? 20
+                                              : 15,
                                         ),
                                       ],
                                     ),
@@ -397,26 +404,36 @@ class _DashboardState extends State<Dashboard>
                                     Column(
                                       children: [
                                         SizedBox(
-                                          width: media.width - 250,
+                                          width: deviceType(media.width) >= 2
+                                              ? media.width - 460
+                                              : media.width - 250,
                                           child: Text(
                                             controller.user.value.email,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               color: kTextGreyColor,
-                                              fontSize: 12,
+                                              fontSize:
+                                                  deviceType(media.width) >= 2
+                                                      ? 16
+                                                      : 12,
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
                                         ),
                                         kHalfSizedBox,
                                         SizedBox(
-                                          width: media.width - 250,
+                                          width: deviceType(media.width) >= 2
+                                              ? media.width - 460
+                                              : media.width - 250,
                                           child: Text(
                                             controller.user.value.address,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               color: kTextGreyColor,
-                                              fontSize: 12,
+                                              fontSize:
+                                                  deviceType(media.width) >= 2
+                                                      ? 16
+                                                      : 12,
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
@@ -594,8 +611,20 @@ class _DashboardState extends State<Dashboard>
                                                             .start,
                                                     children: [
                                                       SizedBox(
-                                                        width:
-                                                            media.width - 200,
+                                                        width: deviceType(media
+                                                                    .width) >=
+                                                                2
+                                                            ? media.width - 400
+                                                            : deviceType(media
+                                                                            .width) >
+                                                                        1 &&
+                                                                    deviceType(media
+                                                                            .width) <
+                                                                        2
+                                                                ? media.width -
+                                                                    250
+                                                                : media.width -
+                                                                    220,
                                                         child: Text(
                                                           controller
                                                               .businesses[index]
@@ -616,8 +645,20 @@ class _DashboardState extends State<Dashboard>
                                                       ),
                                                       kHalfSizedBox,
                                                       SizedBox(
-                                                        width:
-                                                            media.width - 200,
+                                                        width: deviceType(media
+                                                                    .width) >=
+                                                                2
+                                                            ? media.width - 400
+                                                            : deviceType(media
+                                                                            .width) >
+                                                                        1 &&
+                                                                    deviceType(media
+                                                                            .width) <
+                                                                        2
+                                                                ? media.width -
+                                                                    250
+                                                                : media.width -
+                                                                    220,
                                                         child: Text(
                                                           controller
                                                               .businesses[index]
@@ -634,8 +675,20 @@ class _DashboardState extends State<Dashboard>
                                                       ),
                                                       kSizedBox,
                                                       SizedBox(
-                                                        width:
-                                                            media.width - 200,
+                                                        width: deviceType(media
+                                                                    .width) >=
+                                                                2
+                                                            ? media.width - 400
+                                                            : deviceType(media
+                                                                            .width) >
+                                                                        1 &&
+                                                                    deviceType(media
+                                                                            .width) <
+                                                                        2
+                                                                ? media.width -
+                                                                    250
+                                                                : media.width -
+                                                                    220,
                                                         child: Row(
                                                           children: [
                                                             FaIcon(
@@ -647,9 +700,20 @@ class _DashboardState extends State<Dashboard>
                                                             ),
                                                             kHalfWidthSizedBox,
                                                             SizedBox(
-                                                              width:
-                                                                  media.width -
-                                                                      230,
+                                                              width: deviceType(
+                                                                          media
+                                                                              .width) >=
+                                                                      2
+                                                                  ? media.width -
+                                                                      430
+                                                                  : deviceType(media.width) >
+                                                                              1 &&
+                                                                          deviceType(media.width) <
+                                                                              2
+                                                                      ? media.width -
+                                                                          250
+                                                                      : media.width -
+                                                                          220,
                                                               child: Text.rich(
                                                                 maxLines: 1,
                                                                 overflow:
