@@ -187,6 +187,19 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
+  // toBusinessDetailScreen(BusinessModel business) {
+  //   Get.to(
+  //     () => BusinessDetailScreen(business: business),
+  //     duration: const Duration(milliseconds: 300),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     routeName: "BusinessDetailScreen",
+  //     preventDuplicates: true,
+  //     popGesture: false,
+  //     transition: Transition.rightToLeft,
+  //   );
+  // }
+
   addVendorBusiness() {
     Get.to(
       () => const AddBusiness(),
@@ -382,12 +395,16 @@ class _DashboardState extends State<Dashboard>
                                                 (context, index) =>
                                                     kHalfSizedBox,
                                             shrinkWrap: true,
+                                            reverse: true,
                                             addAutomaticKeepAlives: true,
                                             itemCount:
                                                 controller.businesses.length,
                                             itemBuilder: (context, index) {
                                               return VendorBusinessContainer(
                                                 onTap: () {},
+                                                // onTap: toBusinessDetailScreen(
+                                                //   controller.businesses[index],
+                                                // ),
                                                 business: controller
                                                     .businesses[index],
                                               );

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import '../providers/api_url.dart';
 import '../providers/constants.dart';
@@ -49,7 +50,7 @@ class VendorModel {
 
   factory VendorModel.fromJson(Map<String, dynamic>? json) {
     json ??= {};
-    consoleLog("JSON data: $json");
+    log("JSON data: $json");
     try {
       return VendorModel(
         id: json["id"] ?? 0,

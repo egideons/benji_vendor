@@ -1,14 +1,10 @@
-// To parse this JSON data, do
-//
-//     final vendorModel = vendorModelFromJson(jsonString);
-
 import 'dart:developer';
 
 import 'package:benji_vendor/src/model/business_type_model.dart';
-import 'package:benji_vendor/src/model/vendor_model.dart';
 
 import '../providers/constants.dart';
 import 'country_model.dart';
+import 'user_model.dart';
 
 class BusinessModel {
   String id;
@@ -16,7 +12,7 @@ class BusinessModel {
   String state;
   String city;
   String address;
-  // String lga;
+  String lga;
   String shopName;
   dynamic shopImage;
   dynamic coverImage;
@@ -27,7 +23,7 @@ class BusinessModel {
   String satClosingHours;
   String sunWeekOpeningHours;
   String sunWeekClosingHours;
-  VendorModel vendorOwner;
+  UserModel vendorOwner;
   String latitude;
   String longitude;
   String businessId;
@@ -44,7 +40,7 @@ class BusinessModel {
     required this.state,
     required this.city,
     required this.address,
-    // required this.lga,
+    required this.lga,
     required this.shopImage,
     required this.coverImage,
     required this.shopType,
@@ -75,17 +71,17 @@ class BusinessModel {
       country: CountryModel.fromJson(json['country'] ?? {}),
       state: json["state"] ?? notAvailable,
       city: json["city"] ?? notAvailable,
-      // lga: json["lga"] ?? notAvailable,
+      lga: json["lga"] ?? notAvailable,
       address: json["address"] ?? notAvailable,
       shopName: json["shop_name"] ?? notAvailable,
       shopImage: json['shop_image'] == null || json['shop_image'] == ""
-          ? 'https://img.freepik.com/free-psd/3d-icon-social-media-app_23-2150049569.jpg'
+          ? 'https://ibb.co/j4d0VtC'
           : json['shop_image'],
       coverImage: json['coverImage'] == null || json['coverImage'] == ""
-          ? 'https://img.freepik.com/free-psd/3d-icon-social-media-app_23-2150049569.jpg'
+          ? 'https://ibb.co/9NqtrPt'
           : json['coverImage'],
       shopType: BusinessType.fromJson(json["shop_type"]),
-      vendorOwner: VendorModel.fromJson(json['vendor_owner']),
+      vendorOwner: UserModel.fromJson(json['vendor_owner']),
       weekOpeningHours: json["weekOpeningHours"] ?? notAvailable,
       weekClosingHours: json["weekClosingHours"] ?? notAvailable,
       satOpeningHours: json["satOpeningHours"] ?? notAvailable,

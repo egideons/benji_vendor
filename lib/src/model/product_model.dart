@@ -1,7 +1,7 @@
 import 'package:benji_vendor/src/model/sub_category.dart';
-import 'package:benji_vendor/src/model/vendor_model.dart';
 
 import '../providers/constants.dart';
+import 'user_model.dart';
 
 class ProductModel {
   String id;
@@ -13,7 +13,7 @@ class ProductModel {
   bool isAvailable;
   bool isTrending;
   bool isRecommended;
-  VendorModel vendor;
+  UserModel vendor;
   SubCategory subCategory;
 
   ProductModel({
@@ -44,7 +44,7 @@ class ProductModel {
       isAvailable: json["is_available"] ?? false,
       isTrending: json["is_trending"] ?? false,
       isRecommended: json["is_recommended"] ?? false,
-      vendor: VendorModel.fromJson(json["vendor"]),
+      vendor: UserModel.fromJson(json["vendor"]),
       subCategory: SubCategory.fromJson(json["sub_category"]),
     );
   }
