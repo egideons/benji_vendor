@@ -188,9 +188,9 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
-  toBusinessDetailScreen() {
+  toBusinessDetailScreen(BusinessModel business) {
     Get.to(
-      () => const BusinessDetailScreen(),
+      () => BusinessDetailScreen(business: business),
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
@@ -402,7 +402,9 @@ class _DashboardState extends State<Dashboard>
                                                 controller.businesses.length,
                                             itemBuilder: (context, index) {
                                               return VendorBusinessContainer(
-                                                onTap: toBusinessDetailScreen,
+                                                onTap: toBusinessDetailScreen(
+                                                  controller.businesses[index],
+                                                ),
                                                 business: controller
                                                     .businesses[index],
                                               );
