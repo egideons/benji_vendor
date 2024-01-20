@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:benji_vendor/src/controller/error_controller.dart';
@@ -78,7 +79,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic>? json) {
     json ??= {};
-    consoleLog("JSON data: $json");
+    log("JSON data: $json");
     try {
       return UserModel(
         id: json["id"] ?? 0,

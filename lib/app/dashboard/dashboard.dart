@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:benji_vendor/app/businesses/business_detail_screen.dart';
 import 'package:benji_vendor/app/profile/edit_profile.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
@@ -188,18 +187,18 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
-  toBusinessDetailScreen(BusinessModel business) {
-    Get.to(
-      () => BusinessDetailScreen(business: business),
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      routeName: "BusinessDetailScreen",
-      preventDuplicates: true,
-      popGesture: false,
-      transition: Transition.rightToLeft,
-    );
-  }
+  // toBusinessDetailScreen(BusinessModel business) {
+  //   Get.to(
+  //     () => BusinessDetailScreen(business: business),
+  //     duration: const Duration(milliseconds: 300),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     routeName: "BusinessDetailScreen",
+  //     preventDuplicates: true,
+  //     popGesture: false,
+  //     transition: Transition.rightToLeft,
+  //   );
+  // }
 
   addVendorBusiness() {
     Get.to(
@@ -402,9 +401,10 @@ class _DashboardState extends State<Dashboard>
                                                 controller.businesses.length,
                                             itemBuilder: (context, index) {
                                               return VendorBusinessContainer(
-                                                onTap: toBusinessDetailScreen(
-                                                  controller.businesses[index],
-                                                ),
+                                                onTap: () {},
+                                                // onTap: toBusinessDetailScreen(
+                                                //   controller.businesses[index],
+                                                // ),
                                                 business: controller
                                                     .businesses[index],
                                               );

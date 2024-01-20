@@ -1,14 +1,10 @@
-// To parse this JSON data, do
-//
-//     final vendorModel = vendorModelFromJson(jsonString);
-
 import 'dart:developer';
 
 import 'package:benji_vendor/src/model/business_type_model.dart';
-import 'package:benji_vendor/src/model/vendor_model.dart';
 
 import '../providers/constants.dart';
 import 'country_model.dart';
+import 'user_model.dart';
 
 class BusinessModel {
   String id;
@@ -27,7 +23,7 @@ class BusinessModel {
   String satClosingHours;
   String sunWeekOpeningHours;
   String sunWeekClosingHours;
-  VendorModel vendorOwner;
+  UserModel vendorOwner;
   String latitude;
   String longitude;
   String businessId;
@@ -85,7 +81,7 @@ class BusinessModel {
           ? 'https://ibb.co/9NqtrPt'
           : json['coverImage'],
       shopType: BusinessType.fromJson(json["shop_type"]),
-      vendorOwner: VendorModel.fromJson(json['vendor_owner']),
+      vendorOwner: UserModel.fromJson(json['vendor_owner']),
       weekOpeningHours: json["weekOpeningHours"] ?? notAvailable,
       weekClosingHours: json["weekClosingHours"] ?? notAvailable,
       satOpeningHours: json["satOpeningHours"] ?? notAvailable,
