@@ -310,16 +310,13 @@ class _EditProfileBodyState extends State<EditProfileBody> {
               children: [
                 selectedLogoImage == null
                     ? Container(
-                        width: media.width,
-                        // height: 144,
                         padding: const EdgeInsets.all(20),
-                        decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(
+                        decoration: const ShapeDecoration(
+                          shape: CircleBorder(
+                            side: BorderSide(
                               width: 0.50,
-                              color: Color(0xFFE6E6E6),
+                              color: kGreyColor1,
                             ),
-                            borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                         child: Center(

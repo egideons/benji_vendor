@@ -3,6 +3,7 @@
 import 'package:benji_vendor/src/providers/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
 import '../../../../../theme/colors.dart';
@@ -21,7 +22,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     required this.elevation,
     required this.actions,
-    required this.backgroundColor,
+    this.backgroundColor = Colors.white,
     this.leading = false,
   });
 //========================================= FUNCTIONS ============================================\\

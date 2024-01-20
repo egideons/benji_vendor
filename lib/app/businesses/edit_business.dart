@@ -601,15 +601,13 @@ class _EditBusinessState extends State<EditBusiness> {
                   children: [
                     selectedLogoImage == null
                         ? Container(
-                            width: media.width,
-                            padding: const EdgeInsets.all(20),
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
+                            padding: const EdgeInsets.all(kDefaultPadding),
+                            decoration: const ShapeDecoration(
+                              shape: CircleBorder(
+                                side: BorderSide(
                                   width: 0.50,
-                                  color: Color(0xFFE6E6E6),
+                                  color: kGreyColor1,
                                 ),
-                                borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                             child: Center(
@@ -628,11 +626,78 @@ class _EditBusinessState extends State<EditBusiness> {
                             ),
                           )
                         : Container(
-                            width: media.width,
-                            height: 144,
                             decoration: ShapeDecoration(
                               image: DecorationImage(
                                 image: FileImage(selectedLogoImage!),
+                                fit: BoxFit.cover,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 0.50,
+                                  color: Color(0xFFE6E6E6),
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                            ),
+                          ),
+                    InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          elevation: 20,
+                          barrierColor: kBlackColor.withOpacity(0.8),
+                          showDragHandle: true,
+                          useSafeArea: true,
+                          isDismissible: true,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(kDefaultPadding),
+                            ),
+                          ),
+                          enableDrag: true,
+                          builder: ((builder) => uploadBusinessLogo()),
+                        );
+                      },
+                      splashColor: kAccentColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          'Upload business logo',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: kAccentColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                    kSizedBox,
+                    selectedCoverImage == null
+                        ? Container(
+                            padding: const EdgeInsets.all(20),
+                            height: deviceType(media.width) > 2 ? 200 : 120,
+                            decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 0.50,
+                                  color: Color(0xFFE6E6E6),
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: Center(
+                              child: MyImage(
+                                url: businessCoverImage,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            decoration: ShapeDecoration(
+                              image: DecorationImage(
+                                image: FileImage(selectedCoverImage!),
                                 fit: BoxFit.cover,
                               ),
                               shape: RoundedRectangleBorder(
@@ -1102,30 +1167,30 @@ class _EditBusinessState extends State<EditBusiness> {
                           },
                         ),
                         kSizedBox,
-                        // const Text(
-                        //   "Local Government Area",
-                        //   style: TextStyle(
-                        //     fontSize: 16,
-                        //     fontWeight: FontWeight.w700,
-                        //   ),
-                        // ),
-                        // kSizedBox,
-                        // MyBlueTextFormField(
-                        //   controller: vendorLGAEC,
-                        //   validator: (value) {
-                        //     if (value == null || value!.isEmpty) {
-                        //       return "Field cannot be empty";
-                        //     } else {
-                        //       return null;
-                        //     }
-                        //   },
-                        //   onSaved: (value) {},
-                        //   textInputAction: TextInputAction.done,
-                        //   focusNode: vendorLGAFN,
-                        //   hintText: "Enter the LGA",
-                        //   textInputType: TextInputType.text,
-                        // ),
-                        // kSizedBox,
+                        const Text(
+                          "Local Government Area",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        kSizedBox,
+                        MyBlueTextFormField(
+                          controller: vendorLGAEC,
+                          validator: (value) {
+                            if (value == null || value!.isEmpty) {
+                              return "Field cannot be empty";
+                            } else {
+                              return null;
+                            }
+                          },
+                          onSaved: (value) {},
+                          textInputAction: TextInputAction.done,
+                          focusNode: vendorLGAFN,
+                          hintText: "Enter the LGA",
+                          textInputType: TextInputType.text,
+                        ),
+                        kSizedBox,
                         const Text(
                           "Address",
                           style: TextStyle(
