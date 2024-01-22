@@ -1,5 +1,5 @@
 import 'package:benji_vendor/app/businesses/edit_businesses.dart';
-import 'package:benji_vendor/app/others/reviews.dart';
+import 'package:benji_vendor/app/others/user_reviews.dart';
 import 'package:benji_vendor/app/profile/edit_profile.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
@@ -60,10 +60,10 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  reviewsPage() {
+  toUserReviewsPage() {
     Get.to(
-      () => const ReviewsPage(),
-      routeName: 'ReviewsPage',
+      () => const UserReviewsPage(),
+      routeName: 'UserReviewsPage',
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,
       curve: Curves.easeIn,
@@ -248,7 +248,7 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     // ListTile(
-                    //   onTap: reviewsPage,
+                    //   onTap: UserReviewsPage,
                     //   leading: FaIcon(
                     //     FontAwesomeIcons.solidComment,
                     //     color: kAccentColor,

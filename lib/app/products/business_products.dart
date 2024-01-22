@@ -95,8 +95,9 @@ class _BusinessProductsState extends State<BusinessProducts> {
               children: (controller.products)
                   .map(
                     (item) => BusinessProductContainer(
-                        onTap: () => _toProductDetailScreen(item),
-                        product: item),
+                      onTap: () => viewProduct(item),
+                      product: item,
+                    ),
                   )
                   .toList(),
             );

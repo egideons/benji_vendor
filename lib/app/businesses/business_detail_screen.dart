@@ -11,6 +11,7 @@ import '../../src/model/business_model.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../products/business_products.dart';
+import 'about_business.dart';
 
 class BusinessDetailScreen extends StatefulWidget {
   final BusinessModel business;

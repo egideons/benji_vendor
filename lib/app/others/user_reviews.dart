@@ -8,16 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class ReviewsPage extends StatefulWidget {
-  const ReviewsPage({super.key});
+class UserReviewsPage extends StatefulWidget {
+  const UserReviewsPage({super.key});
 
   @override
-  State<ReviewsPage> createState() => _ReviewsPageState();
+  State<UserReviewsPage> createState() => _UserReviewsPageState();
 }
 
 const List<int> stars = [5, 4, 3, 2, 1];
 
-class _ReviewsPageState extends State<ReviewsPage> {
+class _UserReviewsPageState extends State<UserReviewsPage> {
   @override
   void initState() {
     super.initState();

@@ -55,6 +55,9 @@ class _DashboardState extends State<Dashboard>
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     scrollController.addListener(_scrollListener);
     scrollController.addListener(() {
+      BusinessController.instance.scrollListener(scrollController);
+    });
+    scrollController.addListener(() {
       if (scrollController.position.userScrollDirection ==
               ScrollDirection.forward ||
           scrollController.position.pixels < 100) {
@@ -150,10 +153,10 @@ class _DashboardState extends State<Dashboard>
   //   );
   // }
 
-  // reviewsPage() {
+  // UserReviewsPage() {
   //   Get.to(
-  //     () => const ReviewsPage(),
-  //     routeName: 'ReviewsPage',
+  //     () => const UserReviewsPage(),
+  //     routeName: 'UserReviewsPage',
   //     duration: const Duration(milliseconds: 300),
   //     fullscreenDialog: true,
   //     curve: Curves.easeIn,
@@ -429,12 +432,9 @@ class _DashboardState extends State<Dashboard>
                                     controller.businesses.isEmpty
                                 ? const BusinessListSkeleton()
                                 : controller.businesses.isEmpty
-                                    ? EmptyCard(
+                                    ? const EmptyCard(
                                         emptyCardMessage:
                                             "You don't have any businesses yet",
-                                        showButton: true,
-                                        buttonTitle: "Add a business",
-                                        onPressed: addVendorBusiness,
                                       )
                                     : showBusinesses
                                         ? ListView.separated(
@@ -481,6 +481,32 @@ class _DashboardState extends State<Dashboard>
                     ),
 
                     kSizedBox,
+                    GetBuilder<BusinessController>(
+                      builder: (controller) => Column(
+                        children: [
+                          controller.isLoadMore.value
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: kAccentColor,
+                                  ),
+                                )
+                              : const SizedBox(),
+                          controller.loadedAll.value &&
+                                  controller.businesses.isNotEmpty
+                              ? Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 20, bottom: 20),
+                                  height: 10,
+                                  width: 10,
+                                  decoration: ShapeDecoration(
+                                    shape: const CircleBorder(),
+                                    color: kPageSkeletonColor,
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
+                    ),
                     // GetBuilder<UserController>(
                     //   builder: (controller) {
                     //     return Container(
@@ -575,7 +601,7 @@ class _DashboardState extends State<Dashboard>
                     //           ),
                     //         ),
                     //         TextButton(
-                    //           onPressed: reviewsPage,
+                    //           onPressed: UserReviewsPage,
                     //           child: Text(
                     //             'See All Reviews',
                     //             style: TextStyle(
