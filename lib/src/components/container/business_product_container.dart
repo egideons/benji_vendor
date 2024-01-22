@@ -8,19 +8,19 @@ import '../../../theme/colors.dart';
 import '../../providers/constants.dart';
 import '../../providers/responsive_constants.dart';
 
-class VendorsProductContainer extends StatefulWidget {
+class BusinessProductContainer extends StatefulWidget {
   final Function() onTap;
   final ProductModel product;
 
-  const VendorsProductContainer(
+  const BusinessProductContainer(
       {super.key, required this.onTap, required this.product});
 
   @override
-  State<VendorsProductContainer> createState() =>
-      _VendorsProductContainerState();
+  State<BusinessProductContainer> createState() =>
+      _BusinessProductContainerState();
 }
 
-class _VendorsProductContainerState extends State<VendorsProductContainer> {
+class _BusinessProductContainerState extends State<BusinessProductContainer> {
   //======================================= ALL VARIABLES ==========================================\\
 
   //======================================= F UNCTIONS ==========================================\\

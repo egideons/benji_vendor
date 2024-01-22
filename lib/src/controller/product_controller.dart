@@ -38,7 +38,7 @@ class ProductController extends GetxController {
         !scrollController.position.outOfRange) {
       ProductController.instance.isLoadMore.value = true;
       update();
-      await ProductController.instance.getProducts();
+      await ProductController.instance.getBusinessProducts();
     }
   }
 
@@ -53,10 +53,10 @@ class ProductController extends GetxController {
     loadedAll.value = false;
     loadNum.value = 10;
     products.value = [];
-    getProducts();
+    getBusinessProducts();
   }
 
-  Future<void> getProducts() async {
+  Future<void> getBusinessProducts() async {
     if (loadedAll.value) {
       return;
     }

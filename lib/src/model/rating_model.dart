@@ -5,7 +5,7 @@ import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:http/http.dart' as http;
 
 import '../providers/constants.dart';
-import '../providers/helper.dart';
+import '../providers/helpers.dart';
 
 class Ratings {
   final String id;

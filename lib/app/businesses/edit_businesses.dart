@@ -1,7 +1,7 @@
 import 'package:benji_vendor/app/businesses/add_business.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
-import 'package:benji_vendor/src/components/container/vendor_business_container.dart';
+import 'package:benji_vendor/src/components/container/business_container.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/business_controller.dart';
@@ -174,7 +174,7 @@ class _EditBusinessesPageState extends State<EditBusinessesPage> {
                                           // controller.products.length -
                                           //     1 -
                                           //     index;
-                                          return VendorBusinessContainer(
+                                          return BusinessContainer(
                                             onTap: () => editBusiness(
                                               controller.businesses[index],
                                             ),

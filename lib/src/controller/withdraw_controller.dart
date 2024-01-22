@@ -6,7 +6,7 @@ import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/bank_model.dart';
 import 'package:benji_vendor/src/model/validate_bank_account.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
+import 'package:benji_vendor/src/providers/helpers.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 

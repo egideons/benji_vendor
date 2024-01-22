@@ -8,7 +8,7 @@ import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
-import '../providers/helper.dart';
+import '../providers/helpers.dart';
 
 class ReviewsController extends GetxController {
   static ReviewsController get instance {

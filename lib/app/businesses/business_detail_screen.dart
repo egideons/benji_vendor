@@ -10,6 +10,7 @@ import '../../src/controller/error_controller.dart';
 import '../../src/model/business_model.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
+import '../products/business_products.dart';
 
 class BusinessDetailScreen extends StatefulWidget {
   final BusinessModel business;
@@ -474,24 +475,24 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                     ),
                   ),
                 ),
-                // kSizedBox,
-                // refreshing
-                //     ? Center(
-                //         child: CircularProgressIndicator(
-                //         color: kAccentColor,
-                //       ))
-                //     : Container(
-                //         padding: deviceType(media.width) > 2
-                //             ? const EdgeInsets.symmetric(horizontal: 20)
-                //             : const EdgeInsets.symmetric(horizontal: 10),
-                //         child: selectedtabbar == 0
-                //             ? BusinessVendor(
-                //                 business: widget.business,
-                //               )
-                //             : AboutBusiness(
-                //                 business: widget.business,
-                //               ),
-                //       ),
+                kSizedBox,
+                refreshing
+                    ? Center(
+                        child: CircularProgressIndicator(
+                        color: kAccentColor,
+                      ))
+                    : Container(
+                        padding: deviceType(media.width) > 2
+                            ? const EdgeInsets.symmetric(horizontal: 20)
+                            : const EdgeInsets.symmetric(horizontal: 10),
+                        child: selectedtabbar == 0
+                            ? BusinessProducts(
+                                business: widget.business,
+                              )
+                            : AboutBusiness(
+                                business: widget.business,
+                              ),
+                      ),
               ],
             ),
           ),

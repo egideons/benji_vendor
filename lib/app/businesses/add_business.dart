@@ -38,7 +38,7 @@ import '../../../src/providers/constants.dart';
 import '../../src/components/image/my_image.dart';
 import '../../src/controller/category_controller.dart';
 import '../../src/controller/push_notifications_controller.dart';
-import '../../src/providers/helper.dart';
+import '../../src/providers/helpers.dart';
 import '../../src/providers/responsive_constants.dart';
 
 class AddBusiness extends StatefulWidget {

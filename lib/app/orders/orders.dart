@@ -1,6 +1,6 @@
 import 'package:benji_vendor/app/orders/order_details.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
-import 'package:benji_vendor/src/components/container/vendors_order_container.dart';
+import 'package:benji_vendor/src/components/container/business_order_container.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:flutter/material.dart';

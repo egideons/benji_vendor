@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:benji_vendor/app/packages/send_package.dart';
 import 'package:benji_vendor/app/profile/edit_profile.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
@@ -14,7 +15,7 @@ import 'package:get/get.dart';
 import '../../src/components/appbar/app_bar_title.dart';
 import '../../src/components/card/dashboard_user_card.dart';
 import '../../src/components/card/empty.dart';
-import '../../src/components/container/vendor_business_container.dart';
+import '../../src/components/container/business_container.dart';
 import '../../src/components/section/dashboard_businesses_display_controller.dart';
 import '../../src/components/skeletons/businesses_skeletons.dart';
 import '../../src/controller/business_controller.dart';
@@ -227,6 +228,19 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
+  toSendPackage() {
+    Get.to(
+      () => const SendPackage(),
+      routeName: 'SendPackage',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
   // productsPage() {
   //   Get.to(
   //     () => const OverView(currentIndex: 2),
@@ -355,6 +369,40 @@ class _DashboardState extends State<Dashboard>
                       },
                     ),
                     kSizedBox,
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: ShapeDecoration(
+                        color: kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x0F000000),
+                            blurRadius: 24,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        onTap: toSendPackage,
+                        leading: FaIcon(
+                          FontAwesomeIcons.bicycle,
+                          color: kAccentColor,
+                        ),
+                        title: const Text(
+                          'Send a Package',
+                          style: TextStyle(
+                            color: kTextBlackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                      ),
+                    ),
+                    kSizedBox,
                     GetBuilder<BusinessController>(
                       init: BusinessController(),
                       builder: (controller) {
@@ -401,7 +449,7 @@ class _DashboardState extends State<Dashboard>
                                             itemCount:
                                                 controller.businesses.length,
                                             itemBuilder: (context, index) {
-                                              return VendorBusinessContainer(
+                                              return BusinessContainer(
                                                 onTap: () {
                                                   Get.to(
                                                     () => BusinessDetailScreen(
