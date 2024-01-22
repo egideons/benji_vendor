@@ -1,4 +1,5 @@
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
+import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:get/route_manager.dart';
 import '../../src/components/image/my_image.dart';
 import '../../src/components/section/my_liquid_refresh.dart';
 import '../../src/controller/error_controller.dart';
+import '../../src/controller/order_controller.dart';
+import '../../src/controller/reviews_controller.dart';
 import '../../src/model/business_model.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
@@ -34,7 +37,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
   void initState() {
     super.initState();
     scrollController.addListener(scrollListener);
-    _tabBarController = TabController(length: 2, vsync: this);
+    _tabBarController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -51,7 +54,9 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
     setState(() {
       refreshing = true;
     });
-
+    await ProductController.instance.getBusinessProducts();
+    await OrderController.instance.getOrdersByStatus();
+    await ReviewsController.instance.getReviews();
     setState(() {
       refreshing = false;
     });
@@ -171,7 +176,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
         appBar: MyAppBar(
           title: isScrollToTopBtnVisible
               ? widget.business.shopName
-              : "Vendor Details",
+              : "Business Details",
           elevation: 0.0,
           backgroundColor: kPrimaryColor,
           actions: const [],
@@ -491,6 +496,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                             ),
                             tabs: const [
                               Tab(text: "Products"),
+                              Tab(text: "Orders"),
                               Tab(text: "About"),
                             ],
                           ),
@@ -513,9 +519,11 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                             ? BusinessProducts(
                                 business: widget.business,
                               )
-                            : AboutBusiness(
-                                business: widget.business,
-                              ),
+                            : selectedtabbar == 1
+                                ? const SizedBox()
+                                : AboutBusiness(
+                                    business: widget.business,
+                                  ),
                       ),
               ],
             ),

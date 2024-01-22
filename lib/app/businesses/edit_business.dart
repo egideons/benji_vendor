@@ -607,17 +607,6 @@ class _EditBusinessState extends State<EditBusiness> {
                             ),
                             child: Center(
                               child: MyImage(url: businessLogo),
-                              //     CachedNetworkImage(
-                              //   imageUrl: businessLogo!,
-                              //   fit: BoxFit.cover,
-                              //   progressIndicatorBuilder:
-                              //       (context, url, downloadProgress) =>
-                              //           Center(
-                              //               child: CupertinoActivityIndicator(
-                              //                   color: kAccentColor)),
-                              //   errorWidget: (context, url, error) =>
-                              //       Icon(Icons.error, color: kAccentColor),
-                              // )
                             ),
                           )
                         : Container(

@@ -77,11 +77,8 @@ class _BusinessProductsState extends State<BusinessProducts> {
               );
             }
             if (controller.products.isEmpty) {
-              return EmptyCard(
-                buttonTitle: "Add a product",
+              return const EmptyCard(
                 emptyCardMessage: "You don't have any products",
-                onPressed: () {},
-                showButton: true,
               );
             }
             return LayoutGrid(
