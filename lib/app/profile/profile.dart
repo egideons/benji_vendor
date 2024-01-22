@@ -73,7 +73,7 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  sendPackage() {
+  toPackages() {
     Get.to(
       () => const Packages(),
       routeName: 'Packages',
@@ -213,7 +213,7 @@ class _ProfileState extends State<Profile> {
                 child: Column(
                   children: [
                     ListTile(
-                      onTap: sendPackage,
+                      onTap: toPackages,
                       leading: FaIcon(
                         FontAwesomeIcons.bicycle,
                         color: kAccentColor,
