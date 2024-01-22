@@ -10,7 +10,7 @@ import '../../providers/constants.dart';
 import '../../providers/responsive_constants.dart';
 
 class VendorBusinessContainer extends StatefulWidget {
-  final Function() onTap;
+  final Function()? onTap;
   final BusinessModel business;
 
   const VendorBusinessContainer(

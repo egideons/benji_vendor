@@ -24,6 +24,7 @@ import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 import '../businesses/add_business.dart';
+import '../businesses/business_detail_screen.dart';
 import '../others/notifications.dart';
 
 class Dashboard extends StatefulWidget {
@@ -187,18 +188,18 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
-  // toBusinessDetailScreen(BusinessModel business) {
-  //   Get.to(
-  //     () => BusinessDetailScreen(business: business),
-  //     duration: const Duration(milliseconds: 300),
-  //     fullscreenDialog: true,
-  //     curve: Curves.easeIn,
-  //     routeName: "BusinessDetailScreen",
-  //     preventDuplicates: true,
-  //     popGesture: false,
-  //     transition: Transition.rightToLeft,
-  //   );
-  // }
+  toBusinessDetailScreen(BusinessModel business) {
+    Get.to(
+      () => BusinessDetailScreen(business: business),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "BusinessDetailScreen",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+  }
 
   addVendorBusiness() {
     Get.to(
@@ -401,7 +402,24 @@ class _DashboardState extends State<Dashboard>
                                                 controller.businesses.length,
                                             itemBuilder: (context, index) {
                                               return VendorBusinessContainer(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  Get.to(
+                                                    () => BusinessDetailScreen(
+                                                      business: controller
+                                                          .businesses[index],
+                                                    ),
+                                                    duration: const Duration(
+                                                        milliseconds: 300),
+                                                    fullscreenDialog: true,
+                                                    curve: Curves.easeIn,
+                                                    routeName:
+                                                        "BusinessDetailScreen",
+                                                    preventDuplicates: true,
+                                                    popGesture: false,
+                                                    transition:
+                                                        Transition.rightToLeft,
+                                                  );
+                                                },
                                                 // onTap: toBusinessDetailScreen(
                                                 //   controller.businesses[index],
                                                 // ),

@@ -202,16 +202,12 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                               : deviceType(media.width) > 2
                                   ? media.height * 0.415
                                   : media.height * 0.28,
-                          decoration: BoxDecoration(
-                            color: kPageSkeletonColor,
-                            // image: const DecorationImage(
-                            //   fit: BoxFit.fill,
-                            //   image: AssetImage(
-                            //     "assets/images/vendors/ntachi-osa.png",
-                            //   ),
-                            // ),
+                          decoration: BoxDecoration(color: kLightGreyColor),
+                          child: Center(
+                            child: MyImage(
+                              url: widget.business.coverImage,
+                            ),
                           ),
-                          child: MyImage(url: widget.business.shopImage),
                         ),
                       ),
                       Positioned(
@@ -324,7 +320,8 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                     children: [
                                       Container(
                                         width: media.width * 0.23,
-                                        height: 57,
+                                        padding: const EdgeInsets.all(
+                                            kDefaultPadding),
                                         decoration: ShapeDecoration(
                                           color: kPrimaryColor,
                                           shape: RoundedRectangleBorder(
@@ -342,21 +339,25 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                               size: 17,
                                             ),
                                             const SizedBox(width: 5),
-                                            // Text(
-                                            //   '${(widget.business.vendorOwner.).toPrecision(1)}',
-                                            //   style: const TextStyle(
-                                            //     color: kBlackColor,
-                                            //     fontSize: 14,
-                                            //     fontWeight: FontWeight.w400,
-                                            //     letterSpacing: -0.28,
-                                            //   ),
-                                            // ),
+                                            Text(
+                                              doubleFormattedText(
+                                                (widget.business.vendorOwner
+                                                    .averageRating),
+                                              ),
+                                              style: const TextStyle(
+                                                color: kBlackColor,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
                                       Container(
-                                        width: media.width * 0.25,
-                                        height: 57,
+                                        width: media.width * 0.28,
+                                        // height: 57,
+                                        padding: const EdgeInsets.all(
+                                            kDefaultPadding),
                                         decoration: ShapeDecoration(
                                           color: kPrimaryColor,
                                           shape: RoundedRectangleBorder(
@@ -368,22 +369,22 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            // Text(
-                                            //   widget.business.vendorOwner
-                                            //           .isOnline
-                                            //       ? "Online"
-                                            //       : 'Offline',
-                                            //   textAlign: TextAlign.center,
-                                            //   style: TextStyle(
-                                            //     color: widget.business
-                                            //             .vendorOwner.isOnline
-                                            //         ? kSuccessColor
-                                            //         : kAccentColor,
-                                            //     fontSize: 14,
-                                            //     fontWeight: FontWeight.w400,
-                                            //     letterSpacing: -0.36,
-                                            //   ),
-                                            // ),
+                                            Text(
+                                              widget.business.vendorOwner
+                                                      .isOnline
+                                                  ? "Online"
+                                                  : 'Offline',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: widget.business
+                                                        .vendorOwner.isOnline
+                                                    ? kSuccessColor
+                                                    : kAccentColor,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                letterSpacing: -0.36,
+                                              ),
+                                            ),
                                             const SizedBox(width: 5),
                                             FaIcon(
                                               Icons.info,
@@ -410,20 +411,18 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                         left: deviceType(media.width) > 2
                             ? (media.width / 2) - (126 / 2)
                             : (media.width / 2) - (100 / 2),
-                        child: Container(
+                        child: SizedBox(
                           width: deviceType(media.width) > 2 ? 126 : 100,
                           height: deviceType(media.width) > 2 ? 126 : 100,
-                          decoration: ShapeDecoration(
-                            color: kPageSkeletonColor,
-                            // image: const DecorationImage(
-                            //   image: AssetImage(
-                            //     "assets/images/vendors/ntachi-osa-logo.png",
-                            //   ),
-                            //   fit: BoxFit.cover,
-                            // ),
-                            shape: const OvalBorder(),
+                          child: ClipRRect(
+                            child: CircleAvatar(
+                              backgroundColor: kLightGreyColor,
+                              child: MyImage(
+                                url: widget.business.shopImage,
+                                imageHeight: 70,
+                              ),
+                            ),
                           ),
-                          child: MyImage(url: widget.business.coverImage),
                         ),
                       ),
                     ],
