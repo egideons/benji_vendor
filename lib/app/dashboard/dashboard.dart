@@ -140,19 +140,6 @@ class _DashboardState extends State<Dashboard>
 
 //==================== NAVIGATION ==================\\
 
-  // addProduct() {
-  //   Get.to(
-  //     () => const AddProduct(),
-  //     routeName: 'AddProduct',
-  //     duration: const Duration(milliseconds: 300),
-  //     fullscreenDialog: true,
-  //     curve: Curves.easeIn,
-  //     preventDuplicates: true,
-  //     popGesture: true,
-  //     transition: Transition.downToUp,
-  //   );
-  // }
-
   // UserReviewsPage() {
   //   Get.to(
   //     () => const UserReviewsPage(),

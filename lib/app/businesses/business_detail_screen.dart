@@ -3,6 +3,7 @@ import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/route_manager.dart';
 
 import '../../src/components/image/my_image.dart';
 import '../../src/components/section/my_liquid_refresh.dart';
@@ -10,6 +11,7 @@ import '../../src/controller/error_controller.dart';
 import '../../src/model/business_model.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
+import '../products/add_new_product.dart';
 import '../products/business_products.dart';
 import 'about_business.dart';
 
@@ -148,6 +150,17 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
 
 //=================================== Navigation =====================================\\
 
+  addProduct() => Get.to(
+        () => const AddProduct(),
+        routeName: 'AddProduct',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.downToUp,
+      );
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -176,7 +189,16 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                 child: FaIcon(FontAwesomeIcons.chevronUp,
                     size: 18, color: kPrimaryColor),
               )
-            : const SizedBox(),
+            : FloatingActionButton(
+                onPressed: addProduct,
+                elevation: 20.0,
+                backgroundColor: kAccentColor,
+                foregroundColor: kPrimaryColor,
+                tooltip: "Add a business",
+                enableFeedback: true,
+                mouseCursor: SystemMouseCursors.click,
+                child: const FaIcon(FontAwesomeIcons.plus),
+              ),
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: Scrollbar(
@@ -430,6 +452,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                     ],
                   ),
                 ),
+                deviceType(media.width) > 2 ? kSizedBox : kHalfSizedBox,
                 Padding(
                   padding: deviceType(media.width) > 2
                       ? const EdgeInsets.symmetric(

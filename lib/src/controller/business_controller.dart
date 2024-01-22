@@ -50,8 +50,8 @@ class BusinessController extends GetxController {
 
     String userId = UserController.instance.user.value.id.toString();
 
-    String url =
-        "${Api.baseUrl}${Api.getVendorBusinesses}$userId?start=${loadNum.value - 10}&end=${loadNum.value}";
+    String url = Api.baseUrl + Api.getVendorBusinesses + userId;
+    // "${Api.baseUrl}${Api.getVendorBusinesses}$userId?start=${loadNum.value - 10}&end=${loadNum.value}";
     var parsedURL = Uri.parse(url);
 
     List<BusinessModel> data = [];
