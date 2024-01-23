@@ -36,8 +36,7 @@ class Api {
       "/vendors/changeVendorpersonalprofile/";
 
   //Businesses
-  static const getVendorBusinesses =
-      "/vendors/getVendorBusinesses/";
+  static const getVendorBusinesses = "/vendors/getVendorBusinesses/";
   static const changeVendorBusinessProfile =
       "/vendors/changeVendorbusinessprofile/";
 
