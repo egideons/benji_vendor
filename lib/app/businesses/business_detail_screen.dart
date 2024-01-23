@@ -1,15 +1,22 @@
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
+import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/route_manager.dart';
 
 import '../../src/components/image/my_image.dart';
 import '../../src/components/section/my_liquid_refresh.dart';
 import '../../src/controller/error_controller.dart';
+import '../../src/controller/order_controller.dart';
+import '../../src/controller/reviews_controller.dart';
 import '../../src/model/business_model.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
+import '../products/add_new_product.dart';
+import '../products/business_products.dart';
+import 'about_business.dart';
 
 class BusinessDetailScreen extends StatefulWidget {
   final BusinessModel business;
@@ -30,7 +37,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
   void initState() {
     super.initState();
     scrollController.addListener(scrollListener);
-    _tabBarController = TabController(length: 2, vsync: this);
+    _tabBarController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -47,7 +54,9 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
     setState(() {
       refreshing = true;
     });
-
+    await ProductController.instance.getBusinessProducts();
+    await OrderController.instance.getOrdersByStatus();
+    await ReviewsController.instance.getReviews();
     setState(() {
       refreshing = false;
     });
@@ -146,6 +155,17 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
 
 //=================================== Navigation =====================================\\
 
+  addProduct() => Get.to(
+        () => const AddProduct(),
+        routeName: 'AddProduct',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.downToUp,
+      );
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
@@ -156,7 +176,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
         appBar: MyAppBar(
           title: isScrollToTopBtnVisible
               ? widget.business.shopName
-              : "Vendor Details",
+              : "Business Details",
           elevation: 0.0,
           backgroundColor: kPrimaryColor,
           actions: const [],
@@ -174,7 +194,16 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                 child: FaIcon(FontAwesomeIcons.chevronUp,
                     size: 18, color: kPrimaryColor),
               )
-            : const SizedBox(),
+            : FloatingActionButton(
+                onPressed: addProduct,
+                elevation: 20.0,
+                backgroundColor: kAccentColor,
+                foregroundColor: kPrimaryColor,
+                tooltip: "Add a business",
+                enableFeedback: true,
+                mouseCursor: SystemMouseCursors.click,
+                child: const FaIcon(FontAwesomeIcons.plus),
+              ),
         body: SafeArea(
           maintainBottomViewPadding: true,
           child: Scrollbar(
@@ -202,16 +231,12 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                               : deviceType(media.width) > 2
                                   ? media.height * 0.415
                                   : media.height * 0.28,
-                          decoration: BoxDecoration(
-                            color: kPageSkeletonColor,
-                            // image: const DecorationImage(
-                            //   fit: BoxFit.fill,
-                            //   image: AssetImage(
-                            //     "assets/images/vendors/ntachi-osa.png",
-                            //   ),
-                            // ),
+                          decoration: BoxDecoration(color: kLightGreyColor),
+                          child: Center(
+                            child: MyImage(
+                              url: widget.business.coverImage,
+                            ),
                           ),
-                          child: MyImage(url: widget.business.shopImage),
                         ),
                       ),
                       Positioned(
@@ -324,7 +349,8 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                     children: [
                                       Container(
                                         width: media.width * 0.23,
-                                        height: 57,
+                                        padding: const EdgeInsets.all(
+                                            kDefaultPadding),
                                         decoration: ShapeDecoration(
                                           color: kPrimaryColor,
                                           shape: RoundedRectangleBorder(
@@ -342,21 +368,25 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                               size: 17,
                                             ),
                                             const SizedBox(width: 5),
-                                            // Text(
-                                            //   '${(widget.business.vendorOwner.).toPrecision(1)}',
-                                            //   style: const TextStyle(
-                                            //     color: kBlackColor,
-                                            //     fontSize: 14,
-                                            //     fontWeight: FontWeight.w400,
-                                            //     letterSpacing: -0.28,
-                                            //   ),
-                                            // ),
+                                            Text(
+                                              doubleFormattedText(
+                                                (widget.business.vendorOwner
+                                                    .averageRating),
+                                              ),
+                                              style: const TextStyle(
+                                                color: kBlackColor,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
                                       Container(
-                                        width: media.width * 0.25,
-                                        height: 57,
+                                        width: media.width * 0.28,
+                                        // height: 57,
+                                        padding: const EdgeInsets.all(
+                                            kDefaultPadding),
                                         decoration: ShapeDecoration(
                                           color: kPrimaryColor,
                                           shape: RoundedRectangleBorder(
@@ -368,22 +398,22 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            // Text(
-                                            //   widget.business.vendorOwner
-                                            //           .isOnline
-                                            //       ? "Online"
-                                            //       : 'Offline',
-                                            //   textAlign: TextAlign.center,
-                                            //   style: TextStyle(
-                                            //     color: widget.business
-                                            //             .vendorOwner.isOnline
-                                            //         ? kSuccessColor
-                                            //         : kAccentColor,
-                                            //     fontSize: 14,
-                                            //     fontWeight: FontWeight.w400,
-                                            //     letterSpacing: -0.36,
-                                            //   ),
-                                            // ),
+                                            Text(
+                                              widget.business.vendorOwner
+                                                      .isOnline
+                                                  ? "Online"
+                                                  : 'Offline',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: widget.business
+                                                        .vendorOwner.isOnline
+                                                    ? kSuccessColor
+                                                    : kAccentColor,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                letterSpacing: -0.36,
+                                              ),
+                                            ),
                                             const SizedBox(width: 5),
                                             FaIcon(
                                               Icons.info,
@@ -410,25 +440,24 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                         left: deviceType(media.width) > 2
                             ? (media.width / 2) - (126 / 2)
                             : (media.width / 2) - (100 / 2),
-                        child: Container(
+                        child: SizedBox(
                           width: deviceType(media.width) > 2 ? 126 : 100,
                           height: deviceType(media.width) > 2 ? 126 : 100,
-                          decoration: ShapeDecoration(
-                            color: kPageSkeletonColor,
-                            // image: const DecorationImage(
-                            //   image: AssetImage(
-                            //     "assets/images/vendors/ntachi-osa-logo.png",
-                            //   ),
-                            //   fit: BoxFit.cover,
-                            // ),
-                            shape: const OvalBorder(),
+                          child: ClipRRect(
+                            child: CircleAvatar(
+                              backgroundColor: kLightGreyColor,
+                              child: MyImage(
+                                url: widget.business.shopImage,
+                                imageHeight: 70,
+                              ),
+                            ),
                           ),
-                          child: MyImage(url: widget.business.coverImage),
                         ),
                       ),
                     ],
                   ),
                 ),
+                deviceType(media.width) > 2 ? kSizedBox : kHalfSizedBox,
                 Padding(
                   padding: deviceType(media.width) > 2
                       ? const EdgeInsets.symmetric(
@@ -467,6 +496,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                             ),
                             tabs: const [
                               Tab(text: "Products"),
+                              Tab(text: "Orders"),
                               Tab(text: "About"),
                             ],
                           ),
@@ -475,24 +505,26 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                     ),
                   ),
                 ),
-                // kSizedBox,
-                // refreshing
-                //     ? Center(
-                //         child: CircularProgressIndicator(
-                //         color: kAccentColor,
-                //       ))
-                //     : Container(
-                //         padding: deviceType(media.width) > 2
-                //             ? const EdgeInsets.symmetric(horizontal: 20)
-                //             : const EdgeInsets.symmetric(horizontal: 10),
-                //         child: selectedtabbar == 0
-                //             ? BusinessVendor(
-                //                 business: widget.business,
-                //               )
-                //             : AboutBusiness(
-                //                 business: widget.business,
-                //               ),
-                //       ),
+                kSizedBox,
+                refreshing
+                    ? Center(
+                        child: CircularProgressIndicator(
+                        color: kAccentColor,
+                      ))
+                    : Container(
+                        padding: deviceType(media.width) > 2
+                            ? const EdgeInsets.symmetric(horizontal: 20)
+                            : const EdgeInsets.symmetric(horizontal: 10),
+                        child: selectedtabbar == 0
+                            ? BusinessProducts(
+                                business: widget.business,
+                              )
+                            : selectedtabbar == 1
+                                ? const SizedBox()
+                                : AboutBusiness(
+                                    business: widget.business,
+                                  ),
+                      ),
               ],
             ),
           ),

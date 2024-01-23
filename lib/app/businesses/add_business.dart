@@ -8,7 +8,7 @@ import 'package:benji_vendor/app/profile/select_bank.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_blue_textformfield.dart';
-import 'package:benji_vendor/src/components/input/my_item_drop.dart';
+import 'package:benji_vendor/src/components/input/my_item_drop_down_menu.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
@@ -35,10 +35,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../src/providers/constants.dart';
-import '../../src/components/image/my_image.dart';
 import '../../src/controller/category_controller.dart';
 import '../../src/controller/push_notifications_controller.dart';
-import '../../src/providers/helper.dart';
+import '../../src/providers/helpers.dart';
 import '../../src/providers/responsive_constants.dart';
 
 class AddBusiness extends StatefulWidget {
@@ -158,9 +157,20 @@ class _AddBusinessState extends State<AddBusiness> {
 //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker _picker = ImagePicker();
+  File? selectedLogoImage;
   File? selectedCoverImage;
-  // File? selectedLogoImage;
   //================================== function ====================================\\
+  pickLogoImage(ImageSource source) async {
+    final XFile? image = await _picker.pickImage(
+      source: source,
+    );
+    if (image != null) {
+      selectedLogoImage = File(image.path);
+      Get.back();
+      setState(() {});
+    }
+  }
+
   pickCoverImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(
       source: source,
@@ -302,26 +312,107 @@ class _AddBusinessState extends State<AddBusiness> {
   }
 
   //=========================== WIDGETS ====================================\\
-  Widget uploadCoverImage() => Container(
-        height: 140,
-        width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.only(
-          left: kDefaultPadding,
-          right: kDefaultPadding,
-          bottom: kDefaultPadding,
-        ),
-        child: Column(
-          children: <Widget>[
-            const Text(
-              "Upload Cover Image",
-              textAlign: TextAlign.left,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
+  Widget uploadBusinessLogo() => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Text(
+            "Upload Cover Image",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
             ),
-            kSizedBox,
-            Row(
+          ),
+          kSizedBox,
+          Padding(
+            padding: const EdgeInsets.only(left: 10, bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        pickLogoImage(ImageSource.camera);
+                      },
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                            side: const BorderSide(
+                              width: 0.5,
+                              color: kGreyColor1,
+                            ),
+                          ),
+                        ),
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.camera,
+                            color: kAccentColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    kHalfSizedBox,
+                    const Text("Camera"),
+                  ],
+                ),
+                kWidthSizedBox,
+                Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        pickLogoImage(ImageSource.gallery);
+                      },
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                            side: const BorderSide(
+                              width: 0.5,
+                              color: kGreyColor1,
+                            ),
+                          ),
+                        ),
+                        child: Center(
+                          child: FaIcon(
+                            FontAwesomeIcons.image,
+                            color: kAccentColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    kHalfSizedBox,
+                    const Text("Gallery"),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+
+  Widget uploadBusinessCoverImage() => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          const Text(
+            "Upload Cover Image",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          kSizedBox,
+          Padding(
+            padding: const EdgeInsets.only(left: 10, bottom: 10),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
@@ -337,9 +428,9 @@ class _AddBusinessState extends State<AddBusiness> {
                         decoration: ShapeDecoration(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
-                            side: BorderSide(
+                            side: const BorderSide(
                               width: 0.5,
-                              color: kLightGreyColor,
+                              color: kGreyColor1,
                             ),
                           ),
                         ),
@@ -369,9 +460,9 @@ class _AddBusinessState extends State<AddBusiness> {
                         decoration: ShapeDecoration(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(100),
-                            side: BorderSide(
+                            side: const BorderSide(
                               width: 0.5,
-                              color: kLightGreyColor,
+                              color: kGreyColor1,
                             ),
                           ),
                         ),
@@ -389,8 +480,8 @@ class _AddBusinessState extends State<AddBusiness> {
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       );
 
   //===================== Scroll to Top ==========================\\
@@ -428,7 +519,7 @@ class _AddBusinessState extends State<AddBusiness> {
       onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
       child: Scaffold(
         appBar: MyAppBar(
-          title: "Business Info",
+          title: "Add Business",
           elevation: 0,
           actions: const [],
           backgroundColor: kPrimaryColor,
@@ -456,6 +547,7 @@ class _AddBusinessState extends State<AddBusiness> {
                 onPressed: _scrollToTop,
                 mini: deviceType(media.width) > 2 ? false : true,
                 backgroundColor: kAccentColor,
+                foregroundColor: kPrimaryColor,
                 enableFeedback: true,
                 mouseCursor: SystemMouseCursors.click,
                 tooltip: "Scroll to top",
@@ -466,7 +558,6 @@ class _AddBusinessState extends State<AddBusiness> {
             : const SizedBox(),
         body: SafeArea(
             child: Scrollbar(
-          controller: scrollController,
           child: ListView(
             controller: scrollController,
             physics: const BouncingScrollPhysics(),
@@ -490,7 +581,6 @@ class _AddBusinessState extends State<AddBusiness> {
                 ),
               ),
               kSizedBox,
-              kSizedBox,
               DottedBorder(
                 color: kLightGreyColor,
                 borderPadding: const EdgeInsets.all(3),
@@ -499,11 +589,30 @@ class _AddBusinessState extends State<AddBusiness> {
                 radius: const Radius.circular(20),
                 child: Column(
                   children: [
-                    selectedCoverImage == null
+                    selectedLogoImage == null
                         ? Container(
-                            width: media.width,
-                            height: 144,
+                            padding: const EdgeInsets.all(kDefaultPadding),
+                            decoration: const ShapeDecoration(
+                              shape: CircleBorder(
+                                side: BorderSide(
+                                  width: 0.50,
+                                  color: kGreyColor1,
+                                ),
+                              ),
+                            ),
+                            child: Center(
+                              child: FaIcon(
+                                FontAwesomeIcons.image,
+                                color: kAccentColor,
+                              ),
+                            ),
+                          )
+                        : Container(
                             decoration: ShapeDecoration(
+                              image: DecorationImage(
+                                image: FileImage(selectedLogoImage!),
+                                fit: BoxFit.cover,
+                              ),
                               shape: RoundedRectangleBorder(
                                 side: const BorderSide(
                                   width: 0.50,
@@ -512,24 +621,63 @@ class _AddBusinessState extends State<AddBusiness> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                             ),
+                          ),
+                    InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          elevation: 20,
+                          barrierColor: kBlackColor.withOpacity(0.8),
+                          showDragHandle: true,
+                          useSafeArea: true,
+                          isDismissible: true,
+                          isScrollControlled: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(kDefaultPadding),
+                            ),
+                          ),
+                          enableDrag: true,
+                          builder: ((builder) => uploadBusinessLogo()),
+                        );
+                      },
+                      splashColor: kAccentColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          'Upload business logo',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: kAccentColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                    kSizedBox,
+                    selectedCoverImage == null
+                        ? Container(
+                            padding: const EdgeInsets.all(20),
+                            height: deviceType(media.width) > 2 ? 200 : 120,
+                            decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 0.50,
+                                  color: Color(0xFFE6E6E6),
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                             child: Center(
-                              child: MyImage(url: shopImage),
-                              //     CachedNetworkImage(
-                              //   imageUrl: shopImage!,
-                              //   fit: BoxFit.cover,
-                              //   progressIndicatorBuilder:
-                              //       (context, url, downloadProgress) =>
-                              //           Center(
-                              //               child: CupertinoActivityIndicator(
-                              //                   color: kAccentColor)),
-                              //   errorWidget: (context, url, error) =>
-                              //       Icon(Icons.error, color: kAccentColor),
-                              // )
+                              child: FaIcon(
+                                FontAwesomeIcons.solidImages,
+                                color: kAccentColor,
+                              ),
                             ),
                           )
                         : Container(
-                            width: media.width,
-                            height: 144,
                             decoration: ShapeDecoration(
                               image: DecorationImage(
                                 image: FileImage(selectedCoverImage!),
@@ -560,7 +708,7 @@ class _AddBusinessState extends State<AddBusiness> {
                             ),
                           ),
                           enableDrag: true,
-                          builder: ((builder) => uploadCoverImage()),
+                          builder: ((builder) => uploadBusinessLogo()),
                         );
                       },
                       splashColor: kAccentColor.withOpacity(0.1),
@@ -568,7 +716,7 @@ class _AddBusinessState extends State<AddBusiness> {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          'Upload shop image',
+                          'Upload cover image',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: kAccentColor,

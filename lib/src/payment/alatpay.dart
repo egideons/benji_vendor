@@ -5,7 +5,6 @@ import 'package:webviewx/webviewx.dart';
 
 import '../providers/api_url.dart';
 
-
 class AlatPayWidget extends StatefulWidget {
   final String apiKey;
   final String businessId;
@@ -104,9 +103,9 @@ class AlatPayWidgetState extends State<AlatPayWidget> {
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
     return Scaffold(
-        body: Center(
-      // Look here!
-      child: WebViewX(
+      body: Center(
+        // Look here!
+        child: WebViewX(
           dartCallBacks: <DartCallback>{
             DartCallback(
               name: 'paymentsuccess',
@@ -135,7 +134,9 @@ class AlatPayWidgetState extends State<AlatPayWidget> {
           initialSourceType: SourceType.html,
           onWebViewCreated: (controller) {
             webviewController = controller;
-          }),
-    ));
+          },
+        ),
+      ),
+    );
   }
 }

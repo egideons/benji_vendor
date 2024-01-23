@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/image/my_image.dart';
-import 'package:benji_vendor/src/components/input/my_item_drop.dart';
+import 'package:benji_vendor/src/components/input/my_item_drop_down_menu.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/model/product_model.dart';

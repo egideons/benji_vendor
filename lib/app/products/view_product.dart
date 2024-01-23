@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:benji_vendor/app/overview/overview.dart';
-import 'package:benji_vendor/app/product/edit_product.dart';
+import 'package:benji_vendor/app/products/edit_product.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';

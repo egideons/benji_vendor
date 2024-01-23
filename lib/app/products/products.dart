@@ -1,6 +1,6 @@
-import 'package:benji_vendor/app/product/view_product.dart';
+import 'package:benji_vendor/app/products/view_product.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
-import 'package:benji_vendor/src/components/container/vendors_product_container.dart';
+import 'package:benji_vendor/src/components/container/business_product_container.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
@@ -226,7 +226,7 @@ class _ProductsState extends State<Products> {
                                           // controller.products.length -
                                           //     1 -
                                           //     index;
-                                          return VendorsProductContainer(
+                                          return BusinessProductContainer(
                                             onTap: () => viewProduct(
                                                 controller.products[index]),
                                             product: controller.products[index],

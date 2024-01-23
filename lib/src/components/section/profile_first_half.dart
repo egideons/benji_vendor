@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../theme/colors.dart';
 import '../../providers/constants.dart';
-import '../../providers/helper.dart';
+import '../../providers/helpers.dart';
 
 class ProfileFirstHalf extends StatefulWidget {
   final String availableBalance;

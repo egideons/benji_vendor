@@ -8,7 +8,7 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/src/providers/helper.dart';
+import 'package:benji_vendor/src/providers/helpers.dart';
 import 'package:get/get.dart';
 
 class OrderController extends GetxController {

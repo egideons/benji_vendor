@@ -10,7 +10,7 @@ import 'package:benji_vendor/src/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../providers/helper.dart';
+import '../providers/helpers.dart';
 
 class UserController extends GetxController {
   static UserController get instance {

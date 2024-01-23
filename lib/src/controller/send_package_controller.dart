@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 import '../model/package/item_category.dart';
 import '../model/package/item_weight.dart';
-import '../providers/helper.dart';
+import '../providers/helpers.dart';
 
 class SendPackageController extends GetxController {
   static SendPackageController get instance {

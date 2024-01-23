@@ -9,11 +9,9 @@ import 'package:benji_vendor/app/profile/select_bank.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_blue_textformfield.dart';
-import 'package:benji_vendor/src/components/input/my_item_drop.dart';
-import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
+import 'package:benji_vendor/src/components/input/my_item_drop_down_menu.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
-import 'package:benji_vendor/src/components/section/location_list_tile.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
@@ -25,9 +23,7 @@ import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
 import 'package:benji_vendor/theme/colors.dart';
-import 'package:csc_picker/csc_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,7 +35,7 @@ import '../../../src/providers/constants.dart';
 import '../../src/components/image/my_image.dart';
 import '../../src/controller/category_controller.dart';
 import '../../src/controller/push_notifications_controller.dart';
-import '../../src/providers/helper.dart';
+import '../../src/providers/helpers.dart';
 import '../../src/providers/responsive_constants.dart';
 
 class EditBusiness extends StatefulWidget {
@@ -68,7 +64,6 @@ class _EditBusinessState extends State<EditBusiness> {
       countryValue = widget.business!.country.name;
       stateValue = widget.business!.state;
       cityValue = widget.business!.city;
-      // vendorLGAEC.text = widget.business!.lga;
 
       businessIdEC.text = widget.business!.businessId;
       businessLogo = widget.business!.shopImage;
@@ -289,9 +284,9 @@ class _EditBusinessState extends State<EditBusiness> {
       "accountName": accountNameEC.text,
       "accountNumber": accountNumberEC.text,
       "accountType": accountTypeEC.text,
-      "country": countryValue,
-      "state": stateValue,
-      "city": cityValue,
+      // "country": countryValue,
+      // "state": stateValue,
+      // "city": cityValue,
       "businessId": businessIdEC.text,
       "shop_name": shopNameEC.text,
       "weekOpeningHours": vendorMonToFriOpeningHoursEC.text,
@@ -612,17 +607,6 @@ class _EditBusinessState extends State<EditBusiness> {
                             ),
                             child: Center(
                               child: MyImage(url: businessLogo),
-                              //     CachedNetworkImage(
-                              //   imageUrl: businessLogo!,
-                              //   fit: BoxFit.cover,
-                              //   progressIndicatorBuilder:
-                              //       (context, url, downloadProgress) =>
-                              //           Center(
-                              //               child: CupertinoActivityIndicator(
-                              //                   color: kAccentColor)),
-                              //   errorWidget: (context, url, error) =>
-                              //       Icon(Icons.error, color: kAccentColor),
-                              // )
                             ),
                           )
                         : Container(
@@ -1052,7 +1036,7 @@ class _EditBusinessState extends State<EditBusiness> {
                                     ? "Loading..."
                                     : "Select a bank",
                                 suffixIcon: FaIcon(
-                                  FontAwesomeIcons.chevronDown,
+                                  FontAwesomeIcons.caretDown,
                                   size: 20,
                                   color: kAccentColor,
                                 ),
@@ -1107,208 +1091,204 @@ class _EditBusinessState extends State<EditBusiness> {
                           },
                         ),
                         kSizedBox,
-                        GetBuilder<WithdrawController>(builder: (controller) {
-                          if (controller.isLoadValidateAccount.value) {
+                        GetBuilder<WithdrawController>(
+                          builder: (controller) {
+                            if (controller.isLoadValidateAccount.value) {
+                              return Text(
+                                'Loading...',
+                                style: TextStyle(
+                                  color: kAccentColor.withOpacity(0.8),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              );
+                            }
+                            if (accountNumberEC.text.length < 10) {
+                              return const Text('');
+                            }
                             return Text(
-                              'Loading...',
+                              controller.validateAccount.value.requestSuccessful
+                                  ? controller.validateAccount.value
+                                      .responseBody.accountName
+                                  : 'Bank details not found',
                               style: TextStyle(
-                                color: kAccentColor.withOpacity(0.8),
+                                color: kAccentColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
                             );
-                          }
-                          if (accountNumberEC.text.length < 10) {
-                            return const Text('');
-                          }
-                          return Text(
-                            controller.validateAccount.value.requestSuccessful
-                                ? controller.validateAccount.value.responseBody
-                                    .accountName
-                                : 'Bank details not found',
-                            style: TextStyle(
-                              color: kAccentColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          );
-                        }),
-                        //  address and location
-
-                        kSizedBox,
-                        const Text(
-                          'Country',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        kSizedBox,
-                        CSCPicker(
-                          layout: Layout.vertical,
-                          countryFilter: const [CscCountry.Nigeria],
-                          countryDropdownLabel: "Select a Country",
-                          stateDropdownLabel: "Select a State",
-                          cityDropdownLabel: "Select a City",
-                          onCountryChanged: (value) {
-                            setState(() {
-                              countryValue = value;
-                            });
-                          },
-                          onStateChanged: (value) {
-                            setState(() {
-                              stateValue = value ?? "";
-                            });
-                          },
-                          onCityChanged: (value) {
-                            setState(() {
-                              cityValue = value ?? "";
-                            });
                           },
                         ),
                         kSizedBox,
-                        const Text(
-                          "Local Government Area",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        kSizedBox,
-                        MyBlueTextFormField(
-                          controller: vendorLGAEC,
-                          validator: (value) {
-                            if (value == null || value!.isEmpty) {
-                              return "Field cannot be empty";
-                            } else {
-                              return null;
-                            }
-                          },
-                          onSaved: (value) {},
-                          textInputAction: TextInputAction.done,
-                          focusNode: vendorLGAFN,
-                          hintText: "Enter the LGA",
-                          textInputType: TextInputType.text,
-                        ),
-                        kSizedBox,
-                        const Text(
-                          "Address",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        kHalfSizedBox,
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Location on Google maps',
-                              style: TextStyle(
-                                color: kTextBlackColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            kHalfSizedBox,
-                            MyMapsTextFormField(
-                              controller: mapsLocationEC,
-                              validator: (value) {
-                                if (value == null) {
-                                  addressFN.requestFocus();
-                                  "Enter a location";
-                                }
-                                return null;
-                              },
-                              onChanged: (value) {
-                                placeAutoComplete(value);
-                                setState(() {
-                                  selectedLocation.value = value;
-                                  isTyping = true;
-                                });
-                                if (kDebugMode) {
-                                  print(
-                                      "ONCHANGED VALUE: ${selectedLocation.value}");
-                                }
-                              },
-                              textInputAction: TextInputAction.done,
-                              focusNode: addressFN,
-                              hintText: "Search a location",
-                              textInputType: TextInputType.text,
-                              prefixIcon: Padding(
-                                padding: const EdgeInsets.all(kDefaultPadding),
-                                child: FaIcon(
-                                  FontAwesomeIcons.locationDot,
-                                  color: kAccentColor,
-                                  size: 18,
-                                ),
-                              ),
-                            ),
-                            kSizedBox,
-                            Divider(
-                              height: 10,
-                              thickness: 2,
-                              color: kLightGreyColor,
-                            ),
-                            ElevatedButton.icon(
-                              onPressed: getLocationOnMap,
-                              icon: FaIcon(
-                                FontAwesomeIcons.locationArrow,
-                                color: kAccentColor,
-                                size: 18,
-                              ),
-                              label: const Text("Locate on map"),
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                backgroundColor: kLightGreyColor,
-                                foregroundColor: kTextBlackColor,
-                                fixedSize: Size(media.width, 40),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                            Divider(
-                              height: 10,
-                              thickness: 2,
-                              color: kLightGreyColor,
-                            ),
-                            const Text(
-                              "Suggestions:",
-                              style: TextStyle(
-                                color: kTextBlackColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            kHalfSizedBox,
-                            SizedBox(
-                              height: () {
-                                if (isTyping == false) {
-                                  return 0.0;
-                                }
-                                if (isTyping == true) {
-                                  return 150.0;
-                                }
-                              }(),
-                              child: Scrollbar(
-                                controller: scrollController,
-                                child: ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: placePredictions.length,
-                                  itemBuilder: (context, index) =>
-                                      LocationListTile(
-                                    onTap: () => setLocation(index),
-                                    location:
-                                        placePredictions[index].description ??
-                                            '',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // const Text(
+                        //   'Country',
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w700,
+                        //   ),
+                        // ),
+                        // kSizedBox,
+                        // CSCPicker(
+                        //   layout: Layout.vertical,
+                        //   countryFilter: const [CscCountry.Nigeria],
+                        //   countryDropdownLabel: "Select a Country",
+                        //   stateDropdownLabel: "Select a State",
+                        //   cityDropdownLabel: "Select a City",
+                        //   onCountryChanged: (value) {
+                        //     setState(() {
+                        //       countryValue = value;
+                        //     });
+                        //   },
+                        //   onStateChanged: (value) {
+                        //     setState(() {
+                        //       stateValue = value ?? "";
+                        //     });
+                        //   },
+                        //   onCityChanged: (value) {
+                        //     setState(() {
+                        //       cityValue = value ?? "";
+                        //     });
+                        //   },
+                        // ),
+                        // kSizedBox,
+                        // const Text(
+                        //   "Local Government Area",
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w700,
+                        //   ),
+                        // ),
+                        // kSizedBox,
+                        // MyBlueTextFormField(
+                        //   controller: vendorLGAEC,
+                        //   validator: (value) {
+                        //     if (value == null || value!.isEmpty) {
+                        //       return "Field cannot be empty";
+                        //     } else {
+                        //       return null;
+                        //     }
+                        //   },
+                        //   onSaved: (value) {},
+                        //   textInputAction: TextInputAction.done,
+                        //   focusNode: vendorLGAFN,
+                        //   hintText: "Enter the LGA",
+                        //   textInputType: TextInputType.text,
+                        // ),
+                        // kSizedBox,
+                        // const Text(
+                        //   "Address",
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w700,
+                        //   ),
+                        // ),
+                        // kHalfSizedBox,
+                        // Column(
+                        //   crossAxisAlignment: CrossAxisAlignment.start,
+                        //   children: [
+                        // const Text(
+                        //   'Address',
+                        //   style: TextStyle(
+                        //     color: kTextBlackColor,
+                        //     fontSize: 14,
+                        //     fontWeight: FontWeight.w500,
+                        //   ),
+                        // ),
+                        // kHalfSizedBox,
+                        // MyMapsTextFormField(
+                        //   controller: mapsLocationEC,
+                        //   validator: (value) {
+                        //     if (value == null) {
+                        //       addressFN.requestFocus();
+                        //       "Enter a location";
+                        //     }
+                        //     return null;
+                        //   },
+                        //   onChanged: (value) {
+                        //     placeAutoComplete(value);
+                        //     setState(() {
+                        //       selectedLocation.value = value;
+                        //       isTyping = true;
+                        //     });
+                        //   },
+                        //   textInputAction: TextInputAction.done,
+                        //   focusNode: addressFN,
+                        //   hintText: "Search a location",
+                        //   textInputType: TextInputType.text,
+                        //   prefixIcon: Padding(
+                        //     padding: const EdgeInsets.all(kDefaultPadding),
+                        //     child: FaIcon(
+                        //       FontAwesomeIcons.locationDot,
+                        //       color: kAccentColor,
+                        //       size: 18,
+                        //     ),
+                        //   ),
+                        // ),
+                        // kSizedBox,
+                        // Divider(
+                        //   height: 10,
+                        //   thickness: 2,
+                        //   color: kLightGreyColor,
+                        // ),
+                        // ElevatedButton.icon(
+                        //   onPressed: getLocationOnMap,
+                        //   icon: FaIcon(
+                        //     FontAwesomeIcons.locationArrow,
+                        //     color: kAccentColor,
+                        //     size: 18,
+                        //   ),
+                        //   label: const Text("Locate on map"),
+                        //   style: ElevatedButton.styleFrom(
+                        //     elevation: 0,
+                        //     backgroundColor: kLightGreyColor,
+                        //     foregroundColor: kTextBlackColor,
+                        //     fixedSize: Size(media.width, 40),
+                        //     shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(10),
+                        //     ),
+                        //   ),
+                        // ),
+                        // Divider(
+                        //   height: 10,
+                        //   thickness: 2,
+                        //   color: kLightGreyColor,
+                        // ),
+                        // const Text(
+                        //   "Suggestions:",
+                        //   style: TextStyle(
+                        //     color: kTextBlackColor,
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w700,
+                        //   ),
+                        // ),
+                        // kHalfSizedBox,
+                        // SizedBox(
+                        //   height: () {
+                        //     if (isTyping == false) {
+                        //       return 0.0;
+                        //     }
+                        //     if (isTyping == true) {
+                        //       return 150.0;
+                        //     }
+                        //   }(),
+                        //   child: Scrollbar(
+                        //     controller: scrollController,
+                        //     child: ListView.builder(
+                        //       physics: const BouncingScrollPhysics(),
+                        //       shrinkWrap: true,
+                        //       itemCount: placePredictions.length,
+                        //       itemBuilder: (context, index) =>
+                        //           LocationListTile(
+                        //         onTap: () => setLocation(index),
+                        //         location:
+                        //             placePredictions[index].description ??
+                        //                 '',
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // ],
+                        // ),
                         kSizedBox,
 
                         // business bio

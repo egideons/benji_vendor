@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:benji_vendor/app/packages/send_package.dart';
 import 'package:benji_vendor/app/profile/edit_profile.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
@@ -14,7 +15,7 @@ import 'package:get/get.dart';
 import '../../src/components/appbar/app_bar_title.dart';
 import '../../src/components/card/dashboard_user_card.dart';
 import '../../src/components/card/empty.dart';
-import '../../src/components/container/vendor_business_container.dart';
+import '../../src/components/container/business_container.dart';
 import '../../src/components/section/dashboard_businesses_display_controller.dart';
 import '../../src/components/skeletons/businesses_skeletons.dart';
 import '../../src/controller/business_controller.dart';
@@ -24,6 +25,7 @@ import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 import '../businesses/add_business.dart';
+import '../businesses/business_detail_screen.dart';
 import '../others/notifications.dart';
 
 class Dashboard extends StatefulWidget {
@@ -52,6 +54,9 @@ class _DashboardState extends State<Dashboard>
     _animationController =
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     scrollController.addListener(_scrollListener);
+    scrollController.addListener(() {
+      BusinessController.instance.scrollListener(scrollController);
+    });
     scrollController.addListener(() {
       if (scrollController.position.userScrollDirection ==
               ScrollDirection.forward ||
@@ -135,23 +140,10 @@ class _DashboardState extends State<Dashboard>
 
 //==================== NAVIGATION ==================\\
 
-  // addProduct() {
+  // UserReviewsPage() {
   //   Get.to(
-  //     () => const AddProduct(),
-  //     routeName: 'AddProduct',
-  //     duration: const Duration(milliseconds: 300),
-  //     fullscreenDialog: true,
-  //     curve: Curves.easeIn,
-  //     preventDuplicates: true,
-  //     popGesture: true,
-  //     transition: Transition.downToUp,
-  //   );
-  // }
-
-  // reviewsPage() {
-  //   Get.to(
-  //     () => const ReviewsPage(),
-  //     routeName: 'ReviewsPage',
+  //     () => const UserReviewsPage(),
+  //     routeName: 'UserReviewsPage',
   //     duration: const Duration(milliseconds: 300),
   //     fullscreenDialog: true,
   //     curve: Curves.easeIn,
@@ -187,18 +179,18 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
-  // toBusinessDetailScreen(BusinessModel business) {
-  //   Get.to(
-  //     () => BusinessDetailScreen(business: business),
-  //     duration: const Duration(milliseconds: 300),
-  //     fullscreenDialog: true,
-  //     curve: Curves.easeIn,
-  //     routeName: "BusinessDetailScreen",
-  //     preventDuplicates: true,
-  //     popGesture: false,
-  //     transition: Transition.rightToLeft,
-  //   );
-  // }
+  toBusinessDetailScreen(BusinessModel business) {
+    Get.to(
+      () => BusinessDetailScreen(business: business),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "BusinessDetailScreen",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+  }
 
   addVendorBusiness() {
     Get.to(
@@ -222,6 +214,19 @@ class _DashboardState extends State<Dashboard>
       routeName: "AddBusiness",
       preventDuplicates: true,
       popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  toSendPackage() {
+    Get.to(
+      () => const SendPackage(),
+      routeName: 'SendPackage',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
       transition: Transition.rightToLeft,
     );
   }
@@ -354,6 +359,40 @@ class _DashboardState extends State<Dashboard>
                       },
                     ),
                     kSizedBox,
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: ShapeDecoration(
+                        color: kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x0F000000),
+                            blurRadius: 24,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        onTap: toSendPackage,
+                        leading: FaIcon(
+                          FontAwesomeIcons.bicycle,
+                          color: kAccentColor,
+                        ),
+                        title: const Text(
+                          'Send a Package',
+                          style: TextStyle(
+                            color: kTextBlackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                      ),
+                    ),
+                    kSizedBox,
                     GetBuilder<BusinessController>(
                       init: BusinessController(),
                       builder: (controller) {
@@ -380,12 +419,9 @@ class _DashboardState extends State<Dashboard>
                                     controller.businesses.isEmpty
                                 ? const BusinessListSkeleton()
                                 : controller.businesses.isEmpty
-                                    ? EmptyCard(
+                                    ? const EmptyCard(
                                         emptyCardMessage:
                                             "You don't have any businesses yet",
-                                        showButton: true,
-                                        buttonTitle: "Add a business",
-                                        onPressed: addVendorBusiness,
                                       )
                                     : showBusinesses
                                         ? ListView.separated(
@@ -400,8 +436,25 @@ class _DashboardState extends State<Dashboard>
                                             itemCount:
                                                 controller.businesses.length,
                                             itemBuilder: (context, index) {
-                                              return VendorBusinessContainer(
-                                                onTap: () {},
+                                              return BusinessContainer(
+                                                onTap: () {
+                                                  Get.to(
+                                                    () => BusinessDetailScreen(
+                                                      business: controller
+                                                          .businesses[index],
+                                                    ),
+                                                    duration: const Duration(
+                                                        milliseconds: 300),
+                                                    fullscreenDialog: true,
+                                                    curve: Curves.easeIn,
+                                                    routeName:
+                                                        "BusinessDetailScreen",
+                                                    preventDuplicates: true,
+                                                    popGesture: false,
+                                                    transition:
+                                                        Transition.rightToLeft,
+                                                  );
+                                                },
                                                 // onTap: toBusinessDetailScreen(
                                                 //   controller.businesses[index],
                                                 // ),
@@ -415,6 +468,32 @@ class _DashboardState extends State<Dashboard>
                     ),
 
                     kSizedBox,
+                    GetBuilder<BusinessController>(
+                      builder: (controller) => Column(
+                        children: [
+                          controller.isLoadMore.value
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: kAccentColor,
+                                  ),
+                                )
+                              : const SizedBox(),
+                          controller.loadedAll.value &&
+                                  controller.businesses.isNotEmpty
+                              ? Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 20, bottom: 20),
+                                  height: 10,
+                                  width: 10,
+                                  decoration: ShapeDecoration(
+                                    shape: const CircleBorder(),
+                                    color: kPageSkeletonColor,
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
+                    ),
                     // GetBuilder<UserController>(
                     //   builder: (controller) {
                     //     return Container(
@@ -509,7 +588,7 @@ class _DashboardState extends State<Dashboard>
                     //           ),
                     //         ),
                     //         TextButton(
-                    //           onPressed: reviewsPage,
+                    //           onPressed: UserReviewsPage,
                     //           child: Text(
                     //             'See All Reviews',
                     //             style: TextStyle(

@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
-import 'package:benji_vendor/src/components/input/my_item_drop.dart';
+import 'package:benji_vendor/src/components/input/my_item_drop_down_menu.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/business_controller.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
@@ -288,71 +288,71 @@ class _AddProductState extends State<AddProduct> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            elevation: 20,
-                            barrierColor: kBlackColor.withOpacity(0.8),
-                            showDragHandle: true,
-                            useSafeArea: true,
-                            isDismissible: true,
-                            isScrollControlled: true,
-                            enableDrag: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(kDefaultPadding),
-                              ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 144,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                              width: 0.50,
+                              color: Color(0xFFE6E6E6),
                             ),
-                            builder: ((builder) =>
-                                uploadProductImages(context)),
-                          );
-                        },
-                        splashColor: kAccentColor.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(16),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 144,
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              side: const BorderSide(
-                                width: 0.50,
-                                color: Color(0xFFE6E6E6),
-                              ),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: selectedImages == null
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        "assets/icons/image-upload.png",
-                                      ),
-                                      kHalfSizedBox,
-                                      const Text(
-                                        'Upload product images',
-                                        style: TextStyle(
-                                          color: kTextBlackColor,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : selectedImages == null
-                                    ? const SizedBox()
-                                    : GridTile(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image: FileImage(selectedImages!),
-                                            ),
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: selectedImages == null
+                              ? Image.asset(
+                                  "assets/icons/image-upload.png",
+                                )
+                              : selectedImages == null
+                                  ? const SizedBox()
+                                  : GridTile(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: FileImage(selectedImages!),
                                           ),
                                         ),
                                       ),
+                                    ),
+                        ),
+                      ),
+                      kSizedBox,
+                      Center(
+                        child: InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              elevation: 20,
+                              barrierColor: kBlackColor.withOpacity(0.8),
+                              showDragHandle: true,
+                              useSafeArea: true,
+                              isDismissible: true,
+                              isScrollControlled: true,
+                              enableDrag: true,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(kDefaultPadding),
+                                ),
+                              ),
+                              builder: ((builder) =>
+                                  uploadProductImages(context)),
+                            );
+                          },
+                          splashColor: kAccentColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              'Upload product images',
+                              style: TextStyle(
+                                color: kAccentColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
                           ),
                         ),
                       ),

@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../providers/api_url.dart';
-import '../providers/helper.dart';
+import '../providers/helpers.dart';
 import 'error_controller.dart';
 
 class AuthController extends GetxController {

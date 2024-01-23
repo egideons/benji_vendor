@@ -9,19 +9,18 @@ import '../../../theme/colors.dart';
 import '../../providers/constants.dart';
 import '../../providers/responsive_constants.dart';
 
-class VendorBusinessContainer extends StatefulWidget {
-  final Function() onTap;
+class BusinessContainer extends StatefulWidget {
+  final Function()? onTap;
   final BusinessModel business;
 
-  const VendorBusinessContainer(
+  const BusinessContainer(
       {super.key, required this.onTap, required this.business});
 
   @override
-  State<VendorBusinessContainer> createState() =>
-      _VendorsProductContainerState();
+  State<BusinessContainer> createState() => _BusinessContainerState();
 }
 
-class _VendorsProductContainerState extends State<VendorBusinessContainer> {
+class _BusinessContainerState extends State<BusinessContainer> {
   //======================================= ALL VARIABLES ==========================================\\
 
   //======================================= F UNCTIONS ==========================================\\
