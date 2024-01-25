@@ -109,6 +109,7 @@ class BusinessModel {
         "shop_name": shopName,
         "shop_image": shopImage,
         "shop_type": shopType.toJson(),
+        "vendor_owner": vendorOwner.toJson(),
         "weekOpeningHours": weekOpeningHours,
         "weekClosingHours": weekClosingHours,
         "satOpeningHours": satOpeningHours,
