@@ -29,7 +29,7 @@ class ProductController extends GetxController {
     loadNum.value = 10;
   }
 
-  Future<void> scrollListener(scrollController) async {
+  Future<void> scrollListener(scrollController, String id) async {
     if (ProductController.instance.loadedAll.value) {
       return;
     }
@@ -38,7 +38,7 @@ class ProductController extends GetxController {
         !scrollController.position.outOfRange) {
       ProductController.instance.isLoadMore.value = true;
       update();
-      await ProductController.instance.getBusinessProducts();
+      await ProductController.instance.getBusinessProducts(id);
     }
   }
 
@@ -49,14 +49,14 @@ class ProductController extends GetxController {
     update();
   }
 
-  refreshData() {
+  refreshData(String id) {
     loadedAll.value = false;
     loadNum.value = 10;
     products.value = [];
-    getBusinessProducts();
+    getBusinessProducts(id);
   }
 
-  Future<void> getBusinessProducts() async {
+  Future<void> getBusinessProducts(String id) async {
     if (loadedAll.value) {
       return;
     }
@@ -64,9 +64,8 @@ class ProductController extends GetxController {
     isLoad.value = true;
 
     late String token;
-    String id = UserController.instance.user.value.id.toString();
     var url =
-        "${Api.baseUrl}/vendors/$id/listMyProducts?start=${loadNum.value - 10}&end=${loadNum.value}";
+        "${Api.baseUrl}/clients/filterProductsByBusiness/$id?start=${loadNum.value - 10}&end=${loadNum.value}";
     loadNum.value += 10;
     token = UserController.instance.user.value.token;
     http.Response? response = await HandleData.getApi(url, token);

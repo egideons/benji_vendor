@@ -126,7 +126,7 @@ class _EditProductState extends State<EditProduct> {
       'editProduct',
     );
     if (FormController.instance.status.toString().startsWith('2')) {
-      ProductController.instance.refreshData();
+      ProductController.instance.refreshData(widget.product.business.id);
       // await PushNotificationController.showNotification(
       //   title: "Success.",
       //   body: "${productNameEC.text} has been been successfully updated.",

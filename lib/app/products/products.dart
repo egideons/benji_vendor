@@ -31,7 +31,8 @@ class _ProductsState extends State<Products> {
     super.initState();
 
     scrollController.addListener(() {
-      ProductController.instance.scrollListener(scrollController);
+      ProductController.instance
+          .scrollListener(scrollController, widget.business.id);
     });
     scrollController.addListener(scrollListener);
   }
@@ -86,7 +87,7 @@ class _ProductsState extends State<Products> {
       refreshing = true;
     });
     await Future.delayed(const Duration(milliseconds: 500),
-        () => ProductController.instance.refreshData());
+        () => ProductController.instance.refreshData(widget.business.id));
     setState(() {
       refreshing = false;
     });
