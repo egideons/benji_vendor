@@ -24,7 +24,6 @@ import '../../src/controller/error_controller.dart';
 import '../../src/controller/product_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import '../overview/overview.dart';
 
 class EditProduct extends StatefulWidget {
   final ProductModel product;
@@ -132,15 +131,7 @@ class _EditProductState extends State<EditProduct> {
       //   body: "${productNameEC.text} has been been successfully updated.",
       // );
 
-      Get.offAll(
-        () => const OverView(currentIndex: 2),
-        routeName: 'OverView',
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        popGesture: true,
-        transition: Transition.rightToLeft,
-      );
+      Get.close(1);
     }
   }
 
@@ -527,8 +518,8 @@ class _EditProductState extends State<EditProduct> {
                       controller: productDescriptionEC,
                       focusNode: productDescriptionFN,
                       hintText: "Enter the description here",
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.newline,
+                      keyboardType: TextInputType.multiline,
                       maxLines: 10,
                       maxLength: 1000,
                       validator: (value) {
