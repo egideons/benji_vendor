@@ -56,7 +56,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
       refreshing = true;
     });
     await ProductController.instance.getBusinessProducts(widget.business.id);
-    await OrderController.instance.getOrdersByStatus();
+    await OrderController.instance.getOrdersByStatus(widget.business.id);
     await ReviewsController.instance.getReviews();
     setState(() {
       refreshing = false;
@@ -371,8 +371,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                             const SizedBox(width: 5),
                                             Text(
                                               doubleFormattedText(
-                                                (widget.business.vendorOwner
-                                                    .averageRating),
+                                                (widget.business.averageRating),
                                               ),
                                               style: const TextStyle(
                                                 color: kBlackColor,
@@ -521,7 +520,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                 business: widget.business,
                               )
                             : selectedtabbar == 1
-                                ? const Orders()
+                                ? Orders(business: widget.business)
                                 : AboutBusiness(
                                     business: widget.business,
                                   ),
