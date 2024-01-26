@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables
 
+import 'dart:html' as html;
 import 'dart:io';
 
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
@@ -91,6 +92,7 @@ class _AddProductState extends State<AddProduct> {
 
   final ImagePicker _picker = ImagePicker();
   File? selectedImages;
+  html.File? selectedImagesWeb;
 
   //================================== FUNCTIONS ====================================\\
   Future<void> submit() async {
@@ -144,22 +146,12 @@ class _AddProductState extends State<AddProduct> {
   }
 
   pickProductImages(ImageSource source) async {
-    print(widget.business.toJson());
     final XFile? image = await _picker.pickImage(
       source: source,
     );
     if (image != null) {
-      if (kIsWeb) {
-        print('image.name ${image.name}');
-        final file = File(
-            'path_to_save_image.jpg'); // Replace with your desired file path
-        await file.writeAsBytes(await image.readAsBytes());
-        selectedImages = file;
-        print(selectedImages);
-      } else {
-        selectedImages = File(image.path);
-        setState(() {});
-      }
+      selectedImages = File(image.path);
+      setState(() {});
     }
   }
 
