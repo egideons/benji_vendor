@@ -8,16 +8,15 @@ import 'package:flutter/material.dart';
 import '../../../theme/colors.dart';
 import '../../providers/constants.dart';
 
-class VendorsOrderContainer extends StatelessWidget {
+class BusinessOrderContainer extends StatelessWidget {
   final OrderModel order;
-  const VendorsOrderContainer({super.key, required this.order});
+  const BusinessOrderContainer({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
     final media = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.all(kDefaultPadding / 2),
-      width: media.width,
+      padding: const EdgeInsets.all(10),
       decoration: ShapeDecoration(
         color: kPrimaryColor,
         shape: RoundedRectangleBorder(
@@ -52,6 +51,7 @@ class VendorsOrderContainer extends StatelessWidget {
                 width: 60,
                 child: Text(
                   "#${order.code}",
+                  maxLines: 2,
                   style: TextStyle(
                     color: kTextGreyColor,
                     fontSize: 13,
@@ -65,13 +65,13 @@ class VendorsOrderContainer extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                width: media.width - 150,
-                // color: kAccentColor,
-                child: Wrap(
-                  alignment: WrapAlignment.spaceBetween,
-                  children: [
-                    Text(
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: media.width - 200,
+                    // color: kAccentColor,
+                    child: Text(
                       order.deliveryStatus == "CANC"
                           ? "Cancelled"
                           : order.deliveryStatus == "dispatched"
@@ -92,21 +92,21 @@ class VendorsOrderContainer extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const SizedBox(width: 5),
-                    Text(
-                      order.created,
-                      overflow: TextOverflow.clip,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    )
-                  ],
-                ),
+                  ),
+                  Text(
+                    order.created,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
               ),
               kHalfSizedBox,
               SizedBox(
-                width: media.width - 200,
+                width: media.width - 260,
                 child: Text.rich(
                   TextSpan(
                     children: [
@@ -125,10 +125,10 @@ class VendorsOrderContainer extends StatelessWidget {
               ),
               kHalfSizedBox,
               Container(
-                  color: kLightGreyColor, height: 2, width: media.width - 150),
+                  color: kLightGreyColor, height: 2, width: media.width - 160),
               kHalfSizedBox,
               SizedBox(
-                width: media.width - 150,
+                width: media.width - 260,
                 child: Text(
                   "${order.client.firstName} ${order.client.lastName}",
                   overflow: TextOverflow.ellipsis,
