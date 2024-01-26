@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:benji_vendor/src/model/business_type_model.dart';
+import 'package:get/get.dart';
 
 import '../providers/constants.dart';
 import 'country_model.dart';
@@ -33,6 +34,8 @@ class BusinessModel {
   String accountType;
   String accountBank;
   dynamic agent;
+  double averageRating;
+  int numberOfClientsReactions;
 
   BusinessModel({
     required this.id,
@@ -61,6 +64,8 @@ class BusinessModel {
     required this.accountType,
     required this.accountBank,
     required this.agent,
+    required this.averageRating,
+    required this.numberOfClientsReactions,
   });
 
   factory BusinessModel.fromJson(Map<String, dynamic>? json) {
@@ -97,6 +102,8 @@ class BusinessModel {
       accountType: json["accountType"] ?? notAvailable,
       accountBank: json["accountBank"] ?? notAvailable,
       agent: json['agent'],
+      averageRating: ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
+      numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
     );
   }
 
@@ -124,5 +131,7 @@ class BusinessModel {
         "accountNumber": accountNumber,
         "accountType": accountType,
         "accountBank": accountBank,
+        "average_rating": averageRating,
+        "number_of_clients_reactions": numberOfClientsReactions,
       };
 }

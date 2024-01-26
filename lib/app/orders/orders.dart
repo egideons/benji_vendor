@@ -2,6 +2,7 @@ import 'package:benji_vendor/app/orders/order_details.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/business_order_container.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +20,8 @@ enum StatusType {
 }
 
 class Orders extends StatefulWidget {
-  const Orders({super.key});
+  const Orders({super.key, required this.business});
+  final BusinessModel business;
 
   @override
   State<Orders> createState() => _OrdersState();
@@ -32,8 +34,8 @@ class _OrdersState extends State<Orders> {
   void initState() {
     super.initState();
     AuthController.instance.checkIfAuthorized();
-    scrollController.addListener(
-        () => OrderController.instance.scrollListener(scrollController));
+    scrollController.addListener(() => OrderController.instance
+        .scrollListener(scrollController, widget.business.id));
     scrollController.addListener(_scrollListener);
   }
 
@@ -45,19 +47,23 @@ class _OrdersState extends State<Orders> {
   }
 
   void clickPending() async {
-    await OrderController.instance.setStatus(StatusType.pending);
+    await OrderController.instance
+        .setStatus(widget.business.id, StatusType.pending);
   }
 
   void clickDispatched() async {
-    await OrderController.instance.setStatus(StatusType.dispatched);
+    await OrderController.instance
+        .setStatus(widget.business.id, StatusType.dispatched);
   }
 
   void clickDelivered() async {
-    await OrderController.instance.setStatus(StatusType.delivered);
+    await OrderController.instance
+        .setStatus(widget.business.id, StatusType.delivered);
   }
 
   void clickCancelled() async {
-    await OrderController.instance.setStatus(StatusType.cancelled);
+    await OrderController.instance
+        .setStatus(widget.business.id, StatusType.cancelled);
   }
 
   bool checkStatus(StatusType? theStatus, StatusType currentStatus) =>
@@ -235,6 +241,7 @@ class _OrdersState extends State<Orders> {
                               onTap: () {
                                 Get.to(
                                   () => OrderDetails(
+                                    business: widget.business,
                                     order: controller.vendorsOrderList[index],
                                     orderStatus: controller
                                                 .vendorsOrderList[index]

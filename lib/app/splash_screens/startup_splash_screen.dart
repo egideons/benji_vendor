@@ -17,7 +17,6 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    order.setStatus();
     withdraw.listBanks();
     var size = MediaQuery.of(context).size;
     return GetBuilder<AuthController>(

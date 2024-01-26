@@ -3,6 +3,7 @@
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,9 +20,11 @@ class OrderDetails extends StatefulWidget {
   final OrderModel order;
   final String orderStatus;
   final Color orderStatusColor;
+  final BusinessModel business;
 
   const OrderDetails(
       {super.key,
+      required this.business,
       required this.order,
       required this.orderStatus,
       required this.orderStatusColor});
@@ -57,7 +60,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         isDispatched = true;
       });
       await Future.delayed(const Duration(microseconds: 500), () {
-        OrderController.instance.resetOrders();
+        OrderController.instance.resetOrders(widget.business.id);
         Get.close(1);
       });
     }

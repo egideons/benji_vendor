@@ -8,7 +8,6 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
-import 'package:benji_vendor/src/providers/helpers.dart';
 import 'package:get/get.dart';
 
 class OrderController extends GetxController {
@@ -36,17 +35,17 @@ class OrderController extends GetxController {
     status.value = StatusType.delivered;
   }
 
-  resetOrders() async {
+  resetOrders(String id) async {
     vendorsOrderList.value = <OrderModel>[];
     loadedAll.value = false;
     isLoadMore.value = false;
     loadNum.value = 10;
     total.value = 0;
     status.value = StatusType.pending;
-    setStatus();
+    setStatus(id);
   }
 
-  Future<void> scrollListener(scrollController) async {
+  Future<void> scrollListener(scrollController, String id) async {
     if (OrderController.instance.loadedAll.value) {
       return;
     }
@@ -55,11 +54,11 @@ class OrderController extends GetxController {
         !scrollController.position.outOfRange) {
       OrderController.instance.isLoadMore.value = true;
       update();
-      await OrderController.instance.getOrdersByStatus();
+      await OrderController.instance.getOrdersByStatus(id);
     }
   }
 
-  setStatus([StatusType newStatus = StatusType.pending]) async {
+  setStatus(String id, [StatusType newStatus = StatusType.pending]) async {
     status.value = newStatus;
     // if (newStatus == StatusType.pending) {
     //   vendorsOrderList.value = vendorPendingOrders;
@@ -73,17 +72,16 @@ class OrderController extends GetxController {
     loadNum.value = 10;
     loadedAll.value = false;
     update();
-    await getOrdersByStatus();
+    await getOrdersByStatus(id);
   }
 
-  Future getOrdersByStatus() async {
+  Future getOrdersByStatus(String id) async {
     if (loadedAll.value) {
       return;
     }
     isLoad.value = true;
-    String id = UserController.instance.user.value.id.toString();
-    var url =
-        "${Api.baseUrl}${Api.vendorsOrderList}$id/listMyOrdersByStatus?start=${loadNum.value - 10}&end=${loadNum.value}&status=${statusTypeConverter(status.value)}";
+    var url = "${Api.baseUrl}/orders/filterBusinessOrdersByStatus/$id";
+    // ?start=${loadNum.value - 10}&end=${loadNum.value}&status=${statusTypeConverter(status.value)}";
 
     consoleLog(url);
     loadNum.value += 10;
