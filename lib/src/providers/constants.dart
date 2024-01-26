@@ -82,7 +82,7 @@ int createUniqueId() {
 
 //===================== Number format ==========================\\
 String doubleFormattedText(double value) {
-  final numberFormat = NumberFormat('#,##0.00');
+  final numberFormat = NumberFormat('#,##0.0');
   return numberFormat.format(value);
 }
 
@@ -107,4 +107,3 @@ convertToCurrency(String e) {
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => "${m[0]},");
   return newStr;
 }
-

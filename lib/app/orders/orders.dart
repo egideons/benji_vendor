@@ -97,7 +97,7 @@ class _OrdersState extends State<Orders> {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
+    // var media = MediaQuery.of(context).size;
     return ListView(
       shrinkWrap: true,
       padding: const EdgeInsets.all(kDefaultPadding),
@@ -276,7 +276,7 @@ class _OrdersState extends State<Orders> {
                               },
                               borderRadius: BorderRadius.circular(12),
                               mouseCursor: SystemMouseCursors.click,
-                              child: VendorsOrderContainer(
+                              child: BusinessOrderContainer(
                                 order: controller.vendorsOrderList[index],
                               ),
                             );

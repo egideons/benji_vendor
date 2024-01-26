@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables
 
-import 'dart:html' as html;
 import 'dart:io';
 
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
@@ -27,7 +26,6 @@ import '../../src/model/product_model.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
-import '../overview/overview.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key, required this.business});
@@ -92,7 +90,6 @@ class _AddProductState extends State<AddProduct> {
 
   final ImagePicker _picker = ImagePicker();
   File? selectedImages;
-  html.File? selectedImagesWeb;
 
   //================================== FUNCTIONS ====================================\\
   Future<void> submit() async {
@@ -128,20 +125,12 @@ class _AddProductState extends State<AddProduct> {
       'addProduct',
     );
     if (FormController.instance.status.toString().startsWith('2')) {
-      await ProductController.instance.reset();
+      await ProductController.instance.refreshData(widget.business.id);
       await PushNotificationController.showNotification(
         title: "Success",
         body: "${productNameEC.text} has been added to your products",
       );
-      Get.offAll(
-        () => const OverView(currentIndex: 2),
-        routeName: 'OverView',
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        popGesture: true,
-        transition: Transition.rightToLeft,
-      );
+      Get.close(1);
     }
   }
 
@@ -527,8 +516,8 @@ class _AddProductState extends State<AddProduct> {
                         controller: productDescriptionEC,
                         focusNode: productDescriptionFN,
                         hintText: "Enter the description here",
-                        textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.newline,
+                        keyboardType: TextInputType.multiline,
                         maxLines: 10,
                         maxLength: 1000,
                         validator: (value) {
