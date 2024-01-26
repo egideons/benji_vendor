@@ -4,6 +4,7 @@ import 'package:benji_vendor/src/components/container/business_product_container
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:benji_vendor/src/model/product_model.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,8 @@ import '../../theme/colors.dart';
 import 'add_new_product.dart';
 
 class Products extends StatefulWidget {
-  const Products({super.key});
+  const Products({super.key, required this.business});
+  final BusinessModel business;
 
   @override
   State<Products> createState() => _ProductsState();
@@ -29,7 +31,8 @@ class _ProductsState extends State<Products> {
     super.initState();
 
     scrollController.addListener(() {
-      ProductController.instance.scrollListener(scrollController);
+      ProductController.instance
+          .scrollListener(scrollController, widget.business.id);
     });
     scrollController.addListener(scrollListener);
   }
@@ -84,7 +87,7 @@ class _ProductsState extends State<Products> {
       refreshing = true;
     });
     await Future.delayed(const Duration(milliseconds: 500),
-        () => ProductController.instance.refreshData());
+        () => ProductController.instance.refreshData(widget.business.id));
     setState(() {
       refreshing = false;
     });
@@ -92,7 +95,7 @@ class _ProductsState extends State<Products> {
 
   addProduct() {
     Get.to(
-      () => const AddProduct(),
+      () => AddProduct(business: widget.business),
       routeName: 'AddProduct',
       duration: const Duration(milliseconds: 300),
       fullscreenDialog: true,

@@ -1,19 +1,21 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables
 
+import 'dart:html' as html;
 import 'dart:io';
 
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop_down_menu.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
-import 'package:benji_vendor/src/controller/business_controller.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -28,7 +30,8 @@ import '../../theme/colors.dart';
 import '../overview/overview.dart';
 
 class AddProduct extends StatefulWidget {
-  const AddProduct({super.key});
+  const AddProduct({super.key, required this.business});
+  final BusinessModel business;
 
   @override
   State<AddProduct> createState() => _AddProductState();
@@ -61,7 +64,6 @@ class _AddProductState extends State<AddProduct> {
   final productPriceFN = FocusNode();
   final productQuantityFN = FocusNode();
   final productDiscountFN = FocusNode();
-  final vendorBusinessFN = FocusNode();
 
   //================================== CONTROLLERS ====================================\\
   final scrollController = ScrollController();
@@ -71,7 +73,6 @@ class _AddProductState extends State<AddProduct> {
   final productQuantityEC = TextEditingController();
   final productSubCategoryEC = TextEditingController();
   final productTypeEC = TextEditingController();
-  final vendorBusinessEC = TextEditingController();
 
   //================================== VALUES ====================================\\
 
@@ -91,6 +92,7 @@ class _AddProductState extends State<AddProduct> {
 
   final ImagePicker _picker = ImagePicker();
   File? selectedImages;
+  html.File? selectedImagesWeb;
 
   //================================== FUNCTIONS ====================================\\
   Future<void> submit() async {
@@ -114,7 +116,7 @@ class _AddProductState extends State<AddProduct> {
       'sub_category_id': productSubCategoryEC.text,
       'product_type': productTypeEC.text,
       'vendor_id': UserController.instance.user.value.id,
-      'business_id': vendorBusinessEC.text,
+      'business_id': widget.business.id,
       'is_available': true,
       'is_recommended': true,
       'is_trending': true,
@@ -308,15 +310,18 @@ class _AddProductState extends State<AddProduct> {
                                 )
                               : selectedImages == null
                                   ? const SizedBox()
-                                  : GridTile(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: FileImage(selectedImages!),
+                                  : kIsWeb
+                                      ? const SizedBox()
+                                      : GridTile(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image:
+                                                    FileImage(selectedImages!),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
                         ),
                       ),
                       kSizedBox,
@@ -355,43 +360,6 @@ class _AddProductState extends State<AddProduct> {
                             ),
                           ),
                         ),
-                      ),
-                      kSizedBox,
-                      const Text(
-                        'Businesses',
-                        style: TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.32,
-                        ),
-                      ),
-                      kHalfSizedBox,
-                      GetBuilder<BusinessController>(
-                        initState: (state) {
-                          BusinessController.instance.getVendorBusinesses();
-                        },
-                        builder: (controller) {
-                          return ItemDropDownMenu(
-                            itemEC: vendorBusinessEC,
-                            hintText: "E.g Restaurant, Auto Dealer, etc",
-                            dropdownMenuEntries:
-                                controller.businesses.isEmpty &&
-                                        controller.isLoad.value
-                                    ? [
-                                        const DropdownMenuEntry(
-                                          value: 'Loading...',
-                                          label: 'Loading...',
-                                          enabled: false,
-                                        )
-                                      ]
-                                    : controller.businesses
-                                        .map((item) => DropdownMenuEntry(
-                                            value: item.id,
-                                            label: item.shopName))
-                                        .toList(),
-                          );
-                        },
                       ),
                       kSizedBox,
                       const Text(

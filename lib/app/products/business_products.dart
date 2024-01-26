@@ -27,7 +27,7 @@ class BusinessProducts extends StatefulWidget {
 class _BusinessProductsState extends State<BusinessProducts> {
   @override
   void initState() {
-    ProductController.instance.getBusinessProducts();
+    ProductController.instance.getBusinessProducts(widget.business.id);
     super.initState();
   }
 
@@ -69,37 +69,45 @@ class _BusinessProductsState extends State<BusinessProducts> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GetBuilder<ProductController>(builder: (controller) {
-            if (controller.isLoad.value) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: kAccentColor,
-                ),
-              );
-            }
-            if (controller.products.isEmpty) {
-              return const EmptyCard(
-                emptyCardMessage: "You don't have any products",
-              );
-            }
-            return LayoutGrid(
-              rowGap: kDefaultPadding / 2,
-              columnGap: kDefaultPadding / 2,
-              columnSizes: breakPointDynamic(media.width, [1.fr], [1.fr, 1.fr],
-                  [1.fr, 1.fr, 1.fr], [1.fr, 1.fr, 1.fr, 1.fr]),
-              rowSizes: controller.products.isEmpty
-                  ? [auto]
-                  : List.generate(controller.products.length, (index) => auto),
-              children: (controller.products)
-                  .map(
-                    (item) => BusinessProductContainer(
-                      onTap: () => viewProduct(item),
-                      product: item,
+          GetBuilder<ProductController>(
+              initState: (state) => ProductController.instance
+                  .getBusinessProducts(widget.business.id),
+              builder: (controller) {
+                if (controller.isLoad.value) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: kAccentColor,
                     ),
-                  )
-                  .toList(),
-            );
-          }),
+                  );
+                }
+                if (controller.products.isEmpty) {
+                  return const EmptyCard(
+                    emptyCardMessage: "You don't have any products",
+                  );
+                }
+                return LayoutGrid(
+                  rowGap: kDefaultPadding / 2,
+                  columnGap: kDefaultPadding / 2,
+                  columnSizes: breakPointDynamic(
+                      media.width,
+                      [1.fr],
+                      [1.fr, 1.fr],
+                      [1.fr, 1.fr, 1.fr],
+                      [1.fr, 1.fr, 1.fr, 1.fr]),
+                  rowSizes: controller.products.isEmpty
+                      ? [auto]
+                      : List.generate(
+                          controller.products.length, (index) => auto),
+                  children: (controller.products)
+                      .map(
+                        (item) => BusinessProductContainer(
+                          onTap: () => viewProduct(item),
+                          product: item,
+                        ),
+                      )
+                      .toList(),
+                );
+              }),
           kSizedBox,
         ],
       ),

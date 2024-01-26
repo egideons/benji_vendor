@@ -126,7 +126,7 @@ class _BusinessContainerState extends State<BusinessContainer> {
                           TextSpan(
                             children: [
                               const TextSpan(
-                                text: "TIN: ",
+                                text: "CAC: ",
                                 style: TextStyle(
                                   color: kTextBlackColor,
                                   fontSize: 16,

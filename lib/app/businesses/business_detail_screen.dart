@@ -1,3 +1,4 @@
+import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/theme/colors.dart';
@@ -54,7 +55,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
     setState(() {
       refreshing = true;
     });
-    await ProductController.instance.getBusinessProducts();
+    await ProductController.instance.getBusinessProducts(widget.business.id);
     await OrderController.instance.getOrdersByStatus();
     await ReviewsController.instance.getReviews();
     setState(() {
@@ -156,7 +157,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
 //=================================== Navigation =====================================\\
 
   addProduct() => Get.to(
-        () => const AddProduct(),
+        () => AddProduct(business: widget.business),
         routeName: 'AddProduct',
         duration: const Duration(milliseconds: 300),
         fullscreenDialog: true,
@@ -520,7 +521,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                 business: widget.business,
                               )
                             : selectedtabbar == 1
-                                ? const SizedBox()
+                                ? const Orders()
                                 : AboutBusiness(
                                     business: widget.business,
                                   ),
