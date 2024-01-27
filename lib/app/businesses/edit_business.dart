@@ -306,8 +306,7 @@ class _EditBusinessState extends State<EditBusiness> {
         '${Api.baseUrl}/vendors/createVendorBusiness/$vendorId',
         data,
         {'shop_image': selectedLogoImage},
-        'changeVendorBusinessProfile',
-        true);
+        'changeVendorBusinessProfile');
     if (FormController.instance.status.toString().startsWith('2')) {
       await PushNotificationController.showNotification(
         title: "Success.",
