@@ -24,6 +24,7 @@ import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -609,21 +610,24 @@ class _EditBusinessState extends State<EditBusiness> {
                               child: MyImage(url: businessLogo),
                             ),
                           )
-                        : Container(
-                            decoration: ShapeDecoration(
-                              image: DecorationImage(
-                                image: FileImage(File(selectedLogoImage!.path)),
-                                fit: BoxFit.cover,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE6E6E6),
+                        : kIsWeb
+                            ? const SizedBox()
+                            : Container(
+                                decoration: ShapeDecoration(
+                                  image: DecorationImage(
+                                    image: FileImage(
+                                        File(selectedLogoImage!.path)),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                      width: 0.50,
+                                      color: Color(0xFFE6E6E6),
+                                    ),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ),
-                          ),
                     InkWell(
                       onTap: () {
                         showModalBottomSheet(

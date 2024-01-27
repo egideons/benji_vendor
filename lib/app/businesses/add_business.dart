@@ -1,6 +1,5 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously, unused_field, invalid_use_of_protected_member
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
@@ -13,17 +12,21 @@ import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
+import 'package:benji_vendor/src/controller/category_controller.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
+import 'package:benji_vendor/src/controller/push_notifications_controller.dart';
 import 'package:benji_vendor/src/controller/shopping_location_controller.dart';
 import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
-import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
+import 'package:benji_vendor/src/providers/constants.dart';
+import 'package:benji_vendor/src/providers/helpers.dart';
 import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
+import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
@@ -34,15 +37,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../src/providers/constants.dart';
-import '../../src/controller/category_controller.dart';
-import '../../src/controller/push_notifications_controller.dart';
-import '../../src/providers/helpers.dart';
-import '../../src/providers/responsive_constants.dart';
-
 class AddBusiness extends StatefulWidget {
-  const AddBusiness({super.key, this.business});
-  final BusinessModel? business;
+  const AddBusiness({super.key});
 
   @override
   State<AddBusiness> createState() => _AddBusinessState();
@@ -55,32 +51,32 @@ class _AddBusinessState extends State<AddBusiness> {
     super.initState();
     CategoryController.instance.getCategory();
     scrollController.addListener(_scrollListener);
-    if (widget.business != null) {
-      addressEC.text = widget.business!.address;
-      latitude = widget.business!.latitude;
-      longitude = widget.business!.longitude;
-      accountBankEC.text = widget.business!.accountBank;
-      accountNameEC.text = widget.business!.accountName;
-      accountNumberEC.text = widget.business!.accountNumber;
-      accountTypeEC.text = widget.business!.accountType;
-      countryEC.text = widget.business!.country.name;
-      stateEC.text = widget.business!.state;
-      cityEC.text = widget.business!.city;
+    // if (widget.business != null) {
+    //   addressEC.text = widget.business!.address;
+    //   latitude = widget.business!.latitude;
+    //   longitude = widget.business!.longitude;
+    //   accountBankEC.text = widget.business!.accountBank;
+    //   accountNameEC.text = widget.business!.accountName;
+    //   accountNumberEC.text = widget.business!.accountNumber;
+    //   accountTypeEC.text = widget.business!.accountType;
+    //   countryEC.text = widget.business!.country.name;
+    //   stateEC.text = widget.business!.state;
+    //   cityEC.text = widget.business!.city;
 
-      businessIdEC.text = widget.business!.businessId;
-      shopImage = widget.business!.shopImage;
-      shopNameEC.text = widget.business!.shopName;
-      vendorMonToFriOpeningHoursEC.text = widget.business!.weekOpeningHours;
-      vendorMonToFriClosingHoursEC.text = widget.business!.weekClosingHours;
-      vendorSatOpeningHoursEC.text = widget.business!.satOpeningHours;
-      vendorSatClosingHoursEC.text = widget.business!.satClosingHours;
-      vendorSunOpeningHoursEC.text = widget.business!.sunWeekOpeningHours;
-      vendorSunClosingHoursEC.text = widget.business!.sunWeekClosingHours;
-      businessBioEC.text = widget.business!.businessBio;
-      vendorBusinessTypeEC.text = widget.business!.shopType.id;
+    //   businessIdEC.text = widget.business!.businessId;
+    //   shopImage = widget.business!.shopImage;
+    //   shopNameEC.text = widget.business!.shopName;
+    //   vendorMonToFriOpeningHoursEC.text = widget.business!.weekOpeningHours;
+    //   vendorMonToFriClosingHoursEC.text = widget.business!.weekClosingHours;
+    //   vendorSatOpeningHoursEC.text = widget.business!.satOpeningHours;
+    //   vendorSatClosingHoursEC.text = widget.business!.satClosingHours;
+    //   vendorSunOpeningHoursEC.text = widget.business!.sunWeekOpeningHours;
+    //   vendorSunClosingHoursEC.text = widget.business!.sunWeekClosingHours;
+    //   businessBioEC.text = widget.business!.businessBio;
+    //   vendorBusinessTypeEC.text = widget.business!.shopType.id;
 
-      consoleLog("This is the shop image: $shopImage");
-    }
+    //   consoleLog("This is the shop image: $shopImage");
+    // }
   }
 
   @override
@@ -158,6 +154,7 @@ class _AddBusinessState extends State<AddBusiness> {
 //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker _picker = ImagePicker();
+  final ImagePicker _pickerCover = ImagePicker();
   XFile? selectedLogoImage;
   XFile? selectedCoverImage;
   //================================== function ====================================\\
@@ -165,20 +162,21 @@ class _AddBusinessState extends State<AddBusiness> {
     final XFile? image = await _picker.pickImage(
       source: source,
     );
+    print('image logo $image');
     if (image != null) {
       selectedLogoImage = image;
-      Get.back();
+      // Get.back();
       setState(() {});
     }
   }
 
   pickCoverImage(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(
+    final XFile? image = await _pickerCover.pickImage(
       source: source,
     );
     if (image != null) {
       selectedCoverImage = image;
-      Get.back();
+      // Get.back();
       setState(() {});
     }
   }
@@ -262,7 +260,11 @@ class _AddBusinessState extends State<AddBusiness> {
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
-    if (selectedCoverImage == null && shopImage!.isEmpty) {
+    if (selectedCoverImage == null) {
+      ApiProcessorController.errorSnack("Please select a shop cover");
+      return;
+    }
+    if (selectedLogoImage == null) {
       ApiProcessorController.errorSnack("Please select a shop image");
       return;
     }
@@ -300,7 +302,7 @@ class _AddBusinessState extends State<AddBusiness> {
     await FormController.instance.postAuthstream2(
         '${Api.baseUrl}/vendors/createVendorBusiness/$vendorId',
         data,
-        {'shop_image': selectedCoverImage},
+        {'shop_image': selectedLogoImage, 'coverImage': selectedCoverImage},
         'changeVendorBusinessProfile',
         true);
     if (FormController.instance.status.toString().startsWith('2')) {
@@ -533,6 +535,7 @@ class _AddBusinessState extends State<AddBusiness> {
                 padding: const EdgeInsets.all(kDefaultPadding),
                 child: MyElevatedButton(
                   onPressed: (() async {
+                    kIsWeb;
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       print('after checker');
@@ -610,21 +613,24 @@ class _AddBusinessState extends State<AddBusiness> {
                               ),
                             ),
                           )
-                        : Container(
-                            decoration: ShapeDecoration(
-                              image: DecorationImage(
-                                image: FileImage(File(selectedLogoImage!.path)),
-                                fit: BoxFit.cover,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE6E6E6),
+                        : kIsWeb
+                            ? const SizedBox()
+                            : Container(
+                                decoration: ShapeDecoration(
+                                  image: DecorationImage(
+                                    image: FileImage(
+                                        File(selectedLogoImage!.path)),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                      width: 0.50,
+                                      color: Color(0xFFE6E6E6),
+                                    ),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ),
-                          ),
                     InkWell(
                       onTap: () {
                         showModalBottomSheet(
@@ -680,22 +686,24 @@ class _AddBusinessState extends State<AddBusiness> {
                               ),
                             ),
                           )
-                        : Container(
-                            decoration: ShapeDecoration(
-                              image: DecorationImage(
-                                image:
-                                    FileImage(File(selectedCoverImage!.path)),
-                                fit: BoxFit.cover,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE6E6E6),
+                        : kIsWeb
+                            ? const SizedBox()
+                            : Container(
+                                decoration: ShapeDecoration(
+                                  image: DecorationImage(
+                                    image: FileImage(
+                                        File(selectedCoverImage!.path)),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                      width: 0.50,
+                                      color: Color(0xFFE6E6E6),
+                                    ),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
                                 ),
-                                borderRadius: BorderRadius.circular(20),
                               ),
-                            ),
-                          ),
                     InkWell(
                       onTap: () {
                         showModalBottomSheet(
@@ -712,7 +720,7 @@ class _AddBusinessState extends State<AddBusiness> {
                             ),
                           ),
                           enableDrag: true,
-                          builder: ((builder) => uploadBusinessLogo()),
+                          builder: ((builder) => uploadBusinessCoverImage()),
                         );
                       },
                       splashColor: kAccentColor.withOpacity(0.1),

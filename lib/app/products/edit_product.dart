@@ -14,6 +14,7 @@ import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -293,24 +294,28 @@ class _EditProductState extends State<EditProduct> {
                             child: MyImage(url: productImages!),
                           ),
                         )
-                      : GridTile(
-                          child: DottedBorder(
-                            color: kLightGreyColor,
-                            borderPadding: const EdgeInsets.all(3),
-                            padding: const EdgeInsets.all(kDefaultPadding / 2),
-                            borderType: BorderType.RRect,
-                            radius: const Radius.circular(20),
-                            child: Container(
-                              width: media.width,
-                              height: 144,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: FileImage(File(selectedImages!.path)),
+                      : kIsWeb
+                          ? const SizedBox()
+                          : GridTile(
+                              child: DottedBorder(
+                                color: kLightGreyColor,
+                                borderPadding: const EdgeInsets.all(3),
+                                padding:
+                                    const EdgeInsets.all(kDefaultPadding / 2),
+                                borderType: BorderType.RRect,
+                                radius: const Radius.circular(20),
+                                child: Container(
+                                  width: media.width,
+                                  height: 144,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image:
+                                          FileImage(File(selectedImages!.path)),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
                   kHalfSizedBox,
                   InkWell(
                     onTap: () {

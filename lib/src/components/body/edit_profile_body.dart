@@ -111,7 +111,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
     );
     if (image != null) {
       selectedLogoImage = image;
-      Get.back();
+      // Get.back();
       setState(() {});
     }
   }
@@ -323,17 +323,19 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                           child: MyImage(url: profileLogo!),
                         ),
                       )
-                    : Container(
-                        height: 200,
-                        width: 200,
-                        decoration: ShapeDecoration(
-                          shape: const CircleBorder(),
-                          image: DecorationImage(
-                            image: FileImage(File(selectedLogoImage!.path)),
-                            fit: BoxFit.cover,
+                    : kIsWeb
+                        ? const SizedBox()
+                        : Container(
+                            height: 200,
+                            width: 200,
+                            decoration: ShapeDecoration(
+                              shape: const CircleBorder(),
+                              image: DecorationImage(
+                                image: FileImage(File(selectedLogoImage!.path)),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
                 kHalfSizedBox,
                 InkWell(
                   onTap: () {
