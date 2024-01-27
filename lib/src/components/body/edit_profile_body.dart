@@ -102,7 +102,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
 //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker _picker = ImagePicker();
-  File? selectedLogoImage;
+  XFile? selectedLogoImage;
   //================================== function ====================================\\
 
   pickLogoImage(ImageSource source) async {
@@ -110,8 +110,8 @@ class _EditProfileBodyState extends State<EditProfileBody> {
       source: source,
     );
     if (image != null) {
-      selectedLogoImage = File(image.path);
-      Get.back();
+      selectedLogoImage = image;
+      // Get.back();
       setState(() {});
     }
   }
@@ -190,7 +190,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
     consoleLog(
         Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString());
     consoleLog("profile logo: $selectedLogoImage");
-    await FormController.instance.postAuthstream(
+    await FormController.instance.postAuthstream2(
         Api.baseUrl + Api.changeVendorPersonalProfile + vendorId.toString(),
         data,
         {'profileLogo': selectedLogoImage},
@@ -323,17 +323,19 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                           child: MyImage(url: profileLogo!),
                         ),
                       )
-                    : Container(
-                        height: 200,
-                        width: 200,
-                        decoration: ShapeDecoration(
-                          shape: const CircleBorder(),
-                          image: DecorationImage(
-                            image: FileImage(selectedLogoImage!),
-                            fit: BoxFit.cover,
+                    : kIsWeb
+                        ? const SizedBox()
+                        : Container(
+                            height: 200,
+                            width: 200,
+                            decoration: ShapeDecoration(
+                              shape: const CircleBorder(),
+                              image: DecorationImage(
+                                image: FileImage(File(selectedLogoImage!.path)),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
                 kHalfSizedBox,
                 InkWell(
                   onTap: () {

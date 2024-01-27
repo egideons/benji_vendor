@@ -89,7 +89,7 @@ class _AddProductState extends State<AddProduct> {
   //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker _picker = ImagePicker();
-  File? selectedImages;
+  XFile? selectedImages;
 
   //================================== FUNCTIONS ====================================\\
   Future<void> submit() async {
@@ -118,7 +118,7 @@ class _AddProductState extends State<AddProduct> {
       'is_recommended': true,
       'is_trending': true,
     };
-    await FormController.instance.postAuthstream(
+    await FormController.instance.postAuthstream2(
       Api.baseUrl + Api.addProduct,
       data,
       {'product_image': selectedImages},
@@ -139,7 +139,7 @@ class _AddProductState extends State<AddProduct> {
       source: source,
     );
     if (image != null) {
-      selectedImages = File(image.path);
+      selectedImages = image;
       setState(() {});
     }
   }
@@ -305,8 +305,8 @@ class _AddProductState extends State<AddProduct> {
                                           child: Container(
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
-                                                image:
-                                                    FileImage(selectedImages!),
+                                                image: FileImage(
+                                                    File(selectedImages!.path)),
                                               ),
                                             ),
                                           ),

@@ -7,6 +7,8 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../providers/helpers.dart';
 import 'user_controller.dart';
@@ -234,6 +236,92 @@ class FormController extends GetxController {
         request.files.add(await http.MultipartFile.fromPath(
             key, files[key]!.path,
             filename: files[key]!.path.split('/').last));
+      }
+      consoleLog("${request.files.map((e) => [
+            e.filename,
+            e.field,
+            e.contentType
+          ]).toList()}");
+
+      request.headers.addAll(headers);
+
+      data.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+      consoleLog('request.fields ${request.fields}');
+      consoleLog('stream response emma $response');
+      // try {
+      response = await request.send();
+      consoleLog('pass 1 $response');
+      status.value = response.statusCode;
+      consoleLog('pass 2');
+      final normalResp = await http.Response.fromStream(response);
+      consoleLog('pass 3 ${response.statusCode}');
+      consoleLog('resp response $normalResp');
+      consoleLog('stream response ${normalResp.body}');
+      if (response.statusCode == 200) {
+        if (saveUser) {
+          UserController.instance.saveUser(
+              normalResp.body, UserController.instance.user.value.token);
+        }
+
+        ApiProcessorController.successSnack(successMsg);
+        isLoad.value = false;
+        update();
+        update([tag]);
+      }
+    } on SocketException {
+      ApiProcessorController.errorSnack(noInternetMsg);
+    } catch (e) {
+      ApiProcessorController.errorSnack(errorMsg);
+    }
+    // } catch (e) {
+    //   response = null;
+    // }
+
+    isLoad.value = false;
+    update();
+    update([tag]);
+    return;
+  }
+
+  Future postAuthstream2(
+    String url,
+    Map data,
+    Map<String, XFile?> files,
+    String tag, [
+    saveUser = false,
+    String errorMsg = "Error occurred",
+    String successMsg = "Submitted successfully",
+    String noInternetMsg = "Please connect to the internet",
+  ]) async {
+    http.StreamedResponse? response;
+
+    isLoad.value = true;
+    update();
+    update([tag]);
+
+    var request = http.MultipartRequest("POST", Uri.parse(url));
+    Map<String, String> headers = authHeader();
+    consoleLog("This is the image: ${files.toString()}");
+    try {
+      for (String key in files.keys) {
+        if (files[key] == null) {
+          continue;
+        }
+
+        request.files.add(http.MultipartFile(
+          key,
+          files[key]!.readAsBytes().asStream(),
+          await files[key]!.length(),
+          filename: 'image.jpg',
+          contentType:
+              MediaType('image', 'jpeg'), // Adjust content type as needed
+        ));
+
+        // request.files.add(await http.MultipartFile.fromPath(
+        //     key, files[key]!.path,
+        //     filename: files[key]!.path.split('/').last));
       }
       consoleLog("${request.files.map((e) => [
             e.filename,

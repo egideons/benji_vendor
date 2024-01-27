@@ -14,6 +14,7 @@ import 'package:benji_vendor/src/model/product_type_model.dart';
 import 'package:benji_vendor/src/model/sub_category.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -92,7 +93,7 @@ class _EditProductState extends State<EditProduct> {
   //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker picker = ImagePicker();
-  File? selectedImages;
+  XFile? selectedImages;
   String? productImages;
 
   //================================== FUNCTIONS ====================================\\
@@ -112,13 +113,13 @@ class _EditProductState extends State<EditProduct> {
     };
 
     consoleLog("This is the data : $data");
-    // await FormController.instance.postAuthstream(
+    // await FormController.instance.postAuthstream2(
     //   Api.baseUrl + Api.changeProduct + widget.product.id,
     //   data,
     //   {'product_image': selectedImages},
     //   'editProduct',
     // );
-    await FormController.instance.postAuthstream(
+    await FormController.instance.postAuthstream2(
       Api.baseUrl + Api.changeProduct + widget.product.id,
       {'data': jsonEncode(data)}, // Wrap 'data' in a Map
       {'product_image': selectedImages},
@@ -140,7 +141,7 @@ class _EditProductState extends State<EditProduct> {
       source: source,
     );
     if (image != null) {
-      selectedImages = File(image.path);
+      selectedImages = image;
       setState(() {});
     }
   }
@@ -293,24 +294,28 @@ class _EditProductState extends State<EditProduct> {
                             child: MyImage(url: productImages!),
                           ),
                         )
-                      : GridTile(
-                          child: DottedBorder(
-                            color: kLightGreyColor,
-                            borderPadding: const EdgeInsets.all(3),
-                            padding: const EdgeInsets.all(kDefaultPadding / 2),
-                            borderType: BorderType.RRect,
-                            radius: const Radius.circular(20),
-                            child: Container(
-                              width: media.width,
-                              height: 144,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: FileImage(selectedImages!),
+                      : kIsWeb
+                          ? const SizedBox()
+                          : GridTile(
+                              child: DottedBorder(
+                                color: kLightGreyColor,
+                                borderPadding: const EdgeInsets.all(3),
+                                padding:
+                                    const EdgeInsets.all(kDefaultPadding / 2),
+                                borderType: BorderType.RRect,
+                                radius: const Radius.circular(20),
+                                child: Container(
+                                  width: media.width,
+                                  height: 144,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image:
+                                          FileImage(File(selectedImages!.path)),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
                   kHalfSizedBox,
                   InkWell(
                     onTap: () {
