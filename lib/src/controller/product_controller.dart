@@ -53,6 +53,7 @@ class ProductController extends GetxController {
     loadedAll.value = false;
     loadNum.value = 10;
     products.value = [];
+    update();
     getBusinessProducts(id);
   }
 
@@ -83,7 +84,7 @@ class ProductController extends GetxController {
           .map((e) => ProductModel.fromJson(e))
           .toList();
       consoleLog(data.toString());
-      products.value += data;
+      products.value = data;
     } catch (e) {
       consoleLog(e.toString());
     }
