@@ -92,7 +92,7 @@ class _EditProductState extends State<EditProduct> {
   //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker picker = ImagePicker();
-  File? selectedImages;
+  XFile? selectedImages;
   String? productImages;
 
   //================================== FUNCTIONS ====================================\\
@@ -112,13 +112,13 @@ class _EditProductState extends State<EditProduct> {
     };
 
     consoleLog("This is the data : $data");
-    // await FormController.instance.postAuthstream(
+    // await FormController.instance.postAuthstream2(
     //   Api.baseUrl + Api.changeProduct + widget.product.id,
     //   data,
     //   {'product_image': selectedImages},
     //   'editProduct',
     // );
-    await FormController.instance.postAuthstream(
+    await FormController.instance.postAuthstream2(
       Api.baseUrl + Api.changeProduct + widget.product.id,
       {'data': jsonEncode(data)}, // Wrap 'data' in a Map
       {'product_image': selectedImages},
@@ -140,7 +140,7 @@ class _EditProductState extends State<EditProduct> {
       source: source,
     );
     if (image != null) {
-      selectedImages = File(image.path);
+      selectedImages = image;
       setState(() {});
     }
   }
@@ -305,7 +305,7 @@ class _EditProductState extends State<EditProduct> {
                               height: 144,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
-                                  image: FileImage(selectedImages!),
+                                  image: FileImage(File(selectedImages!.path)),
                                 ),
                               ),
                             ),

@@ -157,15 +157,15 @@ class _AddBusinessState extends State<AddBusiness> {
 //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker _picker = ImagePicker();
-  File? selectedLogoImage;
-  File? selectedCoverImage;
+  XFile? selectedLogoImage;
+  XFile? selectedCoverImage;
   //================================== function ====================================\\
   pickLogoImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(
       source: source,
     );
     if (image != null) {
-      selectedLogoImage = File(image.path);
+      selectedLogoImage = image;
       Get.back();
       setState(() {});
     }
@@ -176,7 +176,7 @@ class _AddBusinessState extends State<AddBusiness> {
       source: source,
     );
     if (image != null) {
-      selectedCoverImage = File(image.path);
+      selectedCoverImage = image;
       Get.back();
       setState(() {});
     }
@@ -296,7 +296,7 @@ class _AddBusinessState extends State<AddBusiness> {
     consoleLog("This is the data: $data");
 
     consoleLog("shop_image: ${selectedCoverImage?.path}");
-    await FormController.instance.postAuthstream(
+    await FormController.instance.postAuthstream2(
         '${Api.baseUrl}/vendors/createVendorBusiness/$vendorId',
         data,
         {'shop_image': selectedCoverImage},
@@ -610,7 +610,7 @@ class _AddBusinessState extends State<AddBusiness> {
                         : Container(
                             decoration: ShapeDecoration(
                               image: DecorationImage(
-                                image: FileImage(selectedLogoImage!),
+                                image: FileImage(File(selectedLogoImage!.path)),
                                 fit: BoxFit.cover,
                               ),
                               shape: RoundedRectangleBorder(
@@ -680,7 +680,8 @@ class _AddBusinessState extends State<AddBusiness> {
                         : Container(
                             decoration: ShapeDecoration(
                               image: DecorationImage(
-                                image: FileImage(selectedCoverImage!),
+                                image:
+                                    FileImage(File(selectedCoverImage!.path)),
                                 fit: BoxFit.cover,
                               ),
                               shape: RoundedRectangleBorder(

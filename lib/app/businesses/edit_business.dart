@@ -158,15 +158,15 @@ class _EditBusinessState extends State<EditBusiness> {
 //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker _picker = ImagePicker();
-  File? selectedLogoImage;
-  File? selectedCoverImage;
+  XFile? selectedLogoImage;
+  XFile? selectedCoverImage;
   //================================== function ====================================\\
   pickLogoImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(
       source: source,
     );
     if (image != null) {
-      selectedLogoImage = File(image.path);
+      selectedLogoImage = image;
       Get.back();
       setState(() {});
     }
@@ -177,7 +177,7 @@ class _EditBusinessState extends State<EditBusiness> {
       source: source,
     );
     if (image != null) {
-      selectedCoverImage = File(image.path);
+      selectedCoverImage = image;
       Get.back();
       setState(() {});
     }
@@ -301,7 +301,7 @@ class _EditBusinessState extends State<EditBusiness> {
     consoleLog("This is the data: $data");
 
     consoleLog("shop_image: ${selectedLogoImage?.path}");
-    await FormController.instance.postAuthstream(
+    await FormController.instance.postAuthstream2(
         '${Api.baseUrl}/vendors/createVendorBusiness/$vendorId',
         data,
         {'shop_image': selectedLogoImage},
@@ -612,7 +612,7 @@ class _EditBusinessState extends State<EditBusiness> {
                         : Container(
                             decoration: ShapeDecoration(
                               image: DecorationImage(
-                                image: FileImage(selectedLogoImage!),
+                                image: FileImage(File(selectedLogoImage!.path)),
                                 fit: BoxFit.cover,
                               ),
                               shape: RoundedRectangleBorder(
@@ -681,7 +681,8 @@ class _EditBusinessState extends State<EditBusiness> {
                         : Container(
                             decoration: ShapeDecoration(
                               image: DecorationImage(
-                                image: FileImage(selectedCoverImage!),
+                                image:
+                                    FileImage(File(selectedCoverImage!.path)),
                                 fit: BoxFit.cover,
                               ),
                               shape: RoundedRectangleBorder(
