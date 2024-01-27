@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:benji_vendor/app/splash_screens/startup_splash_screen.dart';
+import 'package:benji_vendor/src/controller/shopping_location_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -58,6 +59,7 @@ void main() async {
   Get.put(ProductPropertyController());
   Get.put(BusinessController());
   Get.put(WithdrawController());
+  Get.put(ShoppingLocationController());
 
   if (!kIsWeb) {
     await Firebase.initializeApp(

@@ -16,6 +16,7 @@ import 'package:benji_vendor/src/components/section/location_list_tile.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
+import 'package:benji_vendor/src/controller/shopping_location_controller.dart';
 import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
@@ -24,7 +25,6 @@ import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
 import 'package:benji_vendor/theme/colors.dart';
-import 'package:csc_picker/csc_picker.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -63,9 +63,9 @@ class _AddBusinessState extends State<AddBusiness> {
       accountNameEC.text = widget.business!.accountName;
       accountNumberEC.text = widget.business!.accountNumber;
       accountTypeEC.text = widget.business!.accountType;
-      countryValue = widget.business!.country.name;
-      stateValue = widget.business!.state;
-      cityValue = widget.business!.city;
+      countryEC.text = widget.business!.country.name;
+      stateEC.text = widget.business!.state;
+      cityEC.text = widget.business!.city;
 
       businessIdEC.text = widget.business!.businessId;
       shopImage = widget.business!.shopImage;
@@ -103,9 +103,6 @@ class _AddBusinessState extends State<AddBusiness> {
   String? latitude;
   String? longitude;
   bool isTyping = false;
-  String countryValue = "";
-  String stateValue = "";
-  String cityValue = "";
 
   //======================================== GLOBAL KEYS ==============================================\\
   final _formKey = GlobalKey<FormState>();
@@ -125,6 +122,10 @@ class _AddBusinessState extends State<AddBusiness> {
   final businessBioEC = TextEditingController();
   final vendorBusinessTypeEC = TextEditingController();
   final addressEC = TextEditingController();
+
+  TextEditingController countryEC = TextEditingController();
+  TextEditingController stateEC = TextEditingController();
+  TextEditingController cityEC = TextEditingController();
 
   final accountNameEC = TextEditingController();
   final accountNumberEC = TextEditingController();
@@ -273,15 +274,15 @@ class _AddBusinessState extends State<AddBusiness> {
     }
     Map data = {
       "address": addressEC.text,
-      "latitude": latitude,
-      "longitude": longitude,
+      "latitude": latitude ?? '',
+      "longitude": longitude ?? '',
       "accountBank": accountBankEC.text,
       "accountName": accountNameEC.text,
       "accountNumber": accountNumberEC.text,
       "accountType": accountTypeEC.text,
-      "country": countryValue,
-      "state": stateValue,
-      "city": cityValue,
+      "country": countryEC.text,
+      "state": stateEC.text,
+      "city": cityEC.text,
       "businessId": businessIdEC.text,
       "shop_name": shopNameEC.text,
       "weekOpeningHours": vendorMonToFriOpeningHoursEC.text,
@@ -534,7 +535,9 @@ class _AddBusinessState extends State<AddBusiness> {
                   onPressed: (() async {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
+                      print('after checker');
                       saveChanges();
+                      print('after save checker');
                     }
                   }),
                   isLoading: saving.isLoad.value,
@@ -1126,28 +1129,152 @@ class _AddBusinessState extends State<AddBusiness> {
                           ),
                         ),
                         kSizedBox,
-                        CSCPicker(
-                          layout: Layout.vertical,
-                          countryFilter: const [CscCountry.Nigeria],
-                          countryDropdownLabel: "Select a Country",
-                          stateDropdownLabel: "Select a State",
-                          cityDropdownLabel: "Select a City",
-                          onCountryChanged: (value) {
-                            setState(() {
-                              countryValue = value;
-                            });
-                          },
-                          onStateChanged: (value) {
-                            setState(() {
-                              stateValue = value ?? "";
-                            });
-                          },
-                          onCityChanged: (value) {
-                            setState(() {
-                              cityValue = value ?? "";
-                            });
-                          },
+                        const Text(
+                          "Select Country",
+                          style: TextStyle(
+                            fontSize: 17.6,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
+                        kHalfSizedBox,
+                        GetBuilder<ShoppingLocationController>(
+                          initState: (state) => ShoppingLocationController
+                              .instance
+                              .getShoppingLocationCountries(),
+                          builder: (controller) => ItemDropDownMenu(
+                            onSelected: (value) {
+                              controller.getShoppingLocationState(value);
+                              countryEC.text = value!.toString();
+                              setState(() {});
+                            },
+                            itemEC: countryEC,
+                            hintText: "Choose country",
+                            dropdownMenuEntries:
+                                controller.isLoadCountry.value &&
+                                        controller.country.isEmpty
+                                    ? [
+                                        const DropdownMenuEntry(
+                                            value: 'Loading...',
+                                            label: 'Loading...',
+                                            enabled: false),
+                                      ]
+                                    : controller.country.isEmpty
+                                        ? [
+                                            const DropdownMenuEntry(
+                                                value: 'EMPTY',
+                                                label: 'EMPTY',
+                                                enabled: false),
+                                          ]
+                                        : controller.country
+                                            .map(
+                                              (item) => DropdownMenuEntry(
+                                                value: item.countryCode,
+                                                label: item.countryName,
+                                              ),
+                                            )
+                                            .toList(),
+                          ),
+                        ),
+                        kSizedBox,
+                        const Text(
+                          "Select state",
+                          style: TextStyle(
+                            fontSize: 17.6,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        GetBuilder<ShoppingLocationController>(
+                          builder: (controller) => ItemDropDownMenu(
+                            onSelected: (value) {
+                              stateEC.text = value!.toString();
+                              controller.getShoppingLocationCity(value);
+                              setState(() {});
+                            },
+                            itemEC: stateEC,
+                            hintText: "Choose state",
+                            dropdownMenuEntries: countryEC.text.isEmpty
+                                ? [
+                                    const DropdownMenuEntry(
+                                        value: 'Select Country',
+                                        label: 'Select Country',
+                                        enabled: false),
+                                  ]
+                                : controller.isLoadState.value &&
+                                        controller.state.isEmpty
+                                    ? [
+                                        const DropdownMenuEntry(
+                                            value: 'Loading...',
+                                            label: 'Loading...',
+                                            enabled: false),
+                                      ]
+                                    : controller.state.isEmpty
+                                        ? [
+                                            const DropdownMenuEntry(
+                                                value: 'EMPTY',
+                                                label: 'EMPTY',
+                                                enabled: false),
+                                          ]
+                                        : controller.state
+                                            .map(
+                                              (item) => DropdownMenuEntry(
+                                                value: item.stateCode,
+                                                label: item.stateName,
+                                              ),
+                                            )
+                                            .toList(),
+                          ),
+                        ),
+                        kSizedBox,
+                        const Text(
+                          "Select city",
+                          style: TextStyle(
+                            fontSize: 17.6,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        kHalfSizedBox,
+                        GetBuilder<ShoppingLocationController>(
+                          builder: (controller) => ItemDropDownMenu(
+                            onSelected: (value) {
+                              cityEC.text = value!.toString();
+                              setState(() {});
+                            },
+                            itemEC: cityEC,
+                            hintText: "Choose city",
+                            dropdownMenuEntries: stateEC.text.isEmpty
+                                ? [
+                                    const DropdownMenuEntry(
+                                        value: 'Select State',
+                                        label: 'Select State',
+                                        enabled: false),
+                                  ]
+                                : controller.isLoadCity.value &&
+                                        controller.city.isEmpty
+                                    ? [
+                                        const DropdownMenuEntry(
+                                            value: 'Loading...',
+                                            label: 'Loading...',
+                                            enabled: false),
+                                      ]
+                                    : controller.city.isEmpty
+                                        ? [
+                                            const DropdownMenuEntry(
+                                                value: 'EMPTY',
+                                                label: 'EMPTY',
+                                                enabled: false),
+                                          ]
+                                        : controller.city
+                                            .map(
+                                              (item) => DropdownMenuEntry(
+                                                value: item.cityCode,
+                                                label: item.cityName,
+                                              ),
+                                            )
+                                            .toList(),
+                          ),
+                        ),
+
                         kSizedBox,
 
                         const Text(
