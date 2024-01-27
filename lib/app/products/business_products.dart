@@ -27,7 +27,7 @@ class BusinessProducts extends StatefulWidget {
 class _BusinessProductsState extends State<BusinessProducts> {
   @override
   void initState() {
-    ProductController.instance.getBusinessProducts(widget.business.id);
+    ProductController.instance.refreshData(widget.business.id);
     super.initState();
   }
 
