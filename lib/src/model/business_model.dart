@@ -36,6 +36,7 @@ class BusinessModel {
   dynamic agent;
   double averageRating;
   int numberOfClientsReactions;
+  double shopReward;
 
   BusinessModel({
     required this.id,
@@ -66,6 +67,7 @@ class BusinessModel {
     required this.agent,
     required this.averageRating,
     required this.numberOfClientsReactions,
+    required this.shopReward,
   });
 
   factory BusinessModel.fromJson(Map<String, dynamic>? json) {
@@ -104,6 +106,7 @@ class BusinessModel {
       agent: json['agent'],
       averageRating: ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
       numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
+      shopReward: double.parse((json['shopReward'] ?? 0.0).toString()),
     );
   }
 

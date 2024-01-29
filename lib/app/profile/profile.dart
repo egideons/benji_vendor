@@ -2,7 +2,6 @@ import 'package:benji_vendor/app/businesses/edit_businesses.dart';
 import 'package:benji_vendor/app/businesses/user_reviews.dart';
 import 'package:benji_vendor/app/profile/edit_profile.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
-import 'package:benji_vendor/src/components/section/profile_first_half.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
@@ -142,7 +141,6 @@ class _ProfileState extends State<Profile> {
           child: ListView(
             scrollDirection: Axis.vertical,
             children: [
-              const ProfileFirstHalf(),
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: ListView(
