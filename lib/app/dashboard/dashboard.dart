@@ -3,6 +3,8 @@
 import 'package:benji_vendor/app/businesses/edit_business.dart';
 import 'package:benji_vendor/app/packages/send_package.dart';
 import 'package:benji_vendor/app/profile/edit_profile.dart';
+import 'package:benji_vendor/src/components/appbar/dashboard_app_bar.dart';
+import 'package:benji_vendor/src/components/container/available_cashback_card.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
@@ -13,8 +15,6 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../src/components/appbar/app_bar_title.dart';
-import '../../src/components/card/dashboard_user_card.dart';
 import '../../src/components/card/empty.dart';
 import '../../src/components/container/business_container.dart';
 import '../../src/components/section/dashboard_businesses_display_controller.dart';
@@ -277,54 +277,9 @@ class _DashboardState extends State<Dashboard>
         child: GestureDetector(
           onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
           child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: kPrimaryColor,
-              titleSpacing: kDefaultPadding / 2,
-              elevation: 0,
-              title: const AppBarTitle(),
-              actions: [
-                Stack(
-                  children: [
-                    IconButton(
-                      iconSize: 20,
-                      onPressed: toNotificationsPage,
-                      tooltip: "Notifications",
-                      icon: FaIcon(
-                        FontAwesomeIcons.bell,
-                        color: kAccentColor,
-                        size: 24,
-                      ),
-                    ),
-
-                    // Positioned(
-                    //   top: 10,
-                    //   right: 5,
-                    //   child: Container(
-                    //     height: 20,
-                    //     width: 20,
-                    //     decoration: ShapeDecoration(
-                    //       color: kAccentColor,
-                    //       shape: RoundedRectangleBorder(
-                    //         borderRadius: BorderRadius.circular(100),
-                    //       ),
-                    //     ),
-                    //     child: Center(
-                    //       child: Text(
-                    //         formatNumber(numberOfNotifications!),
-                    //         textAlign: TextAlign.center,
-                    //         style: const TextStyle(
-                    //           fontSize: 9,
-                    //           fontWeight: FontWeight.w400,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // )
-                  ],
-                ),
-                kWidthSizedBox,
-              ],
-            ),
+            appBar: DashboardAppBar(
+                numberOfNotifications:
+                    NotificationController.instance.notification.length),
             floatingActionButton: _isScrollToTopBtnVisible
                 ? FloatingActionButton(
                     onPressed: scrollToTop,
@@ -351,14 +306,8 @@ class _DashboardState extends State<Dashboard>
                   scrollDirection: Axis.vertical,
                   padding: const EdgeInsets.all(kDefaultPadding),
                   children: [
-                    GetBuilder<UserController>(
-                      builder: (controller) {
-                        return DashboardUserCard(
-                          user: controller.user.value,
-                          onTap: editProfile,
-                        );
-                      },
-                    ),
+                    const AvailableCashbackCard(),
+
                     kSizedBox,
                     Container(
                       padding: const EdgeInsets.all(10),

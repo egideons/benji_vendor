@@ -2,6 +2,7 @@ import 'package:benji_vendor/app/businesses/edit_businesses.dart';
 import 'package:benji_vendor/app/businesses/user_reviews.dart';
 import 'package:benji_vendor/app/profile/edit_profile.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/components/section/profile_first_half.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
@@ -140,189 +141,200 @@ class _ProfileState extends State<Profile> {
           maintainBottomViewPadding: true,
           child: ListView(
             scrollDirection: Axis.vertical,
-            padding: const EdgeInsets.all(10),
             children: [
-              Container(
-                padding: const EdgeInsets.all(kDefaultPadding),
-                decoration: ShapeDecoration(
-                  color: kPrimaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  shadows: const [
-                    BoxShadow(
-                      color: Color(0x0F000000),
-                      blurRadius: 24,
-                      offset: Offset(0, 4),
-                      spreadRadius: 0,
-                    ),
-                  ],
-                ),
-                child: Column(
+              const ProfileFirstHalf(),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: ListView(
+                  shrinkWrap: true,
                   children: [
-                    ListTile(
-                      onTap: toEditProfile,
-                      leading: FaIcon(FontAwesomeIcons.solidUser,
-                          color: kAccentColor),
-                      title: const Text(
-                        'Personal Info',
-                        style: TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
+                    Container(
+                      padding: const EdgeInsets.all(kDefaultPadding),
+                      decoration: ShapeDecoration(
+                        color: kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
                         ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x0F000000),
+                            blurRadius: 24,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          ),
+                        ],
                       ),
-                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            onTap: toEditProfile,
+                            leading: FaIcon(FontAwesomeIcons.solidUser,
+                                color: kAccentColor),
+                            title: const Text(
+                              'Personal Info',
+                              style: TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            trailing:
+                                const FaIcon(FontAwesomeIcons.chevronRight),
+                          ),
+                          ListTile(
+                            onTap: toSettings,
+                            leading: FaIcon(
+                              FontAwesomeIcons.gear,
+                              color: kAccentColor,
+                            ),
+                            title: const Text(
+                              'Settings',
+                              style: TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            trailing:
+                                const FaIcon(FontAwesomeIcons.chevronRight),
+                          ),
+                        ],
+                      ),
                     ),
-                    ListTile(
-                      onTap: toSettings,
-                      leading: FaIcon(
-                        FontAwesomeIcons.gear,
-                        color: kAccentColor,
-                      ),
-                      title: const Text(
-                        'Settings',
-                        style: TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
+                    kSizedBox,
+                    Container(
+                      padding: const EdgeInsets.all(kDefaultPadding),
+                      decoration: ShapeDecoration(
+                        color: kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
                         ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x0F000000),
+                            blurRadius: 24,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
                       ),
-                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            onTap: toPackages,
+                            leading: FaIcon(
+                              FontAwesomeIcons.bicycle,
+                              color: kAccentColor,
+                            ),
+                            title: const Text(
+                              'Package delivery',
+                              style: TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            trailing:
+                                const FaIcon(FontAwesomeIcons.chevronRight),
+                          ),
+                          ListTile(
+                            onTap: toBusinesses,
+                            leading: FaIcon(
+                              FontAwesomeIcons.store,
+                              color: kAccentColor,
+                            ),
+                            title: const Text(
+                              'Edit Businesses',
+                              style: TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            trailing: FaIcon(
+                              FontAwesomeIcons.solidPenToSquare,
+                              color: kAccentColor,
+                            ),
+                          ),
+                          // ListTile(
+                          //   onTap: UserReviewsPage,
+                          //   leading: FaIcon(
+                          //     FontAwesomeIcons.solidComment,
+                          //     color: kAccentColor,
+                          //   ),
+                          //   title: const Text(
+                          //     'User Reviews',
+                          //     style: TextStyle(
+                          //       color: kTextBlackColor,
+                          //       fontSize: 15,
+                          //       fontWeight: FontWeight.w400,
+                          //     ),
+                          //   ),
+                          //   trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                          // ),
+                          // ListTile(
+                          //   leading: FaIcon(
+                          //     FontAwesomeIcons.receipt,
+                          //     color: kAccentColor,
+                          //   ),
+                          //   title: const Text(
+                          //     'Number of Orders',
+                          //     style: TextStyle(
+                          //       color: kTextBlackColor,
+                          //       fontSize: 15,
+                          //       fontWeight: FontWeight.w400,
+                          //     ),
+                          //   ),
+                          //   trailing: Text(
+                          //     formatNumber(totalNumberOfOrders()),
+                          //     textAlign: TextAlign.right,
+                          //     style: const TextStyle(
+                          //       color: Color(0xFF9B9BA5),
+                          //       fontSize: 18,
+                          //       fontWeight: FontWeight.w700,
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                    ),
+                    kSizedBox,
+                    Container(
+                      padding: const EdgeInsets.all(kDefaultPadding),
+                      decoration: ShapeDecoration(
+                        color: kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x0F000000),
+                            blurRadius: 24,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                      child: ListTile(
+                        onTap: logOut,
+                        leading: FaIcon(
+                          FontAwesomeIcons.rightFromBracket,
+                          color: kAccentColor,
+                        ),
+                        title: const Text(
+                          'Log Out',
+                          style: TextStyle(
+                            color: kTextBlackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              kSizedBox,
-              Container(
-                padding: const EdgeInsets.all(kDefaultPadding),
-                decoration: ShapeDecoration(
-                  color: kPrimaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  shadows: const [
-                    BoxShadow(
-                      color: Color(0x0F000000),
-                      blurRadius: 24,
-                      offset: Offset(0, 4),
-                      spreadRadius: 0,
-                    )
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    ListTile(
-                      onTap: toPackages,
-                      leading: FaIcon(
-                        FontAwesomeIcons.bicycle,
-                        color: kAccentColor,
-                      ),
-                      title: const Text(
-                        'Package delivery',
-                        style: TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      trailing: const FaIcon(FontAwesomeIcons.chevronRight),
-                    ),
-                    ListTile(
-                      onTap: toBusinesses,
-                      leading: FaIcon(
-                        FontAwesomeIcons.store,
-                        color: kAccentColor,
-                      ),
-                      title: const Text(
-                        'Edit Businesses',
-                        style: TextStyle(
-                          color: kTextBlackColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      trailing: FaIcon(
-                        FontAwesomeIcons.solidPenToSquare,
-                        color: kAccentColor,
-                      ),
-                    ),
-                    // ListTile(
-                    //   onTap: UserReviewsPage,
-                    //   leading: FaIcon(
-                    //     FontAwesomeIcons.solidComment,
-                    //     color: kAccentColor,
-                    //   ),
-                    //   title: const Text(
-                    //     'User Reviews',
-                    //     style: TextStyle(
-                    //       color: kTextBlackColor,
-                    //       fontSize: 15,
-                    //       fontWeight: FontWeight.w400,
-                    //     ),
-                    //   ),
-                    //   trailing: const FaIcon(FontAwesomeIcons.chevronRight),
-                    // ),
-                    // ListTile(
-                    //   leading: FaIcon(
-                    //     FontAwesomeIcons.receipt,
-                    //     color: kAccentColor,
-                    //   ),
-                    //   title: const Text(
-                    //     'Number of Orders',
-                    //     style: TextStyle(
-                    //       color: kTextBlackColor,
-                    //       fontSize: 15,
-                    //       fontWeight: FontWeight.w400,
-                    //     ),
-                    //   ),
-                    //   trailing: Text(
-                    //     formatNumber(totalNumberOfOrders()),
-                    //     textAlign: TextAlign.right,
-                    //     style: const TextStyle(
-                    //       color: Color(0xFF9B9BA5),
-                    //       fontSize: 18,
-                    //       fontWeight: FontWeight.w700,
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-              kSizedBox,
-              Container(
-                padding: const EdgeInsets.all(kDefaultPadding),
-                decoration: ShapeDecoration(
-                  color: kPrimaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  shadows: const [
-                    BoxShadow(
-                      color: Color(0x0F000000),
-                      blurRadius: 24,
-                      offset: Offset(0, 4),
-                      spreadRadius: 0,
-                    )
-                  ],
-                ),
-                child: ListTile(
-                  onTap: logOut,
-                  leading: FaIcon(
-                    FontAwesomeIcons.rightFromBracket,
-                    color: kAccentColor,
-                  ),
-                  title: const Text(
-                    'Log Out',
-                    style: TextStyle(
-                      color: kTextBlackColor,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  trailing: const FaIcon(FontAwesomeIcons.chevronRight),
-                ),
-              ),
+              )
             ],
           ),
         ),

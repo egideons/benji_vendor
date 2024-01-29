@@ -30,6 +30,9 @@ class UserModel {
   String lga;
   String profileLogo;
   bool isOnline;
+  double balance;
+
+  bool isVisibleCash;
 
   // String shopName;
   // String shopImage;
@@ -61,6 +64,8 @@ class UserModel {
     required this.lga,
     required this.profileLogo,
     required this.isOnline,
+    required this.balance,
+    required this.isVisibleCash,
 
     // required this.shopName,
     // required this.shopImage,
@@ -99,6 +104,8 @@ class UserModel {
             ? 'https://img.freepik.com/free-psd/3d-icon-social-media-app_23-2150049569.jpg'
             : json['profileLogo'],
         isOnline: json["is_online"] ?? false,
+        balance: double.parse((json['balance'] ?? 0.0).toString()),
+        isVisibleCash: json['isVisibleCash'] ?? true,
 
         // shopName: json["shop_name"] ?? notAvailable,
         // shopImage: json["shop_image"] ?? '',
