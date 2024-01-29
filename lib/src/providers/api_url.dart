@@ -23,6 +23,7 @@ class Api {
   static const deleteProduct = "/products/deleteProduct/";
   static const notification = "/vendors/";
   static const category = "/categories/list";
+  static const withdrawalHistory = "/wallet/withdrawalHistory/";
 
   static const listBanks = "/payments/list_banks";
   static const validateBankNumber = "/payments/validateBankNumbers/";
