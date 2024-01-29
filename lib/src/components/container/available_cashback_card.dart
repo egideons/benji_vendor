@@ -2,6 +2,7 @@
 
 import 'package:benji_vendor/main.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -54,7 +55,7 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
           Row(
             children: [
               const Text(
-                'Available Cashback',
+                'Shop Reward',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: kTextBlackColor,
@@ -77,59 +78,80 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GetBuilder<UserController>(
-                init: UserController(),
-                builder: (controller) => controller.isLoading.value
-                    ? Text(
-                        'Loading...',
-                        style: TextStyle(
-                          color: kGreyColor,
-                          fontSize: 20,
-                          fontFamily: 'sen',
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    : Text.rich(
-                        TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: "₦ ",
-                              style: TextStyle(
-                                color: kTextBlackColor,
-                                fontSize: 30,
-                                fontFamily: 'sen',
-                                fontWeight: FontWeight.w700,
-                              ),
+              Row(
+                children: [
+                  GetBuilder<UserController>(
+                    init: UserController(),
+                    builder: (controller) => controller.isLoading.value
+                        ? Text(
+                            'Loading...',
+                            style: TextStyle(
+                              color: kGreyColor,
+                              fontSize: 20,
+                              fontFamily: 'sen',
+                              fontWeight: FontWeight.w600,
                             ),
+                          )
+                        : Text.rich(
                             TextSpan(
-                              text: controller.user.value.isVisibleCash
-                                  ? doubleFormattedText(
-                                      controller.user.value.balance)
-                                  : '******',
-                              style: TextStyle(
-                                color: kAccentColor,
-                                fontSize: 30,
-                                fontFamily: 'sen',
-                                fontWeight: FontWeight.w700,
-                              ),
+                              children: [
+                                const TextSpan(
+                                  text: "₦ ",
+                                  style: TextStyle(
+                                    color: kTextBlackColor,
+                                    fontSize: 30,
+                                    fontFamily: 'sen',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: controller.user.value.isVisibleCash
+                                      ? doubleFormattedText(
+                                          controller.user.value.balance)
+                                      : '******',
+                                  style: TextStyle(
+                                    color: kAccentColor,
+                                    fontSize: 30,
+                                    fontFamily: 'sen',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
+                  ),
+                  kSizedBox,
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.arrowsRotate),
+                    onPressed: () async {
+                      await UserController.instance.getUser();
+                    },
+                    mouseCursor: SystemMouseCursors.click,
+                    color: kGreyColor,
+                    iconSize: 25.0,
+                    tooltip: 'Refresh',
+                    padding: const EdgeInsets.all(10.0),
+                    splashRadius: 20.0,
+                  ),
+                ],
               ),
-              kSizedBox,
-              IconButton(
-                icon: const FaIcon(FontAwesomeIcons.arrowsRotate),
+              TextButton(
                 onPressed: () async {
-                  await UserController.instance.getUser();
+                  Map data = {
+                    "user_id": 'id',
+                    "amount_to_withdraw": '',
+                    "bank_details_id": ''
+                  };
+
+                  final result =
+                      await WithdrawController.instance.withdraw(data);
+                  if (result.statusCode == 200) {
+                    setState(() {});
+                  }
                 },
-                mouseCursor: SystemMouseCursors.click,
-                color: kGreyColor,
-                iconSize: 25.0,
-                tooltip: 'Refresh',
-                padding: const EdgeInsets.all(10.0),
-                splashRadius: 20.0,
+                child: const Text('Withdraw'),
               ),
             ],
           ),

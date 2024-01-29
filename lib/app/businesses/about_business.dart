@@ -1,4 +1,5 @@
 import 'package:benji_vendor/app/businesses/user_reviews.dart';
+import 'package:benji_vendor/src/components/container/available_cashback_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -72,6 +73,8 @@ class _AboutBusinessState extends State<AboutBusiness> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const AvailableCashbackCard(),
+          kSizedBox,
           const Text(
             "About This Business",
             style: TextStyle(

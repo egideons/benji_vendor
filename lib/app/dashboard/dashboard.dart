@@ -4,7 +4,7 @@ import 'package:benji_vendor/app/businesses/edit_business.dart';
 import 'package:benji_vendor/app/packages/send_package.dart';
 import 'package:benji_vendor/app/profile/edit_profile.dart';
 import 'package:benji_vendor/src/components/appbar/dashboard_app_bar.dart';
-import 'package:benji_vendor/src/components/container/available_cashback_card.dart';
+import 'package:benji_vendor/src/components/card/dashboard_user_card.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
@@ -306,7 +306,8 @@ class _DashboardState extends State<Dashboard>
                   scrollDirection: Axis.vertical,
                   padding: const EdgeInsets.all(kDefaultPadding),
                   children: [
-                    const AvailableCashbackCard(),
+                    DashboardUserCard(user: UserController.instance.user.value),
+                    // const AvailableCashbackCard(),
 
                     kSizedBox,
                     Container(
