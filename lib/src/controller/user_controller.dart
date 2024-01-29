@@ -7,8 +7,10 @@ import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/main.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/model/user_model.dart';
+import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 
 import '../providers/helpers.dart';
 
@@ -57,16 +59,39 @@ class UserController extends GetxController {
 
   void setUserSync() {
     String? userData = prefs.getString('user');
+    bool? isVisibleCash = prefs.getBool('isVisibleCash');
     if (userData == null) {
       user.value = UserModel.fromJson(null);
     } else {
-      user.value = userModelFromJson(userData);
+      Map<String, dynamic> userObj =
+          (jsonDecode(userData) as Map<String, dynamic>);
+      userObj['isVisibleCash'] = isVisibleCash;
+      user.value = UserModel.fromJson(userObj);
     }
     update();
   }
 
   Future<bool> deleteUser() async {
     return await prefs.remove('user');
+  }
+
+  getUser() async {
+    isLoading.value = true;
+    update();
+
+    final user = UserController.instance.user.value;
+    http.Response? responseUserData = await HandleData.getApi(
+        '${Api.baseUrl}/vendors/getVendor/${user.id}', user.token);
+    if (responseUserData?.statusCode != 200) {
+      ApiProcessorController.errorSnack("Failed to refresh");
+      isLoading.value = false;
+      update();
+      return;
+    }
+
+    UserController.instance.saveUser(responseUserData!.body, user.token);
+    isLoading.value = false;
+    update();
   }
 
   // Future<void> saveVendor(String vendor, String token) async {
