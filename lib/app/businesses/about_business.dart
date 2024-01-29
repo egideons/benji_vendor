@@ -73,7 +73,7 @@ class _AboutBusinessState extends State<AboutBusiness> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const AvailableCashbackCard(),
+          AvailableCashbackCard(shopReward: widget.business.shopReward),
           kSizedBox,
           const Text(
             "About This Business",
