@@ -95,18 +95,29 @@ class BusinessController extends GetxController {
   Future getVendorBusinessBalance(String id) async {
     isLoadBalance.value = true;
 
-    String url = '${Api.baseUrl}/wallet/getvendorbusinessbalance/$id';
-    print(url);
-    var parsedURL = Uri.parse(url);
+    try {
+      String url = '${Api.baseUrl}/wallet/getvendorbusinessbalance/$id';
+      print(url);
+      var parsedURL = Uri.parse(url);
 
-    final result = await http.get(
-      parsedURL,
-      headers: authHeader(),
-    );
-    print(result.body);
-    balance.value = double.parse(result.body);
-    isLoadBalance.value = false;
-    update();
+      final result = await http.get(
+        parsedURL,
+        headers: authHeader(),
+      );
+      if (result.statusCode != 200) {
+        ApiProcessorController.errorSnack("Something went wrong");
+        return;
+      }
+      print(result.body);
+      balance.value =
+          double.parse(jsonDecode(result.body)['balance'].toString());
+      isLoadBalance.value = false;
+      update();
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   Future<http.Response> getVendorBusinessWithdraw(
