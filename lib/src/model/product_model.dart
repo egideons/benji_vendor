@@ -31,8 +31,6 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic>? json) {
-    // print('search product $json');
-
     json ??= {};
     return ProductModel(
       id: json['id'] ?? notAvailable,

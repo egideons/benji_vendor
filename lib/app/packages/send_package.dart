@@ -16,7 +16,6 @@ import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -232,10 +231,6 @@ class _SendPackageState extends State<SendPackage> {
     // longitudePick = latLngDetailController.latLngDetail.value[1];
     // pickupEC.text = latLngDetailController.latLngDetail.value[2];
     // latLngDetailController.setEmpty();
-    if (kDebugMode) {
-      print("LATLNG: $latitudePick,$longitudePick");
-      print("pickup text : ${pickupEC.text}");
-    }
   }
 
   void toGetLocationOnMapDrop() async {
@@ -269,10 +264,6 @@ class _SendPackageState extends State<SendPackage> {
     // longitudeDrop = latLngDetailController.latLngDetail.value[1];
     // dropOffEC.text = latLngDetailController.latLngDetail.value[2];
     // latLngDetailController.setEmpty();
-    if (kDebugMode) {
-      print("LATLNG: $latitudeDrop,$longitudeDrop");
-      print("dropOff text : ${dropOffEC.text}");
-    }
   }
 
   //===================== Scroll to Top ==========================\\
@@ -585,9 +576,6 @@ class _SendPackageState extends State<SendPackage> {
                     selectedLocationPick.value = value;
                     isTyping = true;
                   });
-                  if (kDebugMode) {
-                    print("ONCHANGED VALUE: ${selectedLocationPick.value}");
-                  }
                 },
                 onSaved: (value) {
                   pickupEC.text = value;
@@ -779,9 +767,6 @@ class _SendPackageState extends State<SendPackage> {
                     selectedLocationDrop.value = value;
                     isTyping = true;
                   });
-                  if (kDebugMode) {
-                    print("ONCHANGED VALUE: ${selectedLocationDrop.value}");
-                  }
                 },
                 onSaved: (value) {
                   dropOffEC.text = value;

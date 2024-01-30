@@ -97,7 +97,6 @@ class BusinessController extends GetxController {
 
     try {
       String url = '${Api.baseUrl}/wallet/getvendorbusinessbalance/$id';
-      print(url);
       var parsedURL = Uri.parse(url);
 
       final result = await http.get(
@@ -108,7 +107,6 @@ class BusinessController extends GetxController {
         ApiProcessorController.errorSnack("Something went wrong");
         return;
       }
-      print(result.body);
       balance.value =
           double.parse(jsonDecode(result.body)['balance'].toString());
       isLoadBalance.value = false;

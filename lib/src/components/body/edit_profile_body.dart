@@ -529,10 +529,6 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                                   selectedLocation.value = value;
                                   isTyping = true;
                                 });
-                                if (kDebugMode) {
-                                  print(
-                                      "ONCHANGED VALUE: ${selectedLocation.value}");
-                                }
                               },
                               textInputAction: TextInputAction.done,
                               focusNode: mapsLocationFN,
