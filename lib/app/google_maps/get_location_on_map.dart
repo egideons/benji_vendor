@@ -7,7 +7,6 @@ import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -187,9 +186,6 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
     final double lat = place['geometry']['location']['lat'];
     final double lng = place['geometry']['location']['lng'];
     _goToSpecifiedLocation(LatLng(lat, lng), 20);
-    if (kDebugMode) {
-      print(LatLng(lat, lng));
-    }
     // _markers.add(
     //   Marker(
     //     markerId: const MarkerId("1"),
@@ -229,9 +225,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
     Placemark address = placemarks[0];
     String addressStr =
         "${address.name} ${address.street},${address.locality}, ${address.country}";
-    if (kDebugMode) {
-      print(LatLng(position.latitude, position.longitude));
-    }
+
     setState(() {
       pinnedLocation = addressStr;
     });
@@ -252,10 +246,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
 //========================================================== Save Function =============================================================\\
   saveFunc() async {
     getPlaceMark(draggedLatLng);
-    if (kDebugMode) {
-      print("draggedLatLng: $draggedLatLng");
-      print("PinnedLocation: $pinnedLocation");
-    }
+
     String latitude = draggedLatLng.latitude.toString();
     String longitude = draggedLatLng.longitude.toString();
     latLngDetailController
@@ -347,11 +338,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                             },
                             textInputAction: TextInputAction.search,
                             textCapitalization: TextCapitalization.words,
-                            onChanged: (value) {
-                              if (kDebugMode) {
-                                print(value);
-                              }
-                            },
+                            onChanged: (value) {},
                           ),
                         ),
                         IconButton(

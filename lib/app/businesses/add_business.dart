@@ -162,7 +162,6 @@ class _AddBusinessState extends State<AddBusiness> {
     final XFile? image = await _picker.pickImage(
       source: source,
     );
-    print('image logo $image');
     if (image != null) {
       selectedLogoImage = image;
       // Get.back();
@@ -252,10 +251,6 @@ class _AddBusinessState extends State<AddBusiness> {
     longitude = latLngDetailController.latLngDetail.value[1];
     addressEC.text = latLngDetailController.latLngDetail.value[2];
     latLngDetailController.setEmpty();
-    if (kDebugMode) {
-      print("LATLNG: $latitude,$longitude");
-      print(addressEC.text);
-    }
   }
 
   //========================== Save data ==================================\\
@@ -537,9 +532,7 @@ class _AddBusinessState extends State<AddBusiness> {
                     kIsWeb;
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
-                      print('after checker');
                       saveChanges();
-                      print('after save checker');
                     }
                   }),
                   isLoading: saving.isLoad.value,
@@ -1319,10 +1312,6 @@ class _AddBusinessState extends State<AddBusiness> {
                                   selectedLocation.value = value;
                                   isTyping = true;
                                 });
-                                if (kDebugMode) {
-                                  print(
-                                      "ONCHANGED VALUE: ${selectedLocation.value}");
-                                }
                               },
                               textInputAction: TextInputAction.done,
                               focusNode: addressFN,
