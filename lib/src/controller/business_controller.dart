@@ -19,7 +19,9 @@ class BusinessController extends GetxController {
   }
 
   var isLoad = false.obs;
+  var isLoadBalance = false.obs;
   var businesses = <BusinessModel>[].obs;
+  var balance = 0.0.obs;
 
   var loadedAll = false.obs;
   var isLoadMore = false.obs;
@@ -88,5 +90,38 @@ class BusinessController extends GetxController {
     isLoadMore.value = false;
     isLoad.value = false;
     update();
+  }
+
+  Future getVendorBusinessBalance(String id) async {
+    isLoadBalance.value = true;
+
+    String url = '${Api.baseUrl}/wallet/getvendorbusinessbalance/$id';
+    print(url);
+    var parsedURL = Uri.parse(url);
+
+    final result = await http.get(
+      parsedURL,
+      headers: authHeader(),
+    );
+    print(result.body);
+    balance.value = double.parse(result.body);
+    isLoadBalance.value = false;
+    update();
+  }
+
+  Future<http.Response> getVendorBusinessWithdraw(
+      BusinessModel business) async {
+    String url = '${Api.baseUrl}/wallet/requestVendorRewardWithdrawal';
+    var parsedURL = Uri.parse(url);
+
+    return await http.post(
+      parsedURL,
+      body: {
+        "business_id": business.id,
+        "amount_to_withdraw": business.shopReward,
+        // "bank_details_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      },
+      headers: authHeader(),
+    );
   }
 }
