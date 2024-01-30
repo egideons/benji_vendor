@@ -12,6 +12,7 @@ import 'package:benji_vendor/src/components/input/my_blue_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop_down_menu.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
+import 'package:benji_vendor/src/controller/business_controller.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
@@ -40,8 +41,8 @@ import '../../src/providers/helpers.dart';
 import '../../src/providers/responsive_constants.dart';
 
 class EditBusiness extends StatefulWidget {
-  const EditBusiness({super.key, this.business});
-  final BusinessModel? business;
+  const EditBusiness({super.key, required this.business});
+  final BusinessModel business;
 
   @override
   State<EditBusiness> createState() => _EditBusinessState();
@@ -54,33 +55,31 @@ class _EditBusinessState extends State<EditBusiness> {
     super.initState();
     CategoryController.instance.getCategory();
     scrollController.addListener(_scrollListener);
-    if (widget.business != null) {
-      mapsLocationEC.text = widget.business!.address;
-      latitude = widget.business!.latitude;
-      longitude = widget.business!.longitude;
-      accountBankEC.text = widget.business!.accountBank;
-      accountNameEC.text = widget.business!.accountName;
-      accountNumberEC.text = widget.business!.accountNumber;
-      accountTypeEC.text = widget.business!.accountType;
-      countryValue = widget.business!.country.name;
-      stateValue = widget.business!.state;
-      cityValue = widget.business!.city;
+    mapsLocationEC.text = widget.business.address;
+    latitude = widget.business.latitude;
+    longitude = widget.business.longitude;
+    accountBankEC.text = widget.business.accountBank;
+    accountNameEC.text = widget.business.accountName;
+    accountNumberEC.text = widget.business.accountNumber;
+    accountTypeEC.text = widget.business.accountType;
+    countryValue = widget.business.country.name;
+    stateValue = widget.business.state;
+    cityValue = widget.business.city;
 
-      businessIdEC.text = widget.business!.businessId;
-      businessLogo = widget.business!.shopImage;
-      businessCoverImage = widget.business!.coverImage;
-      shopNameEC.text = widget.business!.shopName;
-      vendorMonToFriOpeningHoursEC.text = widget.business!.weekOpeningHours;
-      vendorMonToFriClosingHoursEC.text = widget.business!.weekClosingHours;
-      vendorSatOpeningHoursEC.text = widget.business!.satOpeningHours;
-      vendorSatClosingHoursEC.text = widget.business!.satClosingHours;
-      vendorSunOpeningHoursEC.text = widget.business!.sunWeekOpeningHours;
-      vendorSunClosingHoursEC.text = widget.business!.sunWeekClosingHours;
-      businessBioEC.text = widget.business!.businessBio;
-      vendorBusinessTypeEC.text = widget.business!.shopType.name;
+    businessIdEC.text = widget.business.businessId;
+    businessLogo = widget.business.shopImage;
+    businessCoverImage = widget.business.coverImage;
+    shopNameEC.text = widget.business.shopName;
+    vendorMonToFriOpeningHoursEC.text = widget.business.weekOpeningHours;
+    vendorMonToFriClosingHoursEC.text = widget.business.weekClosingHours;
+    vendorSatOpeningHoursEC.text = widget.business.satOpeningHours;
+    vendorSatClosingHoursEC.text = widget.business.satClosingHours;
+    vendorSunOpeningHoursEC.text = widget.business.sunWeekOpeningHours;
+    vendorSunClosingHoursEC.text = widget.business.sunWeekClosingHours;
+    businessBioEC.text = widget.business.businessBio;
+    vendorBusinessTypeEC.text = widget.business.shopType.name;
 
-      log("This is the shop image: $businessLogo");
-    }
+    log("This is the shop image: $businessLogo");
   }
 
   @override
@@ -303,7 +302,7 @@ class _EditBusinessState extends State<EditBusiness> {
 
     consoleLog("shop_image: ${selectedLogoImage?.path}");
     await FormController.instance.postAuthstream2(
-        '${Api.baseUrl}/vendors/createVendorBusiness/$vendorId',
+        '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}',
         data,
         {'shop_image': selectedLogoImage},
         'changeVendorBusinessProfile');
@@ -312,6 +311,8 @@ class _EditBusinessState extends State<EditBusiness> {
         title: "Success.",
         body: "Your business profile has been successfully updated.",
       );
+      // reload
+      BusinessController.instance.getVendorBusinesses();
       Get.close(1);
     }
   }

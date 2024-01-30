@@ -8,6 +8,7 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
+import 'package:benji_vendor/src/providers/helpers.dart';
 import 'package:get/get.dart';
 
 class OrderController extends GetxController {
@@ -80,9 +81,9 @@ class OrderController extends GetxController {
       return;
     }
     isLoad.value = true;
-    var url = "${Api.baseUrl}/orders/filterBusinessOrdersByStatus/$id";
-    // ?start=${loadNum.value - 10}&end=${loadNum.value}&status=${statusTypeConverter(status.value)}";
-
+    var url =
+        "${Api.baseUrl}/orders/filterBusinessOrdersByStatus/$id?status=${statusTypeConverter(status.value)}";
+// &start=${loadNum.value - 10}&end=${loadNum.value}";
     consoleLog(url);
     loadNum.value += 10;
     String token = UserController.instance.user.value.token;

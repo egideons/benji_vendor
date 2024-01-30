@@ -1,25 +1,26 @@
 // ignore_for_file: file_names
 
-import 'package:benji_vendor/src/controller/withdraw_controller.dart';
+import 'package:benji_vendor/src/controller/business_controller.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../theme/colors.dart';
 import '../../providers/constants.dart';
 
 class AvailableCashbackCard extends StatefulWidget {
-  const AvailableCashbackCard({super.key, required this.shopReward});
-  final double shopReward;
+  const AvailableCashbackCard({super.key, required this.business});
+  final BusinessModel business;
 
   @override
   State<AvailableCashbackCard> createState() => _AvailableCashbackCardState();
 }
 
 class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
-  late double shopReward;
   @override
   void initState() {
-    shopReward = widget.shopReward;
     super.initState();
   }
 
@@ -59,15 +60,6 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              // IconButton(
-              //   onPressed: toggleVisibleCash,
-              //   icon: FaIcon(
-              //     widget.business.isVisibleCash
-              //         ? FontAwesomeIcons.solidEye
-              //         : FontAwesomeIcons.solidEyeSlash,
-              //     color: kAccentColor,
-              //   ),
-              // ),
             ],
           ),
           Row(
@@ -75,60 +67,52 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
             children: [
               Row(
                 children: [
-                  Text.rich(
-                    TextSpan(
-                      children: [
-                        const TextSpan(
-                          text: "₦ ",
-                          style: TextStyle(
-                            color: kTextBlackColor,
-                            fontSize: 30,
-                            fontFamily: 'sen',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
+                  GetBuilder<BusinessController>(
+                    initState: (state) => BusinessController.instance
+                        .getVendorBusinessBalance(widget.business.id),
+                    builder: (controller) {
+                      if (controller.isLoadBalance.value) {
+                        return const Text('Loading...');
+                      }
+                      return Text.rich(
                         TextSpan(
-                          text: doubleFormattedText(shopReward),
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 30,
-                            fontFamily: 'sen',
-                            fontWeight: FontWeight.w700,
-                          ),
+                          children: [
+                            const TextSpan(
+                              text: "₦ ",
+                              style: TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 30,
+                                fontFamily: 'sen',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            TextSpan(
+                              text:
+                                  doubleFormattedText(controller.balance.value),
+                              style: TextStyle(
+                                color: kAccentColor,
+                                fontSize: 30,
+                                fontFamily: 'sen',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-
-                  // kSizedBox,
-                  // IconButton(
-                  //   icon: const FaIcon(FontAwesomeIcons.arrowsRotate),
-                  //   onPressed: () async {
-                  //     await UserController.instance.getUser();
-                  //   },
-                  //   mouseCursor: SystemMouseCursors.click,
-                  //   color: kGreyColor,
-                  //   iconSize: 25.0,
-                  //   tooltip: 'Refresh',
-                  //   padding: const EdgeInsets.all(10.0),
-                  //   splashRadius: 20.0,
-                  // ),
+                      );
+                    },
+                  )
                 ],
               ),
               TextButton(
                 onPressed: () async {
-                  Map data = {
-                    "user_id": 'id',
-                    "amount_to_withdraw": '',
-                    "bank_details_id": ''
-                  };
-
-                  final result =
-                      await WithdrawController.instance.withdraw(data);
+                  final result = await BusinessController.instance
+                      .getVendorBusinessWithdraw(widget.business);
+                  await BusinessController.instance
+                      .getVendorBusinessBalance(widget.business.id);
                   if (result.statusCode == 200) {
-                    setState(() {
-                      shopReward = 0;
-                    });
+                    ApiProcessorController.successSnack('Withdrawal success');
+                  } else {
+                    ApiProcessorController.errorSnack('Withdrawal failed');
                   }
                 },
                 child: const Text('Withdraw'),

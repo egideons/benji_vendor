@@ -14,13 +14,11 @@ import '../../providers/constants.dart';
 
 class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int numberOfNotifications;
-  final String? image;
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
   const DashboardAppBar({
     super.key,
     required this.numberOfNotifications,
-    this.image,
   });
 //======================================== ALL VARIABLES ==============================================\\
 
@@ -80,7 +78,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                         shape: const OvalBorder(),
                       ),
                       padding: const EdgeInsets.all(5),
-                      child: MyImage(url: image),
+                      child: MyImage(url: controller.user.value.profileLogo),
                     ),
                   ),
                 ),
