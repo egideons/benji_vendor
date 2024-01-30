@@ -109,7 +109,7 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
                       .getVendorBusinessWithdraw(widget.business);
                   await BusinessController.instance
                       .getVendorBusinessBalance(widget.business.id);
-                  if (result.statusCode == 200) {
+                  if (result != null && result.statusCode == 200) {
                     ApiProcessorController.successSnack('Withdrawal success');
                   } else {
                     ApiProcessorController.errorSnack('Withdrawal failed');
