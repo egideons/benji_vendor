@@ -53,6 +53,7 @@ class LoginController extends GetxController {
             "Invalid email or password. Try again");
         isLoad.value = false;
         update();
+        return;
       } else {
         http.Response? responseUser =
             await HandleData.getApi(Api.baseUrl + Api.user, jsonData["token"]);
