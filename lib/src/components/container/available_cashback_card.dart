@@ -62,19 +62,19 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
+          GetBuilder<BusinessController>(
+            initState: (state) => BusinessController.instance
+                .getVendorBusinessBalance(widget.business.id),
+            builder: (controller) {
+              if (controller.isLoadBalance.value) {
+                return const Text('Loading...');
+              }
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GetBuilder<BusinessController>(
-                    initState: (state) => BusinessController.instance
-                        .getVendorBusinessBalance(widget.business.id),
-                    builder: (controller) {
-                      if (controller.isLoadBalance.value) {
-                        return const Text('Loading...');
-                      }
-                      return Text.rich(
+                  Row(
+                    children: [
+                      Text.rich(
                         TextSpan(
                           children: [
                             const TextSpan(
@@ -98,27 +98,31 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
                             ),
                           ],
                         ),
-                      );
+                      ),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      final result = await BusinessController.instance
+                          .getVendorBusinessWithdraw(widget.business,
+                              shopReward: controller.balance.value);
+                      await BusinessController.instance
+                          .getVendorBusinessBalance(widget.business.id);
+                      print(result?.body);
+                      print(result?.statusCode);
+                      if (result != null && result.statusCode == 200) {
+                        ApiProcessorController.successSnack(
+                            'Withdrawal success');
+                      } else {
+                        ApiProcessorController.errorSnack('Withdrawal failed');
+                      }
                     },
-                  )
+                    child: const Text('Withdraw'),
+                  ),
                 ],
-              ),
-              TextButton(
-                onPressed: () async {
-                  final result = await BusinessController.instance
-                      .getVendorBusinessWithdraw(widget.business);
-                  await BusinessController.instance
-                      .getVendorBusinessBalance(widget.business.id);
-                  if (result.statusCode == 200) {
-                    ApiProcessorController.successSnack('Withdrawal success');
-                  } else {
-                    ApiProcessorController.errorSnack('Withdrawal failed');
-                  }
-                },
-                child: const Text('Withdraw'),
-              ),
-            ],
-          ),
+              );
+            },
+          )
         ],
       ),
     );

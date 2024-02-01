@@ -118,19 +118,29 @@ class BusinessController extends GetxController {
     }
   }
 
-  Future<http.Response> getVendorBusinessWithdraw(
-      BusinessModel business) async {
+  Future<http.Response?> getVendorBusinessWithdraw(BusinessModel business,
+      {double shopReward = 0.0}) async {
     String url = '${Api.baseUrl}/wallet/requestVendorRewardWithdrawal';
-    var parsedURL = Uri.parse(url);
 
-    return await http.post(
-      parsedURL,
-      body: {
+    try {
+      final body = {
         "business_id": business.id,
-        "amount_to_withdraw": business.shopReward,
+        "amount_to_withdraw": shopReward,
         // "bank_details_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-      },
-      headers: authHeader(),
-    );
+      };
+      print(body);
+      final response = await http.post(
+        Uri.parse(url),
+        body: jsonEncode(body),
+        headers: authHeader(),
+      );
+      print('value of type what');
+      return response;
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
   }
 }
