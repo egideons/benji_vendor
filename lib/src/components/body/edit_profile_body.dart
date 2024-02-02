@@ -71,7 +71,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
   String? longitude;
   List<AutocompletePrediction> placePredictions = [];
   final selectedLocation = ValueNotifier<String?>(null);
-  final genders = ["Male", "Female"];
+  final genders = ["male", "female"];
   String? horizontalGroupValue;
   String? profileLogo;
 
@@ -452,7 +452,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                         ),
                         kHalfSizedBox,
                         RadioGroup<String>.builder(
-                          groupValue: horizontalGroupValue!,
+                          groupValue: horizontalGroupValue!.toLowerCase(),
                           direction: Axis.horizontal,
                           activeColor: kAccentColor,
                           onChanged: (value) => setState(() {
