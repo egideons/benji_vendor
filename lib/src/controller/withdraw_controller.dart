@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:benji_vendor/src/controller/error_controller.dart';
@@ -68,6 +69,8 @@ class WithdrawController extends GetxController {
       }
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
+    } catch (e) {
+      log(e.toString());
     }
     isLoad.value = false;
     update();
