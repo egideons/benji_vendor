@@ -94,8 +94,7 @@ class _SelectBankBodyState extends State<SelectBankBody> {
             child: Scrollbar(
               controller: scrollController,
               child: GetBuilder<WithdrawController>(
-                  initState: (state) =>
-                      WithdrawController.instance.listOfBanks(),
+                  initState: (state) => WithdrawController.instance.listBanks(),
                   builder: (banks) {
                     return banks.listOfBanks.isEmpty
                         ? const EmptyCard(
