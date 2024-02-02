@@ -1,20 +1,22 @@
-import 'package:benji_vendor/src/providers/constants.dart';
+import '../providers/constants.dart';
 
 class BankModel {
-  String name;
-  String code;
-  String ussdTemplate;
-  String baseUssdCode;
-  String transferUssdTemplate;
-  // String logo;
+  final String name;
+  final String code;
+  final String? ussdTemplate;
+  final String? baseUssdCode;
+  final String? transferUssdTemplate;
+  final String? bankId;
+  final String nipBankCode;
 
   BankModel({
     required this.name,
     required this.code,
-    required this.ussdTemplate,
-    required this.baseUssdCode,
-    required this.transferUssdTemplate,
-    // required this.logo,
+    this.ussdTemplate,
+    this.baseUssdCode,
+    this.transferUssdTemplate,
+    this.bankId,
+    required this.nipBankCode,
   });
 
   factory BankModel.fromJson(Map<String, dynamic>? json) {
@@ -24,8 +26,9 @@ class BankModel {
       code: json['code'] ?? notAvailable,
       ussdTemplate: json['ussdTemplate'] ?? notAvailable,
       baseUssdCode: json['baseUssdCode'] ?? notAvailable,
-      // logo: json['logo'] ?? notAvailable,
       transferUssdTemplate: json['transferUssdTemplate'] ?? notAvailable,
+      bankId: json['bankId'] ?? notAvailable,
+      nipBankCode: json['nipBankCode'] ?? notAvailable,
     );
   }
 
@@ -36,6 +39,8 @@ class BankModel {
       'ussdTemplate': ussdTemplate,
       'baseUssdCode': baseUssdCode,
       'transferUssdTemplate': transferUssdTemplate,
+      'bankId': bankId,
+      'nipBankCode': nipBankCode,
     };
   }
 

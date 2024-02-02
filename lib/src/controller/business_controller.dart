@@ -128,13 +128,13 @@ class BusinessController extends GetxController {
         "amount_to_withdraw": shopReward,
         // "bank_details_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
       };
-      print(body);
+      // print(body);
       final response = await http.post(
         Uri.parse(url),
         body: jsonEncode(body),
         headers: authHeader(),
       );
-      print('value of type what');
+      log('value of type what');
       return response;
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");

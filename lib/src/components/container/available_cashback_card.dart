@@ -108,8 +108,8 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
                               shopReward: controller.balance.value);
                       await BusinessController.instance
                           .getVendorBusinessBalance(widget.business.id);
-                      print(result?.body);
-                      print(result?.statusCode);
+                      // print(result?.body);
+                      // print(result?.statusCode);
                       if (result != null && result.statusCode == 200) {
                         ApiProcessorController.successSnack(
                             'Withdrawal success');
