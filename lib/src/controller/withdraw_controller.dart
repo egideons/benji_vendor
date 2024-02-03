@@ -41,28 +41,17 @@ class WithdrawController extends GetxController {
   listBanks() async {
     var url = "${Api.baseUrl}${Api.listBanks}";
     isLoad.value = true;
-    update();
     try {
       final response = await http.get(Uri.parse(url), headers: authHeader());
       if (response.statusCode == 200) {
         dynamic jsonResponse = jsonDecode(response.body);
-        if (jsonResponse is List) {
-          listOfBanks.value =
-              BankModel.listFromJson(jsonResponse.cast<Map<String, dynamic>>());
-          listOfBanksSearch = listOfBanks;
-        } else if (jsonResponse is Map) {
-          if (jsonResponse.containsKey('responseBody')) {
-            listOfBanks.value = BankModel.listFromJson(
-                jsonResponse['responseBody'].cast<Map<String, dynamic>>());
-            listOfBanksSearch = listOfBanks;
-          } else {
-            listOfBanks.value = [];
-            listOfBanksSearch.value = [];
-          }
-        } else {
-          listOfBanks.value = [];
-          listOfBanksSearch.value = [];
-        }
+        print(jsonResponse['responseBody'] as List);
+
+        listOfBanks.value = (jsonResponse['responseBody'] as List)
+            .map((json) => BankModel.fromJson(json))
+            .toList();
+        print('listOfBanks $listOfBanks');
+        listOfBanksSearch = listOfBanks;
       } else {
         listOfBanks.value = [];
         listOfBanksSearch.value = [];
@@ -120,10 +109,11 @@ class WithdrawController extends GetxController {
   Future<void> validateBankNumbers(
       String accountNumber, String bankCode) async {
     var url =
-        "${Api.baseUrl}${Api.validateBankNumber}?account_number=$accountNumber&bank_code=$bankCode";
+        "${Api.baseUrl}${Api.validateBankNumber}$accountNumber/$bankCode/monnify";
     isLoadValidateAccount.value = true;
-    update();
-
+    // update();
+    print('$accountNumber, $bankCode');
+    print('validateBankNumbers, $url');
     try {
       final response = await http.get(Uri.parse(url), headers: authHeader());
 

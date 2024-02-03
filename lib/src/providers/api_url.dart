@@ -25,7 +25,7 @@ class Api {
   static const category = "/categories/list";
   static const withdrawalHistory = "/wallet/withdrawalHistory/";
 
-  static const listBanks = "/payments/list_banks";
+  static const listBanks = "/payments/list_banks/";
   static const validateBankNumber = "/payments/validateBankNumbers/";
 //Orders
   static const changeOrderStatus = "/orders/vendorChangeStatus";
