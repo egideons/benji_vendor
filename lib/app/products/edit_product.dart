@@ -1,6 +1,5 @@
 // ignore_for_file: file_names, prefer_typing_uninitialized_variables
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
@@ -110,6 +109,9 @@ class _EditProductState extends State<EditProduct> {
       'price': productPriceEC.text,
       'quantity_available': productQuantityEC.text,
       'sub_category_id': subCategoryEC.text,
+      "address": "",
+      "latitude": "",
+      "longitude": ""
     };
 
     consoleLog("This is the data : $data");
@@ -119,10 +121,15 @@ class _EditProductState extends State<EditProduct> {
     //   {'product_image': selectedImages},
     //   'editProduct',
     // );
-    await FormController.instance.postAuthstream2(
-      Api.baseUrl + Api.changeProduct + widget.product.id,
-      {'data': jsonEncode(data)}, // Wrap 'data' in a Map
+    await FormController.instance.uploadImage(
+      Api.baseUrl + Api.changeProductImage + widget.product.id,
       {'product_image': selectedImages},
+      'editProduct',
+    );
+
+    await FormController.instance.patchAuth(
+      Api.baseUrl + Api.changeProduct + widget.product.id,
+      data, // Wrap 'data' in a Map
       'editProduct',
     );
     if (FormController.instance.status.toString().startsWith('2')) {
