@@ -608,18 +608,19 @@ class _AddBusinessState extends State<AddBusiness> {
                         : kIsWeb
                             ? const SizedBox()
                             : Container(
+                                height: 200,
                                 decoration: ShapeDecoration(
                                   image: DecorationImage(
                                     image: FileImage(
                                         File(selectedLogoImage!.path)),
                                     fit: BoxFit.cover,
                                   ),
-                                  shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
+                                  shape: const CircleBorder(
+                                    side: BorderSide(
                                       width: 0.50,
                                       color: Color(0xFFE6E6E6),
                                     ),
-                                    borderRadius: BorderRadius.circular(20),
+                                    // borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
                               ),
@@ -681,6 +682,7 @@ class _AddBusinessState extends State<AddBusiness> {
                         : kIsWeb
                             ? const SizedBox()
                             : Container(
+                                height: 200,
                                 decoration: ShapeDecoration(
                                   image: DecorationImage(
                                     image: FileImage(

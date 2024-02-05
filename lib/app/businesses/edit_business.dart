@@ -313,7 +313,7 @@ class _EditBusinessState extends State<EditBusiness> {
       );
       // reload
       BusinessController.instance.getVendorBusinesses();
-      Get.close(1);
+      Get.close(2);
     }
   }
 
@@ -613,6 +613,7 @@ class _EditBusinessState extends State<EditBusiness> {
                         : kIsWeb
                             ? const SizedBox()
                             : Container(
+                                height: 200,
                                 decoration: ShapeDecoration(
                                   image: DecorationImage(
                                     image: FileImage(
@@ -683,6 +684,7 @@ class _EditBusinessState extends State<EditBusiness> {
                             ),
                           )
                         : Container(
+                            height: 200,
                             decoration: ShapeDecoration(
                               image: DecorationImage(
                                 image:
@@ -714,7 +716,7 @@ class _EditBusinessState extends State<EditBusiness> {
                             ),
                           ),
                           enableDrag: true,
-                          builder: ((builder) => uploadBusinessLogo()),
+                          builder: ((builder) => uploadBusinessCoverImage()),
                         );
                       },
                       splashColor: kAccentColor.withOpacity(0.1),

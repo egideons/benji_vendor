@@ -89,11 +89,11 @@ class _AddProductState extends State<AddProduct> {
   //=========================== IMAGE PICKER ====================================\\
 
   final ImagePicker _picker = ImagePicker();
-  XFile? selectedImages;
+  XFile? selectedImage;
 
   //================================== FUNCTIONS ====================================\\
   Future<void> submit() async {
-    if (selectedImages == null) {
+    if (selectedImage == null) {
       ApiProcessorController.errorSnack("Please select product images");
       return;
     }
@@ -121,7 +121,7 @@ class _AddProductState extends State<AddProduct> {
     await FormController.instance.postAuthstream2(
       Api.baseUrl + Api.addProduct,
       data,
-      {'product_image': selectedImages},
+      {'product_image': selectedImage},
       'addProduct',
     );
     if (FormController.instance.status.toString().startsWith('2')) {
@@ -134,12 +134,12 @@ class _AddProductState extends State<AddProduct> {
     }
   }
 
-  pickProductImages(ImageSource source) async {
+  pickProductImage(ImageSource source) async {
     final XFile? image = await _picker.pickImage(
       source: source,
     );
     if (image != null) {
-      selectedImages = image;
+      selectedImage = image;
       setState(() {});
     }
   }
@@ -170,7 +170,7 @@ class _AddProductState extends State<AddProduct> {
                 children: [
                   InkWell(
                     onTap: () {
-                      pickProductImages(ImageSource.camera);
+                      pickProductImage(ImageSource.camera);
                     },
                     borderRadius: BorderRadius.circular(100),
                     child: Container(
@@ -200,7 +200,7 @@ class _AddProductState extends State<AddProduct> {
                 children: [
                   InkWell(
                     onTap: () {
-                      pickProductImages(ImageSource.gallery);
+                      pickProductImage(ImageSource.gallery);
                     },
                     borderRadius: BorderRadius.circular(100),
                     child: Container(
@@ -293,24 +293,22 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         child: Align(
                           alignment: Alignment.center,
-                          child: selectedImages == null
+                          child: selectedImage == null
                               ? Image.asset(
                                   "assets/icons/image-upload.png",
                                 )
-                              : selectedImages == null
+                              : kIsWeb
                                   ? const SizedBox()
-                                  : kIsWeb
-                                      ? const SizedBox()
-                                      : GridTile(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: FileImage(
-                                                    File(selectedImages!.path)),
-                                              ),
-                                            ),
+                                  : GridTile(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: FileImage(
+                                                File(selectedImage!.path)),
                                           ),
                                         ),
+                                      ),
+                                    ),
                         ),
                       ),
                       kSizedBox,
