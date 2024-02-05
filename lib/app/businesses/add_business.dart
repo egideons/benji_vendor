@@ -743,7 +743,7 @@ class _AddBusinessState extends State<AddBusiness> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Shop Name",
+                      "Business Name",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -763,6 +763,30 @@ class _AddBusinessState extends State<AddBusiness> {
                       textInputAction: TextInputAction.next,
                       focusNode: shopNameFN,
                       hintText: "Name of shop",
+                      textInputType: TextInputType.text,
+                    ),
+                    kSizedBox,
+                    const Text(
+                      "CAC Number",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    kSizedBox,
+                    MyBlueTextFormField(
+                      controller: businessIdEC,
+                      validator: (value) {
+                        if (value == null || value!.isEmpty) {
+                          businessIdFN.requestFocus();
+                          return "Field cannot be empty";
+                        } else {
+                          return null;
+                        }
+                      },
+                      textInputAction: TextInputAction.next,
+                      focusNode: businessIdFN,
+                      hintText: "CAC Number",
                       textInputType: TextInputType.text,
                     ),
                     kSizedBox,
@@ -1094,39 +1118,41 @@ class _AddBusinessState extends State<AddBusiness> {
                           },
                         ),
                         kSizedBox,
-                        GetBuilder<WithdrawController>(
-                          builder: (controller) {
-                            if (controller.isLoadValidateAccount.value) {
-                              return Text(
-                                'Loading...',
-                                style: TextStyle(
-                                  color: kAccentColor.withOpacity(0.8),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              );
-                            }
-                            if (accountNumberEC.text.length < 10) {
-                              return const Text('');
-                            }
+                        GetBuilder<WithdrawController>(builder: (controller) {
+                          if (controller.isLoadValidateAccount.value) {
                             return Text(
-                              controller.validateAccount.value.requestSuccessful
-                                  ? controller.validateAccount.value
-                                      .responseBody.accountName
-                                  : 'Bank details not found',
+                              'Loading...',
                               style: TextStyle(
-                                color: kAccentColor,
+                                color: kAccentColor.withOpacity(0.8),
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
                             );
-                          },
-                        ),
+                          }
+
+                          if (accountNumberEC.text.length < 10) {
+                            return const Text('');
+                          }
+                          return Text(
+                            controller.validateAccount.value.requestSuccessful
+                                ? controller.validateAccount.value.responseBody
+                                    .accountName
+                                : 'Bank details not found',
+                            style: TextStyle(
+                              color: controller
+                                      .validateAccount.value.requestSuccessful
+                                  ? kAccentColor
+                                  : kSuccessColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          );
+                        }),
                         //  address and location
 
                         kSizedBox,
                         const Text(
-                          'Country',
+                          'Business Location',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
