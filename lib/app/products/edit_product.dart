@@ -121,11 +121,13 @@ class _EditProductState extends State<EditProduct> {
     //   {'product_image': selectedImages},
     //   'editProduct',
     // );
-    await FormController.instance.uploadImage(
-      Api.baseUrl + Api.changeProductImage + widget.product.id,
-      {'product_image': selectedImages},
-      'editProduct',
-    );
+    if (selectedImages != null) {
+      await FormController.instance.uploadImage(
+        Api.baseUrl + Api.changeProductImage + widget.product.id,
+        {'product_image': selectedImages},
+        'editProduct',
+      );
+    }
 
     await FormController.instance.patchAuth(
       Api.baseUrl + Api.changeProduct + widget.product.id,
@@ -139,7 +141,7 @@ class _EditProductState extends State<EditProduct> {
       //   body: "${productNameEC.text} has been been successfully updated.",
       // );
 
-      Get.close(1);
+      Get.close(3);
     }
   }
 

@@ -313,7 +313,7 @@ class _AddBusinessState extends State<AddBusiness> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           const Text(
-            "Upload Cover Image",
+            "Upload Business Image",
             textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 18,

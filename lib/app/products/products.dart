@@ -190,9 +190,10 @@ class _ProductsState extends State<Products> {
                   physics: const BouncingScrollPhysics(),
                   children: [
                     GetBuilder<ProductController>(
-                      // initState: (state) async {
-                      //   await ProductController.instance.getProducts();
-                      // },
+                      initState: (state) async {
+                        await ProductController.instance
+                            .getBusinessProducts(widget.business.id, true);
+                      },
                       builder: (controller) {
                         return controller.isLoad.value &&
                                 controller.products.isEmpty

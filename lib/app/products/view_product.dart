@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 
-import 'package:benji_vendor/app/overview/overview.dart';
 import 'package:benji_vendor/app/products/edit_product.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
@@ -155,15 +154,7 @@ class _ViewProductState extends State<ViewProduct> {
       return;
     }
     ProductController.instance.reset();
-    Get.offAll(
-      () => const OverView(currentIndex: 2),
-      routeName: 'OverView',
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      popGesture: true,
-      transition: Transition.rightToLeft,
-    );
+    Get.close(3);
   }
 
   editProduct() {
