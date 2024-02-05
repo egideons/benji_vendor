@@ -21,11 +21,7 @@ class MyImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: url == null
-          ? ''
-          : url!.startsWith("https")
-              ? url!
-              : baseImage + url!,
+      imageUrl: url == null ? '' : baseImage + url!,
       height: height,
       width: width,
       fit: fit,
