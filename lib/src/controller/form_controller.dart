@@ -426,4 +426,76 @@ class FormController extends GetxController {
     update([tag]);
     return;
   }
+
+  Future uploadImage(String url, Map<String, XFile?> files, String tag,
+      [String errorMsg = "An error occurred",
+      String successMsg = "Submitted successfully"]) async {
+    http.StreamedResponse? response;
+
+    isLoad.value = true;
+    update();
+    update([tag]);
+
+    var request = http.MultipartRequest("POST", Uri.parse(url));
+    Map<String, String> headers = authHeader();
+
+    request.headers.addAll(headers);
+
+    for (String key in files.keys) {
+      if (files[key] == null) {
+        continue;
+      }
+
+      request.files.add(http.MultipartFile(
+        key,
+        files[key]!.readAsBytes().asStream(),
+        await files[key]!.length(),
+        filename: 'image.jpg',
+        contentType:
+            MediaType('image', 'jpeg'), // Adjust content type as needed
+      ));
+
+      // request.files.add(await http.MultipartFile.fromPath(
+      //     key, files[key]!.path,
+      //     filename: files[key]!.path.split('/').last));
+    }
+
+    print('first stream response: $response');
+    try {
+      response = await request.send();
+      print('second stream response body: ${response.statusCode}');
+      final normalResp = await http.Response.fromStream(response);
+      print('third stream response body: ${normalResp.body}');
+      status.value = response.statusCode;
+      if (response.statusCode == 200) {
+        // ApiProcessorController.successSnack(successMsg);
+        print('Got here!');
+        isLoad.value = false;
+        update();
+        update([tag]);
+        return;
+      } else {
+        ApiProcessorController.errorSnack(errorMsg);
+      }
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet");
+      isLoad.value = false;
+      update();
+      update([tag]);
+      return;
+    } catch (e) {
+      ApiProcessorController.errorSnack("An error occured. \nERROR: $e");
+      print("An error occured. \nERROR: $e");
+      response = null;
+      isLoad.value = false;
+      update();
+      update([tag]);
+      return;
+    }
+
+    ApiProcessorController.errorSnack(errorMsg);
+    isLoad.value = false;
+    update([tag]);
+    return;
+  }
 }
