@@ -1094,32 +1094,34 @@ class _AddBusinessState extends State<AddBusiness> {
                           },
                         ),
                         kSizedBox,
-                        GetBuilder<WithdrawController>(builder: (controller) {
-                          if (controller.isLoadValidateAccount.value) {
+                        GetBuilder<WithdrawController>(
+                          builder: (controller) {
+                            if (controller.isLoadValidateAccount.value) {
+                              return Text(
+                                'Loading...',
+                                style: TextStyle(
+                                  color: kAccentColor.withOpacity(0.8),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              );
+                            }
+                            if (accountNumberEC.text.length < 10) {
+                              return const Text('');
+                            }
                             return Text(
-                              'Loading...',
+                              controller.validateAccount.value.requestSuccessful
+                                  ? controller.validateAccount.value
+                                      .responseBody.accountName
+                                  : 'Bank details not found',
                               style: TextStyle(
-                                color: kAccentColor.withOpacity(0.8),
+                                color: kAccentColor,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
                             );
-                          }
-                          if (accountNumberEC.text.length < 10) {
-                            return const Text('');
-                          }
-                          return Text(
-                            controller.validateAccount.value.requestSuccessful
-                                ? controller.validateAccount.value.responseBody
-                                    .accountName
-                                : 'Bank details not found',
-                            style: TextStyle(
-                              color: kAccentColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          );
-                        }),
+                          },
+                        ),
                         //  address and location
 
                         kSizedBox,
