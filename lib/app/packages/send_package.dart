@@ -1087,7 +1087,7 @@ class _SendPackageState extends State<SendPackage> {
                 textInputAction: TextInputAction.next,
                 focusNode: itemQuantityFN,
                 hintText: "Enter the quantity ",
-                inputFormatter: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               kSizedBox,
               const Text(
