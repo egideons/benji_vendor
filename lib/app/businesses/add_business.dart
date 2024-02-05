@@ -589,24 +589,43 @@ class _AddBusinessState extends State<AddBusiness> {
                   children: [
                     selectedLogoImage == null
                         ? Container(
-                            padding: const EdgeInsets.all(kDefaultPadding),
-                            decoration: const ShapeDecoration(
-                              shape: CircleBorder(
-                                side: BorderSide(
+                            padding: const EdgeInsets.all(20),
+                            height: deviceType(media.width) > 2 ? 200 : 120,
+                            decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
                                   width: 0.50,
-                                  color: kGreyColor1,
+                                  color: Color(0xFFE6E6E6),
                                 ),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                             ),
                             child: Center(
-                              child: FaIcon(
-                                FontAwesomeIcons.image,
-                                color: kAccentColor,
+                              child: Image.asset(
+                                "assets/icons/image-upload.png",
                               ),
                             ),
                           )
                         : kIsWeb
-                            ? const SizedBox()
+                            ? Container(
+                                padding: const EdgeInsets.all(20),
+                                height: deviceType(media.width) > 2 ? 200 : 120,
+                                decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                      width: 0.50,
+                                      color: Color(0xFFE6E6E6),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: FaIcon(
+                                    FontAwesomeIcons.solidImages,
+                                    color: kAccentColor,
+                                  ),
+                                ),
+                              )
                             : Container(
                                 height: 200,
                                 decoration: ShapeDecoration(
@@ -673,14 +692,31 @@ class _AddBusinessState extends State<AddBusiness> {
                               ),
                             ),
                             child: Center(
-                              child: FaIcon(
-                                FontAwesomeIcons.solidImages,
-                                color: kAccentColor,
+                              child: Image.asset(
+                                "assets/icons/image-upload.png",
                               ),
                             ),
                           )
                         : kIsWeb
-                            ? const SizedBox()
+                            ? Container(
+                                padding: const EdgeInsets.all(20),
+                                height: deviceType(media.width) > 2 ? 200 : 120,
+                                decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                      width: 0.50,
+                                      color: Color(0xFFE6E6E6),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: FaIcon(
+                                    FontAwesomeIcons.solidImages,
+                                    color: kAccentColor,
+                                  ),
+                                ),
+                              )
                             : Container(
                                 height: 200,
                                 decoration: ShapeDecoration(

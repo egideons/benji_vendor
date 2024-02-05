@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:benji_vendor/app/packages/packages.dart';
+import 'package:benji_vendor/src/payment/monnify.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
@@ -12,7 +13,6 @@ import '../../src/controller/auth_controller.dart';
 import '../../src/controller/error_controller.dart';
 import '../../src/controller/payment_controller.dart';
 import '../../src/controller/user_controller.dart';
-import '../../src/payment/alatpay.dart';
 import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/keys.dart';
@@ -134,8 +134,8 @@ class _PayForDeliveryState extends State<PayForDelivery> {
 
 //======== Place Order =======\\
   void placeOrder() {
-    String apiKey = alatPayPrimaryKey;
-    String businessId = alatPayBuinessId;
+    String apiKey = monnifyAPIkey;
+    String contractCode = contractCodeKey;
     String email = UserController.instance.user.value.email;
     String phone = UserController.instance.user.value.phone;
     String firstName = UserController.instance.user.value.firstName;
@@ -150,9 +150,9 @@ class _PayForDeliveryState extends State<PayForDelivery> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) {
-          return AlatPayWidget(
+          return MonnifyWidget(
             apiKey: apiKey,
-            businessId: businessId,
+            contractCode: contractCode,
             email: email,
             phone: phone,
             firstName: firstName,
