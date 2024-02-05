@@ -1129,6 +1129,7 @@ class _AddBusinessState extends State<AddBusiness> {
                               ),
                             );
                           }
+
                           if (accountNumberEC.text.length < 10) {
                             return const Text('');
                           }

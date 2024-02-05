@@ -39,18 +39,18 @@ class WithdrawController extends GetxController {
   // }
 
   listBanks() async {
-    var url = "${Api.baseUrl}${Api.listBanks}";
+    var url = Api.baseUrl + Api.listBanks;
     isLoad.value = true;
     try {
       final response = await http.get(Uri.parse(url), headers: authHeader());
       if (response.statusCode == 200) {
         dynamic jsonResponse = jsonDecode(response.body);
-        print(jsonResponse['responseBody'] as List);
+        log((jsonResponse['responseBody'] as List).toString());
 
         listOfBanks.value = (jsonResponse['responseBody'] as List)
             .map((json) => BankModel.fromJson(json))
             .toList();
-        print('listOfBanks $listOfBanks');
+        log('listOfBanks $listOfBanks');
         listOfBanksSearch = listOfBanks;
       } else {
         listOfBanks.value = [];

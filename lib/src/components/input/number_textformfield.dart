@@ -8,28 +8,34 @@ import '../../../../theme/colors.dart';
 class NumberTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final FormFieldValidator validator;
-  final dynamic onSaved, onChanged;
+  final dynamic onSaved;
   final TextInputAction textInputAction;
   final FocusNode focusNode;
   final String hintText;
-  final List<TextInputFormatter> inputFormatter;
+  final List<TextInputFormatter>? inputFormatters;
+  final dynamic maxlength;
+  final dynamic onChanged;
+  final bool? enabled;
 
   const NumberTextFormField({
     super.key,
     required this.controller,
     required this.validator,
     this.onSaved,
+    this.maxlength,
     required this.textInputAction,
     required this.focusNode,
     required this.hintText,
-    required this.inputFormatter,
+    this.inputFormatters,
     this.onChanged,
+    this.enabled,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       // onTap: onTap,
+      enabled: enabled ?? true,
       focusNode: focusNode,
       controller: controller,
       validator: validator,
@@ -41,18 +47,20 @@ class NumberTextFormField extends StatelessWidget {
       autocorrect: true,
       enableSuggestions: true,
       keyboardType: TextInputType.number,
-      inputFormatters: inputFormatter,
+      inputFormatters: inputFormatters,
+      maxLength: maxlength,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      // mouseCursor: SystemMouseCursors.text,
       maxLines: 1,
       style: TextStyle(
         color: kSecondaryColor,
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.w400,
       ),
       decoration: InputDecoration(
         hintText: hintText,
-        errorStyle: const TextStyle(
-          color: kErrorColor,
-        ),
+        errorStyle: const TextStyle(color: kErrorColor),
         filled: true,
         fillColor: Colors.blue.shade50,
         focusColor: Colors.blue.shade50,
@@ -76,10 +84,7 @@ class NumberTextFormField extends StatelessWidget {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(
-            color: kErrorBorderColor,
-            width: 2.0,
-          ),
+          borderSide: const BorderSide(color: kErrorBorderColor, width: 2.0),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
