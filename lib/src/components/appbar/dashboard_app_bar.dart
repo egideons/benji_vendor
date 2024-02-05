@@ -71,14 +71,21 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(kDefaultPadding),
                     child: Container(
-                      width: 45,
-                      height: 45,
-                      decoration: ShapeDecoration(
-                        color: kPageSkeletonColor,
-                        shape: const OvalBorder(),
-                      ),
+                      // width: 45,
+                      // height: 45,
+                      // decoration: ShapeDecoration(
+                      //   color: kPageSkeletonColor,
+                      //   shape: const OvalBorder(),
+                      // ),
                       padding: const EdgeInsets.all(5),
-                      child: MyImage(url: controller.user.value.profileLogo),
+                      child: ClipOval(
+                        child: CircleAvatar(
+                          radius: 45 / 2,
+                          child: MyImage(
+                            url: controller.user.value.profileLogo,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

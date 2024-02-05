@@ -50,9 +50,7 @@ class _BusinessProductContainerState extends State<BusinessProductContainer> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              width: deviceType(media.width) >= 2
-                  ? media.width - 250
-                  : media.width - 300,
+              width: (media.width - 20) / 3,
               height: deviceType(media.width) >= 2 ? 150 : 100,
               decoration: ShapeDecoration(
                 color: kPageSkeletonColor,
