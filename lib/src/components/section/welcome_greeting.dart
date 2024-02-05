@@ -40,9 +40,9 @@ class WelcomeGreeting extends StatelessWidget {
             vendorName,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: kTextGreyColor,
+              color: kTextBlackColor,
               fontSize: deviceType(media.width) >= 2 ? 20 : 14,
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.w800,
             ),
           ),
         ),

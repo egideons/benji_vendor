@@ -303,6 +303,7 @@ class FormController extends GetxController {
 
     var request = http.MultipartRequest("POST", Uri.parse(url));
     Map<String, String> headers = authHeader();
+    consoleLog("This is the url: ${url.toString()}");
     consoleLog("This is the image: ${files.toString()}");
     try {
       for (String key in files.keys) {

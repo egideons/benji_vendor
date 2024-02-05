@@ -48,6 +48,8 @@ class _DashboardState extends State<Dashboard>
   void initState() {
     super.initState();
     // AuthController.instance.checkIfAuthorized();
+    UserController.instance.getUser();
+    UserController.instance.setUserSync();
     userCode = UserController.instance.user.value.username;
     BusinessController.instance.getVendorBusinesses();
 
@@ -111,6 +113,7 @@ class _DashboardState extends State<Dashboard>
       refreshing = true;
     });
 
+    UserController.instance.getUser();
     UserController.instance.setUserSync();
     await BusinessController.instance.getVendorBusinesses();
 
@@ -278,8 +281,9 @@ class _DashboardState extends State<Dashboard>
           onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
           child: Scaffold(
             appBar: DashboardAppBar(
-                numberOfNotifications:
-                    NotificationController.instance.notification.length),
+              numberOfNotifications:
+                  NotificationController.instance.notification.length,
+            ),
             floatingActionButton: _isScrollToTopBtnVisible
                 ? FloatingActionButton(
                     onPressed: scrollToTop,

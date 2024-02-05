@@ -186,12 +186,13 @@ class _EditProfileBodyState extends State<EditProfileBody> {
       'latitude': latitude,
       'longitude': longitude,
     };
-    consoleLog("This is the data: $data");
-    consoleLog(
-        Api.baseUrl + Api.changeVendorBusinessProfile + vendorId.toString());
-    consoleLog("profile logo: $selectedLogoImage");
+    log("This is the data: $data");
+    var url =
+        Api.baseUrl + Api.changeVendorPersonalProfile + vendorId.toString();
+    log(url);
+    log("profile logo: $selectedLogoImage");
     await FormController.instance.postAuthstream2(
-        Api.baseUrl + Api.changeVendorPersonalProfile + vendorId.toString(),
+        url,
         data,
         {'profileLogo': selectedLogoImage},
         "changeVendorPersonalProfile",
@@ -205,14 +206,10 @@ class _EditProfileBodyState extends State<EditProfileBody> {
   }
 
   Widget uploadLogoImage() => Container(
-        height: 140,
         width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.only(
-          left: kDefaultPadding,
-          right: kDefaultPadding,
-          bottom: kDefaultPadding,
-        ),
+        padding: const EdgeInsets.all(10),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const Text(
               "Upload Profile picture",
@@ -309,30 +306,23 @@ class _EditProfileBodyState extends State<EditProfileBody> {
             Column(
               children: [
                 selectedLogoImage == null
-                    ? Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: const ShapeDecoration(
-                          shape: CircleBorder(
-                            side: BorderSide(
-                              width: 0.50,
-                              color: kGreyColor1,
-                            ),
-                          ),
-                        ),
+                    ? CircleAvatar(
+                        radius: 60,
                         child: Center(
-                          child: MyImage(url: profileLogo!),
+                          child: ClipOval(
+                            child: MyImage(url: profileLogo!),
+                          ),
                         ),
                       )
                     : kIsWeb
                         ? const SizedBox()
-                        : Container(
-                            height: 200,
-                            width: 200,
-                            decoration: ShapeDecoration(
-                              shape: const CircleBorder(),
-                              image: DecorationImage(
-                                image: FileImage(File(selectedLogoImage!.path)),
-                                fit: BoxFit.cover,
+                        : CircleAvatar(
+                            radius: 60,
+                            child: Center(
+                              child: ClipOval(
+                                child: Image.file(
+                                  File(selectedLogoImage!.path),
+                                ),
                               ),
                             ),
                           ),

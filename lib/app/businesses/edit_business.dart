@@ -262,11 +262,11 @@ class _EditBusinessState extends State<EditBusiness> {
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
-    if (selectedCoverImage == null && businessCoverImage!.isEmpty) {
-      ApiProcessorController.errorSnack("Please select a shop image");
+    if (selectedCoverImage == null) {
+      ApiProcessorController.errorSnack("Please select a shop cover");
       return;
     }
-    if (selectedLogoImage == null && businessLogo!.isEmpty) {
+    if (selectedLogoImage == null) {
       ApiProcessorController.errorSnack("Please select a shop image");
       return;
     }
@@ -277,17 +277,17 @@ class _EditBusinessState extends State<EditBusiness> {
       return;
     }
     Map data = {
-      "address": mapsLocationEC.text,
-      "latitude": latitude,
-      "longitude": longitude,
-      "accountBank": accountBankEC.text,
-      "accountName": accountNameEC.text,
-      "accountNumber": accountNumberEC.text,
-      "accountType": accountTypeEC.text,
+      // "address": mapsLocationEC.text,
+      // "latitude": latitude,
+      // "longitude": longitude,
+      // "accountBank": accountBankEC.text,
+      // "accountName": accountNameEC.text,
+      // "accountNumber": accountNumberEC.text,
+      // "accountType": accountTypeEC.text,
       // "country": countryValue,
       // "state": stateValue,
       // "city": cityValue,
-      "businessId": businessIdEC.text,
+      // "businessId": businessIdEC.text,
       "shop_name": shopNameEC.text,
       "weekOpeningHours": vendorMonToFriOpeningHoursEC.text,
       "weekClosingHours": vendorMonToFriClosingHoursEC.text,
@@ -295,7 +295,7 @@ class _EditBusinessState extends State<EditBusiness> {
       "satClosingHours": vendorSatClosingHoursEC.text,
       "sunWeekOpeningHours": vendorSunOpeningHoursEC.text,
       "sunWeekClosingHours": vendorSunClosingHoursEC.text,
-      "businessBio": businessBioEC.text,
+      "description": businessBioEC.text,
       "shop_type": vendorBusinessTypeEC.text,
     };
     consoleLog("This is the data: $data");
@@ -304,7 +304,7 @@ class _EditBusinessState extends State<EditBusiness> {
     await FormController.instance.postAuthstream2(
         '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}',
         data,
-        {'shop_image': selectedLogoImage},
+        {'shop_image': selectedLogoImage, 'coverImage': selectedCoverImage},
         'changeVendorBusinessProfile');
     if (FormController.instance.status.toString().startsWith('2')) {
       await PushNotificationController.showNotification(
@@ -724,7 +724,7 @@ class _EditBusinessState extends State<EditBusiness> {
                       child: Container(
                         padding: const EdgeInsets.all(10),
                         child: Text(
-                          'Upload business logo',
+                          'Upload business image',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: kAccentColor,

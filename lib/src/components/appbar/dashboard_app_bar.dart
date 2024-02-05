@@ -1,9 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:benji_vendor/app/others/notifications.dart';
-import 'package:benji_vendor/src/components/appbar/dashboard_app_bar_aggregator.dart';
-import 'package:benji_vendor/src/components/image/my_image.dart';
-import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/components/appbar/app_bar_title.dart';
 import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -16,10 +14,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
   final int numberOfNotifications;
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-  const DashboardAppBar({
-    super.key,
-    required this.numberOfNotifications,
-  });
+  const DashboardAppBar({super.key, required this.numberOfNotifications});
 //======================================== ALL VARIABLES ==============================================\\
 
 //======================================== FUNCTIONS ==============================================\\
@@ -60,51 +55,8 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing:
           deviceType(media.width) > 2 ? kDefaultPadding : kDefaultPadding / 2,
       elevation: 0,
-      title: GetBuilder<UserController>(
-          init: UserController(),
-          builder: (controller) {
-            return Row(
-              children: [
-                InkWell(
-                  onTap: toProfilePage,
-                  borderRadius: BorderRadius.circular(100),
-                  child: Padding(
-                    padding: const EdgeInsets.all(kDefaultPadding),
-                    child: Container(
-                      // width: 45,
-                      // height: 45,
-                      // decoration: ShapeDecoration(
-                      //   color: kPageSkeletonColor,
-                      //   shape: const OvalBorder(),
-                      // ),
-                      padding: const EdgeInsets.all(5),
-                      child: ClipOval(
-                        child: CircleAvatar(
-                          radius: 45 / 2,
-                          child: MyImage(
-                            url: controller.user.value.profileLogo,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                AppBarVendor(
-                  title: "Welcome,",
-                  aggregatorName:
-                      "${controller.user.value.firstName} ${controller.user.value.lastName}",
-                ),
-              ],
-            );
-          }),
+      title: const AppBarTitle(),
       actions: [
-        // IconButton(
-        //     onPressed: showSearchField,
-        //     icon: FaIcon(
-        //       FontAwesomeIcons.magnifyingGlass,
-        //       color: kGreyColor,
-        //     ),
-        // ),
         Stack(
           children: [
             IconButton(
