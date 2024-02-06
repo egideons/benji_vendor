@@ -14,8 +14,6 @@ class FcmMessagingController extends GetxController {
 
     consoleLog("This is the FCM token: $fcmToken");
 
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
     //When the app restarts
     FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
       consoleLog("This is the FCM token after the app restarted: $fcmToken");
@@ -33,7 +31,7 @@ class FcmMessagingController extends GetxController {
   Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     consoleLog("Handling a background message: ${message.messageId}");
 
-    //call awesomenotification to how the push notification.
+    //Call awesomenotification to how the push notification.
     AwesomeNotifications().createNotificationFromJsonData(message.data);
   }
 }

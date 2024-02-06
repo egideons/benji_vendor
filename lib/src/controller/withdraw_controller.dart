@@ -154,7 +154,7 @@ class WithdrawController extends GetxController {
       return response;
     }
 
-    ApiProcessorController.successSnack('Withdrawal successfully');
+    ApiProcessorController.successSnack('Withdrawal successful');
     isLoadWithdraw.value = false;
     update();
     return response;

@@ -19,34 +19,28 @@ class EmptyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      padding: const EdgeInsets.all(kDefaultPadding),
+    return Column(
       children: [
-        Column(
-          children: [
-            Lottie.asset(
-              "assets/animations/empty/frame_1.json",
-            ),
-            kSizedBox,
-            Text(
-              emptyCardMessage,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: kTextGreyColor,
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            kSizedBox,
-            showButton == false
-                ? const SizedBox()
-                : MyElevatedButton(
-                    title: buttonTitle,
-                    onPressed: onPressed ?? () {},
-                  ),
-          ],
+        Lottie.asset(
+          "assets/animations/empty/frame_1.json",
         ),
+        kSizedBox,
+        Text(
+          emptyCardMessage,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: kTextGreyColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        kSizedBox,
+        showButton == false
+            ? const SizedBox()
+            : MyElevatedButton(
+                title: buttonTitle,
+                onPressed: onPressed ?? () {},
+              ),
       ],
     );
   }
