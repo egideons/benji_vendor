@@ -54,6 +54,9 @@ class Api {
 
   //BusinessTypes
   static const businessType = "/categories/list";
+
+  //Push Notification
+  static const createPushNotification = "/notifier/create_push_notification";
 }
 
 String header = "application/json";

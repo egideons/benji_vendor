@@ -112,8 +112,8 @@ class WithdrawController extends GetxController {
         "${Api.baseUrl}${Api.validateBankNumber}$accountNumber/$bankCode/monnify";
     isLoadValidateAccount.value = true;
     // update();
-    print('$accountNumber, $bankCode');
-    print('validateBankNumbers, $url');
+    log('$accountNumber, $bankCode');
+    log('validateBankNumbers, $url');
     try {
       final response = await http.get(Uri.parse(url), headers: authHeader());
 

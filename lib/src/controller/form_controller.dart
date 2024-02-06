@@ -1,6 +1,7 @@
 // ignore_for_file: empty_catches
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:benji_vendor/src/controller/error_controller.dart';
@@ -461,16 +462,16 @@ class FormController extends GetxController {
       //     filename: files[key]!.path.split('/').last));
     }
 
-    print('first stream response: $response');
+    log('first stream response: $response');
     try {
       response = await request.send();
-      print('second stream response body: ${response.statusCode}');
+      log('second stream response body: ${response.statusCode}');
       final normalResp = await http.Response.fromStream(response);
-      print('third stream response body: ${normalResp.body}');
+      log('third stream response body: ${normalResp.body}');
       status.value = response.statusCode;
       if (response.statusCode == 200) {
         // ApiProcessorController.successSnack(successMsg);
-        print('Got here!');
+        log('Got here!');
         isLoad.value = false;
         update();
         update([tag]);
@@ -486,7 +487,7 @@ class FormController extends GetxController {
       return;
     } catch (e) {
       ApiProcessorController.errorSnack("An error occured. \nERROR: $e");
-      print("An error occured. \nERROR: $e");
+      log("An error occured. \nERROR: $e");
       response = null;
       isLoad.value = false;
       update();
