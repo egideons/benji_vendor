@@ -36,7 +36,7 @@ class DashboardUserCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: [
-          GestureDetector(
+          InkWell(
             onTap: onTap,
             child: CircleAvatar(
               maxRadius: deviceType(media.width) >= 2 ? 90 : 50,
@@ -44,6 +44,7 @@ class DashboardUserCard extends StatelessWidget {
               child: ClipOval(
                 child: Center(
                   child: MyImage(
+                    fit: BoxFit.fill,
                     url: user.profileLogo,
                   ),
                 ),

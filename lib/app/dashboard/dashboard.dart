@@ -310,9 +310,10 @@ class _DashboardState extends State<Dashboard>
                   scrollDirection: Axis.vertical,
                   padding: const EdgeInsets.all(kDefaultPadding),
                   children: [
-                    DashboardUserCard(user: UserController.instance.user.value),
-                    // const AvailableCashbackCard(),
-
+                    DashboardUserCard(
+                      user: UserController.instance.user.value,
+                      onTap: editProfile,
+                    ),
                     kSizedBox,
                     Container(
                       padding: const EdgeInsets.all(10),
