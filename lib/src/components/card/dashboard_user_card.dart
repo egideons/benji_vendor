@@ -38,11 +38,11 @@ class DashboardUserCard extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: onTap,
-            child: Center(
-              child: CircleAvatar(
-                maxRadius: deviceType(media.width) >= 2 ? 90 : 50,
-                minRadius: deviceType(media.width) >= 2 ? 90 : 50,
-                child: ClipOval(
+            child: CircleAvatar(
+              maxRadius: deviceType(media.width) >= 2 ? 90 : 50,
+              minRadius: deviceType(media.width) >= 2 ? 90 : 50,
+              child: ClipOval(
+                child: Center(
                   child: MyImage(
                     url: user.profileLogo,
                   ),

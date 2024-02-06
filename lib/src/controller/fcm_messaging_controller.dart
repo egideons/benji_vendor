@@ -10,7 +10,8 @@ class FcmMessagingController extends GetxController {
   }
 
   Future<void> handleFCM() async {
-    final fcmToken = await FirebaseMessaging.instance.getToken();
+    final fcmToken =
+        await FirebaseMessaging.instance.getToken().then((value) => null);
 
     consoleLog("This is the FCM token: $fcmToken");
 

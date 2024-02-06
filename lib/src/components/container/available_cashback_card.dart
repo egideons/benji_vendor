@@ -52,7 +52,7 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
           const Row(
             children: [
               Text(
-                'Shop Reward',
+                'Business Reward',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: kTextBlackColor,
