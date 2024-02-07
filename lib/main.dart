@@ -43,7 +43,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
   Get.put(FcmMessagingController());
-  Get.put(PushNotificationController());
   Get.put(UserController());
   Get.put(CategoryController());
   Get.put(LoginController());
