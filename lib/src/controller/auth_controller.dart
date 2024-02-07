@@ -59,6 +59,7 @@ class AuthController extends GetxController {
       }
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
+      checkAuth();
     } catch (e) {
       log(e.toString());
     }
