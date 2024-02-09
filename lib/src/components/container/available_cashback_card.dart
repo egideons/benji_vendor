@@ -52,7 +52,7 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
           const Row(
             children: [
               Text(
-                'Shop Reward',
+                'Business Reward',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   color: kTextBlackColor,
@@ -102,22 +102,38 @@ class _AvailableCashbackCardState extends State<AvailableCashbackCard> {
                     ],
                   ),
                   TextButton(
-                    onPressed: () async {
-                      final result = await BusinessController.instance
-                          .getVendorBusinessWithdraw(widget.business,
-                              shopReward: controller.balance.value);
-                      await BusinessController.instance
-                          .getVendorBusinessBalance(widget.business.id);
-                      // print(result?.body);
-                      // print(result?.statusCode);
-                      if (result != null && result.statusCode == 200) {
-                        ApiProcessorController.successSnack(
-                            'Withdrawal success');
-                      } else {
-                        ApiProcessorController.errorSnack('Withdrawal failed');
-                      }
-                    },
-                    child: const Text('Withdraw'),
+                    onPressed: doubleFormattedText(controller.balance.value)
+                            .startsWith("0")
+                        ? null
+                        : () async {
+                            final result = await BusinessController.instance
+                                .getVendorBusinessWithdraw(widget.business,
+                                    shopReward: controller.balance.value);
+                            await BusinessController.instance
+                                .getVendorBusinessBalance(widget.business.id);
+                            // print(result?.body);
+                            // print(result?.statusCode);
+                            if (result != null && result.statusCode == 200) {
+                              ApiProcessorController.successSnack(
+                                'Withdrawal request successful',
+                              );
+                            } else {
+                              ApiProcessorController.errorSnack(
+                                'Withdrawal request failed',
+                              );
+                            }
+                          },
+                    child: Text(
+                      'Withdraw',
+                      style: TextStyle(
+                        color: doubleFormattedText(controller.balance.value)
+                                .startsWith("0")
+                            ? null
+                            : kAccentColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
                 ],
               );

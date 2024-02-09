@@ -308,9 +308,12 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                 selectedLogoImage == null
                     ? CircleAvatar(
                         radius: 60,
-                        child: Center(
-                          child: ClipOval(
-                            child: MyImage(url: profileLogo!),
+                        child: ClipOval(
+                          child: Center(
+                            child: MyImage(
+                              url: profileLogo!,
+                              fit: BoxFit.fill,
+                            ),
                           ),
                         ),
                       )
@@ -318,10 +321,13 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                         ? const SizedBox()
                         : CircleAvatar(
                             radius: 60,
-                            child: Center(
-                              child: ClipOval(
+                            child: ClipOval(
+                              child: Center(
                                 child: Image.file(
-                                  File(selectedLogoImage!.path),
+                                  fit: BoxFit.fill,
+                                  File(
+                                    selectedLogoImage!.path,
+                                  ),
                                 ),
                               ),
                             ),
