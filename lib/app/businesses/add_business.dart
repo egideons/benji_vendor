@@ -1169,6 +1169,10 @@ class _AddBusinessState extends State<AddBusiness> {
                           if (accountNumberEC.text.length < 10) {
                             return const Text('');
                           }
+                          accountNameEC.text = controller
+                              .validateAccount.value.responseBody.accountName;
+                          accountTypeEC.text = controller
+                              .validateAccount.value.responseBody.bankCode;
                           return Text(
                             controller.validateAccount.value.requestSuccessful
                                 ? controller.validateAccount.value.responseBody
@@ -1177,8 +1181,8 @@ class _AddBusinessState extends State<AddBusiness> {
                             style: TextStyle(
                               color: controller
                                       .validateAccount.value.requestSuccessful
-                                  ? kAccentColor
-                                  : kSuccessColor,
+                                  ? kSuccessColor
+                                  : kAccentColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),

@@ -11,12 +11,10 @@ import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_blue_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop_down_menu.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
-import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/business_controller.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
-import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
 import 'package:benji_vendor/src/model/business_model.dart';
@@ -1018,116 +1016,124 @@ class _EditBusinessState extends State<EditBusiness> {
                         ),
                         kSizedBox,
                         // account section
-                        const Text(
-                          'Bank Name',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        kHalfSizedBox,
-                        GetBuilder<WithdrawController>(
-                          builder: (controller) {
-                            return InkWell(
-                              onTap: controller.listOfBanks.isEmpty &&
-                                      controller.isLoad.value
-                                  ? null
-                                  : selectBank,
-                              child: MyBlueTextFormField(
-                                controller: accountBankEC,
-                                isEnabled: false,
-                                textInputAction: TextInputAction.next,
-                                focusNode: accountBankFN,
-                                hintText: controller.listOfBanks.isEmpty &&
-                                        controller.isLoad.value
-                                    ? "Loading..."
-                                    : "Select a bank",
-                                suffixIcon: FaIcon(
-                                  FontAwesomeIcons.caretDown,
-                                  size: 20,
-                                  color: kAccentColor,
-                                ),
-                                textInputType: TextInputType.name,
-                                validator: (value) {
-                                  if (value == null || value!.isEmpty) {
-                                    return "Select a bank";
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  setState(() {
-                                    accountBankEC.text = value!;
-                                  });
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                        kSizedBox,
-                        const Text(
-                          'Account Number',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        kHalfSizedBox,
-                        MyTextFormField(
-                          textCapitalization: TextCapitalization.none,
-                          controller: accountNumberEC,
-                          focusNode: accountNumberFN,
-                          hintText: "Enter the account number here",
-                          textInputAction: TextInputAction.next,
-                          textInputType: TextInputType.name,
-                          onChanged: (value) {
-                            if (value.length >= 10) {
-                              WithdrawController.instance.validateBankNumbers(
-                                  accountNumberEC.text, bankCode);
-                            }
-                            setState(() {});
-                          },
-                          validator: (value) {
-                            if (value == null || value!.isEmpty) {
-                              accountNumberFN.requestFocus();
-                              return "Enter the account number";
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            accountNumberEC.text = value!;
-                          },
-                        ),
-                        kSizedBox,
-                        GetBuilder<WithdrawController>(
-                          builder: (controller) {
-                            if (controller.isLoadValidateAccount.value) {
-                              return Text(
-                                'Loading...',
-                                style: TextStyle(
-                                  color: kAccentColor.withOpacity(0.8),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              );
-                            }
-                            if (accountNumberEC.text.length < 10) {
-                              return const Text('');
-                            }
-                            return Text(
-                              controller.validateAccount.value.requestSuccessful
-                                  ? controller.validateAccount.value
-                                      .responseBody.accountName
-                                  : 'Bank details not found',
-                              style: TextStyle(
-                                color: kAccentColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            );
-                          },
-                        ),
-                        kSizedBox,
                         // const Text(
+                        //   'Bank Name',
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w700,
+                        //   ),
+                        // ),
+                        // kHalfSizedBox,
+                        // GetBuilder<WithdrawController>(
+                        //   builder: (controller) {
+                        //     return InkWell(
+                        //       onTap: controller.listOfBanks.isEmpty &&
+                        //               controller.isLoad.value
+                        //           ? null
+                        //           : selectBank,
+                        //       child: MyBlueTextFormField(
+                        //         controller: accountBankEC,
+                        //         isEnabled: false,
+                        //         textInputAction: TextInputAction.next,
+                        //         focusNode: accountBankFN,
+                        //         hintText: controller.listOfBanks.isEmpty &&
+                        //                 controller.isLoad.value
+                        //             ? "Loading..."
+                        //             : "Select a bank",
+                        //         suffixIcon: FaIcon(
+                        //           FontAwesomeIcons.caretDown,
+                        //           size: 20,
+                        //           color: kAccentColor,
+                        //         ),
+                        //         textInputType: TextInputType.name,
+                        //         validator: (value) {
+                        //           if (value == null || value!.isEmpty) {
+                        //             return "Select a bank";
+                        //           }
+                        //           return null;
+                        //         },
+                        //         onSaved: (value) {
+                        //           setState(() {
+                        //             accountBankEC.text = value!;
+                        //           });
+                        //         },
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // kSizedBox,
+                        // const Text(
+                        //   'Account Number',
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w700,
+                        //   ),
+                        // ),
+                        // kHalfSizedBox,
+                        // MyTextFormField(
+                        //   textCapitalization: TextCapitalization.none,
+                        //   controller: accountNumberEC,
+                        //   focusNode: accountNumberFN,
+                        //   hintText: "Enter the account number here",
+                        //   textInputAction: TextInputAction.next,
+                        //   textInputType: TextInputType.name,
+                        //   onChanged: (value) {
+                        //     if (value.length >= 10) {
+                        //       WithdrawController.instance.validateBankNumbers(
+                        //           accountNumberEC.text, bankCode);
+                        //     }
+                        //     setState(() {});
+                        //   },
+                        //   validator: (value) {
+                        //     if (value == null || value!.isEmpty) {
+                        //       accountNumberFN.requestFocus();
+                        //       return "Enter the account number";
+                        //     }
+                        //     return null;
+                        //   },
+                        //   onSaved: (value) {
+                        //     accountNumberEC.text = value!;
+                        //   },
+                        // ),
+                        // kSizedBox,
+                        // GetBuilder<WithdrawController>(
+                        //   builder: (controller) {
+                        //     if (controller.isLoadValidateAccount.value) {
+                        //       return Text(
+                        //         'Loading...',
+                        //         style: TextStyle(
+                        //           color: kAccentColor.withOpacity(0.8),
+                        //           fontSize: 14,
+                        //           fontWeight: FontWeight.w500,
+                        //         ),
+                        //       );
+                        //     }
+                        //     if (accountNumberEC.text.length < 10 ||
+                        //         bankCode == '') {
+                        //       return const Text('');
+                        //     }
+                        //     accountNameEC.text = controller
+                        //         .validateAccount.value.responseBody.accountName;
+                        //     accountTypeEC.text = controller
+                        //         .validateAccount.value.responseBody.bankCode;
+                        //     return Text(
+                        //       controller.validateAccount.value.requestSuccessful
+                        //           ? controller.validateAccount.value
+                        //               .responseBody.accountName
+                        //           : 'Bank details not found',
+                        //       style: TextStyle(
+                        //         color: controller
+                        //                 .validateAccount.value.requestSuccessful
+                        //             ? kSuccessColor
+                        //             : kAccentColor,
+                        //         fontSize: 14,
+                        //         fontWeight: FontWeight.w500,
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // kSizedBox,
+                        // // const Text(
                         //   'Country',
                         //   style: TextStyle(
                         //     fontSize: 16,
