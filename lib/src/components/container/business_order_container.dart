@@ -35,15 +35,18 @@ class BusinessOrderContainer extends StatelessWidget {
         children: [
           Column(
             children: [
-              Container(
+              SizedBox(
                 width: 60,
                 height: 60,
-                decoration: BoxDecoration(
-                  color: kLightGreyColor,
+                // decoration: BoxDecoration(
+                //   color: kLightGreyColor,
+                //   borderRadius: BorderRadius.circular(16),
+                // ),
+                child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                ),
-                child: MyImage(
-                  url: order.client.image,
+                  child: MyImage(
+                    url: order.client.image,
+                  ),
                 ),
               ),
               kHalfSizedBox,

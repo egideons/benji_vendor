@@ -72,6 +72,7 @@ class UserController extends GetxController {
   }
 
   Future<bool> deleteUser() async {
+    await http.post(Uri.parse('$baseURL/auth/logout'), headers: authHeader());
     return await prefs.remove('user');
   }
 

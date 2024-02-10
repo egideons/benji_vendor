@@ -18,15 +18,18 @@ class AuthController extends GetxController {
     return Get.find<AuthController>();
   }
 
-  @override
-  void onInit() {
-    checkAuth();
-    super.onInit();
-  }
-
   Future checkAuth() async {
     if (await isAuthorized() == null) {
       ApiProcessorController.errorSnack('Please connect to the internet');
+      Get.offAll(
+        () => const Login(),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Login",
+        predicate: (route) => false,
+        popGesture: false,
+        transition: Transition.cupertinoDialog,
+      );
       return;
     }
     try {
@@ -59,15 +62,41 @@ class AuthController extends GetxController {
       }
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
-      checkAuth();
+      Get.offAll(
+        () => const Login(),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Login",
+        predicate: (route) => false,
+        popGesture: false,
+        transition: Transition.cupertinoDialog,
+      );
     } catch (e) {
-      log(e.toString());
+      ApiProcessorController.errorSnack("Something went wrong");
+      Get.offAll(
+        () => const Login(),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Login",
+        predicate: (route) => false,
+        popGesture: false,
+        transition: Transition.cupertinoDialog,
+      );
     }
   }
 
   Future checkIfAuthorized() async {
     if (await isAuthorized() == null) {
       ApiProcessorController.errorSnack('Connect to the internet');
+      Get.offAll(
+        () => const Login(),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Login",
+        predicate: (route) => false,
+        popGesture: false,
+        transition: Transition.cupertinoDialog,
+      );
       return;
     }
     try {
@@ -92,8 +121,26 @@ class AuthController extends GetxController {
       }
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
+      Get.offAll(
+        () => const Login(),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Login",
+        predicate: (route) => false,
+        popGesture: false,
+        transition: Transition.cupertinoDialog,
+      );
     } catch (e) {
-      consoleLog(e.toString());
+      ApiProcessorController.errorSnack("Something went wrong");
+      Get.offAll(
+        () => const Login(),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Login",
+        predicate: (route) => false,
+        popGesture: false,
+        transition: Transition.cupertinoDialog,
+      );
     }
   }
 }

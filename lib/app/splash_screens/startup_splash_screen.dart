@@ -17,10 +17,11 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('in the startup splash');
     withdraw.listBanks();
     var size = MediaQuery.of(context).size;
     return GetBuilder<AuthController>(
-      init: AuthController(),
+      initState: (state) => AuthController.instance.checkAuth(),
       builder: (controller) {
         return Scaffold(
           body: ListView(

@@ -58,7 +58,9 @@ class _BusinessProductContainerState extends State<BusinessProductContainer> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
               ),
-              child: MyImage(url: widget.product.productImage),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: MyImage(url: widget.product.productImage)),
             ),
             kHalfWidthSizedBox,
             Column(

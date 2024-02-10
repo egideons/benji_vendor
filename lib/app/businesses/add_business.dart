@@ -620,10 +620,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                   ),
                                 ),
                                 child: Center(
-                                  child: FaIcon(
-                                    FontAwesomeIcons.solidImages,
-                                    color: kAccentColor,
-                                  ),
+                                  child: Image.network(selectedLogoImage!.path),
                                 ),
                               )
                             : Container(
@@ -711,10 +708,8 @@ class _AddBusinessState extends State<AddBusiness> {
                                   ),
                                 ),
                                 child: Center(
-                                  child: FaIcon(
-                                    FontAwesomeIcons.solidImages,
-                                    color: kAccentColor,
-                                  ),
+                                  child:
+                                      Image.network(selectedCoverImage!.path),
                                 ),
                               )
                             : Container(

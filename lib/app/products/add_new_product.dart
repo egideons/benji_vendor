@@ -298,7 +298,17 @@ class _AddProductState extends State<AddProduct> {
                                   "assets/icons/image-upload.png",
                                 )
                               : kIsWeb
-                                  ? const SizedBox()
+                                  ? GridTile(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: Image.network(
+                                                    selectedImage!.path)
+                                                .image,
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   : GridTile(
                                       child: Container(
                                         decoration: BoxDecoration(

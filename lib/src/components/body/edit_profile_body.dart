@@ -318,7 +318,15 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                         ),
                       )
                     : kIsWeb
-                        ? const SizedBox()
+                        ? CircleAvatar(
+                            radius: 60,
+                            child: ClipOval(
+                              child: Center(
+                                child: Image.network(selectedLogoImage!.path,
+                                    fit: BoxFit.fill),
+                              ),
+                            ),
+                          )
                         : CircleAvatar(
                             radius: 60,
                             child: ClipOval(

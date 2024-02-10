@@ -305,8 +305,8 @@ class _ViewProductState extends State<ViewProduct> {
                 itemCount: widget.product.productImage.length,
                 itemBuilder:
                     (BuildContext context, int itemIndex, int pageViewIndex) =>
-                        Padding(
-                  padding: const EdgeInsets.all(10),
+                        SizedBox(
+                  // padding: const EdgeInsets.all(10),
                   child: Container(
                     width: media.width,
                     decoration: const ShapeDecoration(

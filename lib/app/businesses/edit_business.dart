@@ -260,14 +260,14 @@ class _EditBusinessState extends State<EditBusiness> {
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
-    if (selectedCoverImage == null) {
-      ApiProcessorController.errorSnack("Please select a shop cover");
-      return;
-    }
-    if (selectedLogoImage == null) {
-      ApiProcessorController.errorSnack("Please select a shop image");
-      return;
-    }
+    // if (selectedCoverImage == null) {
+    //   ApiProcessorController.errorSnack("Please select a shop cover");
+    //   return;
+    // }
+    // if (selectedLogoImage == null) {
+    //   ApiProcessorController.errorSnack("Please select a shop image");
+    //   return;
+    // }
     if (shopType == null &&
         vendorBusinessTypeEC.text.isEmpty &&
         shopType!.isEmpty) {
@@ -299,6 +299,8 @@ class _EditBusinessState extends State<EditBusiness> {
     consoleLog("This is the data: $data");
 
     consoleLog("shop_image: ${selectedLogoImage?.path}");
+    print(
+        '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}');
     await FormController.instance.postAuthstream2(
         '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}',
         data,
@@ -591,148 +593,143 @@ class _EditBusinessState extends State<EditBusiness> {
                 padding: const EdgeInsets.all(kDefaultPadding / 2),
                 borderType: BorderType.RRect,
                 radius: const Radius.circular(20),
-                child: Column(
-                  children: [
-                    selectedLogoImage == null
-                        ? Container(
-                            padding: const EdgeInsets.all(kDefaultPadding),
-                            decoration: const ShapeDecoration(
-                              shape: CircleBorder(
-                                side: BorderSide(
-                                  width: 0.50,
-                                  color: kGreyColor1,
-                                ),
-                              ),
-                            ),
-                            child: Center(
-                              child: MyImage(url: businessLogo),
-                            ),
-                          )
-                        : kIsWeb
-                            ? const SizedBox()
-                            : Container(
-                                height: 200,
-                                decoration: ShapeDecoration(
-                                  image: DecorationImage(
-                                    image: FileImage(
-                                        File(selectedLogoImage!.path)),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                      width: 0.50,
-                                      color: Color(0xFFE6E6E6),
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
-                              ),
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          elevation: 20,
-                          barrierColor: kBlackColor.withOpacity(0.8),
-                          showDragHandle: true,
-                          useSafeArea: true,
-                          isDismissible: true,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(kDefaultPadding),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(kDefaultPadding),
+                        decoration: const ShapeDecoration(
+                          shape: CircleBorder(
+                            side: BorderSide(
+                              width: 0.50,
+                              color: kGreyColor1,
                             ),
                           ),
-                          enableDrag: true,
-                          builder: ((builder) => uploadBusinessLogo()),
-                        );
-                      },
-                      splashColor: kAccentColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          'Upload business logo',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
+                        ),
+                        child: CircleAvatar(
+                          radius: 60,
+                          child: ClipOval(
+                            child: Center(
+                              child: selectedLogoImage == null
+                                  ? MyImage(
+                                      url: businessLogo,
+                                      fit: BoxFit.fill,
+                                    )
+                                  : kIsWeb
+                                      ? Image.network(selectedLogoImage!.path)
+                                      : Image.file(
+                                          fit: BoxFit.fill,
+                                          File(
+                                            selectedLogoImage!.path,
+                                          ),
+                                        ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    kSizedBox,
-                    selectedCoverImage == null
-                        ? Container(
-                            padding: const EdgeInsets.all(20),
-                            height: deviceType(media.width) > 2 ? 200 : 120,
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE6E6E6),
-                                ),
-                                borderRadius: BorderRadius.circular(10),
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            elevation: 20,
+                            barrierColor: kBlackColor.withOpacity(0.8),
+                            showDragHandle: true,
+                            useSafeArea: true,
+                            isDismissible: true,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(kDefaultPadding),
                               ),
                             ),
-                            child: Center(
-                              child: MyImage(
-                                url: businessCoverImage,
-                              ),
+                            enableDrag: true,
+                            builder: ((builder) => uploadBusinessLogo()),
+                          );
+                        },
+                        splashColor: kAccentColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Upload business logo',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: kAccentColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
                             ),
-                          )
-                        : Container(
-                            height: 200,
-                            decoration: ShapeDecoration(
-                              image: DecorationImage(
-                                image:
-                                    FileImage(File(selectedCoverImage!.path)),
-                                fit: BoxFit.cover,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE6E6E6),
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          elevation: 20,
-                          barrierColor: kBlackColor.withOpacity(0.8),
-                          showDragHandle: true,
-                          useSafeArea: true,
-                          isDismissible: true,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(kDefaultPadding),
-                            ),
-                          ),
-                          enableDrag: true,
-                          builder: ((builder) => uploadBusinessCoverImage()),
-                        );
-                      },
-                      splashColor: kAccentColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          'Upload business image',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                      kSizedBox,
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                              width: 0.50,
+                              color: Color(0xFFE6E6E6),
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 60,
+                          child: ClipOval(
+                            child: Center(
+                              child: selectedCoverImage == null
+                                  ? MyImage(
+                                      url: businessCoverImage,
+                                    )
+                                  : kIsWeb
+                                      ? Image.network(selectedCoverImage!.path)
+                                      : Image.file(
+                                          fit: BoxFit.fill,
+                                          File(
+                                            selectedLogoImage!.path,
+                                          ),
+                                        ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            elevation: 20,
+                            barrierColor: kBlackColor.withOpacity(0.8),
+                            showDragHandle: true,
+                            useSafeArea: true,
+                            isDismissible: true,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(kDefaultPadding),
+                              ),
+                            ),
+                            enableDrag: true,
+                            builder: ((builder) => uploadBusinessCoverImage()),
+                          );
+                        },
+                        splashColor: kAccentColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Upload business image',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: kAccentColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               kSizedBox,

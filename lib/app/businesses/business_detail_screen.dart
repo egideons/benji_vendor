@@ -235,6 +235,14 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                           decoration: BoxDecoration(color: kLightGreyColor),
                           child: Center(
                             child: MyImage(
+                              height: deviceType(media.width) > 3 &&
+                                      deviceType(media.width) < 5
+                                  ? media.height * 0.4
+                                  : deviceType(media.width) > 2
+                                      ? media.height * 0.415
+                                      : media.height * 0.28,
+                              width: media.width,
+                              fit: BoxFit.cover,
                               url: widget.business.coverImage,
                             ),
                           ),
@@ -436,19 +444,23 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                             ? media.height * 0.15
                             : deviceType(media.width) > 2
                                 ? media.height * 0.15
-                                : media.height * 0.08,
+                                : media.height * 0.07,
                         left: deviceType(media.width) > 2
                             ? (media.width / 2) - (126 / 2)
                             : (media.width / 2) - (100 / 2),
                         child: SizedBox(
-                          width: deviceType(media.width) > 2 ? 126 : 100,
-                          height: deviceType(media.width) > 2 ? 126 : 100,
-                          child: Center(
+                          child: CircleAvatar(
+                            radius: deviceType(media.width) > 2 ? 63 : 50,
                             child: ClipOval(
-                              // backgroundColor: kLightGreyColor,
-                              child: MyImage(
-                                url: widget.business.shopImage,
-                                height: 70,
+                              child: Center(
+                                child: MyImage(
+                                  height:
+                                      deviceType(media.width) > 2 ? 126 : 100,
+                                  width:
+                                      deviceType(media.width) > 2 ? 126 : 100,
+                                  url: widget.business.shopImage,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),

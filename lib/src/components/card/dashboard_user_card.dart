@@ -44,6 +44,8 @@ class DashboardUserCard extends StatelessWidget {
               child: ClipOval(
                 child: Center(
                   child: MyImage(
+                    width: deviceType(media.width) >= 2 ? 180 : 100,
+                    height: deviceType(media.width) >= 2 ? 180 : 100,
                     fit: BoxFit.fill,
                     url: user.profileLogo,
                   ),
