@@ -11,12 +11,10 @@ import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_blue_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_item_drop_down_menu.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
-import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/business_controller.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
-import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
 import 'package:benji_vendor/src/model/business_model.dart';
@@ -262,14 +260,14 @@ class _EditBusinessState extends State<EditBusiness> {
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
-    if (selectedCoverImage == null) {
-      ApiProcessorController.errorSnack("Please select a shop cover");
-      return;
-    }
-    if (selectedLogoImage == null) {
-      ApiProcessorController.errorSnack("Please select a shop image");
-      return;
-    }
+    // if (selectedCoverImage == null) {
+    //   ApiProcessorController.errorSnack("Please select a shop cover");
+    //   return;
+    // }
+    // if (selectedLogoImage == null) {
+    //   ApiProcessorController.errorSnack("Please select a shop image");
+    //   return;
+    // }
     if (shopType == null &&
         vendorBusinessTypeEC.text.isEmpty &&
         shopType!.isEmpty) {
@@ -301,6 +299,8 @@ class _EditBusinessState extends State<EditBusiness> {
     consoleLog("This is the data: $data");
 
     consoleLog("shop_image: ${selectedLogoImage?.path}");
+    print(
+        '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}');
     await FormController.instance.postAuthstream2(
         '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}',
         data,
@@ -593,148 +593,149 @@ class _EditBusinessState extends State<EditBusiness> {
                 padding: const EdgeInsets.all(kDefaultPadding / 2),
                 borderType: BorderType.RRect,
                 radius: const Radius.circular(20),
-                child: Column(
-                  children: [
-                    selectedLogoImage == null
-                        ? Container(
-                            padding: const EdgeInsets.all(kDefaultPadding),
-                            decoration: const ShapeDecoration(
-                              shape: CircleBorder(
-                                side: BorderSide(
-                                  width: 0.50,
-                                  color: kGreyColor1,
-                                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(kDefaultPadding),
+                        decoration: const ShapeDecoration(
+                          shape: CircleBorder(
+                            side: BorderSide(
+                              width: 0.50,
+                              color: kGreyColor1,
+                            ),
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 60,
+                          child: ClipOval(
+                            child: Center(
+                              child: selectedLogoImage == null
+                                  ? MyImage(
+                                      height: 120,
+                                      width: 120,
+                                      url: businessLogo,
+                                      fit: BoxFit.fill,
+                                    )
+                                  : kIsWeb
+                                      ? Image.network(
+                                          selectedLogoImage!.path,
+                                          height: 120,
+                                          width: 120,
+                                        )
+                                      : Image.file(
+                                          height: 120,
+                                          width: 120,
+                                          fit: BoxFit.fill,
+                                          File(
+                                            selectedLogoImage!.path,
+                                          ),
+                                        ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            elevation: 20,
+                            barrierColor: kBlackColor.withOpacity(0.8),
+                            showDragHandle: true,
+                            useSafeArea: true,
+                            isDismissible: true,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(kDefaultPadding),
                               ),
                             ),
-                            child: Center(
-                              child: MyImage(url: businessLogo),
+                            enableDrag: true,
+                            builder: ((builder) => uploadBusinessLogo()),
+                          );
+                        },
+                        splashColor: kAccentColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Upload business logo',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: kAccentColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
                             ),
-                          )
-                        : kIsWeb
-                            ? const SizedBox()
-                            : Container(
-                                height: 200,
-                                decoration: ShapeDecoration(
-                                  image: DecorationImage(
-                                    image: FileImage(
-                                        File(selectedLogoImage!.path)),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                      width: 0.50,
-                                      color: Color(0xFFE6E6E6),
+                          ),
+                        ),
+                      ),
+                      kSizedBox,
+                      Container(
+                        height: 200,
+                        width: media.width - 100,
+                        padding: const EdgeInsets.all(20),
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            side: const BorderSide(
+                              width: 0.50,
+                              color: Color(0xFFE6E6E6),
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: selectedCoverImage == null
+                              ? MyImage(
+                                  url: businessCoverImage,
+                                )
+                              : kIsWeb
+                                  ? Image.network(selectedCoverImage!.path)
+                                  : Image.file(
+                                      fit: BoxFit.fill,
+                                      File(
+                                        selectedLogoImage!.path,
+                                      ),
                                     ),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            elevation: 20,
+                            barrierColor: kBlackColor.withOpacity(0.8),
+                            showDragHandle: true,
+                            useSafeArea: true,
+                            isDismissible: true,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(kDefaultPadding),
                               ),
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          elevation: 20,
-                          barrierColor: kBlackColor.withOpacity(0.8),
-                          showDragHandle: true,
-                          useSafeArea: true,
-                          isDismissible: true,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(kDefaultPadding),
                             ),
-                          ),
-                          enableDrag: true,
-                          builder: ((builder) => uploadBusinessLogo()),
-                        );
-                      },
-                      splashColor: kAccentColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          'Upload business logo',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
+                            enableDrag: true,
+                            builder: ((builder) => uploadBusinessCoverImage()),
+                          );
+                        },
+                        splashColor: kAccentColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Upload business image',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: kAccentColor,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    kSizedBox,
-                    selectedCoverImage == null
-                        ? Container(
-                            padding: const EdgeInsets.all(20),
-                            height: deviceType(media.width) > 2 ? 200 : 120,
-                            decoration: ShapeDecoration(
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE6E6E6),
-                                ),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            child: Center(
-                              child: MyImage(
-                                url: businessCoverImage,
-                              ),
-                            ),
-                          )
-                        : Container(
-                            height: 200,
-                            decoration: ShapeDecoration(
-                              image: DecorationImage(
-                                image:
-                                    FileImage(File(selectedCoverImage!.path)),
-                                fit: BoxFit.cover,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                side: const BorderSide(
-                                  width: 0.50,
-                                  color: Color(0xFFE6E6E6),
-                                ),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
-                    InkWell(
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          elevation: 20,
-                          barrierColor: kBlackColor.withOpacity(0.8),
-                          showDragHandle: true,
-                          useSafeArea: true,
-                          isDismissible: true,
-                          isScrollControlled: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(kDefaultPadding),
-                            ),
-                          ),
-                          enableDrag: true,
-                          builder: ((builder) => uploadBusinessCoverImage()),
-                        );
-                      },
-                      splashColor: kAccentColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          'Upload business image',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               kSizedBox,
@@ -1018,116 +1019,124 @@ class _EditBusinessState extends State<EditBusiness> {
                         ),
                         kSizedBox,
                         // account section
-                        const Text(
-                          'Bank Name',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        kHalfSizedBox,
-                        GetBuilder<WithdrawController>(
-                          builder: (controller) {
-                            return InkWell(
-                              onTap: controller.listOfBanks.isEmpty &&
-                                      controller.isLoad.value
-                                  ? null
-                                  : selectBank,
-                              child: MyBlueTextFormField(
-                                controller: accountBankEC,
-                                isEnabled: false,
-                                textInputAction: TextInputAction.next,
-                                focusNode: accountBankFN,
-                                hintText: controller.listOfBanks.isEmpty &&
-                                        controller.isLoad.value
-                                    ? "Loading..."
-                                    : "Select a bank",
-                                suffixIcon: FaIcon(
-                                  FontAwesomeIcons.caretDown,
-                                  size: 20,
-                                  color: kAccentColor,
-                                ),
-                                textInputType: TextInputType.name,
-                                validator: (value) {
-                                  if (value == null || value!.isEmpty) {
-                                    return "Select a bank";
-                                  }
-                                  return null;
-                                },
-                                onSaved: (value) {
-                                  setState(() {
-                                    accountBankEC.text = value!;
-                                  });
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                        kSizedBox,
-                        const Text(
-                          'Account Number',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        kHalfSizedBox,
-                        MyTextFormField(
-                          textCapitalization: TextCapitalization.none,
-                          controller: accountNumberEC,
-                          focusNode: accountNumberFN,
-                          hintText: "Enter the account number here",
-                          textInputAction: TextInputAction.next,
-                          textInputType: TextInputType.name,
-                          onChanged: (value) {
-                            if (value.length >= 10) {
-                              WithdrawController.instance.validateBankNumbers(
-                                  accountNumberEC.text, bankCode);
-                            }
-                            setState(() {});
-                          },
-                          validator: (value) {
-                            if (value == null || value!.isEmpty) {
-                              accountNumberFN.requestFocus();
-                              return "Enter the account number";
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            accountNumberEC.text = value!;
-                          },
-                        ),
-                        kSizedBox,
-                        GetBuilder<WithdrawController>(
-                          builder: (controller) {
-                            if (controller.isLoadValidateAccount.value) {
-                              return Text(
-                                'Loading...',
-                                style: TextStyle(
-                                  color: kAccentColor.withOpacity(0.8),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              );
-                            }
-                            if (accountNumberEC.text.length < 10) {
-                              return const Text('');
-                            }
-                            return Text(
-                              controller.validateAccount.value.requestSuccessful
-                                  ? controller.validateAccount.value
-                                      .responseBody.accountName
-                                  : 'Bank details not found',
-                              style: TextStyle(
-                                color: kAccentColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            );
-                          },
-                        ),
-                        kSizedBox,
                         // const Text(
+                        //   'Bank Name',
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w700,
+                        //   ),
+                        // ),
+                        // kHalfSizedBox,
+                        // GetBuilder<WithdrawController>(
+                        //   builder: (controller) {
+                        //     return InkWell(
+                        //       onTap: controller.listOfBanks.isEmpty &&
+                        //               controller.isLoad.value
+                        //           ? null
+                        //           : selectBank,
+                        //       child: MyBlueTextFormField(
+                        //         controller: accountBankEC,
+                        //         isEnabled: false,
+                        //         textInputAction: TextInputAction.next,
+                        //         focusNode: accountBankFN,
+                        //         hintText: controller.listOfBanks.isEmpty &&
+                        //                 controller.isLoad.value
+                        //             ? "Loading..."
+                        //             : "Select a bank",
+                        //         suffixIcon: FaIcon(
+                        //           FontAwesomeIcons.caretDown,
+                        //           size: 20,
+                        //           color: kAccentColor,
+                        //         ),
+                        //         textInputType: TextInputType.name,
+                        //         validator: (value) {
+                        //           if (value == null || value!.isEmpty) {
+                        //             return "Select a bank";
+                        //           }
+                        //           return null;
+                        //         },
+                        //         onSaved: (value) {
+                        //           setState(() {
+                        //             accountBankEC.text = value!;
+                        //           });
+                        //         },
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // kSizedBox,
+                        // const Text(
+                        //   'Account Number',
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.w700,
+                        //   ),
+                        // ),
+                        // kHalfSizedBox,
+                        // MyTextFormField(
+                        //   textCapitalization: TextCapitalization.none,
+                        //   controller: accountNumberEC,
+                        //   focusNode: accountNumberFN,
+                        //   hintText: "Enter the account number here",
+                        //   textInputAction: TextInputAction.next,
+                        //   textInputType: TextInputType.name,
+                        //   onChanged: (value) {
+                        //     if (value.length >= 10) {
+                        //       WithdrawController.instance.validateBankNumbers(
+                        //           accountNumberEC.text, bankCode);
+                        //     }
+                        //     setState(() {});
+                        //   },
+                        //   validator: (value) {
+                        //     if (value == null || value!.isEmpty) {
+                        //       accountNumberFN.requestFocus();
+                        //       return "Enter the account number";
+                        //     }
+                        //     return null;
+                        //   },
+                        //   onSaved: (value) {
+                        //     accountNumberEC.text = value!;
+                        //   },
+                        // ),
+                        // kSizedBox,
+                        // GetBuilder<WithdrawController>(
+                        //   builder: (controller) {
+                        //     if (controller.isLoadValidateAccount.value) {
+                        //       return Text(
+                        //         'Loading...',
+                        //         style: TextStyle(
+                        //           color: kAccentColor.withOpacity(0.8),
+                        //           fontSize: 14,
+                        //           fontWeight: FontWeight.w500,
+                        //         ),
+                        //       );
+                        //     }
+                        //     if (accountNumberEC.text.length < 10 ||
+                        //         bankCode == '') {
+                        //       return const Text('');
+                        //     }
+                        //     accountNameEC.text = controller
+                        //         .validateAccount.value.responseBody.accountName;
+                        //     accountTypeEC.text = controller
+                        //         .validateAccount.value.responseBody.bankCode;
+                        //     return Text(
+                        //       controller.validateAccount.value.requestSuccessful
+                        //           ? controller.validateAccount.value
+                        //               .responseBody.accountName
+                        //           : 'Bank details not found',
+                        //       style: TextStyle(
+                        //         color: controller
+                        //                 .validateAccount.value.requestSuccessful
+                        //             ? kSuccessColor
+                        //             : kAccentColor,
+                        //         fontSize: 14,
+                        //         fontWeight: FontWeight.w500,
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        // kSizedBox,
+                        // // const Text(
                         //   'Country',
                         //   style: TextStyle(
                         //     fontSize: 16,

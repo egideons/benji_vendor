@@ -53,8 +53,11 @@ class _BusinessContainerState extends State<BusinessContainer> {
               width: 120,
               decoration: ShapeDecoration(
                   color: kLightGreyColor, shape: const CircleBorder()),
-              child: MyImage(
-                url: widget.business.shopImage,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: MyImage(
+                  url: widget.business.shopImage,
+                ),
               ),
             ),
             kHalfWidthSizedBox,

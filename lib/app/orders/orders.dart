@@ -37,6 +37,8 @@ class _OrdersState extends State<Orders> {
     scrollController.addListener(() => OrderController.instance
         .scrollListener(scrollController, widget.business.id));
     scrollController.addListener(_scrollListener);
+
+    OrderController.instance.setStatus(widget.business.id);
   }
 
   @override
@@ -247,7 +249,7 @@ class _OrdersState extends State<Orders> {
                                                 .vendorsOrderList[index]
                                                 .deliveryStatus ==
                                             "COMP"
-                                        ? "Completeds"
+                                        ? "Completed"
                                         : controller.vendorsOrderList[index]
                                                     .deliveryStatus ==
                                                 "dispatched"

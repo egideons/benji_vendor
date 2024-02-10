@@ -303,28 +303,27 @@ class _EditProductState extends State<EditProduct> {
                             child: MyImage(url: productImages!),
                           ),
                         )
-                      : kIsWeb
-                          ? const SizedBox()
-                          : GridTile(
-                              child: DottedBorder(
-                                color: kLightGreyColor,
-                                borderPadding: const EdgeInsets.all(3),
-                                padding:
-                                    const EdgeInsets.all(kDefaultPadding / 2),
-                                borderType: BorderType.RRect,
-                                radius: const Radius.circular(20),
-                                child: Container(
-                                  width: media.width,
-                                  height: 144,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image:
-                                          FileImage(File(selectedImages!.path)),
-                                    ),
-                                  ),
+                      : GridTile(
+                          child: DottedBorder(
+                            color: kLightGreyColor,
+                            borderPadding: const EdgeInsets.all(3),
+                            padding: const EdgeInsets.all(kDefaultPadding / 2),
+                            borderType: BorderType.RRect,
+                            radius: const Radius.circular(20),
+                            child: Container(
+                              width: media.width,
+                              height: 144,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: kIsWeb
+                                      ? Image.network(selectedImages!.path)
+                                          .image
+                                      : FileImage(File(selectedImages!.path)),
                                 ),
                               ),
                             ),
+                          ),
+                        ),
                   kHalfSizedBox,
                   InkWell(
                     onTap: () {

@@ -589,24 +589,40 @@ class _AddBusinessState extends State<AddBusiness> {
                   children: [
                     selectedLogoImage == null
                         ? Container(
-                            padding: const EdgeInsets.all(kDefaultPadding),
-                            decoration: const ShapeDecoration(
-                              shape: CircleBorder(
-                                side: BorderSide(
+                            padding: const EdgeInsets.all(20),
+                            height: deviceType(media.width) > 2 ? 200 : 120,
+                            decoration: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
                                   width: 0.50,
-                                  color: kGreyColor1,
+                                  color: Color(0xFFE6E6E6),
                                 ),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                             ),
                             child: Center(
-                              child: FaIcon(
-                                FontAwesomeIcons.image,
-                                color: kAccentColor,
+                              child: Image.asset(
+                                "assets/icons/image-upload.png",
                               ),
                             ),
                           )
                         : kIsWeb
-                            ? const SizedBox()
+                            ? Container(
+                                padding: const EdgeInsets.all(20),
+                                height: deviceType(media.width) > 2 ? 200 : 120,
+                                decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                      width: 0.50,
+                                      color: Color(0xFFE6E6E6),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Image.network(selectedLogoImage!.path),
+                                ),
+                              )
                             : Container(
                                 height: 200,
                                 decoration: ShapeDecoration(
@@ -673,14 +689,29 @@ class _AddBusinessState extends State<AddBusiness> {
                               ),
                             ),
                             child: Center(
-                              child: FaIcon(
-                                FontAwesomeIcons.solidImages,
-                                color: kAccentColor,
+                              child: Image.asset(
+                                "assets/icons/image-upload.png",
                               ),
                             ),
                           )
                         : kIsWeb
-                            ? const SizedBox()
+                            ? Container(
+                                padding: const EdgeInsets.all(20),
+                                height: deviceType(media.width) > 2 ? 200 : 120,
+                                decoration: ShapeDecoration(
+                                  shape: RoundedRectangleBorder(
+                                    side: const BorderSide(
+                                      width: 0.50,
+                                      color: Color(0xFFE6E6E6),
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Center(
+                                  child:
+                                      Image.network(selectedCoverImage!.path),
+                                ),
+                              )
                             : Container(
                                 height: 200,
                                 decoration: ShapeDecoration(
@@ -1133,6 +1164,10 @@ class _AddBusinessState extends State<AddBusiness> {
                           if (accountNumberEC.text.length < 10) {
                             return const Text('');
                           }
+                          accountNameEC.text = controller
+                              .validateAccount.value.responseBody.accountName;
+                          accountTypeEC.text = controller
+                              .validateAccount.value.responseBody.bankCode;
                           return Text(
                             controller.validateAccount.value.requestSuccessful
                                 ? controller.validateAccount.value.responseBody
@@ -1141,8 +1176,8 @@ class _AddBusinessState extends State<AddBusiness> {
                             style: TextStyle(
                               color: controller
                                       .validateAccount.value.requestSuccessful
-                                  ? kAccentColor
-                                  : kSuccessColor,
+                                  ? kSuccessColor
+                                  : kAccentColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
