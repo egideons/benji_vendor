@@ -305,41 +305,35 @@ class _EditProfileBodyState extends State<EditProfileBody> {
           children: [
             Column(
               children: [
-                selectedLogoImage == null
-                    ? CircleAvatar(
-                        radius: 60,
-                        child: ClipOval(
-                          child: Center(
-                            child: MyImage(
+                CircleAvatar(
+                  radius: 60,
+                  child: ClipOval(
+                    child: Center(
+                      child: selectedLogoImage == null
+                          ? MyImage(
+                              height: 120,
+                              width: 120,
                               url: profileLogo!,
                               fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      )
-                    : kIsWeb
-                        ? CircleAvatar(
-                            radius: 60,
-                            child: ClipOval(
-                              child: Center(
-                                child: Image.network(selectedLogoImage!.path,
-                                    fit: BoxFit.fill),
-                              ),
-                            ),
-                          )
-                        : CircleAvatar(
-                            radius: 60,
-                            child: ClipOval(
-                              child: Center(
-                                child: Image.file(
+                            )
+                          : kIsWeb
+                              ? Image.network(
+                                  selectedLogoImage!.path,
+                                  fit: BoxFit.fill,
+                                  height: 120,
+                                  width: 120,
+                                )
+                              : Image.file(
+                                  height: 120,
+                                  width: 120,
                                   fit: BoxFit.fill,
                                   File(
                                     selectedLogoImage!.path,
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
+                    ),
+                  ),
+                ),
                 kHalfSizedBox,
                 InkWell(
                   onTap: () {

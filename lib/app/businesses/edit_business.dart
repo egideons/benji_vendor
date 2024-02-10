@@ -613,12 +613,20 @@ class _EditBusinessState extends State<EditBusiness> {
                             child: Center(
                               child: selectedLogoImage == null
                                   ? MyImage(
+                                      height: 120,
+                                      width: 120,
                                       url: businessLogo,
                                       fit: BoxFit.fill,
                                     )
                                   : kIsWeb
-                                      ? Image.network(selectedLogoImage!.path)
+                                      ? Image.network(
+                                          selectedLogoImage!.path,
+                                          height: 120,
+                                          width: 120,
+                                        )
                                       : Image.file(
+                                          height: 120,
+                                          width: 120,
                                           fit: BoxFit.fill,
                                           File(
                                             selectedLogoImage!.path,
@@ -664,6 +672,8 @@ class _EditBusinessState extends State<EditBusiness> {
                       ),
                       kSizedBox,
                       Container(
+                        height: 200,
+                        width: media.width - 100,
                         padding: const EdgeInsets.all(20),
                         decoration: ShapeDecoration(
                           shape: RoundedRectangleBorder(
@@ -674,24 +684,20 @@ class _EditBusinessState extends State<EditBusiness> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: CircleAvatar(
-                          radius: 60,
-                          child: ClipOval(
-                            child: Center(
-                              child: selectedCoverImage == null
-                                  ? MyImage(
-                                      url: businessCoverImage,
-                                    )
-                                  : kIsWeb
-                                      ? Image.network(selectedCoverImage!.path)
-                                      : Image.file(
-                                          fit: BoxFit.fill,
-                                          File(
-                                            selectedLogoImage!.path,
-                                          ),
-                                        ),
-                            ),
-                          ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: selectedCoverImage == null
+                              ? MyImage(
+                                  url: businessCoverImage,
+                                )
+                              : kIsWeb
+                                  ? Image.network(selectedCoverImage!.path)
+                                  : Image.file(
+                                      fit: BoxFit.fill,
+                                      File(
+                                        selectedLogoImage!.path,
+                                      ),
+                                    ),
                         ),
                       ),
                       InkWell(
