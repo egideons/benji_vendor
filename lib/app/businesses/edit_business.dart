@@ -260,14 +260,20 @@ class _EditBusinessState extends State<EditBusiness> {
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
-    // if (selectedCoverImage == null) {
-    //   ApiProcessorController.errorSnack("Please select a shop cover");
-    //   return;
-    // }
-    // if (selectedLogoImage == null) {
-    //   ApiProcessorController.errorSnack("Please select a shop image");
-    //   return;
-    // }
+    if (selectedCoverImage != null) {
+      await FormController.instance.uploadImage(
+        '${Api.baseUrl}/vendors/changeVendorbusinessimages/${widget.business.vendorOwner.id}/${widget.business.id}?type=cover',
+        {'image': selectedCoverImage},
+        'editBusinessImageCover',
+      );
+    }
+    if (selectedLogoImage != null) {
+      await FormController.instance.uploadImage(
+        '${Api.baseUrl}/vendors/changeVendorbusinessimages/${widget.business.vendorOwner.id}/${widget.business.id}?type=shop',
+        {'image': selectedLogoImage},
+        'editBusinessImageLogo',
+      );
+    }
     if (shopType == null &&
         vendorBusinessTypeEC.text.isEmpty &&
         shopType!.isEmpty) {
@@ -293,7 +299,7 @@ class _EditBusinessState extends State<EditBusiness> {
       "satClosingHours": vendorSatClosingHoursEC.text,
       "sunWeekOpeningHours": vendorSunOpeningHoursEC.text,
       "sunWeekClosingHours": vendorSunClosingHoursEC.text,
-      "description": businessBioEC.text,
+      "businessBio": businessBioEC.text,
       "shop_type": vendorBusinessTypeEC.text,
     };
     consoleLog("This is the data: $data");
@@ -301,10 +307,10 @@ class _EditBusinessState extends State<EditBusiness> {
     consoleLog("shop_image: ${selectedLogoImage?.path}");
     print(
         '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}');
-    await FormController.instance.postAuthstream2(
+
+    await FormController.instance.postAuth(
         '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}',
         data,
-        {'shop_image': selectedLogoImage, 'coverImage': selectedCoverImage},
         'changeVendorBusinessProfile');
     if (FormController.instance.status.toString().startsWith('2')) {
       await PushNotificationController.showNotification(
