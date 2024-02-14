@@ -21,10 +21,17 @@ class MyImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
-      imageUrl: url == null ? '' : baseImage + url!,
+      imageUrl: url == null
+          ? ''
+          : url!.startsWith("https")
+              ? url!
+              : baseImage + url!,
       height: height,
       width: width,
       fit: fit,
+      fadeInCurve: Curves.easeIn,
+      fadeOutCurve: Curves.easeInOut,
+      filterQuality: FilterQuality.high,
       alignment: alignment,
       progressIndicatorBuilder: (context, url, downloadProgress) => Center(
           child: CupertinoActivityIndicator(

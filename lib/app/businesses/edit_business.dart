@@ -739,7 +739,7 @@ class _EditBusinessState extends State<EditBusiness> {
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            'Upload business image',
+                            'Upload cover image',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: kAccentColor,
