@@ -694,14 +694,23 @@ class _EditBusinessState extends State<EditBusiness> {
                           borderRadius: BorderRadius.circular(10),
                           child: selectedCoverImage == null
                               ? MyImage(
+                                  height: 120,
+                                  width: 120,
                                   url: businessCoverImage,
+                                  fit: BoxFit.fill,
                                 )
                               : kIsWeb
-                                  ? Image.network(selectedCoverImage!.path)
+                                  ? Image.network(
+                                      selectedCoverImage!.path,
+                                      height: 120,
+                                      width: 120,
+                                    )
                                   : Image.file(
+                                      height: 120,
+                                      width: 120,
                                       fit: BoxFit.fill,
                                       File(
-                                        selectedLogoImage!.path,
+                                        selectedCoverImage!.path,
                                       ),
                                     ),
                         ),
