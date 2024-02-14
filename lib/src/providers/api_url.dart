@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -114,8 +113,6 @@ class HandleData {
           HttpHeaders.authorizationHeader: "Bearer $token",
         },
       );
-    } on SocketException {
-      ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
       response = null;
       consoleLog(e.toString());
