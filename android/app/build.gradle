@@ -23,12 +23,13 @@ if (flutterVersionName == null) {
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+//apply plugin: 'com.google.gms.google-services'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    namespace "com.benji.benji_vendor"
+    namespace "com.benji.vendor"
     compileSdk 34
-    ndkVersion '25.2.9519653'
+    ndkVersion '26.0.10792818'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -45,13 +46,15 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.benji.benji_vendor"
+        applicationId "com.benji.vendor"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 20
-        targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionName '1.0.0'
+        versionNameSuffix 'test'
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -59,6 +62,12 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+        }
+        debug {
+            multiDexEnabled true
+        }
+        profile {
+            multiDexEnabled true
         }
     }
     buildToolsVersion '34.0.0'
@@ -70,4 +79,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
+//    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+//    implementation 'com.google.firebase:firebase-analytics'
+} 

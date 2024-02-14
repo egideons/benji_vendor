@@ -1,98 +1,140 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/route_manager.dart';
 
 import '../../theme/colors.dart';
+import '../businesses/add_business.dart';
 import '../dashboard/dashboard.dart';
-import '../orders/orders.dart';
-import '../product/product.dart';
 import '../profile/profile.dart';
 
 class OverView extends StatefulWidget {
-  const OverView({super.key});
+  final int currentIndex;
+  const OverView({super.key, this.currentIndex = 0});
 
   @override
   State<OverView> createState() => _OverViewState();
 }
 
 class _OverViewState extends State<OverView> {
-  int _currentIndex = 0;
+  @override
+  void initState() {
+    currentIndex = widget.currentIndex;
+    super.initState();
+  }
 
-  final List<Widget> _pages = const [
-    Dashboard(),
-    Orders(),
-    Product(),
-    Profile(),
-  ];
+//======== variables =========//
+  bool _bottomNavBarIsVisible = true;
+  late int currentIndex;
 
-  void _onTappedBar(int index) {
+//===================================== FUNCTIONS =================================================\\
+
+  void showNav() {
     setState(() {
-      _currentIndex = index;
+      _bottomNavBarIsVisible = true;
     });
+  }
+
+  void hideNav() {
+    setState(() {
+      _bottomNavBarIsVisible = false;
+    });
+  }
+
+  addVendorBusiness() {
+    Get.to(
+      () => const AddBusiness(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "AddBusiness",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.downToUp,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    //===================================== PAGINATION =================================================\\
+    final List<Widget> pages = [
+      Dashboard(showNavigation: showNav, hideNavigation: hideNav),
+      const Profile(),
+    ];
+
+    void onTappedNavBar(int index) {
+      HapticFeedback.selectionClick();
+      setState(() {
+        currentIndex = index;
+      });
+    }
+
     return Scaffold(
-      body: _pages[_currentIndex],
+      body: pages[currentIndex],
       backgroundColor: kPrimaryColor,
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: kPrimaryColor,
-        currentIndex: _currentIndex,
-        onTap: _onTappedBar,
-        elevation: 20.0,
-        selectedItemColor: kAccentColor,
-        selectedIconTheme: IconThemeData(
-          color: kAccentColor,
+      floatingActionButton: !_bottomNavBarIsVisible
+          ? Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: FloatingActionButton(
+                onPressed: addVendorBusiness,
+                elevation: 20.0,
+                backgroundColor: kAccentColor,
+                foregroundColor: kPrimaryColor,
+                tooltip: "Add a business",
+                enableFeedback: true,
+                mouseCursor: SystemMouseCursors.click,
+                child: const FaIcon(FontAwesomeIcons.plus),
+              ),
+            )
+          : FloatingActionButton(
+              onPressed: addVendorBusiness,
+              elevation: 20.0,
+              backgroundColor: kAccentColor,
+              foregroundColor: kPrimaryColor,
+              tooltip: "Add a business",
+              enableFeedback: true,
+              mouseCursor: SystemMouseCursors.click,
+              child: const FaIcon(FontAwesomeIcons.plus),
+            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      bottomNavigationBar: AnimatedContainer(
+        height: _bottomNavBarIsVisible ? kBottomNavigationBarHeight : 0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.fastOutSlowIn,
+        child: Wrap(
+          children: [
+            BottomNavigationBar(
+              backgroundColor: kPrimaryColor,
+              landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
+              currentIndex: currentIndex,
+              mouseCursor: SystemMouseCursors.click,
+              onTap: onTappedNavBar,
+              elevation: 20.0,
+              selectedItemColor: kAccentColor,
+              selectedIconTheme: IconThemeData(color: kAccentColor),
+              showSelectedLabels: true,
+              unselectedItemColor: const Color(0xFFBDBDBD),
+              unselectedIconTheme:
+                  const IconThemeData(color: Color(0xFFBDBDBD)),
+              showUnselectedLabels: true,
+              enableFeedback: true,
+              type: BottomNavigationBarType.fixed,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.grid_view),
+                  label: "Dashboard",
+                  activeIcon: Icon(Icons.grid_view_rounded),
+                ),
+                BottomNavigationBarItem(
+                  icon: FaIcon(FontAwesomeIcons.user),
+                  label: "Profile",
+                  activeIcon: FaIcon(FontAwesomeIcons.solidUser),
+                ),
+              ],
+            ),
+          ],
         ),
-        showSelectedLabels: true,
-        unselectedItemColor: const Color(
-          0xFFBDBDBD,
-        ),
-        unselectedIconTheme: const IconThemeData(
-          color: Color(
-            0xFFBDBDBD,
-          ),
-        ),
-        showUnselectedLabels: true,
-        enableFeedback: true,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.grid_view,
-            ),
-            label: "Overview",
-            activeIcon: Icon(
-              Icons.grid_view_rounded,
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.shopping_bag_outlined,
-            ),
-            label: "Orders",
-            activeIcon: Icon(
-              Icons.shopping_bag_rounded,
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.menu,
-            ),
-            label: "Products",
-            activeIcon: Icon(
-              Icons.menu_rounded,
-            ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.person_2_outlined,
-            ),
-            label: "Profile",
-            activeIcon: Icon(
-              Icons.person_2_rounded,
-            ),
-          ),
-        ],
       ),
     );
   }

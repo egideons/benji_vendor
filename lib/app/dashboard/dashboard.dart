@@ -1,19 +1,40 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:benji_vendor/app/others/user%20reviews.dart';
+import 'package:benji_vendor/app/businesses/edit_business.dart';
+import 'package:benji_vendor/app/packages/send_package.dart';
+import 'package:benji_vendor/app/profile/edit_profile.dart';
+import 'package:benji_vendor/src/components/appbar/dashboard_app_bar.dart';
+import 'package:benji_vendor/src/components/card/dashboard_user_card.dart';
+import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
+import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
-import '../../src/common_widgets/home appBar vendor name.dart';
-import '../../src/common_widgets/home orders container.dart';
-import '../../src/common_widgets/home showModalBottomSheet.dart';
+import '../../src/components/card/empty.dart';
+import '../../src/components/container/business_container.dart';
+import '../../src/components/section/dashboard_businesses_display_controller.dart';
+import '../../src/components/skeletons/businesses_skeletons.dart';
+import '../../src/controller/business_controller.dart';
+import '../../src/controller/notification_controller.dart';
+import '../../src/model/business_model.dart';
 import '../../src/providers/constants.dart';
+import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
+import '../businesses/add_business.dart';
+import '../businesses/business_detail_screen.dart';
 import '../others/notifications.dart';
-import '../product/add new product.dart';
-import '../profile/profile.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  final VoidCallback showNavigation;
+  final VoidCallback hideNavigation;
+  const Dashboard(
+      {Key? key, required this.showNavigation, required this.hideNavigation})
+      : super(key: key);
 
   @override
   State<Dashboard> createState() => _DashboardState();
@@ -21,444 +42,652 @@ class Dashboard extends StatefulWidget {
 
 typedef ModalContentBuilder = Widget Function(BuildContext);
 
-class _DashboardState extends State<Dashboard> {
-//=================================== ALL VARIABLES =====================================\\
+class _DashboardState extends State<Dashboard>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    // AuthController.instance.checkIfAuthorized();
+    UserController.instance.getUser();
+    UserController.instance.setUserSync();
+    userCode = UserController.instance.user.value.username;
+    BusinessController.instance.getVendorBusinesses();
 
-//=================================== DROP DOWN BUTTON =====================================\\
-
-  String dropDownItemValue = "Daily";
-
-  void dropDownOnChanged(String? newValue) {
-    setState(() {
-      dropDownItemValue = newValue!;
+    numberOfNotifications = NotificationController.instance.notification.length;
+    _animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    scrollController.addListener(_scrollListener);
+    scrollController.addListener(() {
+      BusinessController.instance.scrollListener(scrollController);
+    });
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+              ScrollDirection.forward ||
+          scrollController.position.pixels < 100) {
+        widget.showNavigation();
+      } else {
+        widget.hideNavigation();
+      }
     });
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _animationController.dispose();
+    scrollController.dispose();
+    handleRefresh().ignore();
+    scrollController.removeListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.forward) {
+        widget.showNavigation();
+      } else {
+        widget.hideNavigation();
+      }
+    });
+  }
+
+//=================================== ALL VARIABLES =====================================\\
+  String? userCode;
+  int? numberOfNotifications;
+  bool refreshing = false;
+  bool _isScrollToTopBtnVisible = false;
+  bool showBusinesses = true;
+
+  //============================================== CONTROLLERS =================================================\\
+  final scrollController = ScrollController();
+  late AnimationController _animationController;
+
+//=================================== ALL FUNCTIONS =====================================\\
+
+  //===================== COPY TO CLIPBOARD =======================\\
+  copyToClipboard(BuildContext context, String userCode) {
+    Clipboard.setData(
+      ClipboardData(text: userCode),
+    );
+    ApiProcessorController.successSnack("ID copied to clipboard");
+  }
+
+  Future<void> handleRefresh() async {
+    setState(() {
+      refreshing = true;
+    });
+
+    UserController.instance.getUser();
+    UserController.instance.setUserSync();
+    await BusinessController.instance.getVendorBusinesses();
+
+    setState(() {
+      refreshing = false;
+    });
+  }
+
+  //============================= Scroll to Top ======================================//
+  void scrollToTop() {
+    _animationController.reverse();
+    scrollController.animateTo(0,
+        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+  }
+
+  void _scrollListener() {
+    //========= Show action button ========//
+    if (scrollController.position.pixels >= 100) {
+      _animationController.forward();
+      setState(() => _isScrollToTopBtnVisible = true);
+    }
+    //========= Hide action button ========//
+    else if (scrollController.position.pixels < 100) {
+      _animationController.reverse();
+      setState(() => _isScrollToTopBtnVisible = false);
+    }
+  }
+
+//==================== NAVIGATION ==================\\
+
+  // UserReviewsPage() {
+  //   Get.to(
+  //     () => const UserReviewsPage(),
+  //     routeName: 'UserReviewsPage',
+  //     duration: const Duration(milliseconds: 300),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     preventDuplicates: true,
+  //     popGesture: true,
+  //     transition: Transition.rightToLeft,
+  //   );
+  // }
+
+  // productDetail(ProductModel product) {
+  //   Get.to(
+  //     () => ViewProduct(product: product),
+  //     routeName: 'ViewProduct',
+  //     duration: const Duration(milliseconds: 300),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     preventDuplicates: true,
+  //     popGesture: true,
+  //     transition: Transition.rightToLeft,
+  //   );
+  // }
+
+  editProfile() {
+    Get.to(
+      () => const EditProfile(),
+      routeName: 'EditProfile',
+      duration: const Duration(milliseconds: 0),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: false,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  toBusinessDetailScreen(BusinessModel business) {
+    Get.to(
+      () => BusinessDetailScreen(business: business),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "BusinessDetailScreen",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  addVendorBusiness() {
+    Get.to(
+      () => const AddBusiness(),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "AddBusiness",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  editBusiness(BusinessModel business) {
+    Get.to(
+      () => EditBusiness(business: business),
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      routeName: "EditBusiness",
+      preventDuplicates: true,
+      popGesture: false,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  toSendPackage() {
+    Get.to(
+      () => const SendPackage(),
+      routeName: 'SendPackage',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
+  }
+
+  // productsPage() {
+  //   Get.to(
+  //     () => const OverView(currentIndex: 2),
+  //     routeName: 'OverView',
+  //     duration: const Duration(milliseconds: 0),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     preventDuplicates: false,
+  //     popGesture: true,
+  //   );
+  // }
+
+  // ordersPage(StatusType status) {
+  //   OrderController.instance.setStatus(status);
+  //   Get.to(
+  //     () => const OverView(currentIndex: 1),
+  //     routeName: 'OverView',
+  //     duration: const Duration(milliseconds: 0),
+  //     fullscreenDialog: true,
+  //     curve: Curves.easeIn,
+  //     preventDuplicates: false,
+  //     popGesture: true,
+  //   );
+  // }
+
+  void toNotificationsPage() => Get.to(
+        () => const Notifications(),
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "Notifications",
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.downToUp,
+      );
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kPrimaryColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const AddProduct(),
+    var media = MediaQuery.of(context).size;
+    return MyResponsivePadding(
+      child: MyLiquidRefresh(
+        onRefresh: handleRefresh,
+        child: GestureDetector(
+          onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
+          child: Scaffold(
+            appBar: DashboardAppBar(
+              numberOfNotifications:
+                  NotificationController.instance.notification.length,
             ),
-          );
-        },
-        elevation: 20.0,
-        backgroundColor: kAccentColor,
-        foregroundColor: kPrimaryColor,
-        tooltip: "Add a product",
-        child: const Icon(
-          Icons.add,
-        ),
-      ),
-      appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        automaticallyImplyLeading: false,
-        titleSpacing: kDefaultPadding / 2,
-        elevation: 0.0,
-        title: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: kDefaultPadding / 2,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const Profile(),
+            floatingActionButton: _isScrollToTopBtnVisible
+                ? FloatingActionButton(
+                    onPressed: scrollToTop,
+                    mini: deviceType(media.width) > 2 ? false : true,
+                    backgroundColor: kAccentColor,
+                    enableFeedback: true,
+                    mouseCursor: SystemMouseCursors.click,
+                    tooltip: "Scroll to top",
+                    hoverColor: kAccentColor,
+                    hoverElevation: 50.0,
+                    child: FaIcon(
+                      FontAwesomeIcons.chevronUp,
+                      size: 18,
+                      color: kPrimaryColor,
                     ),
-                  );
-                },
-                child: CircleAvatar(
-                  minRadius: 20,
-                  backgroundColor: kSecondaryColor,
-                  child: ClipOval(
-                    child: Image.asset(
-                      "assets/images/profile/profile-picture.png",
-                      fit: BoxFit.cover,
+                  )
+                : const SizedBox(),
+            body: SafeArea(
+              maintainBottomViewPadding: true,
+              child: Scrollbar(
+                child: ListView(
+                  physics: const BouncingScrollPhysics(),
+                  controller: scrollController,
+                  scrollDirection: Axis.vertical,
+                  padding: const EdgeInsets.all(kDefaultPadding),
+                  children: [
+                    DashboardUserCard(
+                      user: UserController.instance.user.value,
+                      onTap: editProfile,
                     ),
-                  ),
+                    kSizedBox,
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: ShapeDecoration(
+                        color: kPrimaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        shadows: const [
+                          BoxShadow(
+                            color: Color(0x0F000000),
+                            blurRadius: 24,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        onTap: toSendPackage,
+                        leading: FaIcon(
+                          FontAwesomeIcons.bicycle,
+                          color: kAccentColor,
+                        ),
+                        title: const Text(
+                          'Send a Package',
+                          style: TextStyle(
+                            color: kTextBlackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                      ),
+                    ),
+                    kSizedBox,
+                    GetBuilder<BusinessController>(
+                      init: BusinessController(),
+                      builder: (controller) {
+                        return DashboardDisplayBusinessesController(
+                          refreshing: refreshing,
+                          showBusinesses: showBusinesses,
+                          onTap: () {
+                            setState(() {
+                              showBusinesses = !showBusinesses;
+                            });
+                          },
+                          numberOfBusinesses:
+                              controller.businesses.length.toString(),
+                        );
+                      },
+                    ),
+                    kSizedBox,
+                    GetBuilder<BusinessController>(
+                      init: BusinessController(),
+                      builder: (controller) {
+                        return refreshing
+                            ? const BusinessListSkeleton()
+                            : controller.isLoad.value &&
+                                    controller.businesses.isEmpty
+                                ? const BusinessListSkeleton()
+                                : controller.businesses.isEmpty
+                                    ? const EmptyCard(
+                                        emptyCardMessage:
+                                            "You don't have any businesses yet",
+                                      )
+                                    : showBusinesses
+                                        ? ListView.separated(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            separatorBuilder:
+                                                (context, index) =>
+                                                    kHalfSizedBox,
+                                            shrinkWrap: true,
+                                            reverse: true,
+                                            addAutomaticKeepAlives: true,
+                                            itemCount:
+                                                controller.businesses.length,
+                                            itemBuilder: (context, index) {
+                                              return BusinessContainer(
+                                                onTap: () {
+                                                  Get.to(
+                                                    () => BusinessDetailScreen(
+                                                      business: controller
+                                                          .businesses[index],
+                                                    ),
+                                                    duration: const Duration(
+                                                        milliseconds: 300),
+                                                    fullscreenDialog: true,
+                                                    curve: Curves.easeIn,
+                                                    routeName:
+                                                        "BusinessDetailScreen",
+                                                    preventDuplicates: true,
+                                                    popGesture: false,
+                                                    transition:
+                                                        Transition.rightToLeft,
+                                                  );
+                                                },
+                                                // onTap: toBusinessDetailScreen(
+                                                //   controller.businesses[index],
+                                                // ),
+                                                business: controller
+                                                    .businesses[index],
+                                              );
+                                            },
+                                          )
+                                        : const SizedBox();
+                      },
+                    ),
+
+                    kSizedBox,
+                    GetBuilder<BusinessController>(
+                      builder: (controller) => Column(
+                        children: [
+                          controller.isLoadMore.value
+                              ? Center(
+                                  child: CircularProgressIndicator(
+                                    color: kAccentColor,
+                                  ),
+                                )
+                              : const SizedBox(),
+                          controller.loadedAll.value &&
+                                  controller.businesses.isNotEmpty
+                              ? Container(
+                                  margin: const EdgeInsets.only(
+                                      top: 20, bottom: 20),
+                                  height: 10,
+                                  width: 10,
+                                  decoration: ShapeDecoration(
+                                    shape: const CircleBorder(),
+                                    color: kPageSkeletonColor,
+                                  ),
+                                )
+                              : const SizedBox(),
+                        ],
+                      ),
+                    ),
+                    // GetBuilder<UserController>(
+                    //   builder: (controller) {
+                    //     return Container(
+                    //       width: media.width,
+                    //       padding: const EdgeInsets.all(kDefaultPadding),
+                    //       decoration: ShapeDecoration(
+                    //         color: kPrimaryColor,
+                    //         shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(12),
+                    //         ),
+                    //         shadows: const [
+                    //           BoxShadow(
+                    //             color: Color(0x0F000000),
+                    //             blurRadius: 24,
+                    //             offset: Offset(0, 4),
+                    //             spreadRadius: 0,
+                    //           ),
+                    //         ],
+                    //       ),
+                    //       child: Column(
+                    //         mainAxisAlignment:
+                    //             MainAxisAlignment.spaceAround,
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         children: [
+                    //           Text(
+                    //             "Username: ${controller.user.value.username}",
+                    //             softWrap: true,
+                    //             overflow: TextOverflow.ellipsis,
+                    //             maxLines: 1,
+                    //             textAlign: TextAlign.start,
+                    //             style: const TextStyle(
+                    //               color: kTextBlackColor,
+                    //               fontSize: 18,
+                    //               fontWeight: FontWeight.w700,
+                    //             ),
+                    //           ),
+                    //           Text(
+                    //             "Business Email: ${controller.user.value.email}",
+                    //             softWrap: true,
+                    //             overflow: TextOverflow.ellipsis,
+                    //             maxLines: 1,
+                    //             textAlign: TextAlign.center,
+                    //             style: const TextStyle(
+                    //               color: kTextBlackColor,
+                    //               fontSize: 16,
+                    //               fontWeight: FontWeight.w400,
+                    //             ),
+                    //           ),
+                    //           Row(
+                    //             children: [
+                    //               Text(
+                    //                 "$userCode",
+                    //                 softWrap: true,
+                    //                 style: const TextStyle(
+                    //                   color: kTextBlackColor,
+                    //                   fontSize: 14,
+                    //                   fontWeight: FontWeight.w400,
+                    //                 ),
+                    //               ),
+                    //               IconButton(
+                    //                 onPressed: () {
+                    //                   copyToClipboard(context, userCode!);
+                    //                 },
+                    //                 tooltip: "Copy ID",
+                    //                 mouseCursor: SystemMouseCursors.click,
+                    //                 icon: FaIcon(
+                    //                   FontAwesomeIcons.solidCopy,
+                    //                   size: 14,
+                    //                   color: kAccentColor,
+                    //                 ),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                    // kSizedBox,
+                    // Column(
+                    //   children: [
+                    //     Row(
+                    //       mainAxisAlignment:
+                    //           MainAxisAlignment.spaceBetween,
+                    //       children: [
+                    //         Text(
+                    //           'Reviews',
+                    //           style: TextStyle(
+                    //             color: kTextGreyColor,
+                    //             fontSize: 14,
+                    //             fontWeight: FontWeight.w400,
+                    //           ),
+                    //         ),
+                    //         TextButton(
+                    //           onPressed: UserReviewsPage,
+                    //           child: Text(
+                    //             'See All Reviews',
+                    //             style: TextStyle(
+                    //               color: kAccentColor,
+                    //               fontSize: 14,
+                    //               fontWeight: FontWeight.w400,
+                    //               decoration: TextDecoration.underline,
+                    //               decorationColor: kAccentColor,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     kHalfSizedBox,
+                    //     GetBuilder<ReviewsController>(
+                    //       initState: (state) {
+                    //         ReviewsController.instance.getAvgRating();
+                    //         ReviewsController.instance.getReviews();
+                    //       },
+                    //       builder: (controller) => Row(
+                    //         crossAxisAlignment: CrossAxisAlignment.center,
+                    //         mainAxisAlignment: MainAxisAlignment.start,
+                    //         children: [
+                    //           FaIcon(
+                    //             FontAwesomeIcons.solidStar,
+                    //             color: kStarColor,
+                    //             size: 20,
+                    //           ),
+                    //           kHalfWidthSizedBox,
+                    //           Text(
+                    //             "${controller.avgRating.value.toPrecision(1)}",
+                    //             style: TextStyle(
+                    //               color: kStarColor,
+                    //               fontSize: 20,
+                    //               fontWeight: FontWeight.w700,
+                    //             ),
+                    //           ),
+                    //           kWidthSizedBox,
+                    //           Text(
+                    //             'You have ${formatNumber(controller.total.value)} Reviews',
+                    //             style: const TextStyle(
+                    //               color: Color(0xFF32343E),
+                    //               fontSize: 18,
+                    //               fontWeight: FontWeight.w400,
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //     kSizedBox,
+                    //     Row(
+                    //       mainAxisAlignment:
+                    //           MainAxisAlignment.spaceBetween,
+                    //       children: [
+                    //         Text(
+                    //           'Latest Products',
+                    //           style: TextStyle(
+                    //             color: kTextGreyColor,
+                    //             fontSize: 14,
+                    //             fontWeight: FontWeight.w400,
+                    //           ),
+                    //         ),
+                    //         TextButton(
+                    //           onPressed: productsPage,
+                    //           child: Text(
+                    //             'See All',
+                    //             style: TextStyle(
+                    //               color: kAccentColor,
+                    //               fontSize: 14,
+                    //               fontWeight: FontWeight.w400,
+                    //               decoration: TextDecoration.underline,
+                    //               decorationColor: kAccentColor,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     kHalfSizedBox,
+                    //   ],
+                    // ),
+
+                    // ProductController.instance.products.isEmpty
+                    //     ? const EmptyCard(
+                    //         emptyCardMessage:
+                    //             "You don't have any products yet.",
+                    //       )
+                    //     :
+                    // SizedBox(
+                    //   height: deviceType(media.width) >= 2 ? 300 : 260,
+                    //   child: GetBuilder<ProductController>(
+                    //     initState: (state) async =>
+                    //         await ProductController.instance
+                    //             .getProducts(),
+                    //     builder: (controller) {
+                    //       return controller.isLoad.value
+                    //           ? Center(
+                    //               child: CircularProgressIndicator(
+                    //                 color: kAccentColor,
+                    //               ),
+                    //             )
+                    //           : controller.products.isEmpty
+                    //               ? const EmptyCard(
+                    //                   emptyCardMessage:
+                    //                       "You don't have any products yet.",
+                    //                 )
+                    //               : ListView.separated(
+                    //                   physics:
+                    //                       const BouncingScrollPhysics(),
+                    //                   separatorBuilder:
+                    //                       (context, index) =>
+                    //                           kWidthSizedBox,
+                    //                   scrollDirection: Axis.horizontal,
+                    //                   reverse: true,
+                    //                   shrinkWrap: true,
+                    //                   itemCount: min(
+                    //                       controller.products.length, 10),
+                    //                   itemBuilder: (BuildContext context,
+                    //                       int index) {
+                    //                     return DashboardProductContainer(
+                    //                       productName: controller
+                    //                           .products[index].name,
+                    //                       child: InkWell(
+                    //                         onTap: () => productDetail(
+                    //                             controller
+                    //                                 .products[index]),
+                    //                         child: MyImage(
+                    //                           url: controller
+                    //                               .products[index]
+                    //                               .productImage,
+                    //                           imageHeight: 150,
+                    //                         ),
+                    //                       ),
+                    //                     );
+                    //                   },
+                    //                 );
+                    //     },
+                    //   ),
+                    // ),
+                  ],
                 ),
               ),
-            ),
-            const AppBarVendor(
-              vendorName: "Ntachi-Osa",
-              vendorLocation: "Independence Layout, Enugu",
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            iconSize: 20,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const Notifications(),
-                ),
-              );
-            },
-            splashRadius: 20,
-            icon: Icon(
-              Icons.notifications_outlined,
-              color: kAccentColor,
             ),
           ),
-        ],
-      ),
-      body: SafeArea(
-        maintainBottomViewPadding: true,
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(
-                kDefaultPadding,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OrdersContainer(
-                    onTap: () {
-                      OrdersContainerBottomSheet(
-                        context,
-                        "20 Running",
-                        20,
-                      );
-                    },
-                    numberOfOrders: "20",
-                    typeOfOrders: "Active",
-                  ),
-                  OrdersContainer(
-                    onTap: () {
-                      OrdersContainerBottomSheet(
-                        context,
-                        "5 Pending",
-                        5,
-                      );
-                    },
-                    numberOfOrders: "05",
-                    typeOfOrders: "Pending",
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: kDefaultPadding * 2,
-            ),
-            Container(
-              margin: const EdgeInsets.only(
-                left: kDefaultPadding,
-                right: kDefaultPadding,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Total Revenue',
-                          style: TextStyle(
-                            color: Color(
-                              0xFF32343E,
-                            ),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text(
-                          "₦2,241",
-                          style: TextStyle(
-                            color: Color(
-                              0xFF32343E,
-                            ),
-                            fontSize: 22,
-                            fontFamily: 'Sen',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 40,
-                    padding: const EdgeInsets.only(
-                      top: 6.10,
-                      left: 8.72,
-                      right: 6.10,
-                      bottom: 6.10,
-                    ),
-                    decoration: ShapeDecoration(
-                      shape: RoundedRectangleBorder(
-                        side: const BorderSide(
-                          width: 0.44,
-                          color: Color(
-                            0xFFE8E9EC,
-                          ),
-                        ),
-                        borderRadius: BorderRadius.circular(
-                          6.98,
-                        ),
-                      ),
-                    ),
-                    child: DropdownButton<String>(
-                      value: dropDownItemValue,
-                      onChanged: dropDownOnChanged,
-                      elevation: 20,
-                      borderRadius: BorderRadius.circular(
-                        16,
-                      ),
-                      underline: Container(
-                        color: kTransparentColor,
-                        height: 0,
-                      ),
-                      icon: const Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                      ),
-                      iconEnabledColor: kAccentColor,
-                      iconDisabledColor: kGreyColor2,
-                      items: const [
-                        DropdownMenuItem<String>(
-                          value: "Daily",
-                          enabled: true,
-                          child: Text(
-                            "Daily",
-                            style: TextStyle(
-                              color: Color(
-                                0xFF9B9BA5,
-                              ),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: "Weekly",
-                          enabled: true,
-                          child: Text(
-                            "Weekly",
-                            style: TextStyle(
-                              color: Color(
-                                0xFF9B9BA5,
-                              ),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: "Monthly",
-                          enabled: true,
-                          child: Text(
-                            "Monthly",
-                            style: TextStyle(
-                              color: Color(
-                                0xFF9B9BA5,
-                              ),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                        DropdownMenuItem<String>(
-                          value: "Yearly",
-                          enabled: true,
-                          child: Text(
-                            "Yearly",
-                            style: TextStyle(
-                              color: Color(
-                                0xFF9B9BA5,
-                              ),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  kHalfWidthSizedBox,
-                  Container(
-                    child: TextButton(
-                      onPressed: () {},
-                      onLongPress: null,
-                      child: Text(
-                        'See Details',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: kAccentColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            kSizedBox,
-            Container(
-              margin: const EdgeInsets.only(
-                left: kDefaultPadding,
-                right: kDefaultPadding,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: 16.57,
-                        child: Text(
-                          'Reviews',
-                          style: TextStyle(
-                            color: kTextGreyColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const UserReviews(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          'See All Reviews',
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  kHalfSizedBox,
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.star_sharp,
-                        color: kAccentColor,
-                        size: 30,
-                      ),
-                      kWidthSizedBox,
-                      Text(
-                        '4.9',
-                        style: TextStyle(
-                          color: kAccentColor,
-                          fontSize: 21.80,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      kWidthSizedBox,
-                      const Text(
-                        'Total 20 Reviews',
-                        style: TextStyle(
-                          color: Color(
-                            0xFF32343E,
-                          ),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ],
-                  ),
-                  kSizedBox,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: 16.57,
-                        child: Text(
-                          'Popular items this week',
-                          style: TextStyle(
-                            color: kTextGreyColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'See All',
-                          style: TextStyle(
-                            color: kAccentColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  kHalfSizedBox,
-                ],
-              ),
-            ),
-            Container(
-              height: 180,
-              margin: const EdgeInsets.only(
-                left: kDefaultPadding,
-                right: kDefaultPadding,
-              ),
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: 5,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: const EdgeInsets.only(
-                      right: kDefaultPadding,
-                      bottom: kDefaultPadding / 1.5,
-                    ),
-                    padding: const EdgeInsets.only(
-                      top: kDefaultPadding / 1.5,
-                      left: kDefaultPadding,
-                      right: kDefaultPadding / 1.5,
-                    ),
-                    width: MediaQuery.of(context).size.width * 0.41,
-                    decoration: ShapeDecoration(
-                      color: kGreyColor1,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          kDefaultPadding,
-                        ),
-                      ),
-                      shadows: const [
-                        BoxShadow(
-                          color: Color(
-                            0x0F000000,
-                          ),
-                          blurRadius: 24,
-                          offset: Offset(
-                            0,
-                            4,
-                          ),
-                          spreadRadius: 4,
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
         ),
       ),
     );
