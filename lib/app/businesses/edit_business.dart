@@ -761,7 +761,7 @@ class _EditBusinessState extends State<EditBusiness> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Shop Name",
+                      "Business Name",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -780,7 +780,7 @@ class _EditBusinessState extends State<EditBusiness> {
                       },
                       textInputAction: TextInputAction.next,
                       focusNode: shopNameFN,
-                      hintText: "Name of shop",
+                      hintText: "Name of business",
                       textInputType: TextInputType.text,
                     ),
                     kSizedBox,
