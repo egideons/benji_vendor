@@ -1,20 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import '../controller/user_controller.dart';
 
 // API URLS AND HTTP CALL FUNCTIONS
-const baseURL = "https://f261-105-120-132-62.ngrok-free.app/api/v1";
-const baseImage = "https://f261-105-120-132-62.ngrok-free.app";
+const baseURL = "https://resource.bgbot.app/api/v1";
+const baseImage = "https://resource.bgbot.app";
 
 var vendorId = UserController.instance.user.value.id;
 
 class Api {
-  static const baseUrl = "https://f261-105-120-132-62.ngrok-free.app/api/v1";
+  static const baseUrl = "https://resource.bgbot.app/api/v1";
   static const login = "/auth/token";
   static const user = "/auth/";
   static const changePassword = "/auth/changeNewPassword/";
@@ -114,8 +113,6 @@ class HandleData {
           HttpHeaders.authorizationHeader: "Bearer $token",
         },
       );
-    } on SocketException {
-      ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
       response = null;
       consoleLog(e.toString());
