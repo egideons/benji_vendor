@@ -305,8 +305,7 @@ class _EditBusinessState extends State<EditBusiness> {
     consoleLog("This is the data: $data");
 
     consoleLog("shop_image: ${selectedLogoImage?.path}");
-    print(
-        '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}');
+    log('${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}');
 
     await FormController.instance.postAuth(
         '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}',
