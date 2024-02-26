@@ -1,10 +1,20 @@
 //default value
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../theme/colors.dart';
 
 //===================== Consts ==========================\\
+const int maxImageSize = 5 * 1024 * 1024; // 5 MB
+
+Future<bool> checkXFileSize(XFile? image) async {
+  if (image == null) {
+    return false;
+  }
+  int imgLen = await image.length();
+  return imgLen > maxImageSize;
+}
 
 const kDefaultPadding = 20.0;
 

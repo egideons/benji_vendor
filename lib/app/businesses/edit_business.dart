@@ -260,6 +260,14 @@ class _EditBusinessState extends State<EditBusiness> {
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
+    if (await checkXFileSize(selectedLogoImage)) {
+      ApiProcessorController.errorSnack('Business logo image too large');
+      return;
+    }
+    if (await checkXFileSize(selectedCoverImage)) {
+      ApiProcessorController.errorSnack('Business cover image too large');
+      return;
+    }
     if (selectedCoverImage != null) {
       await FormController.instance.uploadImage(
         '${Api.baseUrl}/vendors/changeVendorbusinessimages/${widget.business.vendorOwner.id}/${widget.business.id}?type=cover',

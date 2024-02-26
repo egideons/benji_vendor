@@ -255,6 +255,14 @@ class _AddBusinessState extends State<AddBusiness> {
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
+    if (await checkXFileSize(selectedLogoImage)) {
+      ApiProcessorController.errorSnack('Business logo image too large');
+      return;
+    }
+    if (await checkXFileSize(selectedCoverImage)) {
+      ApiProcessorController.errorSnack('Business cover image too large');
+      return;
+    }
     if (selectedCoverImage == null) {
       ApiProcessorController.errorSnack("Please select a shop cover");
       return;

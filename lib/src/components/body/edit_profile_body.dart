@@ -10,6 +10,7 @@ import 'package:benji_vendor/src/components/input/my_intl_phonefield.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/name_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
@@ -177,6 +178,10 @@ class _EditProfileBodyState extends State<EditProfileBody> {
     //   ApiProcessorController.errorSnack("Please select a logo image");
     //   return;
     // }
+    if (await checkXFileSize(selectedLogoImage)) {
+      ApiProcessorController.errorSnack('Profile image too large');
+      return;
+    }
     Map data = {
       'first_name': firstNameEC.text,
       'last_name': lastNameEC.text,
