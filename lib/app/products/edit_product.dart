@@ -100,6 +100,11 @@ class _EditProductState extends State<EditProduct> {
     // if (selectedImages == null && productImages!.isEmpty) {
     //   ApiProcessorController.errorSnack("Please select product images");
     // }
+    if (await checkXFileSize(selectedImages)) {
+      ApiProcessorController.errorSnack('Product image too large');
+      return;
+    }
+
     if (subCategoryEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please select a category");
     }

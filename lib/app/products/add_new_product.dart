@@ -93,6 +93,11 @@ class _AddProductState extends State<AddProduct> {
 
   //================================== FUNCTIONS ====================================\\
   Future<void> submit() async {
+    if (await checkXFileSize(selectedImage)) {
+      ApiProcessorController.errorSnack('Product image too large');
+      return;
+    }
+
     if (selectedImage == null) {
       ApiProcessorController.errorSnack("Please select product images");
       return;
