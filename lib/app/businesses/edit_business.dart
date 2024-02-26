@@ -305,8 +305,7 @@ class _EditBusinessState extends State<EditBusiness> {
     consoleLog("This is the data: $data");
 
     consoleLog("shop_image: ${selectedLogoImage?.path}");
-    print(
-        '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}');
+    log('${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}');
 
     await FormController.instance.postAuth(
         '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}',
@@ -739,7 +738,7 @@ class _EditBusinessState extends State<EditBusiness> {
                         child: Container(
                           padding: const EdgeInsets.all(10),
                           child: Text(
-                            'Upload business image',
+                            'Upload cover image',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: kAccentColor,
@@ -761,7 +760,7 @@ class _EditBusinessState extends State<EditBusiness> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      "Shop Name",
+                      "Business Name",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -780,7 +779,7 @@ class _EditBusinessState extends State<EditBusiness> {
                       },
                       textInputAction: TextInputAction.next,
                       focusNode: shopNameFN,
-                      hintText: "Name of shop",
+                      hintText: "Name of business",
                       textInputType: TextInputType.text,
                     ),
                     kSizedBox,
