@@ -50,7 +50,7 @@ class _BusinessProductContainerState extends State<BusinessProductContainer> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              width: (media.width - 20) / 3,
+              width: (media.width - 50) / 3,
               height: deviceType(media.width) >= 2 ? 150 : 100,
               decoration: ShapeDecoration(
                 color: kPageSkeletonColor,
@@ -67,16 +67,19 @@ class _BusinessProductContainerState extends State<BusinessProductContainer> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.product.name,
-                  style: const TextStyle(
-                    color: kTextBlackColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
+                SizedBox(
+                  width: ((media.width - 110) / 3) * 2,
+                  child: Text(
+                    widget.product.name,
+                    style: const TextStyle(
+                      color: kTextBlackColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 SizedBox(
-                  width: media.width - 250,
+                  width: ((media.width - 110) / 3) * 2,
                   child: Text(
                     widget.product.description,
                     overflow: TextOverflow.ellipsis,
@@ -93,7 +96,7 @@ class _BusinessProductContainerState extends State<BusinessProductContainer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: media.width - 300,
+                      width: (media.width - 110) / 3,
                       child: Text(
                         '₦${convertToCurrency(widget.product.price.toString())}',
                         style: const TextStyle(
@@ -104,8 +107,9 @@ class _BusinessProductContainerState extends State<BusinessProductContainer> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      width: media.width - 300,
+                    Container(
+                      alignment: Alignment.centerRight,
+                      width: (media.width - 110) / 3,
                       child: Text(
                         'Qty: ${widget.product.quantityAvailable}',
                         textAlign: TextAlign.right,
