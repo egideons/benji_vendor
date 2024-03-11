@@ -24,10 +24,6 @@ Future<dynamic> OrdersContainerBottomSheet(
     isScrollControlled: true,
     isDismissible: true,
     elevation: 20.0,
-    // constraints: BoxConstraints(
-    //   maxHeight: MediaQuery.of(context).size.height * 0.7,
-    //   minHeight: MediaQuery.of(context).size.height * 0.5,
-    // ),
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(

@@ -98,10 +98,6 @@ class _SelectBankBodyState extends State<SelectBankBody> {
                                 // Return an empty container for banks that do not match the search
                                 return Container();
                               }
-                              // BankListTile(
-                              //   onTap: () => selectBank(index),
-                              //   bank: banks.listOfBanks[index].name,
-                              // );
                             });
                   }),
             ),

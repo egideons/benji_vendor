@@ -174,10 +174,6 @@ class _EditProfileBodyState extends State<EditProfileBody> {
   }
 
   Future<void> updateData() async {
-    // if (selectedLogoImage == null && profileLogo!.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please select a logo image");
-    //   return;
-    // }
     if (await checkXFileSize(selectedLogoImage)) {
       ApiProcessorController.errorSnack('Profile image too large');
       return;

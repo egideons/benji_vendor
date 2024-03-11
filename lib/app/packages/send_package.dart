@@ -255,11 +255,6 @@ class _SendPackageState extends State<SendPackage> {
         longitudeDrop = longitudeValue.toString();
       });
     }
-
-    // latitudeDrop = latLngDetailController.latLngDetail.value[0];
-    // longitudeDrop = latLngDetailController.latLngDetail.value[1];
-    // dropOffEC.text = latLngDetailController.latLngDetail.value[2];
-    // latLngDetailController.setEmpty();
   }
 
   //===================== Scroll to Top ==========================\\
@@ -333,10 +328,7 @@ class _SendPackageState extends State<SendPackage> {
           "Please fill in the quantity of the item");
       return;
     }
-    // if (selectedImage == null) {
-    //   ApiProcessorController.errorSnack("Please select an image");
-    //   return;
-    // }
+
     Map data = {
       'client_id': UserController.instance.user.value.id.toString(),
       'pickUpAddress': pickupEC.text,

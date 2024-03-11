@@ -393,9 +393,6 @@ class FormController extends GetxController {
       update([tag]);
       return;
     }
-    // } catch (e) {
-    //   response = null;
-    // }
 
     ApiProcessorController.errorSnack(errorMsg);
     isLoad.value = false;
@@ -431,10 +428,6 @@ class FormController extends GetxController {
         contentType:
             MediaType('image', 'jpeg'), // Adjust content type as needed
       ));
-
-      // request.files.add(await http.MultipartFile.fromPath(
-      //     key, files[key]!.path,
-      //     filename: files[key]!.path.split('/').last));
     }
 
     log('first stream response: $response');

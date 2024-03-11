@@ -226,10 +226,6 @@ class _ProductsState extends State<Products> {
                                             DragStartBehavior.start,
                                         itemBuilder:
                                             (BuildContext context, int index) {
-                                          // int reversedIndex =
-                                          // controller.products.length -
-                                          //     1 -
-                                          //     index;
                                           return BusinessProductContainer(
                                             onTap: () => viewProduct(
                                                 controller.products[index]),

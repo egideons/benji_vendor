@@ -65,15 +65,6 @@ class _NotificationsState extends State<Notifications> {
         elevation: 0,
         actions: const [],
       ),
-      // bottomNavigationBar: Container(
-      //   width: media.width,
-      //   padding: const EdgeInsets.all(kDefaultPadding),
-      //   decoration: BoxDecoration(color: kPrimaryColor),
-      //   child: MyElevatedButton(
-      //     title: "Notifications",
-      //     onPressed: toNotifications,
-      //   ),
-      // ),
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: GetBuilder<NotificationController>(
@@ -101,12 +92,6 @@ class _NotificationsState extends State<Notifications> {
                               scrollDirection: Axis.vertical,
                               shrinkWrap: true,
                               separatorBuilder: (context, index) => kSizedBox,
-                              // Container(
-                              //   width: media.width - 350,
-                              //   height: 1,
-                              //   decoration: const BoxDecoration(
-                              //       color: Color(0xFFF0F4F9)),
-                              // ),
                               itemBuilder: (context, index) {
                                 final NotificationModel notify =
                                     notifications.notification[index];

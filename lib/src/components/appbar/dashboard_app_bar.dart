@@ -18,18 +18,7 @@ class DashboardAppBar extends StatelessWidget implements PreferredSizeWidget {
 //======================================== ALL VARIABLES ==============================================\\
 
 //======================================== FUNCTIONS ==============================================\\
-  void toProfilePage() {
-    // Get.to(
-    //   () => const PersonalInfo(),
-    //   duration: const Duration(milliseconds: 300),
-    //   fullscreenDialog: true,
-    //   curve: Curves.easeIn,
-    //   routeName: "PersonalInfo",
-    //   preventDuplicates: true,
-    //   popGesture: true,
-    //   transition: Transition.downToUp,
-    // );
-  }
+  void toProfilePage() {}
 
   void toNotificationsPage() => Get.to(
         () => const Notifications(),
