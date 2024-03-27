@@ -1,12 +1,17 @@
 // ignore_for_file: unused_field, library_prefixes
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui' as ui; // Import the ui library with an alias
 
-import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
+import 'package:benji_vendor/src/googleMaps/location_service.dart';
+import 'package:benji_vendor/src/googleMaps/web_map.dart';
+import 'package:benji_vendor/src/providers/constants.dart';
+import 'package:benji_vendor/src/providers/keys.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,10 +19,10 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 
-import '../../../src/googleMaps/location_service.dart';
-import '../../../src/providers/constants.dart';
-import '../../../theme/colors.dart';
+import '../../src/components/appbar/my_appbar.dart';
+import '../../theme/colors.dart';
 
 class GetLocationOnMap extends StatefulWidget {
   const GetLocationOnMap({super.key});
@@ -33,9 +38,9 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
   void initState() {
     super.initState();
     pinnedLocation = "";
-    markerTitle = <String>["Me"];
-    markerSnippet = <String>["My Location"];
-    loadMapData();
+    _markerTitle = <String>["Me"];
+    _markerSnippet = <String>["My Location"];
+    _loadMapData();
   }
 
   @override
@@ -45,13 +50,13 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
 
   //============================================================= ALL VARIABLES ======================================================================\\
   String? pinnedLocation;
-  final latLngDetailController = LatLngDetailController.instance;
+
   //============================================================= BOOL VALUES ======================================================================\\
   bool locationPinIsVisible = true;
 
   //====================================== Setting Google Map Consts =========================================\\
 
-  Position? userPosition;
+  Position? _userPosition;
   CameraPosition? _cameraPosition;
 
   Uint8List? _markerImage;
@@ -60,8 +65,8 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
   final List<MarkerId> _markerId = <MarkerId>[
     const MarkerId("0"),
   ];
-  List<String>? markerTitle;
-  List<String>? markerSnippet;
+  List<String>? _markerTitle;
+  List<String>? _markerSnippet;
   final List<String> _customMarkers = <String>[
     "assets/icons/person_location.png",
   ];
@@ -77,7 +82,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
   //======================================= Google Maps ================================================\\
 
   /// When the location services are not enabled or permissions are denied the `Future` will return an error.
-  Future<void> loadMapData() async {
+  Future<void> _loadMapData() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -109,18 +114,23 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
         'Location permissions are permanently denied, we cannot request permissions.',
       );
     }
-    await getAndGoToUserCurrentLocation();
-    await loadCustomMarkers();
+    await _getAndGoToUserCurrentLocation();
+    await _loadCustomMarkers();
   }
 
 //============================================== Get Current Location ==================================================\\
 
-  Future<Position> getAndGoToUserCurrentLocation() async {
+  Future<Position> _getAndGoToUserCurrentLocation() async {
     Position userLocation = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     ).then(
-      (location) => userPosition = location,
+      (location) => _userPosition = location,
     );
+
+    if (kIsWeb) {
+      await _getPlaceMark(
+          LatLng(_userPosition!.latitude, _userPosition!.longitude));
+    }
 
     LatLng latLngPosition =
         LatLng(userLocation.latitude, userLocation.longitude);
@@ -152,11 +162,11 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
 
   //====================================== Get Location Markers =========================================\\
 
-  loadCustomMarkers() async {
+  _loadCustomMarkers() async {
     Position userLocation = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     ).then(
-      (location) => userPosition = location,
+      (location) => _userPosition = location,
     );
     List<LatLng> latLng = <LatLng>[
       LatLng(userLocation.latitude, userLocation.longitude),
@@ -171,8 +181,8 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
           icon: BitmapDescriptor.fromBytes(markerIcon),
           position: latLng[i],
           infoWindow: InfoWindow(
-            title: markerTitle![i],
-            snippet: markerSnippet![i],
+            title: _markerTitle![i],
+            snippet: _markerSnippet![i],
           ),
         ),
       );
@@ -183,9 +193,20 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
 //========================================================== Locate a place =============================================================\\
 
   Future<void> _locatePlace(Map<String, dynamic> place) async {
-    final double lat = place['geometry']['location']['lat'];
-    final double lng = place['geometry']['location']['lng'];
+    double lat;
+    double lng;
+    if (kIsWeb) {
+      lat = place['lat'];
+      lng = place['lng'];
+    } else {
+      lat = place['geometry']['location']['lat'];
+      lng = place['geometry']['location']['lng'];
+    }
+
     _goToSpecifiedLocation(LatLng(lat, lng), 20);
+    if (kDebugMode) {
+      print(LatLng(lat, lng));
+    }
     // _markers.add(
     //   Marker(
     //     markerId: const MarkerId("1"),
@@ -203,6 +224,14 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
     setState(() {
       locationPinIsVisible = false;
     });
+    if (kIsWeb) {
+      List coord = await parseLatLng(_searchEC.text);
+      _locatePlace({
+        'lat': double.parse(coord[0] ?? 0),
+        'lng': double.parse(coord[1] ?? 0)
+      });
+      return;
+    }
     var place = await LocationService().getPlace(_searchEC.text);
     _locatePlace(place);
   }
@@ -214,26 +243,48 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
       target: position,
       zoom: zoom,
     )));
-    await getPlaceMark(position);
+    await _getPlaceMark(position);
   }
 
 //========================================================== Get PlaceMark Address and LatLng =============================================================\\
 
-  Future getPlaceMark(LatLng position) async {
+  Future _getPlaceMark(LatLng position) async {
+    if (kIsWeb) {
+      Uri uri = Uri.https("maps.googleapis.com", '/maps/api/geocode/json', {
+        "latlng": '${position.latitude},${position.longitude}',
+        "key": googlePlacesApiKey
+      });
+
+      var resp = await http.get(uri);
+      Map<String, dynamic> decodedResponse = jsonDecode(resp.body);
+
+      if (decodedResponse['status'] == 'OK') {
+        Map<String, dynamic> firstResult = decodedResponse['results'][0];
+
+        // Extract the formatted address
+        String formattedAddress = firstResult['formatted_address'];
+        setState(() {
+          pinnedLocation = formattedAddress;
+        });
+      }
+      return;
+    }
     List<Placemark> placemarks =
         await placemarkFromCoordinates(position.latitude, position.longitude);
     Placemark address = placemarks[0];
     String addressStr =
         "${address.name} ${address.street},${address.locality}, ${address.country}";
-
+    if (kDebugMode) {
+      print(LatLng(position.latitude, position.longitude));
+    }
     setState(() {
       pinnedLocation = addressStr;
     });
   }
 
 //==================== Select Location using ===============\\
-  void selectLocation() async {
-    getPlaceMark(draggedLatLng);
+  void _selectLocation() async {
+    await _getPlaceMark(draggedLatLng);
   }
 
 //============================================== Create Google Maps ==================================================\\
@@ -244,21 +295,18 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
   }
 
 //========================================================== Save Function =============================================================\\
-  saveFunc() async {
-    getPlaceMark(draggedLatLng);
-
+  _saveFunc() async {
+    await _getPlaceMark(draggedLatLng);
+    if (kDebugMode) {
+      print("draggedLatLng: $draggedLatLng");
+      print("PinnedLocation: $pinnedLocation");
+    }
     String latitude = draggedLatLng.latitude.toString();
     String longitude = draggedLatLng.longitude.toString();
-    latLngDetailController
+    LatLngDetailController.instance
         .setLatLngdetail([latitude, longitude, pinnedLocation]);
 
-    Get.back(
-      result: {
-        'pinnedLocation': pinnedLocation,
-        'latitude': latitude,
-        'longitude': longitude,
-      },
-    );
+    Get.back();
   }
 
   @override
@@ -268,15 +316,14 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
       child: Scaffold(
         appBar: MyAppBar(
           title: "Locate on Map",
-          elevation: 0,
+          elevation: 0.0,
           actions: const [],
           backgroundColor: kPrimaryColor,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
         floatingActionButton: FloatingActionButton(
-          onPressed: selectLocation,
+          onPressed: _selectLocation,
           backgroundColor: kAccentColor,
-          foregroundColor: kPrimaryColor,
           tooltip: "Pin Location",
           mouseCursor: SystemMouseCursors.click,
           child: const FaIcon(
@@ -286,7 +333,9 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
         ),
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(color: kPrimaryColor),
+          decoration: BoxDecoration(
+            color: kPrimaryColor,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -302,27 +351,18 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                 TextSpan(text: pinnedLocation!),
               ])),
               kHalfSizedBox,
-              MyElevatedButton(
-                title: "Save",
-                onPressed: userPosition == null
-                    ? pinnedLocation == null
-                        ? () {}
-                        : () {}
-                    : saveFunc,
-              ),
+              MyElevatedButton(title: "Save", onPressed: _saveFunc),
             ],
           ),
         ),
         body: SafeArea(
           maintainBottomViewPadding: true,
-          child: userPosition == null
-              ? pinnedLocation == null
-                  ? Center(
-                      child: CircularProgressIndicator(color: kAccentColor),
-                    )
-                  : Center(
-                      child: CircularProgressIndicator(color: kAccentColor),
-                    )
+          child: _userPosition == null
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: kAccentColor,
+                  ),
+                )
               : Column(
                   children: [
                     Row(
@@ -338,7 +378,11 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                             },
                             textInputAction: TextInputAction.search,
                             textCapitalization: TextCapitalization.words,
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              if (kDebugMode) {
+                                print(value);
+                              }
+                            },
                           ),
                         ),
                         IconButton(
@@ -359,8 +403,8 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                             onMapCreated: _onMapCreated,
                             initialCameraPosition: CameraPosition(
                               target: LatLng(
-                                userPosition!.latitude,
-                                userPosition!.longitude,
+                                _userPosition!.latitude,
+                                _userPosition!.longitude,
                               ),
                               zoom: 20,
                             ),
@@ -368,7 +412,7 @@ class _GetLocationOnMapState extends State<GetLocationOnMap> {
                               setState(() {
                                 locationPinIsVisible = true;
                               });
-                              getPlaceMark(draggedLatLng);
+                              _getPlaceMark(draggedLatLng);
                             },
                             onCameraMove: (cameraPosition) {
                               setState(() {
