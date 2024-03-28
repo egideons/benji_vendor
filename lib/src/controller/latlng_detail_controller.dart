@@ -7,13 +7,22 @@ class LatLngDetailController extends GetxController {
 
   var latLngDetail = [].obs;
   setLatLngdetail(List latLngDetailList) {
-    for (var i in latLngDetailList) {
-      latLngDetail.add(i ?? '');
-    }
+    latLngDetail.value = latLngDetailList;
+    update();
   }
 
   setEmpty() {
     latLngDetail.removeRange(0, latLngDetail.length);
     latLngDetail.addAll(['', '', '']);
+    update();
+  }
+
+  isNotEmpty() {
+    for (var i = 0; i < latLngDetail.length; i++) {
+      if ((latLngDetail[i] as String).isNotEmpty) {
+        return true;
+      }
+    }
+    return false;
   }
 }

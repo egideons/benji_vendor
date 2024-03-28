@@ -89,8 +89,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
   final firstNameEC = TextEditingController();
   final lastNameEC = TextEditingController();
   final mapsLocationEC = TextEditingController();
-  final LatLngDetailController latLngDetailController =
-      LatLngDetailController.instance;
+
   final userPhoneNumberEC = TextEditingController();
 
   //=========================== FOCUS NODES ====================================\\
@@ -134,6 +133,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
   }
 
   void placeAutoComplete(String query) async {
+    print('in the placeAutoComplete 1');
     Uri uri = Uri.https(
         "maps.googleapis.com",
         '/maps/api/place/autocomplete/json', //unencoder path
@@ -141,8 +141,10 @@ class _EditProfileBodyState extends State<EditProfileBody> {
           "input": query, //query params
           "key": googlePlacesApiKey, //google places api key
         });
+    print('in the placeAutoComplete 2');
 
     String? response = await NetworkUtility.fetchUrl(uri);
+    print(response);
     PlaceAutocompleteResponse result =
         PlaceAutocompleteResponse.parseAutoCompleteResult(response!);
     if (result.predictions != null) {
@@ -150,6 +152,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
         placePredictions = result.predictions!;
       });
     }
+    print('in the placeAutoComplete 3');
   }
 
   void getLocationOnMap() async {
@@ -163,11 +166,18 @@ class _EditProfileBodyState extends State<EditProfileBody> {
       popGesture: true,
       transition: Transition.rightToLeft,
     );
-    if (result != null) {
-      mapsLocationEC.text = result["pinnedLocation"];
-      latitude = result["latitude"];
-      longitude = result["longitude"];
+    final LatLngDetailController latLngDetailController =
+        LatLngDetailController.instance;
+
+    if (latLngDetailController.isNotEmpty()) {
+      setState(() {
+        latitude = latLngDetailController.latLngDetail.value[0];
+        longitude = latLngDetailController.latLngDetail.value[1];
+        mapsLocationEC.text = latLngDetailController.latLngDetail.value[2];
+        latLngDetailController.setEmpty();
+      });
     }
+
     log(
       "Received Data - Maps Location: ${mapsLocationEC.text}, Latitude: $latitude, Longitude: $longitude",
     );
