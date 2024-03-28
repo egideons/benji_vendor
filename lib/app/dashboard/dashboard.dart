@@ -9,6 +9,7 @@ import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/providers/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -262,6 +263,25 @@ class _DashboardState extends State<Dashboard>
                     DashboardUserCard(
                       user: UserController.instance.user.value,
                       onTap: editProfile,
+                    ),
+                    kSizedBox,
+                    Container(
+                      alignment: Alignment.center,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 25, horizontal: 40),
+                            backgroundColor: kAccentColor),
+                        onPressed: launchDownloadLinkAndroid,
+                        child: const Text(
+                          'Download APK',
+                          style: TextStyle(
+                            color: kTextWhiteColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
                     ),
                     kSizedBox,
                     Container(
