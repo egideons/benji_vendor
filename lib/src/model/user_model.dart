@@ -31,17 +31,6 @@ class UserModel {
   String profileLogo;
   bool isOnline;
 
-  // String shopName;
-  // String shopImage;
-  // BusinessType shopType;
-  // String weekOpeningHours;
-  // String weekClosingHours;
-  // String satOpeningHours;
-  // String satClosingHours;
-  // String sunWeekOpeningHours;
-  // String sunWeekClosingHours;
-  // String businessBio;
-
   UserModel({
     required this.id,
     required this.token,
@@ -61,17 +50,6 @@ class UserModel {
     required this.lga,
     required this.profileLogo,
     required this.isOnline,
-
-    // required this.shopName,
-    // required this.shopImage,
-    // required this.shopType,
-    // required this.weekOpeningHours,
-    // required this.weekClosingHours,
-    // required this.satOpeningHours,
-    // required this.satClosingHours,
-    // required this.sunWeekOpeningHours,
-    // required this.sunWeekClosingHours,
-    // required this.businessBio,
   });
 
   factory UserModel.fromJson(Map<String, dynamic>? json) {
@@ -99,17 +77,6 @@ class UserModel {
             ? 'https://img.freepik.com/free-psd/3d-icon-social-media-app_23-2150049569.jpg'
             : json['profileLogo'],
         isOnline: json["is_online"] ?? false,
-
-        // shopName: json["shop_name"] ?? notAvailable,
-        // shopImage: json["shop_image"] ?? '',
-        // shopType: BusinessType.fromJson(json["shop_type"]),
-        // weekOpeningHours: json["weekOpeningHours"] ?? notAvailable,
-        // weekClosingHours: json["weekClosingHours"] ?? notAvailable,
-        // satOpeningHours: json["satOpeningHours"] ?? notAvailable,
-        // satClosingHours: json["satClosingHours"] ?? notAvailable,
-        // sunWeekOpeningHours: json["sunWeekOpeningHours"] ?? notAvailable,
-        // sunWeekClosingHours: json["sunWeekClosingHours"] ?? notAvailable,
-        // businessBio: json["description"] ?? notAvailable,
       );
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
@@ -138,15 +105,5 @@ class UserModel {
         "lga": lga,
         "profileLogo": profileLogo,
         "is_online": isOnline,
-        // "shop_name": shopName,
-        // "shop_image": shopImage,
-        // "shop_type": shopType.toJson(),
-        // "weekOpeningHours": weekOpeningHours,
-        // "weekClosingHours": weekClosingHours,
-        // "satOpeningHours": satOpeningHours,
-        // "satClosingHours": satClosingHours,
-        // "sunWeekOpeningHours": sunWeekOpeningHours,
-        // "sunWeekClosingHours": sunWeekClosingHours,
-        // "description": businessBio,
       };
 }

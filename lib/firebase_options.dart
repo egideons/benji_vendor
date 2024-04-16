@@ -17,13 +17,19 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -46,30 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyABRQIbm3Dl4x8TKq_6Ht3PaNllH_8yuwo',
-    appId: '1:912983858748:web:5a38bd0f75ce63190bad39',
-    messagingSenderId: '912983858748',
-    projectId: 'keen-tokenizer-400311',
-    authDomain: 'keen-tokenizer-400311.firebaseapp.com',
-    storageBucket: 'keen-tokenizer-400311.appspot.com',
-    measurementId: 'G-MR3HM0K20Z',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDFliG30yK5Kni1TDp8R0aCSxN-7tDyqg8',
-    appId: '1:912983858748:android:ba497fbe4464b2a60bad39',
-    messagingSenderId: '912983858748',
-    projectId: 'keen-tokenizer-400311',
-    storageBucket: 'keen-tokenizer-400311.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCeBNy7o_fnEeG33lvV9vzfCi6TDKQDwZI',
-    appId: '1:912983858748:ios:3c943b5b967df0220bad39',
-    messagingSenderId: '912983858748',
-    projectId: 'keen-tokenizer-400311',
-    storageBucket: 'keen-tokenizer-400311.appspot.com',
-    iosBundleId: 'com.example.benjiVendor',
+    apiKey: 'AIzaSyAqDfoPuoPyiiD6GstqkJ_29IPawL429qc',
+    appId: '1:815674234051:android:936417611eb4286007be76',
+    messagingSenderId: '815674234051',
+    projectId: 'benji-vendor',
+    storageBucket: 'benji-vendor.appspot.com',
   );
 }

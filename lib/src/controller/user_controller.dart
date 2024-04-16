@@ -94,22 +94,4 @@ class UserController extends GetxController {
     isLoading.value = false;
     update();
   }
-
-  // Future<void> saveVendor(String vendor, String token) async {
-  //   Map data = jsonDecode(vendor);
-  //   data['token'] = token;
-
-  //   await prefs.setString('vendor', jsonEncode(data));
-  //   setVendorSynce();
-  // }
-
-  // void setVendorSynce() {
-  //   String? vendorData = prefs.getString('vendor');
-  //   if (vendorData == null) {
-  //     vendor.value = VendorModel.fromJson(null);
-  //   } else {
-  //     vendor.value = vendorModelFromJson(vendorData);
-  //   }
-  //   update();
-  // }
 }

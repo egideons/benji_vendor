@@ -19,7 +19,8 @@ class AuthController extends GetxController {
   }
 
   Future checkAuth() async {
-    if (await isAuthorized() == null) {
+    bool? checkIsAuthorized = await isAuthorized();
+    if (checkIsAuthorized == null) {
       ApiProcessorController.errorSnack('Please connect to the internet');
       Get.offAll(
         () => const Login(),
@@ -33,7 +34,7 @@ class AuthController extends GetxController {
       return;
     }
     try {
-      if (await isAuthorized() == true) {
+      if (checkIsAuthorized == true) {
         log("User is authorized");
 
         Get.offAll(
@@ -86,7 +87,9 @@ class AuthController extends GetxController {
   }
 
   Future checkIfAuthorized() async {
-    if (await isAuthorized() == null) {
+    bool? checkIsAuthorized = await isAuthorized();
+
+    if (checkIsAuthorized == null) {
       ApiProcessorController.errorSnack('Connect to the internet');
       Get.offAll(
         () => const Login(),
@@ -100,7 +103,7 @@ class AuthController extends GetxController {
       return;
     }
     try {
-      if (await isAuthorized() == true) {
+      if (checkIsAuthorized == true) {
         log("User is authorized");
         return;
       } else {

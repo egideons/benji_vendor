@@ -1,14 +1,12 @@
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/business_product_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:get/get.dart';
 
 import '../../src/controller/product_controller.dart';
 import '../../src/model/business_model.dart';
 import '../../src/model/product_model.dart';
 import '../../src/providers/constants.dart';
-import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 import 'view_product.dart';
 
@@ -32,19 +30,6 @@ class _BusinessProductsState extends State<BusinessProducts> {
   }
 
   late Future<Map<String, List<ProductModel>>> productAndSubCategoryName;
-
-  // _getData() async {
-  //   Map<String, List<Product>> productAndSubCategoryName =
-  //       await getVendorProductsAndSubCategoryName(widget.vendor.id);
-  //   try {
-  //     activeCategory = productAndSubCategoryName.keys.toList()[0];
-  //     // ignore: empty_catches
-  //   } catch (e) {}
-
-  //   setState(() {
-  //     snapshot.data = productAndSubCategoryName;
-  //   });
-  // }
 
 //=================================== Navigation =====================================\\
   viewProduct(ProductModel product) {
@@ -85,27 +70,18 @@ class _BusinessProductsState extends State<BusinessProducts> {
                     emptyCardMessage: "You don't have any products",
                   );
                 }
-                return LayoutGrid(
-                  rowGap: kDefaultPadding / 2,
-                  columnGap: kDefaultPadding / 2,
-                  columnSizes: breakPointDynamic(
-                      media.width,
-                      [1.fr],
-                      [1.fr, 1.fr],
-                      [1.fr, 1.fr, 1.fr],
-                      [1.fr, 1.fr, 1.fr, 1.fr]),
-                  rowSizes: controller.products.isEmpty
-                      ? [auto]
-                      : List.generate(
-                          controller.products.length, (index) => auto),
-                  children: (controller.products)
-                      .map(
-                        (item) => BusinessProductContainer(
-                          onTap: () => viewProduct(item),
-                          product: item,
-                        ),
-                      )
-                      .toList(),
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    children: (controller.products)
+                        .map(
+                          (item) => BusinessProductContainer(
+                            onTap: () => viewProduct(item),
+                            product: item,
+                          ),
+                        )
+                        .toList(),
+                  ),
                 );
               }),
           kSizedBox,

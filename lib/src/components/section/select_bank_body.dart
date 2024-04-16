@@ -68,28 +68,6 @@ class _SelectBankBodyState extends State<SelectBankBody> {
       maintainBottomViewPadding: true,
       child: Column(
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(10),
-          //   child: SearchBar(
-          //     controller: bankQueryEC,
-          //     hintText: "Search bank",
-          //     backgroundColor: MaterialStatePropertyAll(
-          //         Theme.of(context).scaffoldBackgroundColor),
-          //     elevation: const MaterialStatePropertyAll(0),
-          //     leading: FaIcon(
-          //       FontAwesomeIcons.magnifyingGlass,
-          //       color: kAccentColor,
-          //       size: 20,
-          //     ),
-          //     onChanged: onChanged,
-          //     padding: const MaterialStatePropertyAll(EdgeInsets.all(10)),
-          //     shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(10),
-          //     )),
-          //     side:
-          //         MaterialStatePropertyAll(BorderSide(color: kLightGreyColor)),
-          //   ),
-          // ),
           Expanded(
             child: Scrollbar(
               controller: scrollController,
@@ -100,11 +78,6 @@ class _SelectBankBodyState extends State<SelectBankBody> {
                         ? const EmptyCard(
                             emptyCardMessage: "There are no banks",
                           )
-                        // : banks.listOfBanks.isEmpty && banks.isLoad.value
-                        //     ? Center(
-                        //         child:
-                        //             CircularProgressIndicator(color: kAccentColor),
-                        //       )
                         : ListView.separated(
                             shrinkWrap: true,
                             physics: const BouncingScrollPhysics(),
@@ -125,10 +98,6 @@ class _SelectBankBodyState extends State<SelectBankBody> {
                                 // Return an empty container for banks that do not match the search
                                 return Container();
                               }
-                              // BankListTile(
-                              //   onTap: () => selectBank(index),
-                              //   bank: banks.listOfBanks[index].name,
-                              // );
                             });
                   }),
             ),

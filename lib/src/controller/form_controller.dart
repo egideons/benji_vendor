@@ -72,31 +72,6 @@ class FormController extends GetxController {
     update([tag]);
   }
 
-  // Future postAuth(String url, Map data, String tag,
-  //     [String errorMsg = "Error occurred",
-  //     String successMsg = "Submitted successfully"]) async {
-  //   isLoad.value = true;
-  //   update([tag]);
-  //   final response = await http.post(
-  //     Uri.parse(url),
-  //     headers: authHeader(),
-  //     body: data,
-  //   );
-  //   status.value = response.statusCode;
-  //   consoleLog(response.body);
-  //   if (response.statusCode != 200) {
-  //     ApiProcessorController.errorSnack(errorMsg);
-  //     isLoad.value = false;
-  //     update([tag]);
-  //     return;
-  //   }
-
-  //   ApiProcessorController.successSnack(successMsg);
-  //   isLoad.value = false;
-  //   responseObject.value = jsonDecode(response.body) as Map;
-  //   update([tag]);
-  // }
-
   Future postAuth(String url, Map data, String tag,
       [String errorMsg = "Error occurred",
       String successMsg = "Submitted successfully"]) async {
@@ -418,9 +393,6 @@ class FormController extends GetxController {
       update([tag]);
       return;
     }
-    // } catch (e) {
-    //   response = null;
-    // }
 
     ApiProcessorController.errorSnack(errorMsg);
     isLoad.value = false;
@@ -456,10 +428,6 @@ class FormController extends GetxController {
         contentType:
             MediaType('image', 'jpeg'), // Adjust content type as needed
       ));
-
-      // request.files.add(await http.MultipartFile.fromPath(
-      //     key, files[key]!.path,
-      //     filename: files[key]!.path.split('/').last));
     }
 
     log('first stream response: $response');

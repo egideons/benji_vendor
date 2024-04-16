@@ -99,24 +99,7 @@ class _OTPChangePhoneNumberState extends State<OTPChangePhoneNumber> {
       );
 
       Get.back();
-
-      // Get.to(
-      //   () => const ForgotPassword(),
-      //   routeName: 'ForgotPassword',
-      //   duration: const Duration(milliseconds: 300),
-      //   fullscreenDialog: true,
-      //   curve: Curves.easeIn,
-      //   preventDuplicates: true,
-      //   popGesture: true,
-      //   transition: Transition.rightToLeft,
-      // );
     }
-
-    // final url =
-    //     Uri.parse('${Api.baseUrl}/auth/requestForgotPassword/$userEmail');
-
-    // final body = {};
-    // await http.post(url, body: body);
 
     setState(() {
       _secondsRemaining = 60;
@@ -169,18 +152,6 @@ class _OTPChangePhoneNumberState extends State<OTPChangePhoneNumber> {
           seconds: 2,
         ),
       );
-
-      // Navigate to the new page
-      // Get.to(
-      //   () => const ResetPassword(),
-      //   routeName: 'ResetPassword',
-      //   duration: const Duration(milliseconds: 300),
-      //   fullscreenDialog: true,
-      //   curve: Curves.easeIn,
-      //   preventDuplicates: true,
-      //   popGesture: true,
-      //   transition: Transition.rightToLeft,
-      // );
     } else {
       myFixedSnackBar(
         context,

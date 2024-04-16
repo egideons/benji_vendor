@@ -38,10 +38,6 @@ class BusinessOrderContainer extends StatelessWidget {
               SizedBox(
                 width: 60,
                 height: 60,
-                // decoration: BoxDecoration(
-                //   color: kLightGreyColor,
-                //   borderRadius: BorderRadius.circular(16),
-                // ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: MyImage(

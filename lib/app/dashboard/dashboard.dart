@@ -9,6 +9,7 @@ import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
+import 'package:benji_vendor/src/providers/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -144,32 +145,6 @@ class _DashboardState extends State<Dashboard>
 
 //==================== NAVIGATION ==================\\
 
-  // UserReviewsPage() {
-  //   Get.to(
-  //     () => const UserReviewsPage(),
-  //     routeName: 'UserReviewsPage',
-  //     duration: const Duration(milliseconds: 300),
-  //     fullscreenDialog: true,
-  //     curve: Curves.easeIn,
-  //     preventDuplicates: true,
-  //     popGesture: true,
-  //     transition: Transition.rightToLeft,
-  //   );
-  // }
-
-  // productDetail(ProductModel product) {
-  //   Get.to(
-  //     () => ViewProduct(product: product),
-  //     routeName: 'ViewProduct',
-  //     duration: const Duration(milliseconds: 300),
-  //     fullscreenDialog: true,
-  //     curve: Curves.easeIn,
-  //     preventDuplicates: true,
-  //     popGesture: true,
-  //     transition: Transition.rightToLeft,
-  //   );
-  // }
-
   editProfile() {
     Get.to(
       () => const EditProfile(),
@@ -235,31 +210,6 @@ class _DashboardState extends State<Dashboard>
     );
   }
 
-  // productsPage() {
-  //   Get.to(
-  //     () => const OverView(currentIndex: 2),
-  //     routeName: 'OverView',
-  //     duration: const Duration(milliseconds: 0),
-  //     fullscreenDialog: true,
-  //     curve: Curves.easeIn,
-  //     preventDuplicates: false,
-  //     popGesture: true,
-  //   );
-  // }
-
-  // ordersPage(StatusType status) {
-  //   OrderController.instance.setStatus(status);
-  //   Get.to(
-  //     () => const OverView(currentIndex: 1),
-  //     routeName: 'OverView',
-  //     duration: const Duration(milliseconds: 0),
-  //     fullscreenDialog: true,
-  //     curve: Curves.easeIn,
-  //     preventDuplicates: false,
-  //     popGesture: true,
-  //   );
-  // }
-
   void toNotificationsPage() => Get.to(
         () => const Notifications(),
         duration: const Duration(milliseconds: 300),
@@ -313,6 +263,25 @@ class _DashboardState extends State<Dashboard>
                     DashboardUserCard(
                       user: UserController.instance.user.value,
                       onTap: editProfile,
+                    ),
+                    kSizedBox,
+                    Container(
+                      alignment: Alignment.center,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 25, horizontal: 40),
+                            backgroundColor: kAccentColor),
+                        onPressed: launchDownloadLinkAndroid,
+                        child: const Text(
+                          'Download APK',
+                          style: TextStyle(
+                            color: kTextWhiteColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
                     ),
                     kSizedBox,
                     Container(
@@ -422,7 +391,6 @@ class _DashboardState extends State<Dashboard>
                                         : const SizedBox();
                       },
                     ),
-
                     kSizedBox,
                     GetBuilder<BusinessController>(
                       builder: (controller) => Column(
@@ -450,239 +418,6 @@ class _DashboardState extends State<Dashboard>
                         ],
                       ),
                     ),
-                    // GetBuilder<UserController>(
-                    //   builder: (controller) {
-                    //     return Container(
-                    //       width: media.width,
-                    //       padding: const EdgeInsets.all(kDefaultPadding),
-                    //       decoration: ShapeDecoration(
-                    //         color: kPrimaryColor,
-                    //         shape: RoundedRectangleBorder(
-                    //           borderRadius: BorderRadius.circular(12),
-                    //         ),
-                    //         shadows: const [
-                    //           BoxShadow(
-                    //             color: Color(0x0F000000),
-                    //             blurRadius: 24,
-                    //             offset: Offset(0, 4),
-                    //             spreadRadius: 0,
-                    //           ),
-                    //         ],
-                    //       ),
-                    //       child: Column(
-                    //         mainAxisAlignment:
-                    //             MainAxisAlignment.spaceAround,
-                    //         crossAxisAlignment: CrossAxisAlignment.start,
-                    //         children: [
-                    //           Text(
-                    //             "Username: ${controller.user.value.username}",
-                    //             softWrap: true,
-                    //             overflow: TextOverflow.ellipsis,
-                    //             maxLines: 1,
-                    //             textAlign: TextAlign.start,
-                    //             style: const TextStyle(
-                    //               color: kTextBlackColor,
-                    //               fontSize: 18,
-                    //               fontWeight: FontWeight.w700,
-                    //             ),
-                    //           ),
-                    //           Text(
-                    //             "Business Email: ${controller.user.value.email}",
-                    //             softWrap: true,
-                    //             overflow: TextOverflow.ellipsis,
-                    //             maxLines: 1,
-                    //             textAlign: TextAlign.center,
-                    //             style: const TextStyle(
-                    //               color: kTextBlackColor,
-                    //               fontSize: 16,
-                    //               fontWeight: FontWeight.w400,
-                    //             ),
-                    //           ),
-                    //           Row(
-                    //             children: [
-                    //               Text(
-                    //                 "$userCode",
-                    //                 softWrap: true,
-                    //                 style: const TextStyle(
-                    //                   color: kTextBlackColor,
-                    //                   fontSize: 14,
-                    //                   fontWeight: FontWeight.w400,
-                    //                 ),
-                    //               ),
-                    //               IconButton(
-                    //                 onPressed: () {
-                    //                   copyToClipboard(context, userCode!);
-                    //                 },
-                    //                 tooltip: "Copy ID",
-                    //                 mouseCursor: SystemMouseCursors.click,
-                    //                 icon: FaIcon(
-                    //                   FontAwesomeIcons.solidCopy,
-                    //                   size: 14,
-                    //                   color: kAccentColor,
-                    //                 ),
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     );
-                    //   },
-                    // ),
-                    // kSizedBox,
-                    // Column(
-                    //   children: [
-                    //     Row(
-                    //       mainAxisAlignment:
-                    //           MainAxisAlignment.spaceBetween,
-                    //       children: [
-                    //         Text(
-                    //           'Reviews',
-                    //           style: TextStyle(
-                    //             color: kTextGreyColor,
-                    //             fontSize: 14,
-                    //             fontWeight: FontWeight.w400,
-                    //           ),
-                    //         ),
-                    //         TextButton(
-                    //           onPressed: UserReviewsPage,
-                    //           child: Text(
-                    //             'See All Reviews',
-                    //             style: TextStyle(
-                    //               color: kAccentColor,
-                    //               fontSize: 14,
-                    //               fontWeight: FontWeight.w400,
-                    //               decoration: TextDecoration.underline,
-                    //               decorationColor: kAccentColor,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     kHalfSizedBox,
-                    //     GetBuilder<ReviewsController>(
-                    //       initState: (state) {
-                    //         ReviewsController.instance.getAvgRating();
-                    //         ReviewsController.instance.getReviews();
-                    //       },
-                    //       builder: (controller) => Row(
-                    //         crossAxisAlignment: CrossAxisAlignment.center,
-                    //         mainAxisAlignment: MainAxisAlignment.start,
-                    //         children: [
-                    //           FaIcon(
-                    //             FontAwesomeIcons.solidStar,
-                    //             color: kStarColor,
-                    //             size: 20,
-                    //           ),
-                    //           kHalfWidthSizedBox,
-                    //           Text(
-                    //             "${controller.avgRating.value.toPrecision(1)}",
-                    //             style: TextStyle(
-                    //               color: kStarColor,
-                    //               fontSize: 20,
-                    //               fontWeight: FontWeight.w700,
-                    //             ),
-                    //           ),
-                    //           kWidthSizedBox,
-                    //           Text(
-                    //             'You have ${formatNumber(controller.total.value)} Reviews',
-                    //             style: const TextStyle(
-                    //               color: Color(0xFF32343E),
-                    //               fontSize: 18,
-                    //               fontWeight: FontWeight.w400,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //     kSizedBox,
-                    //     Row(
-                    //       mainAxisAlignment:
-                    //           MainAxisAlignment.spaceBetween,
-                    //       children: [
-                    //         Text(
-                    //           'Latest Products',
-                    //           style: TextStyle(
-                    //             color: kTextGreyColor,
-                    //             fontSize: 14,
-                    //             fontWeight: FontWeight.w400,
-                    //           ),
-                    //         ),
-                    //         TextButton(
-                    //           onPressed: productsPage,
-                    //           child: Text(
-                    //             'See All',
-                    //             style: TextStyle(
-                    //               color: kAccentColor,
-                    //               fontSize: 14,
-                    //               fontWeight: FontWeight.w400,
-                    //               decoration: TextDecoration.underline,
-                    //               decorationColor: kAccentColor,
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     kHalfSizedBox,
-                    //   ],
-                    // ),
-
-                    // ProductController.instance.products.isEmpty
-                    //     ? const EmptyCard(
-                    //         emptyCardMessage:
-                    //             "You don't have any products yet.",
-                    //       )
-                    //     :
-                    // SizedBox(
-                    //   height: deviceType(media.width) >= 2 ? 300 : 260,
-                    //   child: GetBuilder<ProductController>(
-                    //     initState: (state) async =>
-                    //         await ProductController.instance
-                    //             .getProducts(),
-                    //     builder: (controller) {
-                    //       return controller.isLoad.value
-                    //           ? Center(
-                    //               child: CircularProgressIndicator(
-                    //                 color: kAccentColor,
-                    //               ),
-                    //             )
-                    //           : controller.products.isEmpty
-                    //               ? const EmptyCard(
-                    //                   emptyCardMessage:
-                    //                       "You don't have any products yet.",
-                    //                 )
-                    //               : ListView.separated(
-                    //                   physics:
-                    //                       const BouncingScrollPhysics(),
-                    //                   separatorBuilder:
-                    //                       (context, index) =>
-                    //                           kWidthSizedBox,
-                    //                   scrollDirection: Axis.horizontal,
-                    //                   reverse: true,
-                    //                   shrinkWrap: true,
-                    //                   itemCount: min(
-                    //                       controller.products.length, 10),
-                    //                   itemBuilder: (BuildContext context,
-                    //                       int index) {
-                    //                     return DashboardProductContainer(
-                    //                       productName: controller
-                    //                           .products[index].name,
-                    //                       child: InkWell(
-                    //                         onTap: () => productDetail(
-                    //                             controller
-                    //                                 .products[index]),
-                    //                         child: MyImage(
-                    //                           url: controller
-                    //                               .products[index]
-                    //                               .productImage,
-                    //                           imageHeight: 150,
-                    //                         ),
-                    //                       ),
-                    //                     );
-                    //                   },
-                    //                 );
-                    //     },
-                    //   ),
-                    // ),
                   ],
                 ),
               ),

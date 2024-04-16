@@ -10,6 +10,7 @@ import 'package:benji_vendor/src/components/input/my_intl_phonefield.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/name_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
@@ -88,8 +89,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
   final firstNameEC = TextEditingController();
   final lastNameEC = TextEditingController();
   final mapsLocationEC = TextEditingController();
-  final LatLngDetailController latLngDetailController =
-      LatLngDetailController.instance;
+
   final userPhoneNumberEC = TextEditingController();
 
   //=========================== FOCUS NODES ====================================\\
@@ -133,6 +133,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
   }
 
   void placeAutoComplete(String query) async {
+    print('in the placeAutoComplete 1');
     Uri uri = Uri.https(
         "maps.googleapis.com",
         '/maps/api/place/autocomplete/json', //unencoder path
@@ -140,8 +141,10 @@ class _EditProfileBodyState extends State<EditProfileBody> {
           "input": query, //query params
           "key": googlePlacesApiKey, //google places api key
         });
+    print('in the placeAutoComplete 2');
 
     String? response = await NetworkUtility.fetchUrl(uri);
+    print(response);
     PlaceAutocompleteResponse result =
         PlaceAutocompleteResponse.parseAutoCompleteResult(response!);
     if (result.predictions != null) {
@@ -149,6 +152,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
         placePredictions = result.predictions!;
       });
     }
+    print('in the placeAutoComplete 3');
   }
 
   void getLocationOnMap() async {
@@ -162,21 +166,28 @@ class _EditProfileBodyState extends State<EditProfileBody> {
       popGesture: true,
       transition: Transition.rightToLeft,
     );
-    if (result != null) {
-      mapsLocationEC.text = result["pinnedLocation"];
-      latitude = result["latitude"];
-      longitude = result["longitude"];
+    final LatLngDetailController latLngDetailController =
+        LatLngDetailController.instance;
+
+    if (latLngDetailController.isNotEmpty()) {
+      setState(() {
+        latitude = latLngDetailController.latLngDetail.value[0];
+        longitude = latLngDetailController.latLngDetail.value[1];
+        mapsLocationEC.text = latLngDetailController.latLngDetail.value[2];
+        latLngDetailController.setEmpty();
+      });
     }
+
     log(
       "Received Data - Maps Location: ${mapsLocationEC.text}, Latitude: $latitude, Longitude: $longitude",
     );
   }
 
   Future<void> updateData() async {
-    // if (selectedLogoImage == null && profileLogo!.isEmpty) {
-    //   ApiProcessorController.errorSnack("Please select a logo image");
-    //   return;
-    // }
+    if (await checkXFileSize(selectedLogoImage)) {
+      ApiProcessorController.errorSnack('Profile image too large');
+      return;
+    }
     Map data = {
       'first_name': firstNameEC.text,
       'last_name': lastNameEC.text,

@@ -100,6 +100,11 @@ class _EditProductState extends State<EditProduct> {
     // if (selectedImages == null && productImages!.isEmpty) {
     //   ApiProcessorController.errorSnack("Please select product images");
     // }
+    if (await checkXFileSize(selectedImages)) {
+      ApiProcessorController.errorSnack('Product image too large');
+      return;
+    }
+
     if (subCategoryEC.text.isEmpty) {
       ApiProcessorController.errorSnack("Please select a category");
     }
@@ -115,12 +120,7 @@ class _EditProductState extends State<EditProduct> {
     };
 
     consoleLog("This is the data : $data");
-    // await FormController.instance.postAuthstream2(
-    //   Api.baseUrl + Api.changeProduct + widget.product.id,
-    //   data,
-    //   {'product_image': selectedImages},
-    //   'editProduct',
-    // );
+
     if (selectedImages != null) {
       await FormController.instance.uploadImage(
         Api.baseUrl + Api.changeProductImage + widget.product.id,
@@ -136,10 +136,6 @@ class _EditProductState extends State<EditProduct> {
     );
     if (FormController.instance.status.toString().startsWith('2')) {
       ProductController.instance.refreshData(widget.product.business.id);
-      // await PushNotificationController.showNotification(
-      //   title: "Success.",
-      //   body: "${productNameEC.text} has been been successfully updated.",
-      // );
 
       Get.close(3);
     }
@@ -366,32 +362,6 @@ class _EditProductState extends State<EditProduct> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     kSizedBox,
-                    // const Text(
-                    //   'Product Type',
-                    //   style: TextStyle(
-                    //     color: kTextBlackColor,
-                    //     fontSize: 16,
-                    //     fontWeight: FontWeight.w700,
-                    //     letterSpacing: -0.32,
-                    //   ),
-                    // ),
-                    // kHalfSizedBox,
-                    // ItemDropDownMenu(
-                    //   itemEC: productTypeEC,
-                    //   hintText: "Choose product type",
-                    //   dropdownMenuEntries: productType == null
-                    //       ? [
-                    //           const DropdownMenuEntry(
-                    //             value: 'Loading...',
-                    //             label: 'Loading...',
-                    //             enabled: false,
-                    //           )
-                    //         ]
-                    //       : productType!
-                    //           .map((item) => DropdownMenuEntry(
-                    //               value: item.id, label: item.name))
-                    //           .toList(),
-                    // ),
                     kSizedBox,
                     const Text(
                       'Product Category',

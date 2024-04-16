@@ -51,32 +51,7 @@ class _AddBusinessState extends State<AddBusiness> {
     super.initState();
     CategoryController.instance.getCategory();
     scrollController.addListener(_scrollListener);
-    // if (widget.business != null) {
-    //   addressEC.text = widget.business!.address;
-    //   latitude = widget.business!.latitude;
-    //   longitude = widget.business!.longitude;
-    //   accountBankEC.text = widget.business!.accountBank;
-    //   accountNameEC.text = widget.business!.accountName;
-    //   accountNumberEC.text = widget.business!.accountNumber;
-    //   accountTypeEC.text = widget.business!.accountType;
-    //   countryEC.text = widget.business!.country.name;
-    //   stateEC.text = widget.business!.state;
-    //   cityEC.text = widget.business!.city;
-
-    //   businessIdEC.text = widget.business!.businessId;
-    //   shopImage = widget.business!.shopImage;
-    //   shopNameEC.text = widget.business!.shopName;
-    //   vendorMonToFriOpeningHoursEC.text = widget.business!.weekOpeningHours;
-    //   vendorMonToFriClosingHoursEC.text = widget.business!.weekClosingHours;
-    //   vendorSatOpeningHoursEC.text = widget.business!.satOpeningHours;
-    //   vendorSatClosingHoursEC.text = widget.business!.satClosingHours;
-    //   vendorSunOpeningHoursEC.text = widget.business!.sunWeekOpeningHours;
-    //   vendorSunClosingHoursEC.text = widget.business!.sunWeekClosingHours;
-    //   businessBioEC.text = widget.business!.businessBio;
-    //   vendorBusinessTypeEC.text = widget.business!.shopType.id;
-
-    //   consoleLog("This is the shop image: $shopImage");
-    // }
+    
   }
 
   @override
@@ -255,6 +230,14 @@ class _AddBusinessState extends State<AddBusiness> {
 
   //========================== Save data ==================================\\
   Future<void> saveChanges() async {
+    if (await checkXFileSize(selectedLogoImage)) {
+      ApiProcessorController.errorSnack('Business logo image too large');
+      return;
+    }
+    if (await checkXFileSize(selectedCoverImage)) {
+      ApiProcessorController.errorSnack('Business cover image too large');
+      return;
+    }
     if (selectedCoverImage == null) {
       ApiProcessorController.errorSnack("Please select a shop cover");
       return;

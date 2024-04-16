@@ -89,7 +89,6 @@ class _SendPackageState extends State<SendPackage> {
 
   final itemValueEC = TextEditingController();
 
-  final latLngDetailController = LatLngDetailController.instance;
   //=============================== FOCUS NODES ==================================\\
   final pickupFN = FocusNode();
   final senderNameFN = FocusNode();
@@ -211,26 +210,25 @@ class _SendPackageState extends State<SendPackage> {
       popGesture: true,
       transition: Transition.rightToLeft,
     );
-    if (result != null) {
-      String pinnedLocation = result['pinnedLocation'];
-      String latitude = result['latitude'];
-      String longitude = result['longitude'];
 
-      double latitudeValue = double.parse(latitude);
-      double longitudeValue = double.parse(longitude);
+    final LatLngDetailController latLngDetailController =
+        LatLngDetailController.instance;
+
+    if (latLngDetailController.isNotEmpty()) {
+      String latitude = latLngDetailController.latLngDetail.value[0];
+      String longitude = latLngDetailController.latLngDetail.value[1];
+      String pinnedLocation = latLngDetailController.latLngDetail.value[2];
+      latLngDetailController.setEmpty();
+
       log(
         "Received Data - Maps Location: $pinnedLocation, Latitude: $latitude, Longitude: $longitude",
       );
       setState(() {
         pickupEC.text = pinnedLocation;
-        latitudePick = latitudeValue.toString();
-        longitudePick = longitudeValue.toString();
+        latitudePick = latitude;
+        longitudePick = longitude;
       });
     }
-    // latitudePick = latLngDetailController.latLngDetail.value[0];
-    // longitudePick = latLngDetailController.latLngDetail.value[1];
-    // pickupEC.text = latLngDetailController.latLngDetail.value[2];
-    // latLngDetailController.setEmpty();
   }
 
   void toGetLocationOnMapDrop() async {
@@ -245,25 +243,21 @@ class _SendPackageState extends State<SendPackage> {
       transition: Transition.rightToLeft,
     );
 
-    if (result != null) {
-      String pinnedLocation = result['pinnedLocation'];
-      String latitude = result['latitude'];
-      String longitude = result['longitude'];
+    final LatLngDetailController latLngDetailController =
+        LatLngDetailController.instance;
 
-      double latitudeValue = double.parse(latitude);
-      double longitudeValue = double.parse(longitude);
+    if (latLngDetailController.isNotEmpty()) {
+      String latitude = latLngDetailController.latLngDetail.value[0];
+      String longitude = latLngDetailController.latLngDetail.value[1];
+      String pinnedLocation = latLngDetailController.latLngDetail.value[2];
+      latLngDetailController.setEmpty();
 
       setState(() {
         dropOffEC.text = pinnedLocation;
-        latitudeDrop = latitudeValue.toString();
-        longitudeDrop = longitudeValue.toString();
+        latitudeDrop = latitude;
+        longitudeDrop = longitude;
       });
     }
-
-    // latitudeDrop = latLngDetailController.latLngDetail.value[0];
-    // longitudeDrop = latLngDetailController.latLngDetail.value[1];
-    // dropOffEC.text = latLngDetailController.latLngDetail.value[2];
-    // latLngDetailController.setEmpty();
   }
 
   //===================== Scroll to Top ==========================\\
@@ -337,10 +331,7 @@ class _SendPackageState extends State<SendPackage> {
           "Please fill in the quantity of the item");
       return;
     }
-    // if (selectedImage == null) {
-    //   ApiProcessorController.errorSnack("Please select an image");
-    //   return;
-    // }
+
     Map data = {
       'client_id': UserController.instance.user.value.id.toString(),
       'pickUpAddress': pickupEC.text,
@@ -406,14 +397,6 @@ class _SendPackageState extends State<SendPackage> {
   }
 
   //=============================== WIDGETS ==================================\\
-
-  // Widget stepIconBuilder(context, details) {
-  //   return Icon(
-  //     Icons.check,
-  //     color: kPrimaryColor,
-  //     size: 15,
-  //   );
-  // }
 
   Widget controlsBuilder(context, details) {
     final media = MediaQuery.of(context);
@@ -1011,7 +994,6 @@ class _SendPackageState extends State<SendPackage> {
                         );
                 },
               ),
-
               kSizedBox,
               const Text(
                 "Item Weight",
@@ -1117,86 +1099,6 @@ class _SendPackageState extends State<SendPackage> {
                 textInputType: TextInputType.number,
               ),
               kSizedBox,
-              // DottedBorder(
-              //   color: kLightGreyColor,
-              //   borderPadding: const EdgeInsets.all(3),
-              //   padding: const EdgeInsets.all(kDefaultPadding / 2),
-              //   borderType: BorderType.RRect,
-              //   radius: const Radius.circular(20),
-              //   child: Column(
-              //     children: [
-              //       selectedImage == null
-              //           ? Container(
-              //               width: media.width,
-              //               height: 144,
-              //               decoration: ShapeDecoration(
-              //                 image: const DecorationImage(
-              //                     image: AssetImage(
-              //                         "assets/icons/image-upload.png")),
-              //                 shape: RoundedRectangleBorder(
-              //                   side: const BorderSide(
-              //                     width: 0.50,
-              //                     color: Color(0xFFE6E6E6),
-              //                   ),
-              //                   borderRadius: BorderRadius.circular(20),
-              //                 ),
-              //               ),
-              //             )
-              //           : Container(
-              //               width: media.width,
-              //               height: deviceType(media.width) >= 2 ? 280 : 200,
-              //               decoration: ShapeDecoration(
-              //                 image: DecorationImage(
-              //                   image: FileImage(selectedImage!),
-              //                   fit: BoxFit.contain,
-              //                 ),
-              //                 shape: RoundedRectangleBorder(
-              //                   side: const BorderSide(
-              //                     width: 0.50,
-              //                     color: Color(0xFFE6E6E6),
-              //                   ),
-              //                   borderRadius: BorderRadius.circular(20),
-              //                 ),
-              //               ),
-              //             ),
-              //       InkWell(
-              //         onTap: () {
-              //           showModalBottomSheet(
-              //             context: context,
-              //             elevation: 20,
-              //             barrierColor: kBlackColor.withOpacity(0.8),
-              //             showDragHandle: true,
-              //             useSafeArea: true,
-              //             isDismissible: true,
-              //             isScrollControlled: true,
-              //             shape: const RoundedRectangleBorder(
-              //               borderRadius: BorderRadius.vertical(
-              //                 top: Radius.circular(kDefaultPadding),
-              //               ),
-              //             ),
-              //             enableDrag: true,
-              //             builder: ((builder) => uploadCoverImage()),
-              //           );
-              //         },
-              //         splashColor: kAccentColor.withOpacity(0.1),
-              //         borderRadius: BorderRadius.circular(10),
-              //         child: Container(
-              //           padding: const EdgeInsets.all(10),
-              //           child: Text(
-              //             'Upload item image',
-              //             textAlign: TextAlign.center,
-              //             style: TextStyle(
-              //               color: kAccentColor,
-              //               fontSize: 16,
-              //               fontWeight: FontWeight.w400,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // kSizedBox,
             ],
           ),
         ),

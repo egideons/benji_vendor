@@ -72,10 +72,6 @@ Future shopTypeModal(BuildContext context, List<BusinessType> type) async {
               },
             ),
           ),
-          // MyElevatedButton(
-          //   title: "Get Categories",
-          //   onPressed: () => CategoryController.instance.getCategory(),
-          // ),
         ],
       ),
     ),
