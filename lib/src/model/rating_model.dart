@@ -36,16 +36,18 @@ class Ratings {
   }
 }
 
-Future<List<Ratings>> getRatingsByVendorId(int id,
+Future<List<Ratings>> getRatingsByVendorId(String id,
     {start = 0, end = 10}) async {
   // url to be changed to agent endpoint
   final response = await http.get(
-    Uri.parse('$baseURL/vendors/$id/getAllVendorRatings?start=$start&end=$end'),
+    Uri.parse('$baseURL/agents/getBusinessRatings/$id?start=$start&end=$end'),
     headers: authHeader(),
   );
-  (jsonDecode(response.body)['items'] as List)
-      .map((item) => Ratings.fromJson(item))
-      .toList();
+  print('$baseURL/agents/getBusinessRatings/$id?start=$start&end=$end');
+
+  print(response.body);
+  print(response.statusCode);
+
   if (response.statusCode == 200) {
     return (jsonDecode(response.body)['items'] as List)
         .map((item) => Ratings.fromJson(item))

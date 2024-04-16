@@ -48,9 +48,9 @@ class AuthController extends GetxController {
         );
       } else {
         log("User is not authorized");
-        ApiProcessorController.errorSnack(
-          "User is not authorized, Please log in.",
-        );
+        // ApiProcessorController.errorSnack(
+        //   "User is not authorized, Please log in.",
+        // );
         Get.offAll(
           () => const Login(),
           fullscreenDialog: true,
@@ -108,9 +108,9 @@ class AuthController extends GetxController {
         return;
       } else {
         UserController.instance.deleteUser();
-        ApiProcessorController.errorSnack(
-          "User is not authorized, Please log in",
-        );
+        // ApiProcessorController.errorSnack(
+        //   "User is not authorized, Please log in",
+        // );
         consoleLog("User is not authorized");
         Get.offAll(
           () => const Login(),

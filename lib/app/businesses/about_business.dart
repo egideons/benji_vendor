@@ -40,7 +40,7 @@ class _AboutBusinessState extends State<AboutBusiness> {
 
     List<Ratings> ratings;
     if (active == 'all') {
-      ratings = await getRatingsByVendorId(widget.business.vendorOwner.id);
+      ratings = await getRatingsByVendorId(widget.business.id);
     } else {
       ratings = await getRatingsByVendorIdAndRating(
           widget.business.vendorOwner.id, int.parse(active));
@@ -300,7 +300,7 @@ class _AboutBusinessState extends State<AboutBusiness> {
                             });
 
                             List<Ratings> ratings = await getRatingsByVendorId(
-                                widget.business.vendorOwner.id);
+                                widget.business.id);
 
                             setState(() {
                               _ratings = ratings;

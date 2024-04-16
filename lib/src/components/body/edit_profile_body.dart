@@ -197,6 +197,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
       'latitude': latitude,
       'longitude': longitude,
     };
+    print(data);
     log("This is the data: $data");
     var url =
         Api.baseUrl + Api.changeVendorPersonalProfile + vendorId.toString();
