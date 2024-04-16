@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:benji_vendor/app/splash_screens/startup_splash_screen.dart';
 import 'package:benji_vendor/src/controller/account_controller.dart';
 import 'package:benji_vendor/src/controller/shopping_location_controller.dart';
@@ -69,8 +67,6 @@ void main() async {
     );
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
     await PushNotificationController.initializeNotification();
-
-    await FcmMessagingController.instance.handleFCM();
   }
 
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -83,30 +79,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      return GetMaterialApp(
-        title: "Benji Vendor",
-        debugShowCheckedModeBanner: false,
-        color: kPrimaryColor,
-        navigatorKey: Get.key,
-        themeMode: ThemeMode.light,
-        darkTheme: AppTheme.darkTheme,
-        theme: AppTheme.lightTheme,
-        defaultTransition: Transition.rightToLeft,
-        home: SplashScreen(),
-      );
-    }
-    if (Platform.isIOS) {
-      return GetCupertinoApp(
-        title: "Benji Vendor",
-        debugShowCheckedModeBanner: false,
-        color: kPrimaryColor,
-        navigatorKey: Get.key,
-        theme: AppTheme.iOSLightTheme,
-        defaultTransition: Transition.rightToLeft,
-        home: SplashScreen(),
-      );
-    }
     return GetMaterialApp(
       title: "Benji Vendor",
       debugShowCheckedModeBanner: false,

@@ -18,25 +18,35 @@ class FcmMessagingController extends GetxController {
   Future<void> handleFCM() async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
 
+    if (Platform.isIOS) {
+      final apnToken = await FirebaseMessaging.instance.getAPNSToken();
+      log("This is the APNS token: $apnToken");
+    }
+
     log("This is the FCM token: $fcmToken");
 
     try {
       final user = UserController.instance.user.value;
       var url = Api.baseUrl + Api.createPushNotification;
 
-      Map data = {"user_id": user.id, "token": fcmToken};
-
-      log("Data: $data");
-      log("Url: $url");
-      log("User Id: ${user.id} and User token: ${user.token}");
-
-      http.Response? response = await HandleData.postApi(url, user.token, data);
-
-      log("Response status code: ${response!.statusCode}");
-      if (response.statusCode == 200) {
-        log("Response body: ${response.body}");
+      if (user.token.isEmpty || user.token == "N/A") {
+        return;
       } else {
-        log("Response body: ${response.body}");
+        Map data = {"user_id": user.id, "token": fcmToken};
+
+        log("Data: $data");
+        log("Url: $url");
+        log("User Id: ${user.id} and User token: ${user.token}");
+
+        http.Response? response =
+            await HandleData.postApi(url, user.token, data);
+
+        log("Response status code: ${response!.statusCode}");
+        if (response.statusCode == 200) {
+          log("Response body: ${response.body}");
+        } else {
+          log("Response body: ${response.body}");
+        }
       }
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
@@ -59,7 +69,7 @@ class FcmMessagingController extends GetxController {
   }
 
   Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    consoleLog("Handling a background message: ${message.messageId}");
+    log("Handling a background message: ${message.messageId}");
 
     //Call awesomenotification to how the push notification.
     AwesomeNotifications().createNotificationFromJsonData(message.data);

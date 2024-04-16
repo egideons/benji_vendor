@@ -29,11 +29,10 @@ class LoginController extends GetxController {
         "username": data.username,
         "password": data.password,
       };
-      print(finalData);
 
       http.Response? response =
           await HandleData.postApi(Api.baseUrl + Api.login, null, finalData);
-      print('response?.body the eee ${response?.body}');
+
       var jsonData = jsonDecode(response?.body ?? '');
       if ((response?.statusCode ?? 400) != 200) {
         ApiProcessorController.errorSnack(
@@ -58,7 +57,7 @@ class LoginController extends GetxController {
         return;
       }
       http.Response? responseUserData = await HandleData.getApi(
-          '${Api.baseUrl}/vendors/getVendor/${jsonDecode(responseUser.body ?? '')['id']}',
+          '${Api.baseUrl}/vendors/getVendor/${jsonDecode(responseUser.body)['id']}',
           jsonData["token"]);
 
       if (responseUserData == null) {
