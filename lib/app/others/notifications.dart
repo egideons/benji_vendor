@@ -110,9 +110,9 @@ class _NotificationsState extends State<Notifications> {
                                   title: Text.rich(
                                     TextSpan(
                                       children: [
-                                        TextSpan(
-                                          text: notify.vendor.username,
-                                          style: const TextStyle(
+                                        const TextSpan(
+                                          text: "Someone",
+                                          style:  TextStyle(
                                             color: Color(0xFF32343E),
                                             fontSize: 13,
                                             fontWeight: FontWeight.w400,
