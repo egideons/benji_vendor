@@ -76,7 +76,7 @@ class _SelectBankBodyState extends State<SelectBankBody> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: SearchBar(constraints: const BoxConstraints.tightFor(),
               padding: const MaterialStatePropertyAll(EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
               controller: bankQueryEC,

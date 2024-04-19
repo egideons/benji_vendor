@@ -76,7 +76,6 @@ class FormController extends GetxController {
       [String errorMsg = "Error occurred",
       String successMsg = "Submitted successfully"]) async {
     isLoad.value = true;
-    update();
     update([tag]);
     final response = await http.post(
       Uri.parse(url),
@@ -84,32 +83,18 @@ class FormController extends GetxController {
       body: data,
     );
     status.value = response.statusCode;
-    consoleLog(response.body);
-    var responseBody = jsonDecode(response.body);
-
     if (response.statusCode != 200) {
       ApiProcessorController.errorSnack(errorMsg);
       isLoad.value = false;
-      update();
       update([tag]);
       return;
-    } else {
-      if (responseBody is String) {
-        ApiProcessorController.successSnack(successMsg);
-        isLoad.value = false;
-        update();
-        update([tag]);
-      } else if (responseBody is Map) {
-        responseObject.value = (responseBody);
-        ApiProcessorController.successSnack(successMsg);
-        isLoad.value = false;
-        update();
-        update([tag]);
-      }
     }
 
+    if (successMsg != '') {
+      ApiProcessorController.successSnack(successMsg);
+    }
     isLoad.value = false;
-    update();
+    responseObject.value = jsonDecode(response.body) as Map;
     update([tag]);
   }
 
