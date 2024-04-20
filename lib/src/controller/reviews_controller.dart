@@ -72,7 +72,7 @@ class ReviewsController extends GetxController {
     if (rating != 0) {
       response = await http.get(
         Uri.parse(
-            '$baseURL/clients/filterVendorReviewsByRating/$id?rating_value=$rating'),
+            '$baseURL/clients/businessReviewByRating/$id?rating_value=$rating'),
         headers: authHeader(),
       );
       if (response.statusCode == 200) {
@@ -90,7 +90,7 @@ class ReviewsController extends GetxController {
     } else {
       response = await http.get(
         Uri.parse(
-            '$baseURL/vendors/$id/getAllVendorRatings?start=$start&end=$end'),
+            '$baseURL/agents/getBusinessRatings/$id?start=$start&end=$end'),
         headers: authHeader(),
       );
 
