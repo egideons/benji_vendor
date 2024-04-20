@@ -12,6 +12,7 @@ import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_message_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
+import 'package:benji_vendor/src/controller/business_controller.dart';
 import 'package:benji_vendor/src/controller/category_controller.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
@@ -287,6 +288,8 @@ class _AddBusinessState extends State<AddBusiness> {
         title: "Success.",
         body: "Your business profile has been successfully updated.",
       );
+    BusinessController.instance.getVendorBusinesses();
+
       Get.close(1);
     }
   }

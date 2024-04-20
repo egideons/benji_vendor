@@ -247,7 +247,7 @@ class _ViewPackageState extends State<ViewPackage> {
         getDeliveryItemsByClientAndStatus('pending');
         getDeliveryItemsByClientAndStatus('dispatched');
         getDeliveryItemsByClientAndStatus('completed');
-        Get.close(2);
+        Get.close(1);
       });
     }
   }

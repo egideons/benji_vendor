@@ -25,7 +25,6 @@ class BusinessProducts extends StatefulWidget {
 class _BusinessProductsState extends State<BusinessProducts> {
   @override
   void initState() {
-    ProductController.instance.refreshData(widget.business.id);
     super.initState();
   }
 
@@ -56,7 +55,7 @@ class _BusinessProductsState extends State<BusinessProducts> {
         children: [
           GetBuilder<ProductController>(
               initState: (state) => ProductController.instance
-                  .getBusinessProducts(widget.business.id),
+                  .getBusinessProducts(widget.business.id, true),
               builder: (controller) {
                 if (controller.isLoad.value) {
                   return Center(

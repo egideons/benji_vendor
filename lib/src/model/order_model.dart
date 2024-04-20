@@ -40,7 +40,7 @@ class OrderModel {
     json ??= {};
     return OrderModel(
       id: json["id"] ?? notAvailable,
-      code: json["code"] ?? notAvailable,
+      code: json["code"] ?? 'emmma',
       totalPrice: json["total_price"] ?? 0.0,
       deliveryFee: json["delivery_fee"] ?? 0.0,
       assignedStatus: json["assigned_status"] ?? "PEND",

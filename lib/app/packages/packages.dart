@@ -326,12 +326,12 @@ class _PackagesState extends State<Packages>
                                                     TextSpan(
                                                       children: [
                                                         const TextSpan(
-                                                            text: "Price:"),
+                                                            text: "Delivery fee:"),
                                                         const TextSpan(
                                                             text: " "),
                                                         TextSpan(
                                                           text:
-                                                              "₦${doubleFormattedText(snapshot.data![index].prices)}",
+                                                              "₦${doubleFormattedText(snapshot.data![index].deliveryFee)}",
                                                           style:
                                                               const TextStyle(
                                                             fontWeight:
@@ -421,12 +421,12 @@ class _PackagesState extends State<Packages>
                                                         TextSpan(
                                                           children: [
                                                             const TextSpan(
-                                                                text: "Price:"),
+                                                                text: "Delivery fee:"),
                                                             const TextSpan(
                                                                 text: " "),
                                                             TextSpan(
                                                               text:
-                                                                  "₦${doubleFormattedText(snapshot.data![index].prices)}",
+                                                                  "₦${doubleFormattedText(snapshot.data![index].deliveryFee)}",
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:
@@ -517,12 +517,12 @@ class _PackagesState extends State<Packages>
                                                         TextSpan(
                                                           children: [
                                                             const TextSpan(
-                                                                text: "Price:"),
+                                                                text: "Delivery fee:"),
                                                             const TextSpan(
                                                                 text: " "),
                                                             TextSpan(
                                                               text:
-                                                                  "₦${doubleFormattedText(snapshot.data![index].prices)}",
+                                                                  "₦${doubleFormattedText(snapshot.data![index].deliveryFee)}",
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:

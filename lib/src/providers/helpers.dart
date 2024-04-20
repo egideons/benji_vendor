@@ -57,13 +57,13 @@ String statusTypeConverter(StatusType statusType) {
     return "COMP";
   }
   if (statusType == StatusType.processing) {
-    return "processing";
+    return "received";
   }
   if (statusType == StatusType.pending) {
     return "PEND";
   }
   if (statusType == StatusType.cancelled) {
-    return "cancelled";
+    return "CANC";
   }
   if (statusType == StatusType.dispatched) {
     return "dispatched";
