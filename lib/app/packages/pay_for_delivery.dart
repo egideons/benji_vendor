@@ -10,6 +10,8 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/payment_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/payment/monnify.dart';
+import 'package:benji_vendor/src/payment/monnify_mobile.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
@@ -158,7 +160,8 @@ class _PayForDeliveryState extends State<PayForDelivery> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) {
-          return MonnifyWidget(
+          if (kIsWeb) {
+            return MonnifyWidget(
             apiKey: apiKey,
             contractCode: contractCode,
             email: email,
@@ -179,6 +182,31 @@ class _PayForDeliveryState extends State<PayForDelivery> {
               Get.back();
             },
           );
+          } else {
+            
+          return MonnifyWidgetMobile(
+            apiKey: apiKey,
+            contractCode: contractCode,
+            email: email,
+            phone: phone,
+            firstName: firstName,
+            lastName: lastName,
+            currency: currency,
+            amount: amount,
+            metaData: meta,
+            onTransaction: (response) async{
+              print('the response from my monnify $response');
+              if (response != null && response['status'] == "SUCCESS") {
+                await Future.delayed(Duration(seconds: 1));
+                toPackages();
+              }
+            },
+             onClose: () {
+              Get.back();
+            },
+          );
+          }
+
         }),
       );
     } on SocketException {
