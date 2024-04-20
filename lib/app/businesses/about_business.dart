@@ -43,7 +43,7 @@ class _AboutBusinessState extends State<AboutBusiness> {
       ratings = await getRatingsByVendorId(widget.business.id);
     } else {
       ratings = await getRatingsByVendorIdAndRating(
-          widget.business.vendorOwner.id, int.parse(active));
+          widget.business.id, int.parse(active));
     }
 
     setState(() {
@@ -299,8 +299,8 @@ class _AboutBusinessState extends State<AboutBusiness> {
                               _ratings = null;
                             });
 
-                            List<Ratings> ratings = await getRatingsByVendorId(
-                                widget.business.id);
+                            List<Ratings> ratings =
+                                await getRatingsByVendorId(widget.business.id);
 
                             setState(() {
                               _ratings = ratings;
@@ -340,7 +340,7 @@ class _AboutBusinessState extends State<AboutBusiness> {
 
                                         List<Ratings> ratings =
                                             await getRatingsByVendorIdAndRating(
-                                                widget.business.vendorOwner.id,
+                                                widget.business.id,
                                                 int.parse(active));
 
                                         setState(() {

@@ -38,6 +38,7 @@ class OrderModel {
 
   factory OrderModel.fromJson(Map<String, dynamic>? json) {
     json ??= {};
+    print('$json OrderModel');
     return OrderModel(
       id: json["id"] ?? notAvailable,
       code: json["code"] ?? 'emmma',
@@ -55,7 +56,7 @@ class OrderModel {
       longitude: json["longitude"] ?? notAvailable,
       deliveryAddress: DeliveryAddress.fromJson(json["delivery_address"]),
       message: json["message"] ?? notAvailable,
-      created: json["created"] ?? notAvailable,
+      created: json["created_at"] ?? notAvailable,
     );
   }
   Map<String, dynamic> toJson() => {

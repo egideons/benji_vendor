@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously, unused_field, invalid_use_of_protected_member
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -30,6 +31,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../src/providers/constants.dart';
 import '../../src/components/image/my_image.dart';
@@ -76,7 +78,7 @@ class _EditBusinessState extends State<EditBusiness> {
     vendorSunClosingHoursEC.text = widget.business.sunWeekClosingHours;
     businessBioEC.text = widget.business.businessBio;
     vendorBusinessTypeEC.text = widget.business.shopType.name;
-
+    shopType = widget.business.shopType.id;
     log("This is the shop image: $businessLogo");
   }
 
@@ -288,27 +290,34 @@ class _EditBusinessState extends State<EditBusiness> {
       ApiProcessorController.errorSnack("Please select a type of business");
       return;
     }
-    Map data = {
+    dynamic data = jsonEncode({
       "shop_name": shopNameEC.text,
+      "shop_type": shopType,
+      "businessBio": businessBioEC.text,
       "weekOpeningHours": vendorMonToFriOpeningHoursEC.text,
       "weekClosingHours": vendorMonToFriClosingHoursEC.text,
       "satOpeningHours": vendorSatOpeningHoursEC.text,
       "satClosingHours": vendorSatClosingHoursEC.text,
       "sunWeekOpeningHours": vendorSunOpeningHoursEC.text,
       "sunWeekClosingHours": vendorSunClosingHoursEC.text,
-      "businessBio": businessBioEC.text,
-      "shop_type": vendorBusinessTypeEC.text,
-    };
+    });
+
     consoleLog("This is the data: $data");
 
     consoleLog("shop_image: ${selectedLogoImage?.path}");
     log('${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}');
 
-    await FormController.instance.postAuth(
-        '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}',
-        data,
-        'changeVendorBusinessProfile');
-    if (FormController.instance.status.toString().startsWith('2')) {
+    final response = await http.post(
+      Uri.parse(
+          '${Api.baseUrl}/vendors/changeVendorbusinessprofile/${widget.business.vendorOwner.id}/${widget.business.id}'),
+      headers: authHeader(),
+      body: data,
+    );
+
+    print(response.body);
+    print(response.statusCode);
+
+    if (response.statusCode.toString().startsWith('2')) {
       await PushNotificationController.showNotification(
         title: "Success.",
         body: "Your business profile has been successfully updated.",
@@ -795,6 +804,11 @@ class _EditBusinessState extends State<EditBusiness> {
                       },
                       builder: (controller) {
                         return ItemDropDownMenu(
+                          onSelected: (value) {
+                            setState(() {
+                              shopType = value;
+                            });
+                          },
                           itemEC: vendorBusinessTypeEC,
                           hintText: vendorBusinessTypeEC.text.isEmpty
                               ? "E.g Restaurant, Auto Dealer, etc"
@@ -1029,7 +1043,7 @@ class _EditBusinessState extends State<EditBusiness> {
                           textInputType: TextInputType.text,
                         ),
                         kSizedBox,
-                      
+
                         kSizedBox,
 
                         // business bio
