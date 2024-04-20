@@ -52,7 +52,9 @@ class _AboutBusinessState extends State<AboutBusiness> {
   }
 
   void _viewAllReviews() => Get.to(
-        () => const UserReviewsPage(),
+        () => UserReviewsPage(
+          business: widget.business,
+        ),
         routeName: 'UserReviewsPage',
         duration: const Duration(milliseconds: 300),
         fullscreenDialog: true,

@@ -57,7 +57,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
     });
     await ProductController.instance.getBusinessProducts(widget.business.id);
     await OrderController.instance.getOrdersByStatus(widget.business.id);
-    await ReviewsController.instance.getReviews();
+    await ReviewsController.instance.getReviews(widget.business.id);
     setState(() {
       refreshing = false;
     });

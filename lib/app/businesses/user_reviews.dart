@@ -2,6 +2,7 @@ import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/card/customer_review_card.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/controller/reviews_controller.dart';
+import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:benji_vendor/src/providers/constants.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class UserReviewsPage extends StatefulWidget {
-  const UserReviewsPage({super.key});
+  final BusinessModel business;
+  const UserReviewsPage({super.key, required this.business});
 
   @override
   State<UserReviewsPage> createState() => _UserReviewsPageState();
@@ -146,7 +148,8 @@ class _UserReviewsPageState extends State<UserReviewsPage> {
                                         : const Color(0xFFA9AAB1),
                               ),
                               onPressed: () async {
-                                await controller.setRatingValue();
+                                await controller
+                                    .setRatingValue(widget.business.id);
                               },
                               child: const Text(
                                 'All',
@@ -180,8 +183,8 @@ class _UserReviewsPageState extends State<UserReviewsPage> {
                                                     : const Color(0xFFA9AAB1),
                                           ),
                                           onPressed: () async {
-                                            await controller
-                                                .setRatingValue(item);
+                                            await controller.setRatingValue(
+                                                widget.business.id, item);
                                           },
                                           child: Row(
                                             children: [
@@ -219,7 +222,7 @@ class _UserReviewsPageState extends State<UserReviewsPage> {
             kSizedBox,
             GetBuilder<ReviewsController>(
               initState: (state) async {
-                await ReviewsController.instance.getReviews();
+                await ReviewsController.instance.getReviews(widget.business.id);
               },
               builder: (controller) => Column(
                 children: [
