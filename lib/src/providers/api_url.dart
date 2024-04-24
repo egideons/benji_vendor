@@ -79,7 +79,7 @@ class HandleData {
               },
               body: body,
             )
-            .timeout(const Duration(seconds: 20));
+            .timeout(const Duration(seconds: 50));
       } else {
         response = await http
             .post(
@@ -91,7 +91,7 @@ class HandleData {
               },
               body: jsonEncode(body),
             )
-            .timeout(const Duration(seconds: 20));
+            .timeout(const Duration(seconds: 50));
       }
     } catch (e) {
       response = null;
