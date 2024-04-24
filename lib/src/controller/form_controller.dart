@@ -77,40 +77,30 @@ class FormController extends GetxController {
       String successMsg = "Submitted successfully"]) async {
     isLoad.value = true;
     update();
-    update([tag]);
     final response = await http.post(
       Uri.parse(url),
       headers: authHeader(),
       body: data,
     );
+    print('${response.body} response.body ${response.statusCode}');
     status.value = response.statusCode;
-    consoleLog(response.body);
-    var responseBody = jsonDecode(response.body);
-
     if (response.statusCode != 200) {
       ApiProcessorController.errorSnack(errorMsg);
       isLoad.value = false;
       update();
-      update([tag]);
       return;
-    } else {
-      if (responseBody is String) {
-        ApiProcessorController.successSnack(successMsg);
-        isLoad.value = false;
-        update();
-        update([tag]);
-      } else if (responseBody is Map) {
-        responseObject.value = (responseBody);
-        ApiProcessorController.successSnack(successMsg);
-        isLoad.value = false;
-        update();
-        update([tag]);
-      }
     }
 
+    if (successMsg != '') {
+      ApiProcessorController.successSnack(successMsg);
+    }
     isLoad.value = false;
+   try{
+    responseObject.value = jsonDecode(response.body) as Map;
+   }on TypeError {
+    responseObject.value = {'data': jsonDecode(response.body)};
+   }
     update();
-    update([tag]);
   }
 
   Future patchAuth(String url, Map data, String tag,
@@ -118,7 +108,7 @@ class FormController extends GetxController {
       String successMsg = "Submitted successfully"]) async {
     isLoad.value = true;
     update();
-    update([tag]);
+    // update([tag]);
     try {
       final response = await http.patch(
         Uri.parse(url),
@@ -133,20 +123,20 @@ class FormController extends GetxController {
         ApiProcessorController.errorSnack(errorMsg);
         isLoad.value = false;
         update();
-        update([tag]);
+        // update([tag]);
         return;
       } else {
         if (responseBody is String) {
           ApiProcessorController.successSnack(successMsg);
           isLoad.value = false;
           update();
-          update([tag]);
+          // update([tag]);
         } else if (responseBody is Map) {
           responseObject.value = (responseBody);
           ApiProcessorController.successSnack(successMsg);
           isLoad.value = false;
           update();
-          update([tag]);
+          // update([tag]);
         }
       }
     } on SocketException {
@@ -158,14 +148,14 @@ class FormController extends GetxController {
 
     isLoad.value = false;
     update();
-    update([tag]);
+    // update([tag]);
   }
 
   Future postNoAuth(String url, Map data, String tag,
       [String errorMsg = "Error occurred",
       String successMsg = "Submitted successfully"]) async {
     isLoad.value = true;
-    update([tag]);
+    // update([tag]);
     final response = await http.post(
       Uri.parse(url),
       body: data,
@@ -174,7 +164,7 @@ class FormController extends GetxController {
     if (response.statusCode != 200) {
       ApiProcessorController.errorSnack(errorMsg);
       isLoad.value = false;
-      update([tag]);
+      // update([tag]);
       return;
     }
 
@@ -198,7 +188,7 @@ class FormController extends GetxController {
 
     isLoad.value = true;
     update();
-    update([tag]);
+    // update([tag]);
 
     var request = http.MultipartRequest("POST", Uri.parse(url));
     Map<String, String> headers = authHeader();
@@ -244,7 +234,7 @@ class FormController extends GetxController {
         ApiProcessorController.successSnack(successMsg);
         isLoad.value = false;
         update();
-        update([tag]);
+        // update([tag]);
       }
     } on SocketException {
       ApiProcessorController.errorSnack(noInternetMsg);
@@ -257,7 +247,7 @@ class FormController extends GetxController {
 
     isLoad.value = false;
     update();
-    update([tag]);
+    // update([tag]);
     return;
   }
 
@@ -275,7 +265,7 @@ class FormController extends GetxController {
 
     isLoad.value = true;
     update();
-    update([tag]);
+    // update([tag]);
 
     var request = http.MultipartRequest("POST", Uri.parse(url));
     Map<String, String> headers = authHeader();
@@ -331,7 +321,7 @@ class FormController extends GetxController {
         ApiProcessorController.successSnack(successMsg);
         isLoad.value = false;
         update();
-        update([tag]);
+        // update([tag]);
       }
     } on SocketException {
       ApiProcessorController.errorSnack(noInternetMsg);
@@ -344,7 +334,7 @@ class FormController extends GetxController {
 
     isLoad.value = false;
     update();
-    update([tag]);
+    // update([tag]);
     return;
   }
 
@@ -356,7 +346,7 @@ class FormController extends GetxController {
     consoleLog('we in the in');
     isLoad.value = true;
     update();
-    update([tag]);
+    // update([tag]);
 
     var request = http.MultipartRequest("PUT", Uri.parse(url));
     Map<String, String> headers = authHeader();
@@ -390,14 +380,14 @@ class FormController extends GetxController {
       ApiProcessorController.successSnack(successMsg);
       isLoad.value = false;
       update();
-      update([tag]);
+      // update([tag]);
       return;
     }
 
     ApiProcessorController.errorSnack(errorMsg);
     isLoad.value = false;
     update();
-    update([tag]);
+    // update([tag]);
     return;
   }
 
@@ -408,7 +398,7 @@ class FormController extends GetxController {
 
     isLoad.value = true;
     update();
-    update([tag]);
+    // update([tag]);
 
     var request = http.MultipartRequest("POST", Uri.parse(url));
     Map<String, String> headers = authHeader();
@@ -442,7 +432,7 @@ class FormController extends GetxController {
         log('Got here!');
         isLoad.value = false;
         update();
-        update([tag]);
+        // update([tag]);
         return;
       } else {
         ApiProcessorController.errorSnack(errorMsg);
@@ -451,7 +441,7 @@ class FormController extends GetxController {
       ApiProcessorController.errorSnack("Please connect to the internet");
       isLoad.value = false;
       update();
-      update([tag]);
+      // update([tag]);
       return;
     } catch (e) {
       ApiProcessorController.errorSnack("An error occured. \nERROR: $e");
@@ -459,13 +449,13 @@ class FormController extends GetxController {
       response = null;
       isLoad.value = false;
       update();
-      update([tag]);
+      // update([tag]);
       return;
     }
 
     ApiProcessorController.errorSnack(errorMsg);
     isLoad.value = false;
-    update([tag]);
+    // update([tag]);
     return;
   }
 }

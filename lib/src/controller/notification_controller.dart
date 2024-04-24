@@ -29,6 +29,7 @@ class NotificationController extends GetxController {
     try {
       http.Response? response = await HandleData.getApi(url, token);
       var responseData = await ApiProcessorController.errorState(response);
+      print(responseData);
       var save = notificationModelFromJson(responseData);
       notification.value = save;
       update();

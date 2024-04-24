@@ -44,6 +44,7 @@ class ProductController extends GetxController {
 
   reset() {
     loadedAll.value = false;
+    isLoadMore.value = false;
     loadNum.value = 10;
     products.value = [];
     update();

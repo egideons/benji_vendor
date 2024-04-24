@@ -2,6 +2,7 @@
 
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
+import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -64,12 +65,11 @@ class BusinessOrderContainer extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Wrap(
-                alignment: WrapAlignment.spaceBetween,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: media.width - 200,
-                    // color: kAccentColor,
+                    width: media.width - 320,
                     child: Text(
                       order.deliveryStatus == "CANC"
                           ? "Cancelled"

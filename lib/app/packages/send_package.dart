@@ -1,37 +1,37 @@
 // ignore_for_file: use_build_context_synchronously, invalid_use_of_protected_member
 
-import 'dart:developer';
 import 'dart:io';
-
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
+import 'package:benji_vendor/app/packages/packages.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
+import 'package:benji_vendor/src/components/input/item_category_dropdown_menu.dart';
 import 'package:benji_vendor/src/components/input/my_intl_phonefield.dart';
 import 'package:benji_vendor/src/components/input/my_maps_textformfield.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/components/input/number_textformfield.dart';
 import 'package:benji_vendor/src/components/section/location_list_tile.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
+import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
+import 'package:benji_vendor/src/controller/package_controller.dart';
+import 'package:benji_vendor/src/controller/payment_controller.dart';
+import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
+import 'package:benji_vendor/src/googleMaps/web_map.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/keys.dart';
 import 'package:benji_vendor/src/providers/network_utils.dart';
+import 'package:benji_vendor/src/providers/responsive_constants.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-import '../../src/components/input/item_category_dropdown_menu.dart';
-import '../../src/controller/error_controller.dart';
-import '../../src/controller/form_controller.dart';
-import '../../src/controller/push_notifications_controller.dart';
-import '../../src/controller/send_package_controller.dart';
-import '../../src/controller/user_controller.dart';
 import '../../src/providers/constants.dart';
-import '../../src/providers/responsive_constants.dart';
 import '../../theme/colors.dart';
 import 'pay_for_delivery.dart';
 
@@ -89,6 +89,7 @@ class _SendPackageState extends State<SendPackage> {
 
   final itemValueEC = TextEditingController();
 
+  final latLngDetailController = LatLngDetailController.instance;
   //=============================== FOCUS NODES ==================================\\
   final pickupFN = FocusNode();
   final senderNameFN = FocusNode();
@@ -104,6 +105,7 @@ class _SendPackageState extends State<SendPackage> {
   List<AutocompletePrediction> placePredictionsDrop = [];
   final selectedLocationPick = ValueNotifier<String?>(null);
   final selectedLocationDrop = ValueNotifier<String?>(null);
+
   //=============================== FUNCTIONS ==================================\\
   void placeAutoCompletePick(String query) async {
     Uri uri = Uri.https(
@@ -151,9 +153,9 @@ class _SendPackageState extends State<SendPackage> {
       pickupEC.text = newLocation;
     });
 
-    List<Location> location = await locationFromAddress(newLocation);
-    latitudePick = location[0].latitude.toString();
-    longitudePick = location[0].longitude.toString();
+    List location = await parseLatLng(newLocation);
+    latitudePick = location[0];
+    longitudePick = location[1];
   }
 
   setLocationDrop(index) async {
@@ -164,9 +166,9 @@ class _SendPackageState extends State<SendPackage> {
       dropOffEC.text = newLocation;
     });
 
-    List<Location> location = await locationFromAddress(newLocation);
-    latitudeDrop = location[0].latitude.toString();
-    longitudeDrop = location[0].longitude.toString();
+    List location = await parseLatLng(newLocation);
+    latitudeDrop = location[0];
+    longitudeDrop = location[1];
   }
 
   continueStep() {
@@ -200,7 +202,7 @@ class _SendPackageState extends State<SendPackage> {
   }
 
   void toGetLocationOnMapPick() async {
-    var result = await Get.to(
+    await Get.to(
       () => const GetLocationOnMap(),
       routeName: 'GetLocationOnMap',
       duration: const Duration(milliseconds: 300),
@@ -210,29 +212,27 @@ class _SendPackageState extends State<SendPackage> {
       popGesture: true,
       transition: Transition.rightToLeft,
     );
+    String pinnedLocation =
+        LatLngDetailController.instance.latLngDetail.value[2];
+    String latitude = LatLngDetailController.instance.latLngDetail.value[0];
+    String longitude = LatLngDetailController.instance.latLngDetail.value[1];
 
-    final LatLngDetailController latLngDetailController =
-        LatLngDetailController.instance;
+    double latitudeValue = double.parse(latitude);
+    double longitudeValue = double.parse(longitude);
 
-    if (latLngDetailController.isNotEmpty()) {
-      String latitude = latLngDetailController.latLngDetail.value[0];
-      String longitude = latLngDetailController.latLngDetail.value[1];
-      String pinnedLocation = latLngDetailController.latLngDetail.value[2];
-      latLngDetailController.setEmpty();
-
-      log(
-        "Received Data - Maps Location: $pinnedLocation, Latitude: $latitude, Longitude: $longitude",
-      );
-      setState(() {
-        pickupEC.text = pinnedLocation;
-        latitudePick = latitude;
-        longitudePick = longitude;
-      });
+    setState(() {
+      pickupEC.text = pinnedLocation;
+      latitudePick = latitudeValue.toString();
+      longitudePick = longitudeValue.toString();
+    });
+    if (kDebugMode) {
+      print("LATLNG: $latitudePick,$longitudePick");
+      print("pickup text : ${pickupEC.text}");
     }
   }
 
   void toGetLocationOnMapDrop() async {
-    var result = await Get.to(
+    await Get.to(
       () => const GetLocationOnMap(),
       routeName: 'GetLocationOnMap',
       duration: const Duration(milliseconds: 300),
@@ -243,21 +243,41 @@ class _SendPackageState extends State<SendPackage> {
       transition: Transition.rightToLeft,
     );
 
-    final LatLngDetailController latLngDetailController =
-        LatLngDetailController.instance;
+    String pinnedLocation =
+        LatLngDetailController.instance.latLngDetail.value[2];
+    String latitude = LatLngDetailController.instance.latLngDetail.value[0];
+    String longitude = LatLngDetailController.instance.latLngDetail.value[1];
 
-    if (latLngDetailController.isNotEmpty()) {
-      String latitude = latLngDetailController.latLngDetail.value[0];
-      String longitude = latLngDetailController.latLngDetail.value[1];
-      String pinnedLocation = latLngDetailController.latLngDetail.value[2];
-      latLngDetailController.setEmpty();
+    double latitudeValue = double.parse(latitude);
+    double longitudeValue = double.parse(longitude);
 
-      setState(() {
-        dropOffEC.text = pinnedLocation;
-        latitudeDrop = latitude;
-        longitudeDrop = longitude;
-      });
+    setState(() {
+      dropOffEC.text = pinnedLocation;
+      latitudeDrop = latitudeValue.toString();
+      longitudeDrop = longitudeValue.toString();
+    });
+
+    // latitudeDrop = latLngDetailController.latLngDetail.value[0];
+    // longitudeDrop = latLngDetailController.latLngDetail.value[1];
+    // dropOffEC.text = latLngDetailController.latLngDetail.value[2];
+    // latLngDetailController.setEmpty();
+    if (kDebugMode) {
+      print("LATLNG: $latitudeDrop,$longitudeDrop");
+      print("dropOff text : ${dropOffEC.text}");
     }
+  }
+
+  _toPackageScreen() {
+    Get.to(
+      () => const Packages(),
+      routeName: 'Packages',
+      duration: const Duration(milliseconds: 300),
+      fullscreenDialog: true,
+      curve: Curves.easeIn,
+      preventDuplicates: true,
+      popGesture: true,
+      transition: Transition.rightToLeft,
+    );
   }
 
   //===================== Scroll to Top ==========================\\
@@ -293,12 +313,11 @@ class _SendPackageState extends State<SendPackage> {
       return;
     }
     if (senderNameEC.text.isEmpty) {
-      ApiProcessorController.errorSnack("Please fill in the sender's name");
+      ApiProcessorController.errorSnack("Please fill in your name");
       return;
     }
     if (senderPhoneEC.text.isEmpty) {
-      ApiProcessorController.errorSnack(
-          "Please fill in the sender's phone number");
+      ApiProcessorController.errorSnack("Please fill in your phone number");
       return;
     }
     if (dropOffEC.text.isEmpty) {
@@ -331,7 +350,10 @@ class _SendPackageState extends State<SendPackage> {
           "Please fill in the quantity of the item");
       return;
     }
-
+    // if (selectedImage == null) {
+    //   ApiProcessorController.errorSnack("Please select an image");
+    //   return;
+    // }
     Map data = {
       'client_id': UserController.instance.user.value.id.toString(),
       'pickUpAddress': pickupEC.text,
@@ -354,8 +376,8 @@ class _SendPackageState extends State<SendPackage> {
     setState(() {
       submittingForm = true;
     });
-    await FormController.instance
-        .postAuth(Api.baseUrl + Api.createItemPackage, data, 'createPackage');
+    await FormController.instance.postAuth(Api.baseUrl + Api.createItemPackage,
+        data, 'createPackage', "Error occurred", '');
     setState(() {
       submittingForm = true;
     });
@@ -365,12 +387,7 @@ class _SendPackageState extends State<SendPackage> {
               ? FormController.instance.responseObject['package_id']
               : null; // or provide a default value if needed
       consoleLog("This is the package ID: $packageId");
-      await PushNotificationController.showNotification(
-        title: "Success",
-        body: "Your package form has been successfully submitted.",
-        summary: "Package Delivery",
-        largeIcon: "asset://assets/icons/package.png",
-      );
+      await PaymentController.instance.getDeliveryFee(packageId);
       Get.to(
         () => PayForDelivery(
           packageId: packageId,
@@ -405,20 +422,14 @@ class _SendPackageState extends State<SendPackage> {
             onPressed: details.onStepContinue,
             style: ElevatedButton.styleFrom(
               backgroundColor: kAccentColor,
+              foregroundColor: kTextWhiteColor,
               elevation: 20.0,
               fixedSize: Size(media.size.width, 60),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
-              "Next",
-              style: TextStyle(
-                color: kPrimaryColor,
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
+            child: const Text("Next"),
           )
         : continuePage == true
             ? Row(
@@ -429,6 +440,7 @@ class _SendPackageState extends State<SendPackage> {
                       return ElevatedButton(
                         onPressed: controller.isLoad.value ? null : submitForm,
                         style: ElevatedButton.styleFrom(
+                          foregroundColor: kTextWhiteColor,
                           backgroundColor: kAccentColor,
                           elevation: 20.0,
                           fixedSize: Size((media.size.width * 0.60) - 45, 60),
@@ -438,14 +450,7 @@ class _SendPackageState extends State<SendPackage> {
                         ),
                         child: controller.isLoad.value
                             ? CircularProgressIndicator(color: kPrimaryColor)
-                            : Text(
-                                "Submit",
-                                style: TextStyle(
-                                  color: kPrimaryColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.normal,
-                                ),
-                              ),
+                            : const Text("Submit"),
                       );
                     },
                   ),
@@ -467,8 +472,8 @@ class _SendPackageState extends State<SendPackage> {
                     child: Text(
                       "Back",
                       style: TextStyle(
-                        color: submittingForm ? kTextGreyColor : kAccentColor,
-                      ),
+                          color:
+                              submittingForm ? kTextGreyColor : kAccentColor),
                     ),
                   )
                 ],
@@ -478,6 +483,7 @@ class _SendPackageState extends State<SendPackage> {
                   ElevatedButton(
                     onPressed: details.onStepContinue,
                     style: ElevatedButton.styleFrom(
+                      foregroundColor: kTextWhiteColor,
                       backgroundColor: kAccentColor,
                       elevation: 20.0,
                       fixedSize: Size((media.size.width * 0.60) - 45, 60),
@@ -485,14 +491,7 @@ class _SendPackageState extends State<SendPackage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text(
-                      "Next",
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
+                    child: const Text("Next"),
                   ),
                   kWidthSizedBox,
                   OutlinedButton(
@@ -532,7 +531,7 @@ class _SendPackageState extends State<SendPackage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Pickup Address",
+                "Enter pickup address",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
@@ -544,7 +543,7 @@ class _SendPackageState extends State<SendPackage> {
                 controller: pickupEC,
                 validator: (value) {
                   RegExp pickupAddress = RegExp(r'^\d+\s+[a-zA-Z0-9\s.-]+$');
-                  if (value!.isEmpty || value == null) {
+                  if (value == null || value == "") {
                     pickupFN.requestFocus();
                     return "Enter pickup location";
                   } else if (!pickupAddress.hasMatch(value)) {
@@ -559,6 +558,9 @@ class _SendPackageState extends State<SendPackage> {
                     selectedLocationPick.value = value;
                     isTyping = true;
                   });
+                  if (kDebugMode) {
+                    print("ONCHANGED VALUE: ${selectedLocationPick.value}");
+                  }
                 },
                 onSaved: (value) {
                   pickupEC.text = value;
@@ -600,7 +602,7 @@ class _SendPackageState extends State<SendPackage> {
                   ),
                 ),
               ),
-              kSizedBox,
+              kHalfSizedBox,
               Divider(
                 height: 10,
                 thickness: 2,
@@ -637,7 +639,7 @@ class _SendPackageState extends State<SendPackage> {
                   ),
                 ),
               ),
-              kHalfSizedBox,
+              kSizedBox,
               const Text(
                 "Sender's Name",
                 style: TextStyle(
@@ -652,7 +654,7 @@ class _SendPackageState extends State<SendPackage> {
                   RegExp userNamePattern = RegExp(
                     r'^.{3,}$', //Min. of 3 characters
                   );
-                  if (value == null || value!.isEmpty) {
+                  if (value == null || value == "") {
                     senderNameFN.requestFocus();
                     return "Enter your name";
                   } else if (!userNamePattern.hasMatch(value)) {
@@ -693,7 +695,7 @@ class _SendPackageState extends State<SendPackage> {
                 textInputAction: TextInputAction.done,
                 focusNode: senderPhoneFN,
                 validator: (value) {
-                  if (value == null || value!.isEmpty) {
+                  if (value == null || value == "") {
                     senderPhoneFN.requestFocus();
                     return "Enter your phone number";
                   }
@@ -723,7 +725,7 @@ class _SendPackageState extends State<SendPackage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Drop-off Address",
+                "Enter drop-off address",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
@@ -735,7 +737,7 @@ class _SendPackageState extends State<SendPackage> {
                 controller: dropOffEC,
                 validator: (value) {
                   RegExp dropoffAddress = RegExp(r'^\d+\s+[a-zA-Z0-9\s.-]+$');
-                  if (value!.isEmpty || value == null) {
+                  if (value == null || value == "") {
                     dropOffFN.requestFocus();
                     return "Enter drop-off location";
                   } else if (!dropoffAddress.hasMatch(value)) {
@@ -750,6 +752,9 @@ class _SendPackageState extends State<SendPackage> {
                     selectedLocationDrop.value = value;
                     isTyping = true;
                   });
+                  if (kDebugMode) {
+                    print("ONCHANGED VALUE: ${selectedLocationDrop.value}");
+                  }
                 },
                 onSaved: (value) {
                   dropOffEC.text = value;
@@ -828,7 +833,7 @@ class _SendPackageState extends State<SendPackage> {
                   ),
                 ),
               ),
-              kHalfSizedBox,
+              kSizedBox,
               const Text(
                 "Receiver's Name",
                 style: TextStyle(
@@ -843,7 +848,7 @@ class _SendPackageState extends State<SendPackage> {
                   RegExp userNamePattern = RegExp(
                     r'^.{3,}$', //Min. of 3 characters
                   );
-                  if (value == null || value!.isEmpty) {
+                  if (value == null || value == "") {
                     receiverNameFN.requestFocus();
                     return "Enter receiver's name";
                   } else if (!userNamePattern.hasMatch(value)) {
@@ -885,7 +890,7 @@ class _SendPackageState extends State<SendPackage> {
                 focusNode: receiverPhoneFN,
                 validator: (value) {
                   if (value == null ||
-                      value.isEmpty ||
+                      value == "" ||
                       receiverPhoneEC.text.isEmpty) {
                     receiverPhoneFN.requestFocus();
                     return "Enter receiver's phone number";
@@ -928,7 +933,7 @@ class _SendPackageState extends State<SendPackage> {
                   RegExp userNamePattern = RegExp(
                     r'^.{3,}$', //Min. of 3 characters
                   );
-                  if (value == null || value!.isEmpty) {
+                  if (value == null || value == "") {
                     itemNameFN.requestFocus();
                     return "Enter the item's name";
                   } else if (!userNamePattern.hasMatch(value)) {
@@ -955,43 +960,48 @@ class _SendPackageState extends State<SendPackage> {
                 ),
               ),
               kHalfSizedBox,
-              GetBuilder<SendPackageController>(
-                init: SendPackageController(),
+              GetBuilder<MyPackageController>(
+                init: MyPackageController(),
                 initState: (controller) async {
-                  await SendPackageController.instance.getPackageCategory();
+                  await MyPackageController.instance.getPackageCategory();
                 },
                 builder: (controller) {
-                  return controller.isLoad.value
-                      ? Center(
-                          child: CircularProgressIndicator(color: kAccentColor),
-                        )
-                      : ItemDropDownMenu(
-                          itemEC: itemCategoryEC,
-                          mediaWidth: media.width - 70,
-                          hintText: "Choose category",
-                          onSelected: (value) {
-                            final selectedCategory =
-                                controller.packageCategory.firstWhere(
-                              (category) => category.id == value,
-                            );
-                            // Set the category id to itemWeightEC
-                            itemCategoryEC.text = value.toString();
-                            // Set the category title to itemWeight
-                            itemCategory = selectedCategory.name;
+                  return ItemDropDownMenu(
+                    itemEC: itemCategoryEC,
+                    mediaWidth: media.width - 70,
+                    hintText: "Choose category",
+                    onSelected: (value) {
+                      final selectedCategory =
+                          controller.packageCategory.firstWhere(
+                        (category) => category.id == value,
+                      );
+                      // Set the category id to itemWeightEC
+                      itemCategoryEC.text = value.toString();
+                      // Set the category title to itemWeight
+                      itemCategory = selectedCategory.name;
 
-                            consoleLog(
-                              "This is the item category title: $itemCategory",
-                            );
-                            consoleLog(
-                                "This is the item category ID: ${itemCategoryEC.text}");
-                          },
-                          dropdownMenuEntries2: controller.packageCategory
-                              .map((category) => DropdownMenuEntry(
-                                    value: category.id,
-                                    label: category.name,
-                                  ))
-                              .toList(),
-                        );
+                      consoleLog(
+                        "This is the item category title: $itemCategory",
+                      );
+                      consoleLog(
+                          "This is the item category ID: ${itemCategoryEC.text}");
+                    },
+                    dropdownMenuEntries2: controller.isLoad.value &&
+                            controller.packageCategory.isEmpty
+                        ? [
+                            const DropdownMenuEntry(
+                              value: 'Loading...',
+                              label: 'Loading...',
+                              enabled: false,
+                            )
+                          ]
+                        : controller.packageCategory
+                            .map((category) => DropdownMenuEntry(
+                                  value: category.id,
+                                  label: category.name,
+                                ))
+                            .toList(),
+                  );
                 },
               ),
               kSizedBox,
@@ -1003,46 +1013,51 @@ class _SendPackageState extends State<SendPackage> {
                 ),
               ),
               kHalfSizedBox,
-              GetBuilder<SendPackageController>(
-                init: SendPackageController(),
+              GetBuilder<MyPackageController>(
+                init: MyPackageController(),
                 initState: (controller) async {
-                  await SendPackageController.instance.getPackageWeight();
+                  await MyPackageController.instance.getPackageWeight();
                 },
                 builder: (controller) {
-                  return controller.isLoad.value
-                      ? Center(
-                          child: CircularProgressIndicator(color: kAccentColor),
-                        )
-                      : ItemDropDownMenu(
-                          itemEC: itemWeightEC,
-                          mediaWidth: media.width - 70,
-                          hintText: "Choose weight",
-                          onSelected: (value) {
-                            final selectedWeight =
-                                controller.packageWeight.firstWhere(
-                              (category) => category.id == value,
-                            );
-                            // Set the weight id to itemWeightEC
-                            itemWeightEC.text = value.toString();
-                            // Set the weight title to itemWeight
-                            itemWeight =
-                                "${selectedWeight.start}KG - ${selectedWeight.end}KG";
+                  return ItemDropDownMenu(
+                    itemEC: itemWeightEC,
+                    mediaWidth: media.width - 70,
+                    hintText: "Choose weight",
+                    onSelected: (value) {
+                      final selectedWeight =
+                          controller.packageWeight.firstWhere(
+                        (category) => category.id == value,
+                      );
+                      // Set the weight id to itemWeightEC
+                      itemWeightEC.text = value.toString();
+                      // Set the weight title to itemWeight
+                      itemWeight =
+                          "${selectedWeight.start}KG - ${selectedWeight.end}KG";
 
-                            consoleLog(
-                              "This is the item weight title: $itemWeight",
-                            );
-                            consoleLog(
-                              "This is the item weight ID: ${itemWeightEC.text}",
-                            );
-                          },
-                          dropdownMenuEntries2: controller.packageWeight
-                              .map((category) => DropdownMenuEntry(
-                                    value: category.id,
-                                    label:
-                                        "${category.start}KG - ${category.end}KG ",
-                                  ))
-                              .toList(),
-                        );
+                      consoleLog(
+                        "This is the item weight title: $itemWeight",
+                      );
+                      consoleLog(
+                        "This is the item weight ID: ${itemWeightEC.text}",
+                      );
+                    },
+                    dropdownMenuEntries2: controller.isLoad.value &&
+                            controller.packageWeight.isEmpty
+                        ? [
+                            const DropdownMenuEntry(
+                              value: 'Loading...',
+                              label: 'Loading...',
+                              enabled: false,
+                            )
+                          ]
+                        : controller.packageWeight
+                            .map((category) => DropdownMenuEntry(
+                                  value: category.id,
+                                  label:
+                                      "${category.start}KG - ${category.end}KG ",
+                                ))
+                            .toList(),
+                  );
                 },
               ),
               kSizedBox,
@@ -1057,7 +1072,7 @@ class _SendPackageState extends State<SendPackage> {
               NumberTextFormField(
                 controller: itemQuantityEC,
                 validator: (value) {
-                  if (value == null || value!.isEmpty) {
+                  if (value == null || value == "") {
                     itemQuantityFN.requestFocus();
                     return "Enter the item's quantity";
                   }
@@ -1069,7 +1084,7 @@ class _SendPackageState extends State<SendPackage> {
                 textInputAction: TextInputAction.next,
                 focusNode: itemQuantityFN,
                 hintText: "Enter the quantity ",
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatter: [FilteringTextInputFormatter.digitsOnly],
               ),
               kSizedBox,
               const Text(
@@ -1083,7 +1098,7 @@ class _SendPackageState extends State<SendPackage> {
               MyTextFormField(
                 controller: itemValueEC,
                 validator: (value) {
-                  if (value == null || value!.isEmpty) {
+                  if (value == null || value == "") {
                     itemValueFN.requestFocus();
                     return "Enter the item's value (in Naira)";
                   }
@@ -1223,7 +1238,33 @@ class _SendPackageState extends State<SendPackage> {
         appBar: MyAppBar(
           title: "Send Package",
           elevation: 0.0,
-          actions: const [],
+          actions: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: OutlinedButton(
+                onPressed: _toPackageScreen,
+                style: OutlinedButton.styleFrom(
+                  // padding: const EdgeInsets.all(10),
+                  disabledForegroundColor: kGreyColor,
+                  disabledBackgroundColor: kLightGreyColor,
+                  enabledMouseCursor: SystemMouseCursors.click,
+                  disabledMouseCursor: SystemMouseCursors.forbidden,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  side: BorderSide(color: kAccentColor),
+                ),
+                child: const Text(
+                  "My Packages",
+                  style: TextStyle(
+                    color: kTextBlackColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
+          ],
           backgroundColor: kPrimaryColor,
         ),
         floatingActionButton: isScrollToTopBtnVisible
@@ -1231,13 +1272,13 @@ class _SendPackageState extends State<SendPackage> {
                 onPressed: scrollToTop,
                 mini: deviceType(media.width) > 2 ? false : true,
                 backgroundColor: kAccentColor,
-                foregroundColor: kPrimaryColor,
                 enableFeedback: true,
                 mouseCursor: SystemMouseCursors.click,
                 tooltip: "Scroll to top",
                 hoverColor: kAccentColor,
                 hoverElevation: 50.0,
-                child: const FaIcon(FontAwesomeIcons.chevronUp, size: 18),
+                child: FaIcon(FontAwesomeIcons.chevronUp,
+                    size: 18, color: kPrimaryColor),
               )
             : const SizedBox(),
         body: SafeArea(

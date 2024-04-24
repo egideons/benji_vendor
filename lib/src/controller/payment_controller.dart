@@ -3,10 +3,9 @@ import 'dart:io';
 
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
+import 'package:benji_vendor/src/providers/helpers.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
-import '../providers/helpers.dart';
 
 class PaymentController extends GetxController {
   static PaymentController get instance {
@@ -22,17 +21,15 @@ class PaymentController extends GetxController {
 
     try {
       final response = await http.get(
-        Uri.parse('${Api.baseUrl}${Api.getDeliveryFee}$packageId/package'),
+        Uri.parse('${Api.baseUrl}/payments/getdeliveryfee/$packageId/package'),
         headers: authHeader(),
       );
-
-      consoleLog("${Api.baseUrl}${Api.getDeliveryFee}$packageId/package");
-      consoleLog('Status Code: ${response.statusCode}');
-      consoleLog('Response Body: ${response.body}');
-
       if (response.statusCode == 200) {
         final dynamic decodedBody = jsonDecode(response.body);
+
         responseObject.value = (decodedBody as Map);
+        update();
+        return;
         // consoleLog(responseObject.value.toString());
       } else {
         throw Exception(

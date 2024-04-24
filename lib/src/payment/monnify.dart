@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:webviewx/webviewx.dart';
+import 'package:webviewx2/webviewx2.dart';
 
 class MonnifyWidget extends StatefulWidget {
   final String apiKey;
@@ -110,9 +109,9 @@ class MonnifyWidgetState extends State<MonnifyWidget> {
             DartCallback(
               name: 'paymentsuccess',
               callBack: (message) {
-                log('message success gotten $message');
+                print('message success gotten $message');
                 dynamic resp = jsonDecode(message);
-                log('the resp $resp');
+                print('the resp $resp');
                 widget.onTransaction(resp);
               },
             ),

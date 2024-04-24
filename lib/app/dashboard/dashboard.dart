@@ -10,6 +10,7 @@ import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/providers/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -264,8 +265,8 @@ class _DashboardState extends State<Dashboard>
                       user: UserController.instance.user.value,
                       onTap: editProfile,
                     ),
-                    kSizedBox,
-                    Container(
+                    kIsWeb ? kSizedBox : const SizedBox(),
+                    kIsWeb ? Container(
                       alignment: Alignment.center,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -282,7 +283,7 @@ class _DashboardState extends State<Dashboard>
                           ),
                         ),
                       ),
-                    ),
+                    ): const SizedBox(),
                     kSizedBox,
                     Container(
                       padding: const EdgeInsets.all(10),

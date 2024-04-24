@@ -10,7 +10,6 @@ class OrderModel {
   String code;
   double totalPrice;
   double deliveryFee;
-  String assignedStatus;
   String deliveryStatus;
   Client client;
   List<Orderitem> orderitems;
@@ -25,7 +24,6 @@ class OrderModel {
     required this.code,
     required this.totalPrice,
     required this.deliveryFee,
-    required this.assignedStatus,
     required this.deliveryStatus,
     required this.client,
     required this.orderitems,
@@ -40,10 +38,9 @@ class OrderModel {
     json ??= {};
     return OrderModel(
       id: json["id"] ?? notAvailable,
-      code: json["code"] ?? notAvailable,
+      code: json["code"] ?? 'emmma',
       totalPrice: json["total_price"] ?? 0.0,
       deliveryFee: json["delivery_fee"] ?? 0.0,
-      assignedStatus: json["assigned_status"] ?? "PEND",
       deliveryStatus: json["delivery_status"] ?? "PEND",
       client: Client.fromJson(json["client"]),
       orderitems: json["orderitems"] == null
@@ -55,7 +52,7 @@ class OrderModel {
       longitude: json["longitude"] ?? notAvailable,
       deliveryAddress: DeliveryAddress.fromJson(json["delivery_address"]),
       message: json["message"] ?? notAvailable,
-      created: json["created"] ?? notAvailable,
+      created: json["created_at"] ?? notAvailable,
     );
   }
   Map<String, dynamic> toJson() => {
@@ -63,7 +60,6 @@ class OrderModel {
         "code": code,
         "total_price": totalPrice,
         "delivery_fee": deliveryFee,
-        "assigned_status": assignedStatus,
         "delivery_status": deliveryStatus,
         "client": client.toJson(),
         "orderitems": orderitems.map((item) => (item).toJson()).toList(),

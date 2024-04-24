@@ -44,19 +44,6 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  toUserReviewsPage() {
-    Get.to(
-      () => const UserReviewsPage(),
-      routeName: 'UserReviewsPage',
-      duration: const Duration(milliseconds: 300),
-      fullscreenDialog: true,
-      curve: Curves.easeIn,
-      preventDuplicates: true,
-      popGesture: true,
-      transition: Transition.rightToLeft,
-    );
-  }
-
   toPackages() {
     Get.to(
       () => const Packages(),

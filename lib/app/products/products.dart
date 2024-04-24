@@ -216,7 +216,8 @@ class _ProductsState extends State<Products> {
                                           color: kAccentColor,
                                         ),
                                       )
-                                    : ListView.builder(
+                                    : ListView.separated(
+                                      separatorBuilder: (context, index) => kSizedBox,
                                         shrinkWrap: true,
                                         reverse: true,
                                         itemCount: controller.products.length,

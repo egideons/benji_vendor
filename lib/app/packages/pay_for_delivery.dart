@@ -1,19 +1,21 @@
+// ignore_for_file: use_build_context_synchronously, unused_field
+
 import 'dart:io';
 import 'dart:math';
 
 import 'package:benji_vendor/app/packages/packages.dart';
+import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
+import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
+import 'package:benji_vendor/src/controller/payment_controller.dart';
+import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/payment/monnify.dart';
+import 'package:benji_vendor/src/payment/monnify_mobile.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../src/components/appbar/my_appbar.dart';
-import '../../src/components/button/my elevatedButton.dart';
-import '../../src/controller/auth_controller.dart';
-import '../../src/controller/error_controller.dart';
-import '../../src/controller/payment_controller.dart';
-import '../../src/controller/user_controller.dart';
-import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/keys.dart';
 import '../../theme/colors.dart';
@@ -55,11 +57,10 @@ class _PayForDeliveryState extends State<PayForDelivery> {
   @override
   void initState() {
     super.initState();
-    getUserData();
     getTotalPrice();
-    callGetDeliveryFee();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      callGetDeliveryFee();
+    });
     packageData = <String>[
       widget.senderName,
       "$countryDialCode ${widget.senderPhoneNumber}",
@@ -83,23 +84,21 @@ class _PayForDeliveryState extends State<PayForDelivery> {
 
   // Map? _data;
   String countryDialCode = '+234';
-  // final double subTotal = 0
+  final double subTotal = 0;
   double totalPrice = 0;
-  int deliveryFee =
-      PaymentController.instance.responseObject.containsKey('delivery_fee')
-          ? PaymentController.instance.responseObject['delivery_fee']
-          : 0;
-  double serviceFee = 0;
-  String? userFirstName;
-  String? userLastName;
-  String? userEmail;
+  double deliveryFee =
+      (PaymentController.instance.responseObject['details'] ?? {})
+              .containsKey('delivery_fee')
+          ? PaymentController.instance.responseObject['details']['delivery_fee']
+          : 0.0;
+
   final String paymentDescription = "Benji app delivery";
   final String currency = "NGN";
 
   // double insuranceFee = 0;
   // double discountFee = 0;
   getTotalPrice() {
-    totalPrice = deliveryFee + serviceFee;
+    totalPrice = subTotal + deliveryFee;
   }
 
   final List<String> titles = <String>[
@@ -127,6 +126,16 @@ class _PayForDeliveryState extends State<PayForDelivery> {
   //===================== BOOL VALUES =======================\\
 
   //===================== FUNCTIONS =======================\\
+  void toPackages() => Get.off(
+        () => const Packages(),
+        routeName: 'Packages',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        preventDuplicates: true,
+        popGesture: true,
+        transition: Transition.rightToLeft,
+      );
 
   Future<void> callGetDeliveryFee() async {
     await PaymentController.instance.getDeliveryFee(widget.packageId);
@@ -141,16 +150,18 @@ class _PayForDeliveryState extends State<PayForDelivery> {
     String firstName = UserController.instance.user.value.firstName;
     String lastName = UserController.instance.user.value.lastName;
     String currency = 'NGN';
-    String amount = (deliveryFee).toString();
+    String amount = (deliveryFee).ceil().toString();
     Map meta = {
-      "client_id": UserController.instance.user.value.id,
-      "the_package_id": widget.packageId
+      "the_item_id": widget.packageId,
+      'the_item_type': 'package',
+      "client_id": UserController.instance.user.value.id
     };
     try {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) {
-          return MonnifyWidget(
+          if (kIsWeb) {
+            return MonnifyWidget(
             apiKey: apiKey,
             contractCode: contractCode,
             email: email,
@@ -160,32 +171,50 @@ class _PayForDeliveryState extends State<PayForDelivery> {
             currency: currency,
             amount: amount,
             metaData: meta,
-            onTransaction: (response) {
-              consoleLog('the response from my alatpay $response');
-              if (response != null) {
+            onTransaction: (response) async{
+              print('the response from my monnify $response');
+              if (response != null && response['status'] == "SUCCESS") {
+                await Future.delayed(Duration(seconds: 1));
                 toPackages();
               }
             },
+             onClose: () {
+              Get.back();
+            },
           );
+          } else {
+            
+          return MonnifyWidgetMobile(
+            apiKey: apiKey,
+            contractCode: contractCode,
+            email: email,
+            phone: phone,
+            firstName: firstName,
+            lastName: lastName,
+            currency: currency,
+            amount: amount,
+            metaData: meta,
+            onTransaction: (response) async{
+              print('the response from my monnify $response');
+              if (response != null && response['status'] == "SUCCESS") {
+                await Future.delayed(Duration(seconds: 1));
+                toPackages();
+              }
+            },
+             onClose: () {
+              Get.back();
+            },
+          );
+          }
+
         }),
       );
     } on SocketException {
       ApiProcessorController.errorSnack("Please connect to the internet");
     } catch (e) {
-      consoleLog(e.toString());
+      print(e.toString());
     }
   }
-
-  void toPackages() => Get.off(
-        () => const Packages(),
-        routeName: 'Packages',
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        preventDuplicates: true,
-        popGesture: true,
-        transition: Transition.rightToLeft,
-      );
 
   String generateRandomString(int len) {
     const chars =
@@ -197,16 +226,6 @@ class _PayForDeliveryState extends State<PayForDelivery> {
         (_) => chars.codeUnitAt(rnd.nextInt(chars.length)),
       ),
     );
-  }
-
-  getUserData() async {
-    AuthController.instance.checkIfAuthorized();
-    var user = UserController.instance.user.value;
-    setState(() {
-      userFirstName = user.firstName;
-      userLastName = user.lastName;
-      userEmail = user.email;
-    });
   }
 
   @override
@@ -345,7 +364,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                           ),
                         ),
                       ),
-                      const Divider(height: 20, color: kGreyColor1),
+                      kSizedBox,
                       Column(
                         children: [
                           Row(
@@ -360,7 +379,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                                 ),
                               ),
                               Text(
-                                '₦${intFormattedText(deliveryFee)}',
+                                '₦${doubleFormattedText(deliveryFee)}',
                                 style: TextStyle(
                                   color: kTextGreyColor,
                                   fontSize: 16,
@@ -371,28 +390,6 @@ class _PayForDeliveryState extends State<PayForDelivery> {
                             ],
                           ),
                           kSizedBox,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Service Fee',
-                                style: TextStyle(
-                                  color: kTextBlackColor,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              Text(
-                                '₦${doubleFormattedText(serviceFee)}',
-                                style: TextStyle(
-                                  color: kTextGreyColor,
-                                  fontSize: 16,
-                                  fontFamily: 'Sen',
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
                         ],
                       ),
                       kHalfSizedBox,

@@ -28,16 +28,16 @@ class BusinessController extends GetxController {
   var loadNum = 10.obs;
 
   Future<void> scrollListener(scrollController) async {
-    if (BusinessController.instance.loadedAll.value) {
-      return;
-    }
+    // if (BusinessController.instance.loadedAll.value || BusinessController.instance.isLoadMore.value) {
+    //   return;
+    // }
 
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
-      BusinessController.instance.isLoadMore.value = true;
-      update();
-      await BusinessController.instance.getVendorBusinesses();
-    }
+    // if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+    //     !scrollController.position.outOfRange) {
+    //   BusinessController.instance.isLoadMore.value = true;
+    //   update();
+    //   await BusinessController.instance.getVendorBusinesses();
+    // }
   }
 
   refreshData() {

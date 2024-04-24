@@ -21,10 +21,11 @@ class ReviewsController extends GetxController {
   var total = 0.obs;
   var reviews = <Ratings>[].obs;
 
-  Future<void> scrollListener(scrollController, [int value = 0]) async {
+  Future<void> scrollListener(scrollController, businessId,
+      [int value = 0]) async {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
-      setRatingValue(value);
+      setRatingValue(businessId, value);
     }
   }
 
@@ -43,19 +44,19 @@ class ReviewsController extends GetxController {
     update();
   }
 
-  Future setRatingValue([int value = 0]) async {
+  Future setRatingValue(String businessId, [int value = 0]) async {
     ratingValue.value = value;
     reviews.value = [];
     update();
-    await getReviews();
+    await getReviews(businessId);
   }
 
-  Future getReviews([int? value]) async {
+  Future getReviews(String businessId, [int? value]) async {
     isLoad.value = true;
 
     try {
-      reviews.value =
-          await getRatingsByVendorIdAndOrRating(value ?? ratingValue.value);
+      reviews.value = await getRatingsByVendorIdAndOrRating(
+          value ?? ratingValue.value, businessId);
     } catch (e) {
       consoleLog(e.toString());
     }
@@ -63,16 +64,17 @@ class ReviewsController extends GetxController {
     update();
   }
 
-  Future<List<Ratings>> getRatingsByVendorIdAndOrRating(int rating,
+  Future<List<Ratings>> getRatingsByVendorIdAndOrRating(
+      int rating, String businessId,
       {start = 0, end = 100}) async {
-    int id = UserController.instance.user.value.id;
+    String id = businessId;
 
     // url to be changed to vendor endpoint
     late http.Response response;
     if (rating != 0) {
       response = await http.get(
         Uri.parse(
-            '$baseURL/clients/filterVendorReviewsByRating/$id?rating_value=$rating'),
+            '$baseURL/clients/businessReviewByRating/$id?rating_value=$rating'),
         headers: authHeader(),
       );
       if (response.statusCode == 200) {
@@ -90,7 +92,7 @@ class ReviewsController extends GetxController {
     } else {
       response = await http.get(
         Uri.parse(
-            '$baseURL/vendors/$id/getAllVendorRatings?start=$start&end=$end'),
+            '$baseURL/agents/getBusinessRatings/$id?start=$start&end=$end'),
         headers: authHeader(),
       );
 

@@ -57,16 +57,15 @@ Future<List<Ratings>> getRatingsByVendorId(String id,
   }
 }
 
-Future<List<Ratings>> getRatingsByVendorIdAndRating(int id, int rating,
+Future<List<Ratings>> getRatingsByVendorIdAndRating(String id, int rating,
     {start = 0, end = 10}) async {
   // url to be changed to agent endpoint
-
   final response = await http.get(
     Uri.parse(
-        '$baseURL/clients/filterVendorReviewsByRating/$id?rating_value=$rating'),
+        '$baseURL/clients/businessReviewByRating/$id?rating_value=$rating'),
     headers: authHeader(),
   );
-
+  print('${response.body} getRatingsByVendorIdAndRating');
   if (response.statusCode == 200) {
     return (jsonDecode(response.body) as List)
         .map((item) => Ratings.fromJson(item))
