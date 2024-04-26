@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/route_manager.dart';
 
+import '../../src/controller/fcm_messaging_controller.dart';
 import '../../theme/colors.dart';
 import '../businesses/add_business.dart';
 import '../dashboard/dashboard.dart';
@@ -20,6 +21,8 @@ class _OverViewState extends State<OverView> {
   @override
   void initState() {
     currentIndex = widget.currentIndex;
+    FcmMessagingController.instance.handleFCM();
+
     super.initState();
   }
 
