@@ -22,6 +22,7 @@ import 'package:benji_vendor/src/controller/shopping_location_controller.dart';
 import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
+import 'package:benji_vendor/src/googleMaps/web_map.dart';
 import 'package:benji_vendor/src/providers/api_url.dart';
 import 'package:benji_vendor/src/providers/constants.dart';
 import 'package:benji_vendor/src/providers/helpers.dart';
@@ -52,7 +53,6 @@ class _AddBusinessState extends State<AddBusiness> {
     super.initState();
     CategoryController.instance.getCategory();
     scrollController.addListener(_scrollListener);
-    
   }
 
   @override
@@ -165,9 +165,9 @@ class _AddBusinessState extends State<AddBusiness> {
       addressEC.text = newLocation;
     });
 
-    List<Location> location = await locationFromAddress(newLocation);
-    latitude = location[0].latitude.toString();
-    longitude = location[0].longitude.toString();
+    List location = await parseLatLng(newLocation);
+    latitude = location[0];
+    longitude = location[1];
   }
 
 // select bank
@@ -288,7 +288,7 @@ class _AddBusinessState extends State<AddBusiness> {
         title: "Success.",
         body: "Your business profile has been successfully updated.",
       );
-    BusinessController.instance.getVendorBusinesses();
+      BusinessController.instance.getVendorBusinesses();
 
       Get.close(1);
     }
