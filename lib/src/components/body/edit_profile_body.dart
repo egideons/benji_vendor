@@ -410,7 +410,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                           validator: (value) {
                             RegExp namePattern =
                                 RegExp(r'^.{3,}$'); //Min. of 3 characters
-                            if (value == null || value!.isEmpty) {
+                            if (value == null || value == '') {
                               firstNameFN.requestFocus();
                               return "Enter your first name";
                             } else if (!namePattern.hasMatch(value)) {
@@ -440,7 +440,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                           validator: (value) {
                             RegExp namePattern =
                                 RegExp(r'^.{3,}$'); //Min. of 3 characters
-                            if (value == null || value!.isEmpty) {
+                            if (value == null || value == '') {
                               lastNameFN.requestFocus();
                               return "Enter your last name";
                             } else if (!namePattern.hasMatch(value)) {
