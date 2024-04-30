@@ -32,9 +32,15 @@ class LoginController extends GetxController {
 
       http.Response? response =
           await HandleData.postApi(Api.baseUrl + Api.login, null, finalData);
-
-      var jsonData = jsonDecode(response?.body ?? '');
-      if ((response?.statusCode ?? 400) != 200) {
+      print("${response?.statusCode} status of login");
+      if (response == null) {
+        ApiProcessorController.errorSnack("Please check your internet");
+        isLoad.value = false;
+        update();
+        return;
+      }
+      var jsonData = jsonDecode(response.body);
+      if (response.statusCode != 200) {
         ApiProcessorController.errorSnack(
             "Invalid email or password. Try again");
         isLoad.value = false;
@@ -90,7 +96,7 @@ class LoginController extends GetxController {
       );
       return;
     } catch (e) {
-      ApiProcessorController.errorSnack("Invalid email or password. Try again");
+      ApiProcessorController.errorSnack("Please check your internet");
       isLoad.value = false;
       update();
     }
