@@ -69,19 +69,14 @@ class _BusinessProductsState extends State<BusinessProducts> {
                     emptyCardMessage: "You don't have any products",
                   );
                 }
-                return Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: (controller.products)
-                        .map(
-                          (item) => BusinessProductContainer(
-                            onTap: () => viewProduct(item),
-                            product: item,
-                          ),
-                        )
-                        .toList(),
-                  ),
-                );
+                return ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => BusinessProductContainer(
+                          onTap: () => viewProduct(controller.products[index]),
+                          product: controller.products[index],
+                        ),
+                    separatorBuilder: (context, index) => kSizedBox,
+                    itemCount: controller.products.length);
               }),
           kSizedBox,
         ],
