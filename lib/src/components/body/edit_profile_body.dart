@@ -49,7 +49,8 @@ class _EditProfileBodyState extends State<EditProfileBody> {
     firstNameEC.text = UserController.instance.user.value.firstName;
     lastNameEC.text = UserController.instance.user.value.lastName;
     mapsLocationEC.text = UserController.instance.user.value.address;
-    userPhoneNumberEC.text = UserController.instance.user.value.phone;
+    userPhoneNumberEC.text =
+        UserController.instance.user.value.phone.replaceFirst("+234", '');
     latitude = UserController.instance.user.value.latitude;
     longitude = UserController.instance.user.value.longitude;
     horizontalGroupValue = UserController.instance.user.value.gender;
@@ -194,7 +195,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
       'last_name': lastNameEC.text,
       'address': mapsLocationEC.text,
       'gender': horizontalGroupValue,
-      'phone': userPhoneNumberEC.text,
+      'phone': countryDialCode + userPhoneNumberEC.text,
       'latitude': latitude,
       'longitude': longitude,
     };
