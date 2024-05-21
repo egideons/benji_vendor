@@ -46,7 +46,7 @@ class DashboardUserCard extends StatelessWidget {
                   child: MyImage(
                     width: deviceType(media.width) >= 2 ? 180 : 100,
                     height: deviceType(media.width) >= 2 ? 180 : 100,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     url: user.profileLogo,
                   ),
                 ),
