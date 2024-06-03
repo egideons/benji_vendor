@@ -21,7 +21,6 @@ import 'package:benji_vendor/src/providers/network_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -529,9 +528,13 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                             MyMapsTextFormField(
                               controller: mapsLocationEC,
                               validator: (value) {
-                                if (value == null) {
+                                if (value == null || value == "") {
                                   mapsLocationFN.requestFocus();
-                                  "Enter a location";
+                                  return "Enter a location";
+                                }
+                                if (latitude == null || longitude == null) {
+                                  mapsLocationFN.requestFocus();
+                                  return "Please select a location so we can get the coordinates";
                                 }
                                 return null;
                               },
