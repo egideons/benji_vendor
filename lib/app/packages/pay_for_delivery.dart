@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:benji_vendor/app/assign/assign_rider.dart';
 import 'package:benji_vendor/app/packages/packages.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
@@ -162,51 +163,58 @@ class _PayForDeliveryState extends State<PayForDelivery> {
         MaterialPageRoute(builder: (context) {
           if (kIsWeb) {
             return MonnifyWidget(
-            apiKey: apiKey,
-            contractCode: contractCode,
-            email: email,
-            phone: phone,
-            firstName: firstName,
-            lastName: lastName,
-            currency: currency,
-            amount: amount,
-            metaData: meta,
-            onTransaction: (response) async{
-              print('the response from my monnify $response');
-              if (response != null && response['status'] == "SUCCESS") {
-                await Future.delayed(Duration(seconds: 1));
-                toPackages();
-              }
-            },
-             onClose: () {
-              Get.back();
-            },
-          );
+              apiKey: apiKey,
+              contractCode: contractCode,
+              email: email,
+              phone: phone,
+              firstName: firstName,
+              lastName: lastName,
+              currency: currency,
+              amount: amount,
+              metaData: meta,
+              onTransaction: (response) async {
+                print('the response from my monnify $response');
+                if (response != null && response['status'] == "SUCCESS") {
+                  await Future.delayed(Duration(seconds: 1));
+                  Get.to(
+                    () => AssignRiderMap(
+                        itemId: widget.packageId, itemType: 'package'),
+                    routeName: 'AssignRiderMap',
+                    duration: const Duration(milliseconds: 300),
+                    fullscreenDialog: true,
+                    curve: Curves.easeIn,
+                    popGesture: false,
+                    transition: Transition.rightToLeft,
+                  );
+                }
+              },
+              onClose: () {
+                Get.back();
+              },
+            );
           } else {
-            
-          return MonnifyWidgetMobile(
-            apiKey: apiKey,
-            contractCode: contractCode,
-            email: email,
-            phone: phone,
-            firstName: firstName,
-            lastName: lastName,
-            currency: currency,
-            amount: amount,
-            metaData: meta,
-            onTransaction: (response) async{
-              print('the response from my monnify $response');
-              if (response != null && response['status'] == "SUCCESS") {
-                await Future.delayed(Duration(seconds: 1));
-                toPackages();
-              }
-            },
-             onClose: () {
-              Get.back();
-            },
-          );
+            return MonnifyWidgetMobile(
+              apiKey: apiKey,
+              contractCode: contractCode,
+              email: email,
+              phone: phone,
+              firstName: firstName,
+              lastName: lastName,
+              currency: currency,
+              amount: amount,
+              metaData: meta,
+              onTransaction: (response) async {
+                print('the response from my monnify $response');
+                if (response != null && response['status'] == "SUCCESS") {
+                  await Future.delayed(Duration(seconds: 1));
+                  toPackages();
+                }
+              },
+              onClose: () {
+                Get.back();
+              },
+            );
           }
-
         }),
       );
     } on SocketException {

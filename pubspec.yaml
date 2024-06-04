@@ -60,6 +60,8 @@ dependencies:
   webview_flutter_android:
   webview_flutter_platform_interface:
   webview_flutter_wkwebview:
+  flutter_polyline_points:
+
 
 dev_dependencies:
   flutter_test:
