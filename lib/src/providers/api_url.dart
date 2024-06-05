@@ -40,6 +40,11 @@ class Api {
   static const getVendorBusinesses = "/vendors/getVendorBusinesses/";
   static const changeVendorBusinessProfile =
       "/vendors/changeVendorbusinessprofile/";
+  static setBusinessOnlineStatus(id, status) =>
+      "/vendors/setBusinessOnlineStatus/$id/?status=$status";
+
+  static getMyBusinessInfo(businessId) =>
+      "/vendors/$businessId/getMybusinessInfo";
 
 //Item Packages
   static const getPackageCategory = "/sendPackage/getPackageCategory/";

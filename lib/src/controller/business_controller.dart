@@ -20,6 +20,11 @@ class BusinessController extends GetxController {
 
   var isLoad = false.obs;
   var isLoadBalance = false.obs;
+  var isLoadBusinessStatus = false.obs;
+  var isLoadBusinessInfo = false.obs;
+
+  var isBusinessOpen = false.obs;
+
   var businesses = <BusinessModel>[].obs;
   var balance = 0.0.obs;
 
@@ -45,6 +50,72 @@ class BusinessController extends GetxController {
     loadNum.value = 10;
     businesses.value = [];
     getVendorBusinesses();
+  }
+
+  setBusiness(businessId) async {
+    var url = "${Api.baseUrl}/vendors/$businessId/getMybusinessInfo";
+    try {
+      var response = await http.get(Uri.parse(url), headers: authHeader());
+
+      if (response.statusCode == 200) {
+        log("This is the response body of the business status: ${response.body}");
+        var responseJson = jsonDecode(response.body);
+        print(responseJson["is_online"]);
+
+        isBusinessOpen.value = responseJson["is_online"] ?? false;
+      }
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet.");
+    }
+
+    update();
+  }
+
+  Future setBusinessOnlineStatus(
+    String businessId,
+    bool status,
+  ) async {
+    var url = Api.baseUrl + Api.setBusinessOnlineStatus(businessId, status);
+
+    log(businessId);
+    log(url);
+
+    isLoadBusinessStatus.value = true;
+    update();
+
+    try {
+      var response = await http.get(Uri.parse(url), headers: authHeader());
+
+      if (response.statusCode == 200) {
+        log("This is the response body of the business status: ${response.body}");
+        var responseJson = jsonDecode(response.body);
+        print(responseJson["is_online"]);
+
+        isBusinessOpen.value = responseJson["is_online"] ?? false;
+      }
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet.");
+    }
+    isLoadBusinessStatus.value = false;
+    update();
+  }
+
+  Future getBusinessInfo(String businessId) async {
+    var url = Api.baseUrl + Api.getMyBusinessInfo(businessId);
+    isLoadBusinessInfo.value = true;
+    update();
+
+    try {
+      var response = await http.get(Uri.parse(url), headers: authHeader());
+
+      if (response.statusCode == 200) {
+        log("This is the response body of business info: ${response.body}");
+      }
+    } on SocketException {
+      ApiProcessorController.errorSnack("Please connect to the internet.");
+    }
+    isLoadBusinessInfo.value = false;
+    update();
   }
 
   Future getVendorBusinesses() async {
