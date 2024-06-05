@@ -5,10 +5,11 @@ import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
 import '../../src/components/image/my_image.dart';
 import '../../src/components/section/my_liquid_refresh.dart';
+import '../../src/controller/business_controller.dart';
 import '../../src/controller/error_controller.dart';
 import '../../src/controller/order_controller.dart';
 import '../../src/controller/reviews_controller.dart';
@@ -37,6 +38,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
   @override
   void initState() {
     super.initState();
+    loadPage();
     scrollController.addListener(scrollListener);
     _tabBarController = TabController(length: 3, vsync: this);
   }
@@ -51,13 +53,15 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
   //========================= VARIABLES =========================\\
   bool refreshing = false;
 
-  Future<void> _handleRefresh() async {
+  Future<void> loadPage() async {
     setState(() {
       refreshing = true;
     });
     await ProductController.instance.getBusinessProducts(widget.business.id);
     await OrderController.instance.getOrdersByStatus(widget.business.id);
     await ReviewsController.instance.getReviews(widget.business.id);
+    await BusinessController.instance.setBusiness(widget.business.id);
+
     setState(() {
       refreshing = false;
     });
@@ -162,7 +166,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
     var media = MediaQuery.of(context).size;
 
     return MyLiquidRefresh(
-      onRefresh: _handleRefresh,
+      onRefresh: loadPage,
       child: Scaffold(
         appBar: MyAppBar(
           title: isScrollToTopBtnVisible
@@ -380,45 +384,69 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                           ],
                                         ),
                                       ),
-                                      Container(
-                                        width: media.width * 0.28,
-                                        // height: 57,
-                                        padding: const EdgeInsets.all(
-                                            kDefaultPadding),
-                                        decoration: ShapeDecoration(
-                                          color: kPrimaryColor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(19),
-                                          ),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              widget.business.vendorOwner
-                                                      .isOnline
-                                                  ? "Online"
-                                                  : 'Offline',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                color: widget.business
-                                                        .vendorOwner.isOnline
-                                                    ? kSuccessColor
-                                                    : kAccentColor,
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                letterSpacing: -0.36,
+                                      GetBuilder<BusinessController>(
+                                        builder: (controller) {
+                                          return Container(
+                                            // width: media.width * 0.32,
+                                            // height: 57,
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: ShapeDecoration(
+                                              color: kPrimaryColor,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(19),
                                               ),
                                             ),
-                                            const SizedBox(width: 5),
-                                            FaIcon(
-                                              Icons.info,
-                                              color: kAccentColor,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Switch(
+                                                  value: controller
+                                                      .isBusinessOpen.value,
+                                                  mouseCursor:
+                                                      SystemMouseCursors.click,
+                                                  activeColor: kSuccessColor,
+                                                  onChanged: controller
+                                                          .isLoadBusinessStatus
+                                                          .value
+                                                      ? null
+                                                      : (value) {
+                                                          controller
+                                                              .setBusinessOnlineStatus(
+                                                            widget.business.id,
+                                                            !controller
+                                                                .isBusinessOpen
+                                                                .value,
+                                                          );
+                                                        },
+                                                ),
+                                                Text(
+                                                  controller
+                                                          .isBusinessOpen.value
+                                                      ? "Open".toUpperCase()
+                                                      : 'Closed'.toUpperCase(),
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: controller
+                                                            .isBusinessOpen
+                                                            .value
+                                                        ? kSuccessColor
+                                                        : kAccentColor,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w800,
+                                                    letterSpacing: -0.36,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 5),
+                                                // FaIcon(
+                                                //   Icons.info,
+                                                //   color: kAccentColor,
+                                                // ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
+                                          );
+                                        },
                                       ),
                                     ],
                                   )
