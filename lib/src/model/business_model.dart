@@ -44,6 +44,7 @@ class BusinessModel {
   dynamic agent;
   double averageRating;
   int numberOfClientsReactions;
+  bool isOnline;
 
   BusinessModel({
     required this.id,
@@ -82,6 +83,7 @@ class BusinessModel {
     required this.agent,
     required this.averageRating,
     required this.numberOfClientsReactions,
+    required this.isOnline,
   });
 
   factory BusinessModel.fromJson(Map<String, dynamic>? json) {
@@ -128,6 +130,7 @@ class BusinessModel {
       agent: json['agent'],
       averageRating: ((json["average_rating"] ?? 0.0) as double).toPrecision(1),
       numberOfClientsReactions: json["number_of_clients_reactions"] ?? 0,
+      isOnline: json["is_online"] ?? false,
     );
   }
 
@@ -165,5 +168,6 @@ class BusinessModel {
         "accountBank": accountBank,
         "average_rating": averageRating,
         "number_of_clients_reactions": numberOfClientsReactions,
+        "is_online": isOnline,
       };
 }
