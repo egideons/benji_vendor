@@ -9,14 +9,14 @@ import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/components/section/my_liquid_refresh.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
-import 'package:benji_vendor/src/providers/utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../main.dart';
+import '../../src/components/button/my elevatedButton.dart';
 import '../../src/components/card/empty.dart';
 import '../../src/components/container/business_container.dart';
 import '../../src/components/section/dashboard_businesses_display_controller.dart';
@@ -71,6 +71,11 @@ class _DashboardState extends State<Dashboard>
         widget.hideNavigation();
       }
     });
+
+    var updatedBusiness = prefs.getBool("updatedBusiness") ?? false;
+    if (updatedBusiness) {
+      showMessageDialog();
+    }
   }
 
   @override
@@ -221,6 +226,83 @@ class _DashboardState extends State<Dashboard>
         popGesture: true,
         transition: Transition.downToUp,
       );
+
+  void showMessageDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Alert!".toUpperCase(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: kAccentColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          content: const Text(
+            "Please update your business(es) info",
+            textAlign: TextAlign.center,
+            maxLines: 4,
+            style: TextStyle(
+              color: kTextBlackColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          actions: [
+            MyElevatedButton(
+              title: "Okay",
+              onPressed: () {
+                prefs.setBool("updateBusiness", true);
+                Get.close(0);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showAppUpdateDialog() {
+    showDialog(
+      context: context,
+      useSafeArea: true,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "UPDATE!".toUpperCase(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: kAccentColor,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          content: const Text(
+            "Please update your app",
+            textAlign: TextAlign.center,
+            maxLines: 4,
+            style: TextStyle(
+              color: kTextBlackColor,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          actions: [
+            MyElevatedButton(
+              title: "Okay",
+              onPressed: () {
+                prefs.setBool("updatedApp", true);
+                Get.close(0);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
