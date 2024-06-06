@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import '../../theme/colors.dart';
 
 //===================== Consts ==========================\\
+const String appVersion = '1.0.0';
+
 const int maxImageSize = 5 * 1024 * 1024; // 5 MB
 
 Future<bool> checkXFileSize(XFile? image) async {
