@@ -191,9 +191,10 @@ class _PackagesState extends State<Packages>
               child: Text(
                 'Draft packages',
                 style: TextStyle(
-                    color: kAccentColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold),
+                  color: kAccentColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
