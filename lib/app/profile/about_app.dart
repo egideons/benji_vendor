@@ -129,7 +129,7 @@ class _AboutAppState extends State<AboutApp> {
                           ),
                         ),
                         const Text(
-                          "v0.0.1",
+                          appVersion,
                           style: TextStyle(
                             color: kTextBlackColor,
                             fontSize: 16,
