@@ -146,15 +146,8 @@ class _ProductsState extends State<Products> {
                     ? Padding(
                         padding: const EdgeInsets.all(10),
                         child: MyOutlinedElevatedButton(
-                          elevation: 10,
                           onPressed: addProduct,
-                          circularBorderRadius: 10,
-                          minimumSizeWidth: 80,
-                          minimumSizeHeight: 40,
-                          maximumSizeWidth: 90,
-                          maximumSizeHeight: 40,
                           title: "Add",
-                          titleFontSize: 12,
                         ),
                       )
                     : const SizedBox(),
@@ -217,7 +210,8 @@ class _ProductsState extends State<Products> {
                                         ),
                                       )
                                     : ListView.separated(
-                                      separatorBuilder: (context, index) => kSizedBox,
+                                        separatorBuilder: (context, index) =>
+                                            kSizedBox,
                                         shrinkWrap: true,
                                         reverse: true,
                                         itemCount: controller.products.length,
