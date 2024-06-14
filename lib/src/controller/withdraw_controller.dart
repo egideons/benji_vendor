@@ -106,7 +106,7 @@ class WithdrawController extends GetxController {
     return;
   }
 
-  Future<void> validateBankNumbers(
+  Future<ValidateBankAccountModel> validateBankNumbers(
       String accountNumber, String bankCode) async {
     var url =
         "${Api.baseUrl}${Api.validateBankNumber}$accountNumber/$bankCode/monnify";
@@ -119,7 +119,7 @@ class WithdrawController extends GetxController {
 
       if (response.statusCode != 200) {
         validateAccount.value = ValidateBankAccountModel.fromJson(null);
-        return;
+        return validateAccount.value;
       }
       var responseData = jsonDecode(response.body);
       validateAccount.value = ValidateBankAccountModel.fromJson(
@@ -134,7 +134,7 @@ class WithdrawController extends GetxController {
 
     isLoadValidateAccount.value = false;
     update();
-    return;
+    return validateAccount.value;
   }
 
   Future<http.Response> withdraw(Map data) async {

@@ -99,6 +99,7 @@ class _AddBusinessState extends State<AddBusiness> {
 
   final accountNameEC = TextEditingController();
   final accountNumberEC = TextEditingController();
+  final accountCodeEC = TextEditingController();
   final accountTypeEC = TextEditingController();
   final accountBankEC = TextEditingController();
 
@@ -263,6 +264,12 @@ class _AddBusinessState extends State<AddBusiness> {
       ApiProcessorController.errorSnack("Please select a type of business");
       return;
     }
+
+    if (accountCodeEC.text.isEmpty) {
+      ApiProcessorController.errorSnack("Please put in valid bank details");
+      return;
+    }
+
     Map data = {
       "address": addressEC.text,
       "latitude": latitude ?? '',
@@ -312,6 +319,7 @@ class _AddBusinessState extends State<AddBusiness> {
           isOpenOnSunday ? sundayClosingTimeOfDay.format(context) : "CLOSED",
       "businessBio": businessBioEC.text,
       "shop_type": vendorBusinessTypeEC.text,
+      "accountCode": accountCodeEC.text,
     };
     consoleLog("This is the data: $data");
 
@@ -1950,10 +1958,16 @@ class _AddBusinessState extends State<AddBusiness> {
                           hintText: "Enter the account number here",
                           textInputAction: TextInputAction.next,
                           textInputType: TextInputType.name,
-                          onChanged: (value) {
+                          onChanged: (value) async {
                             if (value.length >= 10) {
-                              WithdrawController.instance.validateBankNumbers(
-                                  accountNumberEC.text, bankCode);
+                              final validateBank = await WithdrawController
+                                  .instance
+                                  .validateBankNumbers(
+                                      accountNumberEC.text, bankCode);
+                              setState(() {
+                                accountCodeEC.text =
+                                    validateBank.responseBody.bankCode;
+                              });
                             }
                             setState(() {});
                           },
