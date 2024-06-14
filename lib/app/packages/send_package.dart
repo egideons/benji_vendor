@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, invalid_use_of_protected_member
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:benji_vendor/app/google_maps/get_location_on_map.dart';
@@ -15,7 +16,6 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
 import 'package:benji_vendor/src/controller/package_controller.dart';
-import 'package:benji_vendor/src/controller/payment_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
 import 'package:benji_vendor/src/googleMaps/places_autocomplete_response.dart';
@@ -34,7 +34,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import 'pay_for_delivery.dart';
+import '../rider/check_for_available_rider_for_package_delivery.dart';
 
 class SendPackage extends StatefulWidget {
   const SendPackage({super.key});
@@ -383,32 +383,29 @@ class _SendPackageState extends State<SendPackage> {
     });
     await FormController.instance.postAuth(Api.baseUrl + Api.createItemPackage,
         data, 'createPackage', "Error occurred", '');
-    setState(() {
-      submittingForm = true;
-    });
-    if (FormController.instance.status.toString().startsWith('2')) {
+
+    if (FormController.instance.status.toString().startsWith('20')) {
       var packageId =
           FormController.instance.responseObject.containsKey('package_id')
               ? FormController.instance.responseObject['package_id']
               : null; // or provide a default value if needed
-      consoleLog("This is the package ID: $packageId");
-      await PaymentController.instance.getDeliveryFee(packageId);
+      log("This is the package ID: $packageId");
+
       Get.to(
-        () => PayForDelivery(
+        () => CheckForAvailableRiderForPackageDelivery(
           packageId: packageId,
           senderName: senderNameEC.text,
           senderPhoneNumber: senderPhoneEC.text,
           receiverName: receiverNameEC.text,
           receiverPhoneNumber: receiverPhoneEC.text,
-          receiverLocation: dropOffEC.text,
+          dropOff: dropOffEC.text,
           itemName: itemNameEC.text,
           itemQuantity: itemQuantityEC.text,
           itemWeight: itemWeight,
           itemValue: itemValueEC.text,
           itemCategory: itemCategory,
         ),
-        routeName: 'PayForDelivery',
-        duration: const Duration(milliseconds: 300),
+        routeName: 'check-for-available-rider',
         fullscreenDialog: true,
         curve: Curves.easeIn,
         preventDuplicates: true,

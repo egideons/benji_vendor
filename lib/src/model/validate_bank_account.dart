@@ -14,7 +14,7 @@ class ValidateBankAccountModel {
   });
 
   factory ValidateBankAccountModel.fromJson(Map<String, dynamic>? json) {
-    json ??= {};
+    json ??= {'responseBody': null};
     return ValidateBankAccountModel(
       requestSuccessful: json['requestSuccessful'] ?? false,
       responseMessage: json['responseMessage'] ?? notAvailable,
@@ -40,7 +40,7 @@ class BankDetailModel {
     return BankDetailModel(
       accountNumber: json['accountNumber'] ?? notAvailable,
       accountName: json['accountName'] ?? notAvailable,
-      bankCode: json['bankCode'] ?? notAvailable,
+      bankCode: json['bankCode'] ?? '',
     );
   }
 }

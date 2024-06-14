@@ -3,8 +3,8 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:benji_vendor/app/assign/assign_rider.dart';
 import 'package:benji_vendor/app/packages/packages.dart';
+import 'package:benji_vendor/app/rider/assign_rider.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
@@ -175,7 +175,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
               onTransaction: (response) async {
                 print('the response from my monnify $response');
                 if (response != null && response['status'] == "SUCCESS") {
-                  await Future.delayed(Duration(seconds: 1));
+                  await Future.delayed(const Duration(seconds: 1));
                   Get.to(
                     () => AssignRiderMap(
                         itemId: widget.packageId, itemType: 'package'),
@@ -206,7 +206,7 @@ class _PayForDeliveryState extends State<PayForDelivery> {
               onTransaction: (response) async {
                 print('the response from my monnify $response');
                 if (response != null && response['status'] == "SUCCESS") {
-                  await Future.delayed(Duration(seconds: 1));
+                  await Future.delayed(const Duration(seconds: 1));
                   toPackages();
                 }
               },
