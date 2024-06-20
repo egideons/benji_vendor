@@ -10,6 +10,9 @@ import '../controller/user_controller.dart';
 const baseURL = "https://resource.bgbot.app/api/v1";
 const baseImage = "https://resource.bgbot.app";
 
+const websocketBaseUrl =
+    "ws://wsbenji.bgbot.app/ws"; // the issue is that it is using ws on the backend instead of wss - "wss://wsbenji.bgbot.app/ws"
+
 var vendorId = UserController.instance.user.value.id;
 
 class Api {
@@ -28,6 +31,7 @@ class Api {
   static const listBanks = "/payments/list_banks/";
   static const validateBankNumber = "/payments/validateBankNumbers/";
 //Orders
+  static const myOrders = "/clients/listClientOrders/";
   static const changeOrderStatus = "/orders/vendorChangeStatus";
 
 //Vendor

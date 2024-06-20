@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:benji_vendor/app/rider/assign_rider.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/components/button/my%20elevatedButton.dart';
+import 'package:benji_vendor/src/controller/package_controller.dart';
 import 'package:benji_vendor/src/model/package/delivery_item.dart';
 import 'package:benji_vendor/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -472,14 +473,23 @@ class _ViewPackageState extends State<ViewPackage> {
               ),
               kSizedBox,
               isDispatched == false &&
-                      widget.deliveryItem.status.toLowerCase() != "dispatched"
-                  ? GetBuilder<FormController>(
-                      init: FormController(),
+                      widget.deliveryItem.status.toLowerCase() == "pending"
+                  ? GetBuilder<MyPackageController>(
+                      initState: (state) => MyPackageController.instance
+                          .getTaskItemSocket(widget.deliveryItem.id),
                       builder: (controller) {
                         return MyElevatedButton(
-                          title: "Dispatched",
-                          onPressed: itemDispatched,
-                          isLoading: controller.isLoad.value,
+                          disable:
+                              !controller.taskItemStatusUpdate.value.action,
+                          title: controller.hasFetched.value
+                              ? controller.taskItemStatusUpdate.value.buttonText
+                              : "Loading...",
+                          onPressed: controller.hasFetched.value
+                              ? () {
+                                  controller.updateTaskItemStatus(
+                                      widget.deliveryItem.id);
+                                }
+                              : () {},
                         );
                       },
                     )
