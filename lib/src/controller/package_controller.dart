@@ -185,14 +185,14 @@ class MyPackageController extends GetxController {
     channelTask.sink.add(jsonEncode({
       'user_id': UserController.instance.user.value.id,
       'package_id': packageId,
-      'user_type': 'client'
+      'user_type': 'vendor'
     }));
 
     Timer.periodic(const Duration(seconds: 10), (timer) {
       channelTask.sink.add(jsonEncode({
         'user_id': UserController.instance.user.value.id,
         'package_id': packageId,
-        'user_type': 'client'
+        'user_type': 'vendor'
       }));
     });
 
@@ -224,7 +224,7 @@ class MyPackageController extends GetxController {
       channelTask.sink.add(jsonEncode({
         'user_id': UserController.instance.user.value.id,
         'package_id': packageId,
-        'user_type': 'client'
+        'user_type': 'vendor'
       }));
       ApiProcessorController.successSnack("Updated successfully");
     } else {
