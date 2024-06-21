@@ -56,9 +56,6 @@ String statusTypeConverter(StatusType statusType) {
   if (statusType == StatusType.delivered) {
     return "COMP";
   }
-  if (statusType == StatusType.processing) {
-    return "received";
-  }
   if (statusType == StatusType.pending) {
     return "PEND";
   }

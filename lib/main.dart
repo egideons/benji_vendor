@@ -1,5 +1,6 @@
 import 'package:benji_vendor/app/splash_screens/startup_splash_screen.dart';
 import 'package:benji_vendor/src/controller/account_controller.dart';
+import 'package:benji_vendor/src/controller/order_status_change.dart';
 import 'package:benji_vendor/src/controller/package_controller.dart';
 import 'package:benji_vendor/src/controller/rider_controller.dart';
 import 'package:benji_vendor/src/controller/shopping_location_controller.dart';
@@ -64,6 +65,7 @@ void main() async {
   Get.put(AccountController());
   Get.put(MyPackageController());
   Get.put(RiderController());
+  Get.put(OrderStatusChangeController());
 
   if (!kIsWeb) {
     await Firebase.initializeApp(

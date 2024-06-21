@@ -10,14 +10,7 @@ import '../../src/controller/auth_controller.dart';
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
 
-enum StatusType {
-  pending,
-  dispatched,
-  processing,
-  confirmed,
-  delivered,
-  cancelled
-}
+enum StatusType { pending, dispatched, confirmed, delivered, cancelled }
 
 class Orders extends StatefulWidget {
   const Orders({super.key, required this.business});
