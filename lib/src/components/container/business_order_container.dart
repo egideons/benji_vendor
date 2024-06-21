@@ -2,7 +2,6 @@
 
 import 'package:benji_vendor/src/components/image/my_image.dart';
 import 'package:benji_vendor/src/model/order_model.dart';
-import 'package:benji_vendor/src/providers/responsive_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -111,7 +110,7 @@ class BusinessOrderContainer extends StatelessWidget {
                     children: [
                       TextSpan(
                         text:
-                            "₦ ${convertToCurrency(order.totalPrice.toString())}",
+                            "₦ ${convertToCurrency(order.preTotal.toString())}",
                         style: const TextStyle(
                           fontSize: 15,
                           fontFamily: 'sen',

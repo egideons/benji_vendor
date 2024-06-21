@@ -2,6 +2,7 @@ import 'package:benji_vendor/app/orders/order_details.dart';
 import 'package:benji_vendor/src/components/card/empty.dart';
 import 'package:benji_vendor/src/components/container/business_order_container.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
+import 'package:benji_vendor/src/controller/order_status_change.dart';
 import 'package:benji_vendor/src/model/business_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -218,72 +219,43 @@ class _OrdersState extends State<Orders> {
         ),
         kSizedBox,
         GetBuilder<OrderController>(
-          builder: (controller) =>
-              controller.isLoad.value && controller.vendorsOrderList.isEmpty
-                  ? Center(
-                      child: CircularProgressIndicator(color: kAccentColor),
-                    )
-                  : controller.vendorsOrderList.isEmpty
-                      ? const EmptyCard(
-                          emptyCardMessage: "There are no orders here")
-                      : ListView.separated(
-                          shrinkWrap: true,
-                          itemCount: controller.vendorsOrderList.length,
-                          physics: const BouncingScrollPhysics(),
-                          separatorBuilder: (context, index) => kSizedBox,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                Get.to(
-                                  () => OrderDetails(
-                                    business: widget.business,
-                                    order: controller.vendorsOrderList[index],
-                                    orderStatus: controller
-                                                .vendorsOrderList[index]
-                                                .deliveryStatus ==
-                                            "COMP"
-                                        ? "Completed"
-                                        : controller.vendorsOrderList[index]
-                                                    .deliveryStatus ==
-                                                "dispatched"
-                                            ? "Dispatched"
-                                            : controller.vendorsOrderList[index]
-                                                        .deliveryStatus ==
-                                                    "PEND"
-                                                ? "Pending"
-                                                : "Completed",
-                                    orderStatusColor: controller
-                                                .vendorsOrderList[index]
-                                                .deliveryStatus ==
-                                            "CANC"
-                                        ? kAccentColor
-                                        : controller.vendorsOrderList[index]
-                                                    .deliveryStatus ==
-                                                "dispatched"
-                                            ? kSecondaryColor
-                                            : controller.vendorsOrderList[index]
-                                                        .deliveryStatus ==
-                                                    "PEND"
-                                                ? kLoadingColor
-                                                : kSuccessColor,
-                                  ),
-                                  routeName: 'OrderDetails',
-                                  duration: const Duration(milliseconds: 300),
-                                  fullscreenDialog: true,
-                                  curve: Curves.easeIn,
-                                  preventDuplicates: true,
-                                  popGesture: true,
-                                  transition: Transition.rightToLeft,
-                                );
-                              },
-                              borderRadius: BorderRadius.circular(12),
-                              mouseCursor: SystemMouseCursors.click,
-                              child: BusinessOrderContainer(
-                                order: controller.vendorsOrderList[index],
-                              ),
+          builder: (controller) => controller.isLoad.value &&
+                  controller.vendorsOrderList.isEmpty
+              ? Center(
+                  child: CircularProgressIndicator(color: kAccentColor),
+                )
+              : controller.vendorsOrderList.isEmpty
+                  ? const EmptyCard(
+                      emptyCardMessage: "There are no orders here")
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: controller.vendorsOrderList.length,
+                      physics: const BouncingScrollPhysics(),
+                      separatorBuilder: (context, index) => kSizedBox,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            OrderStatusChangeController.instance
+                                .setOrder(controller.vendorsOrderList[index]);
+                            Get.to(
+                              () => const OrderDetails(),
+                              routeName: 'OrderDetails',
+                              duration: const Duration(milliseconds: 300),
+                              fullscreenDialog: true,
+                              curve: Curves.easeIn,
+                              preventDuplicates: true,
+                              popGesture: true,
+                              transition: Transition.rightToLeft,
                             );
                           },
-                        ),
+                          borderRadius: BorderRadius.circular(12),
+                          mouseCursor: SystemMouseCursors.click,
+                          child: BusinessOrderContainer(
+                            order: controller.vendorsOrderList[index],
+                          ),
+                        );
+                      },
+                    ),
         ),
         kSizedBox,
         GetBuilder<OrderController>(

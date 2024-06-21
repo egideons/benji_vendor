@@ -9,6 +9,7 @@ class OrderModel {
   String id;
   String code;
   double totalPrice;
+  double preTotal;
   double deliveryFee;
   String deliveryStatus;
   Client client;
@@ -23,6 +24,7 @@ class OrderModel {
     required this.id,
     required this.code,
     required this.totalPrice,
+    required this.preTotal,
     required this.deliveryFee,
     required this.deliveryStatus,
     required this.client,
@@ -40,6 +42,7 @@ class OrderModel {
       id: json["id"] ?? notAvailable,
       code: json["code"] ?? notAvailable,
       totalPrice: json["total_price"] ?? 0.0,
+      preTotal: json["pre_total"] ?? 410.0,
       deliveryFee: json["delivery_fee"] ?? 0.0,
       deliveryStatus: json["delivery_status"] ?? "PEND",
       client: Client.fromJson(json["client"]),
