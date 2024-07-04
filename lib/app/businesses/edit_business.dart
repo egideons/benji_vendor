@@ -209,7 +209,9 @@ class _EditBusinessState extends State<EditBusiness> {
     );
     if (image != null) {
       selectedLogoImage = image;
-      Get.back();
+      if (!kIsWeb) {
+        Get.close(1);
+      }
       setState(() {});
     }
   }
@@ -220,7 +222,9 @@ class _EditBusinessState extends State<EditBusiness> {
     );
     if (image != null) {
       selectedCoverImage = image;
-      Get.back();
+      if (!kIsWeb) {
+        Get.close(1);
+      }
       setState(() {});
     }
   }
