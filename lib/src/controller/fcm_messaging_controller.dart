@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:benji_vendor/app/orders/awaiting_orders.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -50,17 +52,33 @@ class FcmMessagingController extends GetxController {
     }
 
     //When the app restarts
-    FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
-      log("This is the FCM token after the app restarted: $fcmToken");
+    // FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
+    // log("This is the FCM token after the app restarted: $fcmToken");
 
-      FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-      // Note: This callback is fired at each app startup and whenever a new
-      // token is generated.
-    }).onError((err) {
-      log("This is the error: $err");
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-      // Error getting token.
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      print(
+          'app notification opened ${event.data.toString()} ${event.notification?.title}');
+
+      Get.to(
+        () => const OrdersAwaiting(),
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        routeName: "OrdersAwaiting",
+        preventDuplicates: true,
+        popGesture: false,
+        transition: Transition.downToUp,
+      );
     });
+    // Note: This callback is fired at each app startup and whenever a new
+    // token is generated.
+    // }).onError((err) {
+    //   log("This is the error: $err");
+
+    //   // Error getting token.
+    // });
   }
 
   Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
