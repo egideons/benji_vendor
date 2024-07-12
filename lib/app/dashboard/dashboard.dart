@@ -23,7 +23,7 @@ import '../../main.dart';
 import '../../src/components/button/my elevatedButton.dart';
 import '../../src/components/card/empty.dart';
 import '../../src/components/container/business_container.dart';
-import '../../src/components/section/dashboard_businesses_display_controller.dart';
+import '../../src/components/section/container_await_order.dart';
 import '../../src/components/skeletons/businesses_skeletons.dart';
 import '../../src/controller/business_controller.dart';
 import '../../src/controller/notification_controller.dart';
@@ -378,22 +378,7 @@ class _DashboardState extends State<Dashboard>
                       ),
                     ),
                     kSizedBox,
-                    GetBuilder<BusinessController>(
-                      init: BusinessController(),
-                      builder: (controller) {
-                        return DashboardDisplayBusinessesController(
-                          refreshing: refreshing,
-                          showBusinesses: showBusinesses,
-                          onTap: () {
-                            setState(() {
-                              showBusinesses = !showBusinesses;
-                            });
-                          },
-                          numberOfBusinesses:
-                              controller.businesses.length.toString(),
-                        );
-                      },
-                    ),
+                    const AwaitingOrderConfirmation(),
                     kSizedBox,
                     GetBuilder<BusinessController>(
                       init: BusinessController(),

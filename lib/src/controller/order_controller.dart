@@ -19,11 +19,14 @@ class OrderController extends GetxController {
   }
 
   var isLoad = false.obs;
+  var isLoadAwait = false.obs;
+  var isLoadAwaitConfirm = false.obs;
   var loadedAll = false.obs;
   var isLoadMore = false.obs;
   var loadNum = 10.obs;
   var total = 0.obs;
   var status = StatusType.pending.obs;
+  var vendorsOrderAwaitList = <OrderModel>[].obs;
   var vendorsOrderList = <OrderModel>[].obs;
   var vendorPendingOrders = <OrderModel>[].obs;
   var vendorDispatchedOrders = <OrderModel>[].obs;
@@ -145,6 +148,51 @@ class OrderController extends GetxController {
     } catch (e) {}
     isLoad.value = false;
     isLoadMore.value = false;
+    update();
+  }
+
+  Future getOrdersAwait() async {
+    isLoadAwait.value = true;
+
+    String id = UserController.instance.user.value.id.toString();
+    var url = "${Api.baseUrl}/orders/ordersAwaitingConfirmation/$id";
+
+    String token = UserController.instance.user.value.token;
+    http.Response? response = await HandleData.getApi(url, token);
+
+    var responseData = await ApiProcessorController.errorState(response);
+    if (responseData == null) {
+      isLoadAwait.value = false;
+      update();
+      return;
+    }
+    try {
+      vendorsOrderAwaitList.value = (jsonDecode(responseData) as List)
+          .map((e) => OrderModel.fromJson(e))
+          .toList();
+    } catch (e) {}
+    isLoadAwait.value = false;
+    update();
+  }
+
+  Future confirmOrder(String id) async {
+    isLoadAwaitConfirm.value = true;
+    update();
+
+    final response = await http.get(
+        Uri.parse('${Api.baseUrl}/orders/orderConfirmItems/$id'),
+        headers: authHeader());
+    if (response.statusCode == 200) {
+      ApiProcessorController.successSnack("Order items availability confirmed");
+      vendorsOrderAwaitList.value = [];
+      isLoadAwaitConfirm.value = false;
+      update();
+      getOrdersAwait();
+      Get.close(1);
+    } else {
+      ApiProcessorController.errorSnack(jsonDecode(response.body)['detail']);
+    }
+    isLoadAwaitConfirm.value = false;
     update();
   }
 }
