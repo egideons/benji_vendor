@@ -3,19 +3,19 @@ import 'package:hexcolor/hexcolor.dart';
 
 // copied from vendor app
 const Color kGreyColor1 = Color(0xFFA5A5A5);
-Color kGreyColor2 = const Color(0xFF757575);
+const Color kGreyColor2 = Color(0xFF757575);
 
 //App Main Colors
-Color kPrimaryColor = const Color(0xFFFFFFFF);
-Color kSecondaryColor = HexColor("#0003C4");
-Color kAccentColor = const Color(0xFFEC2623);
+const Color kPrimaryColor = Color(0xFFFFFFFF);
+final Color kSecondaryColor = HexColor("#0003C4");
+const Color kAccentColor = Color(0xFFEC2623);
 
-Color kLoadingColor = const Color(0xFFFFA927);
-Color kStarColor = const Color(0xFFFF6838);
-Color kPageSkeletonColor = kBlackColor.withOpacity(0.35);
+const Color kLoadingColor = Color(0xFFFFA927);
+const Color kStarColor = Color(0xFFFF6838);
+final Color kPageSkeletonColor = kBlackColor.withOpacity(0.35);
 
-Color kLightGreyColor = Colors.grey.shade300;
-Color kGreyColor = const Color(0xFF757575);
+final Color kLightGreyColor = Colors.grey.shade300;
+const Color kGreyColor = Color(0xFF757575);
 const Color kBlackColor = Color(0xFF000000);
 const Color kDarkGreyColor = Colors.black12;
 

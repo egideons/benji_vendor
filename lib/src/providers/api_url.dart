@@ -10,8 +10,8 @@ import '../controller/user_controller.dart';
 const baseURL = "https://resource.bgbot.app/api/v1";
 const baseImage = "https://resource.bgbot.app";
 
-const websocketBaseUrl = "ws://wsbenji.bgbot.app/ws";
-// const websocketBaseUrl = "ws://127.0.0.1:6388/ws";
+// const websocketBaseUrl = "ws://wsbenji.bgbot.app/ws";
+const websocketBaseUrl = "ws://127.0.0.1:6388/ws";
 
 var vendorId = UserController.instance.user.value.id;
 

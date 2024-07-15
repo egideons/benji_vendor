@@ -71,7 +71,7 @@ class _OrdersAwaitingState extends State<OrdersAwaiting> {
               initState: (_) => OrderController.instance.getOrdersAwait(),
               builder: (controller) => controller.isLoadAwait.value &&
                       controller.vendorsOrderAwaitList.isEmpty
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(color: kAccentColor),
                     )
                   : controller.vendorsOrderAwaitList.isEmpty

@@ -188,7 +188,7 @@ class _AddProductState extends State<AddProduct> {
                               const BorderSide(width: 0.5, color: kGreyColor1),
                         ),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: FaIcon(
                           FontAwesomeIcons.camera,
                           color: kAccentColor,
@@ -220,7 +220,7 @@ class _AddProductState extends State<AddProduct> {
                           ),
                         ),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: FaIcon(
                           FontAwesomeIcons.solidImages,
                           color: kAccentColor,
@@ -245,15 +245,15 @@ class _AddProductState extends State<AddProduct> {
       onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
       child: Scaffold(
         backgroundColor: kPrimaryColor,
-        appBar: MyAppBar(
+        appBar: const MyAppBar(
           title: "Add New Product",
           backgroundColor: kPrimaryColor,
           elevation: 0,
-          actions: const [],
+          actions: [],
         ),
         bottomNavigationBar: Container(
           padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(color: kPrimaryColor),
+          decoration: const BoxDecoration(color: kPrimaryColor),
           child: GetBuilder<FormController>(
             init: FormController(),
             builder: (saving) {
@@ -352,7 +352,7 @@ class _AddProductState extends State<AddProduct> {
                           borderRadius: BorderRadius.circular(16),
                           child: Container(
                             padding: const EdgeInsets.all(10),
-                            child: Text(
+                            child: const Text(
                               'Upload product images',
                               style: TextStyle(
                                 color: kAccentColor,

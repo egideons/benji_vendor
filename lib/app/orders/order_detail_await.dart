@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:benji_vendor/src/components/image/my_image.dart';
+import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/order_status_change.dart';
@@ -34,6 +35,11 @@ class _OrderDetailsAwaitState extends State<OrderDetailsAwait> {
   }
 
 //============================== ALL VARIABLES ================================\\
+  final formKey = GlobalKey<FormState>();
+
+  bool rejectStatus = false;
+  final rejectController = TextEditingController();
+  var rejectFN = FocusNode();
 
   final Map status = {
     'pend': 'PENDING',
@@ -59,19 +65,12 @@ class _OrderDetailsAwaitState extends State<OrderDetailsAwait> {
     return MyResponsivePadding(
       child: GetBuilder<OrderController>(builder: (controller) {
         return Scaffold(
-          appBar: MyAppBar(
-            title: "Order Details",
+          appBar: const MyAppBar(
+            title: "Confirm Items",
             elevation: 0,
-            actions: const [],
+            actions: [],
             backgroundColor: kPrimaryColor,
           ),
-          bottomNavigationBar: Container(
-              padding: const EdgeInsets.all(kDefaultPadding),
-              child: MyElevatedButton(
-                title: "Confirm you have items",
-                onPressed: () => controller.confirmOrder(widget.order.id),
-                isLoading: controller.isLoadAwaitConfirm.value,
-              )),
           body: ListView(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
@@ -366,6 +365,68 @@ class _OrderDetailsAwaitState extends State<OrderDetailsAwait> {
                     kHalfSizedBox,
                   ],
                 ),
+              ),
+              kSizedBox,
+              kSizedBox,
+              Column(
+                children: [
+                  MyElevatedButton(
+                    title: "Confirm",
+                    onPressed: () => controller.confirmOrder(widget.order.id),
+                    disable: controller.isLoadAwaitConfirm.value,
+                  ),
+                  kSizedBox,
+                  Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          rejectStatus
+                              ? Column(
+                                  children: [
+                                    MyTextFormField(
+                                        controller: rejectController,
+                                        validator: (value) {
+                                          if (value == null || value == "") {
+                                            return "You most have a reason to reject";
+                                          }
+                                          return null;
+                                        },
+                                        onSaved: (value) {
+                                          rejectController.text = value;
+                                        },
+                                        textInputAction: TextInputAction.done,
+                                        focusNode: rejectFN,
+                                        hintText: "Reason for rejecting",
+                                        textInputType: TextInputType.text,
+                                        textCapitalization:
+                                            TextCapitalization.sentences),
+                                    kSizedBox,
+                                  ],
+                                )
+                              : const SizedBox(),
+                          MyElevatedButton(
+                            color: rejectStatus ? kBlackColor : kGreyColor,
+                            title: "Reject",
+                            onPressed: () {
+                              if (rejectStatus) {
+                                if (formKey.currentState!.validate()) {
+                                  formKey.currentState!.save();
+
+                                  controller.confirmOrder(widget.order.id,
+                                      confirm: false,
+                                      reason: rejectController.text);
+                                }
+                              } else {
+                                setState(() {
+                                  rejectStatus = true;
+                                });
+                              }
+                            },
+                            disable: controller.isLoadAwaitConfirm.value,
+                          ),
+                        ],
+                      ))
+                ],
               ),
             ],
           ),

@@ -153,6 +153,7 @@ class OrderController extends GetxController {
 
   Future getOrdersAwait() async {
     isLoadAwait.value = true;
+    vendorsOrderAwaitList.value = [];
 
     String id = UserController.instance.user.value.id.toString();
     var url = "${Api.baseUrl}/orders/ordersAwaitingConfirmation/$id";
@@ -175,12 +176,14 @@ class OrderController extends GetxController {
     update();
   }
 
-  Future confirmOrder(String id) async {
+  Future confirmOrder(String id,
+      {bool confirm = true, String reason = ''}) async {
     isLoadAwaitConfirm.value = true;
     update();
 
     final response = await http.get(
-        Uri.parse('${Api.baseUrl}/orders/orderConfirmItems/$id'),
+        Uri.parse(
+            '${Api.baseUrl}/orders/orderConfirmItems/$id?confirm=$confirm&reason=$reason'),
         headers: authHeader());
     if (response.statusCode == 200) {
       ApiProcessorController.successSnack("Order items availability confirmed");
