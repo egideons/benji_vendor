@@ -38,11 +38,12 @@ class OrderModel {
 
   factory OrderModel.fromJson(Map<String, dynamic>? json) {
     json ??= {};
+    print(json["pre_total"]);
     return OrderModel(
       id: json["id"] ?? notAvailable,
       code: json["code"] ?? notAvailable,
       totalPrice: json["total_price"] ?? 0.0,
-      preTotal: json["pre_total"] ?? 410.0,
+      preTotal: json["pre_total"] ?? 0.0,
       deliveryFee: json["delivery_fee"] ?? 0.0,
       deliveryStatus: json["delivery_status"] ?? "PEND",
       client: Client.fromJson(json["client"]),
@@ -88,6 +89,7 @@ class Orderitem {
   });
 
   factory Orderitem.fromJson(Map<String, dynamic>? json) {
+    // print(json);
     json ??= {};
     return Orderitem(
       id: json["id"] ?? notAvailable,
