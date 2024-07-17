@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:benji_vendor/src/components/image/my_image.dart';
+import 'package:benji_vendor/src/components/input/my_item_drop_down_menu.dart';
 import 'package:benji_vendor/src/components/input/my_textformfield.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
@@ -39,7 +40,9 @@ class _OrderDetailsAwaitState extends State<OrderDetailsAwait> {
 
   bool rejectStatus = false;
   final rejectController = TextEditingController();
+  final rejectSelectController = TextEditingController();
   var rejectFN = FocusNode();
+  bool show2ndInput = false;
 
   final Map status = {
     'pend': 'PENDING',
@@ -383,23 +386,65 @@ class _OrderDetailsAwaitState extends State<OrderDetailsAwait> {
                           rejectStatus
                               ? Column(
                                   children: [
-                                    MyTextFormField(
-                                        controller: rejectController,
-                                        validator: (value) {
-                                          if (value == null || value == "") {
-                                            return "You most have a reason to reject";
+                                    ItemDropDownMenu(
+                                        onSelected: (value) {
+                                          if (value!.toString() ==
+                                              'Item not available') {
+                                            setState(() {
+                                              show2ndInput = true;
+                                            });
+                                          } else {
+                                            setState(() {
+                                              show2ndInput = false;
+                                              rejectController.text =
+                                                  rejectSelectController.text;
+                                            });
                                           }
-                                          return null;
                                         },
-                                        onSaved: (value) {
-                                          rejectController.text = value;
-                                        },
-                                        textInputAction: TextInputAction.done,
-                                        focusNode: rejectFN,
-                                        hintText: "Reason for rejecting",
-                                        textInputType: TextInputType.text,
-                                        textCapitalization:
-                                            TextCapitalization.sentences),
+                                        itemEC: rejectSelectController,
+                                        hintText: "Reason",
+                                        dropdownMenuEntries: const [
+                                          DropdownMenuEntry(
+                                            value: 'Not Arround',
+                                            label: 'Not Arround',
+                                          ),
+                                          DropdownMenuEntry(
+                                            value: 'Item not available',
+                                            label: 'Item not available',
+                                          ),
+                                        ]),
+                                    show2ndInput
+                                        ? Column(
+                                            children: [
+                                              kSizedBox,
+                                              MyTextFormField(
+                                                  controller: rejectController,
+                                                  validator: (value) {
+                                                    if (value == null ||
+                                                        value == "") {
+                                                      return "Which items";
+                                                    }
+                                                    return null;
+                                                  },
+                                                  onSaved: (value) {
+                                                    rejectController.text =
+                                                        rejectSelectController
+                                                                .text +
+                                                            value;
+                                                  },
+                                                  textInputAction:
+                                                      TextInputAction.done,
+                                                  focusNode: rejectFN,
+                                                  hintText:
+                                                      "Reason for rejecting",
+                                                  textInputType:
+                                                      TextInputType.text,
+                                                  textCapitalization:
+                                                      TextCapitalization
+                                                          .sentences),
+                                            ],
+                                          )
+                                        : const SizedBox(),
                                     kSizedBox,
                                   ],
                                 )
