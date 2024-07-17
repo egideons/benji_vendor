@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -61,16 +62,20 @@ class FcmMessagingController extends GetxController {
       print(
           'app notification opened ${event.data.toString()} ${event.notification?.title}');
 
-      Get.to(
-        () => const OrdersAwaiting(),
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        routeName: "OrdersAwaiting",
-        preventDuplicates: true,
-        popGesture: false,
-        transition: Transition.downToUp,
-      );
+// worked for 10 seconds need to check for app has loaded instead
+      Timer.periodic(const Duration(seconds: 10), (timer) {
+        Get.to(
+          () => const OrdersAwaiting(),
+          duration: const Duration(milliseconds: 300),
+          fullscreenDialog: true,
+          curve: Curves.easeIn,
+          routeName: "OrdersAwaiting",
+          preventDuplicates: true,
+          popGesture: false,
+          transition: Transition.downToUp,
+        );
+        timer.cancel();
+      });
     });
     // Note: This callback is fired at each app startup and whenever a new
     // token is generated.

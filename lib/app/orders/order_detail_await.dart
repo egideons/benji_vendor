@@ -405,8 +405,8 @@ class _OrderDetailsAwaitState extends State<OrderDetailsAwait> {
                                         hintText: "Reason",
                                         dropdownMenuEntries: const [
                                           DropdownMenuEntry(
-                                            value: 'Not Arround',
-                                            label: 'Not Arround',
+                                            value: 'Not Open',
+                                            label: 'Not Open',
                                           ),
                                           DropdownMenuEntry(
                                             value: 'Item not available',
@@ -435,8 +435,7 @@ class _OrderDetailsAwaitState extends State<OrderDetailsAwait> {
                                                   textInputAction:
                                                       TextInputAction.done,
                                                   focusNode: rejectFN,
-                                                  hintText:
-                                                      "Reason for rejecting",
+                                                  hintText: "Name of item(s)",
                                                   textInputType:
                                                       TextInputType.text,
                                                   textCapitalization:
