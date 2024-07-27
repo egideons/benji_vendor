@@ -3,10 +3,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:benji_vendor/app/orders/awaiting_orders.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -62,20 +60,18 @@ class FcmMessagingController extends GetxController {
       print(
           'app notification opened ${event.data.toString()} ${event.notification?.title}');
 
-// worked for 10 seconds need to check for app has loaded instead
-      Timer.periodic(const Duration(seconds: 10), (timer) {
-        Get.to(
-          () => const OrdersAwaiting(),
-          duration: const Duration(milliseconds: 300),
-          fullscreenDialog: true,
-          curve: Curves.easeIn,
-          routeName: "OrdersAwaiting",
-          preventDuplicates: true,
-          popGesture: false,
-          transition: Transition.downToUp,
-        );
-        timer.cancel();
-      });
+      // Timer(const Duration(seconds: 10), () {
+      //   Get.to(
+      //     () => const OrdersAwaiting(),
+      //     duration: const Duration(milliseconds: 300),
+      //     fullscreenDialog: true,
+      //     curve: Curves.easeIn,
+      //     routeName: "OrdersAwaiting",
+      //     preventDuplicates: true,
+      //     popGesture: false,
+      //     transition: Transition.downToUp,
+      //   );
+      // });
     });
     // Note: This callback is fired at each app startup and whenever a new
     // token is generated.

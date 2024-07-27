@@ -31,36 +31,21 @@ class ItemDropDownMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.of(context).size;
+    final media = MediaQuery.of(context).size;
     return DropdownMenu(
-      dropdownMenuEntries: dropdownMenuEntries,
-      enabled: enabled,
-      menuStyle: const MenuStyle(
-        mouseCursor: MaterialStatePropertyAll(SystemMouseCursors.click),
-        elevation: MaterialStatePropertyAll(10),
-        shape: MaterialStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(12),
-              bottomRight: Radius.circular(12),
-            ),
-          ),
-        ),
-      ),
       onSelected: onSelected ??
           (value) {
             itemEC.text = value!.toString();
           },
       width: width ?? media.width - 40,
-      hintText: hintText,
-      enableSearch: enableSearch ?? true,
-      enableFilter: enableFilter ?? true,
-      errorText: errorText,
-      menuHeight: menuHeight ?? deviceType(media.width) >= 2
+      menuHeight: deviceType(media.width) >= 2
           ? media.height * 0.6
           : media.height * 0.4,
+      hintText: hintText,
       inputDecorationTheme: InputDecorationTheme(
-        errorStyle: TextStyle(color: kAccentColor),
+        errorStyle: const TextStyle(
+          color: kErrorColor,
+        ),
         filled: true,
         fillColor: Colors.blue.shade50,
         focusColor: Colors.blue.shade50,
@@ -97,6 +82,7 @@ class ItemDropDownMenu extends StatelessWidget {
           ),
         ),
       ),
+      dropdownMenuEntries: dropdownMenuEntries,
     );
   }
 }
