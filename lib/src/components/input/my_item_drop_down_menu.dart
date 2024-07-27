@@ -11,8 +11,6 @@ class ItemDropDownMenu extends StatelessWidget {
     required this.dropdownMenuEntries,
     this.enabled = true,
     this.onSelected,
-    this.enableSearch,
-    this.enableFilter,
     this.menuHeight,
     this.errorText,
     this.width,
@@ -23,8 +21,6 @@ class ItemDropDownMenu extends StatelessWidget {
   final String hintText;
   final List<DropdownMenuEntry<Object>> dropdownMenuEntries;
   final Function(dynamic value)? onSelected;
-  final bool? enableSearch;
-  final bool? enableFilter;
   final double? menuHeight;
   final String? errorText;
   final double? width;
@@ -37,11 +33,13 @@ class ItemDropDownMenu extends StatelessWidget {
           (value) {
             itemEC.text = value!.toString();
           },
+      enabled: enabled,
       width: width ?? media.width - 40,
-      menuHeight: deviceType(media.width) >= 2
+      menuHeight: menuHeight ?? deviceType(media.width) >= 2
           ? media.height * 0.6
           : media.height * 0.4,
       hintText: hintText,
+      errorText: errorText,
       inputDecorationTheme: InputDecorationTheme(
         errorStyle: const TextStyle(
           color: kErrorColor,
