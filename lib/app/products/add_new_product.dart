@@ -21,7 +21,6 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../src/components/input/my_message_textformfield.dart';
-import '../../src/controller/push_notifications_controller.dart';
 import '../../src/model/product_model.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
@@ -131,10 +130,10 @@ class _AddProductState extends State<AddProduct> {
     );
     if (FormController.instance.status.toString().startsWith('2')) {
       await ProductController.instance.refreshData(widget.business.id);
-      await PushNotificationController.showNotification(
-        title: "Success",
-        body: "${productNameEC.text} has been added to your products",
-      );
+      // await PushNotificationController.showNotification(
+      //   title: "Success",
+      //   body: "${productNameEC.text} has been added to your products",
+      // );
       Get.close(1);
     }
   }

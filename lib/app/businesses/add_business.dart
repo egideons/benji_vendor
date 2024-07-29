@@ -17,7 +17,6 @@ import 'package:benji_vendor/src/controller/category_controller.dart';
 import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/form_controller.dart';
 import 'package:benji_vendor/src/controller/latlng_detail_controller.dart';
-import 'package:benji_vendor/src/controller/push_notifications_controller.dart';
 import 'package:benji_vendor/src/controller/shopping_location_controller.dart';
 import 'package:benji_vendor/src/controller/withdraw_controller.dart';
 import 'package:benji_vendor/src/googleMaps/autocomplete_prediction.dart';
@@ -330,10 +329,10 @@ class _AddBusinessState extends State<AddBusiness> {
         {'shop_image': selectedLogoImage, 'coverImage': selectedCoverImage},
         'changeVendorBusinessProfile');
     if (FormController.instance.status.toString().startsWith('2')) {
-      await PushNotificationController.showNotification(
-        title: "Success.",
-        body: "Your business profile has been successfully updated.",
-      );
+      // await PushNotificationController.showNotification(
+      //   title: "Success.",
+      //   body: "Your business profile has been successfully updated.",
+      // );
       BusinessController.instance.getVendorBusinesses();
 
       Get.close(1);
@@ -378,7 +377,7 @@ class _AddBusinessState extends State<AddBusiness> {
                             ),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: FaIcon(
                             FontAwesomeIcons.camera,
                             color: kAccentColor,
@@ -411,7 +410,7 @@ class _AddBusinessState extends State<AddBusiness> {
                             ),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: FaIcon(
                             FontAwesomeIcons.image,
                             color: kAccentColor,
@@ -466,7 +465,7 @@ class _AddBusinessState extends State<AddBusiness> {
                             ),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: FaIcon(
                             FontAwesomeIcons.camera,
                             color: kAccentColor,
@@ -499,7 +498,7 @@ class _AddBusinessState extends State<AddBusiness> {
                             ),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: FaIcon(
                             FontAwesomeIcons.image,
                             color: kAccentColor,
@@ -551,10 +550,10 @@ class _AddBusinessState extends State<AddBusiness> {
     return GestureDetector(
       onTap: (() => FocusManager.instance.primaryFocus?.unfocus()),
       child: Scaffold(
-        appBar: MyAppBar(
+        appBar: const MyAppBar(
           title: "Add Business",
           elevation: 0,
-          actions: const [],
+          actions: [],
           backgroundColor: kPrimaryColor,
         ),
         bottomNavigationBar: GetBuilder<FormController>(
@@ -605,7 +604,7 @@ class _AddBusinessState extends State<AddBusiness> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Text(
+              const Text(
                 "This is visible to users",
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -699,7 +698,7 @@ class _AddBusinessState extends State<AddBusiness> {
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        child: Text(
+                        child: const Text(
                           'Upload business logo',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -788,7 +787,7 @@ class _AddBusinessState extends State<AddBusiness> {
                       borderRadius: BorderRadius.circular(10),
                       child: Container(
                         padding: const EdgeInsets.all(10),
-                        child: Text(
+                        child: const Text(
                           'Upload cover image',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -978,7 +977,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1033,7 +1032,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1119,7 +1118,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1174,7 +1173,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1259,7 +1258,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1314,7 +1313,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1400,7 +1399,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1456,7 +1455,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1542,7 +1541,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1598,7 +1597,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1683,7 +1682,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1738,7 +1737,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1824,7 +1823,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1880,7 +1879,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         style: TextButton.styleFrom(
                                           padding: const EdgeInsets.all(2),
                                         ),
-                                        child: Text(
+                                        child: const Text(
                                           "Change",
                                           style: TextStyle(
                                             color: kAccentColor,
@@ -1921,7 +1920,7 @@ class _AddBusinessState extends State<AddBusiness> {
                                         controller.isLoad.value
                                     ? "Loading..."
                                     : "Select a bank",
-                                suffixIcon: FaIcon(
+                                suffixIcon: const FaIcon(
                                   FontAwesomeIcons.chevronDown,
                                   size: 20,
                                   color: kAccentColor,
@@ -2220,8 +2219,8 @@ class _AddBusinessState extends State<AddBusiness> {
                               focusNode: addressFN,
                               hintText: "Search a location",
                               textInputType: TextInputType.text,
-                              prefixIcon: Padding(
-                                padding: const EdgeInsets.all(kDefaultPadding),
+                              prefixIcon: const Padding(
+                                padding: EdgeInsets.all(kDefaultPadding),
                                 child: FaIcon(
                                   FontAwesomeIcons.locationDot,
                                   color: kAccentColor,
@@ -2237,7 +2236,7 @@ class _AddBusinessState extends State<AddBusiness> {
                             ),
                             ElevatedButton.icon(
                               onPressed: getLocationOnMap,
-                              icon: FaIcon(
+                              icon: const FaIcon(
                                 FontAwesomeIcons.locationArrow,
                                 color: kAccentColor,
                                 size: 18,

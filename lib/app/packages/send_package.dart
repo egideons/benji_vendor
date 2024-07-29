@@ -451,7 +451,8 @@ class _SendPackageState extends State<SendPackage> {
                           ),
                         ),
                         child: controller.isLoad.value
-                            ? CircularProgressIndicator(color: kPrimaryColor)
+                            ? const CircularProgressIndicator(
+                                color: kPrimaryColor)
                             : const Text("Submit"),
                       );
                     },
@@ -465,7 +466,7 @@ class _SendPackageState extends State<SendPackage> {
                       elevation: 20.0,
                       side: submittingForm
                           ? BorderSide(color: kLightGreyColor, width: 1.2)
-                          : BorderSide(color: kAccentColor, width: 1.2),
+                          : const BorderSide(color: kAccentColor, width: 1.2),
                       fixedSize: Size((media.size.width * 0.40) - 45, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -501,13 +502,13 @@ class _SendPackageState extends State<SendPackage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: kPrimaryColor,
                       elevation: 20.0,
-                      side: BorderSide(color: kAccentColor, width: 1.2),
+                      side: const BorderSide(color: kAccentColor, width: 1.2),
                       fixedSize: Size((media.size.width * 0.40) - 45, 60),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    child: Text(
+                    child: const Text(
                       "Back",
                       style: TextStyle(color: kAccentColor),
                     ),
@@ -571,8 +572,8 @@ class _SendPackageState extends State<SendPackage> {
                 focusNode: pickupFN,
                 hintText: "Pick location",
                 textInputType: TextInputType.text,
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(kDefaultPadding),
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.all(kDefaultPadding),
                   child: FaIcon(
                     FontAwesomeIcons.locationDot,
                     color: kAccentColor,
@@ -588,7 +589,7 @@ class _SendPackageState extends State<SendPackage> {
               ),
               ElevatedButton.icon(
                 onPressed: toGetLocationOnMapPick,
-                icon: FaIcon(
+                icon: const FaIcon(
                   FontAwesomeIcons.locationArrow,
                   color: kAccentColor,
                   size: 18,
@@ -689,7 +690,7 @@ class _SendPackageState extends State<SendPackage> {
                 dropdownIconPosition: IconPosition.trailing,
                 showCountryFlag: true,
                 showDropdownIcon: true,
-                dropdownIcon: Icon(
+                dropdownIcon: const Icon(
                   Icons.arrow_drop_down_rounded,
                   color: kAccentColor,
                 ),
@@ -765,8 +766,8 @@ class _SendPackageState extends State<SendPackage> {
                 focusNode: dropOffFN,
                 hintText: "Drop off location",
                 textInputType: TextInputType.text,
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(kDefaultPadding),
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.all(kDefaultPadding),
                   child: FaIcon(
                     FontAwesomeIcons.locationDot,
                     color: kAccentColor,
@@ -782,7 +783,7 @@ class _SendPackageState extends State<SendPackage> {
               ),
               ElevatedButton.icon(
                 onPressed: toGetLocationOnMapDrop,
-                icon: FaIcon(
+                icon: const FaIcon(
                   FontAwesomeIcons.locationArrow,
                   color: kAccentColor,
                   size: 18,
@@ -883,7 +884,7 @@ class _SendPackageState extends State<SendPackage> {
                 dropdownIconPosition: IconPosition.trailing,
                 showCountryFlag: true,
                 showDropdownIcon: true,
-                dropdownIcon: Icon(
+                dropdownIcon: const Icon(
                   Icons.arrow_drop_down_rounded,
                   color: kAccentColor,
                 ),
@@ -1162,7 +1163,7 @@ class _SendPackageState extends State<SendPackage> {
                             ),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: FaIcon(
                             FontAwesomeIcons.camera,
                             color: kAccentColor,
@@ -1194,7 +1195,7 @@ class _SendPackageState extends State<SendPackage> {
                             ),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: FaIcon(
                             FontAwesomeIcons.image,
                             color: kAccentColor,
@@ -1254,7 +1255,7 @@ class _SendPackageState extends State<SendPackage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  side: BorderSide(color: kAccentColor),
+                  side: const BorderSide(color: kAccentColor),
                 ),
                 child: const Text(
                   "My Packages",
@@ -1279,7 +1280,7 @@ class _SendPackageState extends State<SendPackage> {
                 tooltip: "Scroll to top",
                 hoverColor: kAccentColor,
                 hoverElevation: 50.0,
-                child: FaIcon(FontAwesomeIcons.chevronUp,
+                child: const FaIcon(FontAwesomeIcons.chevronUp,
                     size: 18, color: kPrimaryColor),
               )
             : const SizedBox(),

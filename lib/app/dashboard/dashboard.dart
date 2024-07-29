@@ -251,7 +251,7 @@ class _DashboardState extends State<Dashboard>
           title: Text(
             "Alert!".toUpperCase(),
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: kAccentColor,
               fontSize: 18,
               fontWeight: FontWeight.w800,
@@ -304,7 +304,7 @@ class _DashboardState extends State<Dashboard>
                     tooltip: "Scroll to top",
                     hoverColor: kAccentColor,
                     hoverElevation: 50.0,
-                    child: FaIcon(
+                    child: const FaIcon(
                       FontAwesomeIcons.chevronUp,
                       size: 18,
                       color: kPrimaryColor,
@@ -362,7 +362,7 @@ class _DashboardState extends State<Dashboard>
                       ),
                       child: ListTile(
                         onTap: toSendPackage,
-                        leading: FaIcon(
+                        leading: const FaIcon(
                           FontAwesomeIcons.bicycle,
                           color: kAccentColor,
                         ),
@@ -441,7 +441,7 @@ class _DashboardState extends State<Dashboard>
                       builder: (controller) => Column(
                         children: [
                           controller.isLoadMore.value
-                              ? Center(
+                              ? const Center(
                                   child: CircularProgressIndicator(
                                     color: kAccentColor,
                                   ),
@@ -486,7 +486,7 @@ void showAppUpdateDialog(context, AppVersion appVersion) {
           title: Text(
             "UPDATE!".toUpperCase(),
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: kAccentColor,
               fontSize: 18,
               fontWeight: FontWeight.w800,

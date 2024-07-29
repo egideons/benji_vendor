@@ -16,7 +16,6 @@ import 'firebase_options.dart';
 import 'src/controller/auth_controller.dart';
 import 'src/controller/business_controller.dart';
 import 'src/controller/category_controller.dart';
-import 'src/controller/fcm_messaging_controller.dart';
 import 'src/controller/form_controller.dart';
 import 'src/controller/latlng_detail_controller.dart';
 import 'src/controller/login_controller.dart';
@@ -35,6 +34,7 @@ import 'theme/app_theme.dart';
 import 'theme/colors.dart';
 
 late SharedPreferences prefs;
+late MyPushNotification localNotificationService;
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
@@ -43,7 +43,6 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
-  Get.put(FcmMessagingController());
   Get.put(UserController());
   Get.put(CategoryController());
   Get.put(LoginController());
@@ -52,10 +51,10 @@ void main() async {
   Get.put(OrderController());
 
   Get.put(FormController());
+  Get.put(NotificationController());
   Get.put(ReviewsController());
   Get.put(LatLngDetailController());
   Get.put(ProfileController());
-  Get.put(NotificationController());
   Get.put(SendPackageController());
   Get.put(PaymentController());
   Get.put(ProductPropertyController());
@@ -72,7 +71,8 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
-    await PushNotificationController.initializeNotification();
+    localNotificationService = MyPushNotification();
+    await localNotificationService.setup();
   }
 
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);

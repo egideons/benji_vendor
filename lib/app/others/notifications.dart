@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 
 import '../../src/providers/constants.dart';
 import '../../theme/colors.dart';
-import 'notification_buttons_page.dart';
 
 class Notifications extends StatefulWidget {
   const Notifications({super.key});
@@ -43,34 +42,34 @@ class _NotificationsState extends State<Notifications> {
 
   //===================== Handle refresh ==========================\\
 
-  void toNotifications() => Get.to(
-        () => const NotificationButtonsPage(),
-        routeName: 'NotificationButtonsPage',
-        duration: const Duration(milliseconds: 300),
-        fullscreenDialog: true,
-        curve: Curves.easeIn,
-        preventDuplicates: true,
-        popGesture: true,
-        transition: Transition.rightToLeft,
-      );
+  // void toNotifications() => Get.to(
+  //       () => const NotificationButtonsPage(),
+  //       routeName: 'NotificationButtonsPage',
+  //       duration: const Duration(milliseconds: 300),
+  //       fullscreenDialog: true,
+  //       curve: Curves.easeIn,
+  //       preventDuplicates: true,
+  //       popGesture: true,
+  //       transition: Transition.rightToLeft,
+  //     );
 
   @override
   Widget build(BuildContext context) {
     // var media = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: kPrimaryColor,
-      appBar: MyAppBar(
+      appBar: const MyAppBar(
         title: "Notifications",
         backgroundColor: kPrimaryColor,
         elevation: 0,
-        actions: const [],
+        actions: [],
       ),
       body: SafeArea(
         maintainBottomViewPadding: true,
         child: GetBuilder<NotificationController>(
           builder: (notifications) {
             return notifications.isLoad.value
-                ? Center(
+                ? const Center(
                     child: CircularProgressIndicator(
                       color: kAccentColor,
                     ),
@@ -112,7 +111,7 @@ class _NotificationsState extends State<Notifications> {
                                       children: [
                                         const TextSpan(
                                           text: "Someone",
-                                          style:  TextStyle(
+                                          style: TextStyle(
                                             color: Color(0xFF32343E),
                                             fontSize: 13,
                                             fontWeight: FontWeight.w400,

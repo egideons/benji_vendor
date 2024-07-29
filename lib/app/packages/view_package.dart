@@ -17,7 +17,6 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../src/controller/form_controller.dart';
-import '../../src/controller/push_notifications_controller.dart';
 import '../../src/providers/api_url.dart';
 import '../../src/providers/constants.dart';
 import '../../src/providers/responsive_constants.dart';
@@ -208,7 +207,7 @@ class _ViewPackageState extends State<ViewPackage> {
                 ),
               ),
             ),
-            Divider(height: 1, color: kGreyColor2),
+            const Divider(height: 1, color: kGreyColor2),
             ListTile(
               onTap: shareImage,
               title: Text(
@@ -238,12 +237,12 @@ class _ViewPackageState extends State<ViewPackage> {
     consoleLog(data.toString());
     await FormController.instance.patchAuth(url, data, 'dispatchPackage');
     if (FormController.instance.status.toString().startsWith('2')) {
-      await PushNotificationController.showNotification(
-        title: "Success",
-        body: dispatchMessage,
-        summary: "Package Delivery",
-        largeIcon: "asset://assets/icons/package.png",
-      );
+      // await PushNotificationController.showNotification(
+      //   title: "Success",
+      //   body: dispatchMessage,
+      //   summary: "Package Delivery",
+      //   largeIcon: "asset://assets/icons/package.png",
+      // );
       setState(() {
         isDispatched = true;
       });
@@ -355,9 +354,9 @@ class _ViewPackageState extends State<ViewPackage> {
                               Container(
                                 height: deviceType(media.width) >= 2 ? 60 : 40,
                                 width: double.infinity,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   color: kPrimaryColor,
-                                  image: const DecorationImage(
+                                  image: DecorationImage(
                                     image: AssetImage(
                                       'assets/images/logo/benji_full_logo.png',
                                     ),
@@ -366,14 +365,14 @@ class _ViewPackageState extends State<ViewPackage> {
                                 ),
                               ),
                               const SizedBox(height: 50),
-                              Divider(color: kGreyColor2, height: 0),
+                              const Divider(color: kGreyColor2, height: 0),
                               ListView.separated(
                                 itemCount: titles.length,
                                 shrinkWrap: true,
                                 physics: const BouncingScrollPhysics(),
                                 separatorBuilder:
                                     (BuildContext context, int index) =>
-                                        Divider(
+                                        const Divider(
                                   height: 1,
                                   color: kGreyColor2,
                                 ),
@@ -432,7 +431,7 @@ class _ViewPackageState extends State<ViewPackage> {
                                   ),
                                 ),
                               ),
-                              Divider(color: kGreyColor2, height: 0),
+                              const Divider(color: kGreyColor2, height: 0),
                               kSizedBox,
                               isDispatched == false &&
                                       widget.deliveryItem.status
@@ -468,7 +467,7 @@ class _ViewPackageState extends State<ViewPackage> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                     ),
-                                    TextSpan(
+                                    const TextSpan(
                                       text: "ji",
                                       style: TextStyle(
                                         color: kAccentColor,
@@ -501,7 +500,7 @@ class _ViewPackageState extends State<ViewPackage> {
                           ),
                           TextSpan(
                             text: widget.deliveryItem.code,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: kAccentColor,
                               fontSize: 18,
                               fontStyle: FontStyle.italic,
@@ -537,7 +536,7 @@ class _ViewPackageState extends State<ViewPackage> {
                                 backgroundColor: kPrimaryColor,
                                 padding: const EdgeInsets.all(kDefaultPadding),
                               ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   FaIcon(
@@ -568,7 +567,7 @@ class _ViewPackageState extends State<ViewPackage> {
                                 backgroundColor: kAccentColor,
                                 padding: const EdgeInsets.all(kDefaultPadding),
                               ),
-                              child: Row(
+                              child: const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   FaIcon(

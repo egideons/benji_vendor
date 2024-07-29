@@ -62,6 +62,7 @@ dependencies:
   webview_flutter_wkwebview:
   flutter_polyline_points:
   web_socket_channel:
+  flutter_local_notifications:
 
 dev_dependencies:
   flutter_test:
