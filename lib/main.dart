@@ -5,8 +5,6 @@ import 'package:benji_vendor/src/controller/package_controller.dart';
 import 'package:benji_vendor/src/controller/rider_controller.dart';
 import 'package:benji_vendor/src/controller/shopping_location_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -66,14 +64,12 @@ void main() async {
   Get.put(RiderController());
   Get.put(OrderStatusChangeController());
 
-  if (!kIsWeb) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    await FirebaseMessaging.instance.setAutoInitEnabled(true);
-    localNotificationService = MyPushNotification();
-    await localNotificationService.setup();
-  }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  localNotificationService = MyPushNotification();
+  await localNotificationService.firebase.setAutoInitEnabled(true);
+  await localNotificationService.setup();
 
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());

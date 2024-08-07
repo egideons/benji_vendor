@@ -13,6 +13,7 @@ import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
 import 'package:benji_vendor/src/model/app_version.dart';
 import 'package:benji_vendor/src/providers/utils.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -81,17 +82,19 @@ class _DashboardState extends State<Dashboard>
       showMessageDialog();
     }
 
-    Timer(
-      const Duration(seconds: 2),
-      () {
-        getAppLatestVersion().then((value) {
-          if (value.version == "0" || value.version == appVersion) {
-            return;
-          }
-          showAppUpdateDialog(context, value);
-        });
-      },
-    );
+    if (!kIsWeb) {
+      Timer(
+        const Duration(seconds: 2),
+        () {
+          getAppLatestVersion().then((value) {
+            if (value.version == "0" || value.version == appVersion) {
+              return;
+            }
+            showAppUpdateDialog(context, value);
+          });
+        },
+      );
+    }
   }
 
   @override
