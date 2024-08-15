@@ -186,7 +186,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                 tooltip: "Scroll to top",
                 hoverColor: kAccentColor,
                 hoverElevation: 50.0,
-                child: FaIcon(FontAwesomeIcons.chevronUp,
+                child: const FaIcon(FontAwesomeIcons.chevronUp,
                     size: 18, color: kPrimaryColor),
               )
             : FloatingActionButton(
@@ -299,19 +299,21 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        FaIcon(
+                                        const FaIcon(
                                           FontAwesomeIcons.locationDot,
                                           color: kAccentColor,
                                           size: 15,
                                         ),
                                         kHalfWidthSizedBox,
-                                        Text(
-                                          widget.business.address,
-                                          textAlign: TextAlign.center,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
+                                        Expanded(
+                                          child: Text(
+                                            widget.business.address,
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -365,7 +367,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            FaIcon(
+                                            const FaIcon(
                                               FontAwesomeIcons.solidStar,
                                               color: kStarColor,
                                               size: 17,
@@ -537,7 +539,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                 ),
                 kSizedBox,
                 refreshing
-                    ? Center(
+                    ? const Center(
                         child: CircularProgressIndicator(
                         color: kAccentColor,
                       ))
