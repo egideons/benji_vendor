@@ -245,7 +245,9 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                       Positioned(
                         top: deviceType(media.width) > 2
                             ? media.height * 0.25
-                            : media.height * 0.13,
+                            : deviceType(media.width) == 2
+                                ? media.height * 0.1
+                                : media.height * 0.13,
                         left: kDefaultPadding,
                         right: kDefaultPadding,
                         child: Container(
@@ -293,20 +295,20 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                   ),
                                   kHalfSizedBox,
                                   Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        const FaIcon(
-                                          FontAwesomeIcons.locationDot,
-                                          color: kAccentColor,
-                                          size: 15,
-                                        ),
-                                        kHalfWidthSizedBox,
-                                        Expanded(
-                                          child: Text(
+                                    child: Expanded(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          const FaIcon(
+                                            FontAwesomeIcons.locationDot,
+                                            color: kAccentColor,
+                                            size: 15,
+                                          ),
+                                          kHalfWidthSizedBox,
+                                          Text(
                                             widget.business.address,
                                             textAlign: TextAlign.center,
                                             overflow: TextOverflow.ellipsis,
@@ -315,8 +317,8 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                               fontWeight: FontWeight.w400,
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   kHalfSizedBox,
