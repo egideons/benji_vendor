@@ -40,6 +40,10 @@
 	<string>This app needs access to your photo library to allow you to upload images for your profile or to verify your identity.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to track your location for delivering your packages and providing real-time tracking updates.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera to allow you to update your profile picture and add images.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to allow you to update your profile picture and select images.</string>
 	<key>UIStatusBarHidden</key>
 	<false/>
 	<key>UISupportedInterfaceOrientations</key>
