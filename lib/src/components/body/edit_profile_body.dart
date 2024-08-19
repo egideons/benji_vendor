@@ -28,7 +28,6 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../../../theme/colors.dart';
 import '../../controller/form_controller.dart';
-import '../../controller/push_notifications_controller.dart';
 import '../../providers/api_url.dart';
 import '../../providers/constants.dart';
 import '../image/my_image.dart';
@@ -211,10 +210,10 @@ class _EditProfileBodyState extends State<EditProfileBody> {
         "changeVendorPersonalProfile",
         true);
     if (FormController.instance.status.toString().startsWith('2')) {}
-    await PushNotificationController.showNotification(
-      title: "Success.",
-      body: "Your personal profile has been successfully updated.",
-    );
+    // await PushNotificationController.showNotification(
+    //   title: "Success.",
+    //   body: "Your personal profile has been successfully updated.",
+    // );
     Get.close(1);
   }
 
@@ -254,7 +253,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                             ),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: FaIcon(
                             FontAwesomeIcons.camera,
                             color: kAccentColor,
@@ -286,7 +285,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                             ),
                           ),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: FaIcon(
                             FontAwesomeIcons.images,
                             color: kAccentColor,
@@ -372,7 +371,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                   borderRadius: BorderRadius.circular(10),
                   child: Container(
                     padding: const EdgeInsets.all(10),
-                    child: Text(
+                    child: const Text(
                       'Upload your profile picture',
                       style: TextStyle(
                         color: kAccentColor,
@@ -488,7 +487,8 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                           dropdownIconPosition: IconPosition.trailing,
                           showCountryFlag: true,
                           showDropdownIcon: true,
-                          dropdownIcon: Icon(Icons.arrow_drop_down_rounded,
+                          dropdownIcon: const Icon(
+                              Icons.arrow_drop_down_rounded,
                               color: kAccentColor),
                           textInputAction: TextInputAction.next,
                           focusNode: userPhoneNumberFN,
@@ -549,8 +549,8 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                               focusNode: mapsLocationFN,
                               hintText: "Search a location",
                               textInputType: TextInputType.text,
-                              prefixIcon: Padding(
-                                padding: const EdgeInsets.all(kDefaultPadding),
+                              prefixIcon: const Padding(
+                                padding: EdgeInsets.all(kDefaultPadding),
                                 child: FaIcon(
                                   FontAwesomeIcons.locationDot,
                                   color: kAccentColor,
@@ -566,7 +566,7 @@ class _EditProfileBodyState extends State<EditProfileBody> {
                             ),
                             ElevatedButton.icon(
                               onPressed: getLocationOnMap,
-                              icon: FaIcon(
+                              icon: const FaIcon(
                                 FontAwesomeIcons.locationArrow,
                                 color: kAccentColor,
                                 size: 18,

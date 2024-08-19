@@ -5,8 +5,6 @@ import 'package:benji_vendor/src/controller/package_controller.dart';
 import 'package:benji_vendor/src/controller/rider_controller.dart';
 import 'package:benji_vendor/src/controller/shopping_location_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -16,7 +14,6 @@ import 'firebase_options.dart';
 import 'src/controller/auth_controller.dart';
 import 'src/controller/business_controller.dart';
 import 'src/controller/category_controller.dart';
-import 'src/controller/fcm_messaging_controller.dart';
 import 'src/controller/form_controller.dart';
 import 'src/controller/latlng_detail_controller.dart';
 import 'src/controller/login_controller.dart';
@@ -35,6 +32,7 @@ import 'theme/app_theme.dart';
 import 'theme/colors.dart';
 
 late SharedPreferences prefs;
+late MyPushNotification localNotificationService;
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(
@@ -43,7 +41,6 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
-  Get.put(FcmMessagingController());
   Get.put(UserController());
   Get.put(CategoryController());
   Get.put(LoginController());
@@ -52,10 +49,10 @@ void main() async {
   Get.put(OrderController());
 
   Get.put(FormController());
+  Get.put(NotificationController());
   Get.put(ReviewsController());
   Get.put(LatLngDetailController());
   Get.put(ProfileController());
-  Get.put(NotificationController());
   Get.put(SendPackageController());
   Get.put(PaymentController());
   Get.put(ProductPropertyController());
@@ -67,13 +64,12 @@ void main() async {
   Get.put(RiderController());
   Get.put(OrderStatusChangeController());
 
-  if (!kIsWeb) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    await FirebaseMessaging.instance.setAutoInitEnabled(true);
-    await PushNotificationController.initializeNotification();
-  }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  localNotificationService = MyPushNotification();
+  await localNotificationService.firebase.setAutoInitEnabled(true);
+  await localNotificationService.setup();
 
   // await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());

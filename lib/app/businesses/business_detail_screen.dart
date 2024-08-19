@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:benji_vendor/app/orders/orders.dart';
 import 'package:benji_vendor/src/components/appbar/my_appbar.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
@@ -186,7 +188,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                 tooltip: "Scroll to top",
                 hoverColor: kAccentColor,
                 hoverElevation: 50.0,
-                child: FaIcon(FontAwesomeIcons.chevronUp,
+                child: const FaIcon(FontAwesomeIcons.chevronUp,
                     size: 18, color: kPrimaryColor),
               )
             : FloatingActionButton(
@@ -207,12 +209,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
               physics: const ScrollPhysics(),
               children: [
                 SizedBox(
-                  height:
-                      deviceType(media.width) > 2 && deviceType(media.width) < 4
-                          ? 540
-                          : deviceType(media.width) > 2
-                              ? 470
-                              : 370,
+                  height: max(400, media.height / 2.5),
                   child: Stack(
                     children: [
                       Positioned(
@@ -220,21 +217,11 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                         left: 0,
                         right: 0,
                         child: Container(
-                          height: deviceType(media.width) > 3 &&
-                                  deviceType(media.width) < 5
-                              ? media.height * 0.4
-                              : deviceType(media.width) > 2
-                                  ? media.height * 0.415
-                                  : media.height * 0.28,
+                          height: max(400, media.height / 2.5) * 0.6,
                           decoration: BoxDecoration(color: kLightGreyColor),
                           child: Center(
                             child: MyImage(
-                              height: deviceType(media.width) > 3 &&
-                                      deviceType(media.width) < 5
-                                  ? media.height * 0.4
-                                  : deviceType(media.width) > 2
-                                      ? media.height * 0.415
-                                      : media.height * 0.28,
+                              height: double.infinity,
                               width: media.width,
                               fit: BoxFit.cover,
                               url: widget.business.coverImage,
@@ -243,9 +230,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                         ),
                       ),
                       Positioned(
-                        top: deviceType(media.width) > 2
-                            ? media.height * 0.25
-                            : media.height * 0.13,
+                        top: max(400, media.height / 2.5) * 0.3,
                         left: kDefaultPadding,
                         right: kDefaultPadding,
                         child: Container(
@@ -277,19 +262,23 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
-                                    width: media.width - 200,
-                                    child: Text(
-                                      widget.business.shopName,
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: kTextBlackColor,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w700,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          widget.business.shopName,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            color: kTextBlackColor,
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
                                   kHalfSizedBox,
                                   Center(
@@ -299,19 +288,21 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        FaIcon(
+                                        const FaIcon(
                                           FontAwesomeIcons.locationDot,
                                           color: kAccentColor,
                                           size: 15,
                                         ),
                                         kHalfWidthSizedBox,
-                                        Text(
-                                          widget.business.address,
-                                          textAlign: TextAlign.center,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
+                                        Flexible(
+                                          child: Text(
+                                            widget.business.address,
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -365,7 +356,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            FaIcon(
+                                            const FaIcon(
                                               FontAwesomeIcons.solidStar,
                                               color: kStarColor,
                                               size: 17,
@@ -457,12 +448,8 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                         ),
                       ),
                       Positioned(
-                        top: deviceType(media.width) > 3 &&
-                                deviceType(media.width) < 5
-                            ? media.height * 0.15
-                            : deviceType(media.width) > 2
-                                ? media.height * 0.15
-                                : media.height * 0.07,
+                        top: max(400, media.height / 2.5) *
+                            (deviceType(media.width) > 2 ? 0.14 : 0.17),
                         left: deviceType(media.width) > 2
                             ? (media.width / 2) - (126 / 2)
                             : (media.width / 2) - (100 / 2),
@@ -537,7 +524,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen>
                 ),
                 kSizedBox,
                 refreshing
-                    ? Center(
+                    ? const Center(
                         child: CircularProgressIndicator(
                         color: kAccentColor,
                       ))

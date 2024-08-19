@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:benji_vendor/app/businesses/edit_businesses.dart';
-import 'package:benji_vendor/app/businesses/user_reviews.dart';
 import 'package:benji_vendor/app/profile/edit_profile.dart';
 import 'package:benji_vendor/src/components/responsive_widgets/padding.dart';
+import 'package:benji_vendor/src/controller/error_controller.dart';
 import 'package:benji_vendor/src/controller/order_controller.dart';
 import 'package:benji_vendor/src/controller/product_controller.dart';
 import 'package:benji_vendor/src/controller/user_controller.dart';
@@ -91,14 +93,99 @@ class _ProfileState extends State<Profile> {
         transition: Transition.rightToLeft,
       );
 
+  void _deleteAccount() async {
+    final res = await UserController.instance.deleteAccount();
+    if (res.statusCode == 200) {
+      await UserController.instance.deleteUser();
+      UserController.instance.logoutUser();
+
+      Get.offAll(
+        () => const Login(),
+        predicate: (route) => false,
+        routeName: 'HomePage',
+        duration: const Duration(milliseconds: 300),
+        fullscreenDialog: true,
+        curve: Curves.easeIn,
+        popGesture: true,
+        transition: Transition.upToDown,
+      );
+      return;
+    }
+    ApiProcessorController.errorSnack(jsonDecode(res.body)['message']);
+  }
+
+  void _deletePopUp() => Get.defaultDialog(
+        title: "What do you want to do?",
+        titleStyle: const TextStyle(
+          fontSize: 20,
+          color: kTextBlackColor,
+          fontWeight: FontWeight.w700,
+        ),
+        content: const SizedBox(height: 0),
+        cancel: ElevatedButton(
+          onPressed: () => _deleteAccount(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kPrimaryColor,
+            elevation: 10.0,
+            shape: RoundedRectangleBorder(
+              side: const BorderSide(color: kAccentColor),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            shadowColor: kBlackColor.withOpacity(0.4),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                UserController.instance.isLoadingDelete.value
+                    ? "Deleting..."
+                    : "Delete Account",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: kAccentColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+        confirm: ElevatedButton(
+          onPressed: () => Get.back(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: kAccentColor,
+            elevation: 10.0,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            shadowColor: kBlackColor.withOpacity(0.4),
+          ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Cancel",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: kPrimaryColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
+    var media = MediaQuery.of(context).size;
+
     return MyResponsivePadding(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: kAccentColor,
           elevation: 0,
-          title: Text(
+          title: const Text(
             'My Profile',
             style: TextStyle(
               color: kPrimaryColor,
@@ -137,7 +224,7 @@ class _ProfileState extends State<Profile> {
                         children: [
                           ListTile(
                             onTap: toEditProfile,
-                            leading: FaIcon(FontAwesomeIcons.solidUser,
+                            leading: const FaIcon(FontAwesomeIcons.solidUser,
                                 color: kAccentColor),
                             title: const Text(
                               'Personal Info',
@@ -152,7 +239,7 @@ class _ProfileState extends State<Profile> {
                           ),
                           ListTile(
                             onTap: toSettings,
-                            leading: FaIcon(
+                            leading: const FaIcon(
                               FontAwesomeIcons.gear,
                               color: kAccentColor,
                             ),
@@ -191,7 +278,7 @@ class _ProfileState extends State<Profile> {
                         children: [
                           ListTile(
                             onTap: toPackages,
-                            leading: FaIcon(
+                            leading: const FaIcon(
                               FontAwesomeIcons.bicycle,
                               color: kAccentColor,
                             ),
@@ -208,7 +295,7 @@ class _ProfileState extends State<Profile> {
                           ),
                           ListTile(
                             onTap: toBusinesses,
-                            leading: FaIcon(
+                            leading: const FaIcon(
                               FontAwesomeIcons.store,
                               color: kAccentColor,
                             ),
@@ -220,7 +307,7 @@ class _ProfileState extends State<Profile> {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                            trailing: FaIcon(
+                            trailing: const FaIcon(
                               FontAwesomeIcons.solidPenToSquare,
                               color: kAccentColor,
                             ),
@@ -245,21 +332,47 @@ class _ProfileState extends State<Profile> {
                           )
                         ],
                       ),
-                      child: ListTile(
-                        onTap: logOut,
-                        leading: FaIcon(
-                          FontAwesomeIcons.rightFromBracket,
-                          color: kAccentColor,
-                        ),
-                        title: const Text(
-                          'Log Out',
-                          style: TextStyle(
-                            color: kTextBlackColor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
+                      child: Column(
+                        children: [
+                          ListTile(
+                            onTap: _deletePopUp,
+                            enableFeedback: true,
+                            mouseCursor: SystemMouseCursors.click,
+                            leading: const FaIcon(
+                              FontAwesomeIcons.solidTrashCan,
+                              color: kAccentColor,
+                            ),
+                            title: const Text(
+                              'Delete Account',
+                              style: TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            trailing: const FaIcon(
+                              FontAwesomeIcons.chevronRight,
+                            ),
                           ),
-                        ),
-                        trailing: const FaIcon(FontAwesomeIcons.chevronRight),
+                          kHalfSizedBox,
+                          ListTile(
+                            onTap: logOut,
+                            leading: const FaIcon(
+                              FontAwesomeIcons.rightFromBracket,
+                              color: kAccentColor,
+                            ),
+                            title: const Text(
+                              'Log Out',
+                              style: TextStyle(
+                                color: kTextBlackColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            trailing:
+                                const FaIcon(FontAwesomeIcons.chevronRight),
+                          ),
+                        ],
                       ),
                     ),
                   ],
